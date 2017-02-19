@@ -1,0 +1,28 @@
+sourceSets.each {
+    def rootResDir = it.res.srcDirs[0]
+    def getSubDirs = { dirName ->
+        def layoutsDir = new File(rootResDir, dirName)
+        def subLayoutDirs = []
+        if (layoutsDir.exists()) {
+            layoutsDir.eachDir {
+                subLayoutDirs.add it
+            }
+        }
+        return subLayoutDirs
+    }
+    def resDirs = [
+            "anims",
+            "colors",
+            "drawables",
+            "drawables-hdpi",
+            "drawables-mdpi",
+            "drawables-xhdpi",
+            "drawables-xxhdpi",
+            "layouts",
+            "valuess",
+    ]
+    def srcDirs = resDirs.collect {
+        getSubDirs(it)
+    }
+    it.res.srcDirs = [srcDirs, rootResDir]
+}

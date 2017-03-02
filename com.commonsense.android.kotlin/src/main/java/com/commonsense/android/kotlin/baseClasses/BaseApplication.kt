@@ -2,6 +2,7 @@ package com.commonsense.android.kotlin.baseClasses
 
 import android.app.Application
 import android.os.StrictMode
+import com.commonsense.android.kotlin.android.logging.logDebug
 import com.squareup.leakcanary.LeakCanary
 
 /**
@@ -12,13 +13,15 @@ abstract class BaseApplication : Application() {
 
 
     fun setupDebugTools() {
+        logDebug("Setting up debugging tools")
         enableLeakCanary()
-        enableStricMode()
+        enableStrictMode()
     }
 
     override fun onCreate() {
         super.onCreate()
         if (LeakCanary.isInAnalyzerProcess(this)) {
+            logDebug("Spawning analyzer procees. skipping setup")
             // This process is dedicated to LeakCanary for heap analysis.
             // You should not init your app in this process.
             return
@@ -27,18 +30,20 @@ abstract class BaseApplication : Application() {
         afterOnCreate()
     }
 
-    abstract fun isDebugMode(): Boolean;
+    abstract fun isDebugMode(): Boolean
 
     /**
-     * this should be overriden as the new "on create", as it allows this class to avoid calling unnessary (eg if the process is not the main application).
+     * this should be overridden as the new "on create", as it allows this class to avoid calling unnecessary (eg if the process is not the main application).
      */
     abstract fun afterOnCreate()
 
     fun enableLeakCanary() {
+        logDebug("Setting up leak canary")
         LeakCanary.install(this)
     }
 
-    fun enableStricMode() {
+    fun enableStrictMode() {
+        logDebug("Setting up strictMode")
         StrictMode.setThreadPolicy(
                 StrictMode.ThreadPolicy.Builder().
                         detectAll().

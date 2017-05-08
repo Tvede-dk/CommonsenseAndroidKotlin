@@ -53,14 +53,10 @@ dependencies {
     debugCompile 'com.squareup.leakcanary:leakcanary-android:1.5'
     releaseCompile 'com.squareup.leakcanary:leakcanary-android-no-op:1.5'
     testCompile 'com.squareup.leakcanary:leakcanary-android-no-op:1.5'
-    kapt "com.android.databinding:compiler:2.3.0"
+//    kapt "com.android.databinding:compiler:2.3.0"
 
     testCompile 'junit:junit:4.12'
-
+    kapt "com.android.databinding:compiler:2.4.+"
     compile "org.jetbrains.kotlin:kotlin-stdlib:$kotlin_version"
-}
-
-kapt {
-    generateStubs = true
 }
 

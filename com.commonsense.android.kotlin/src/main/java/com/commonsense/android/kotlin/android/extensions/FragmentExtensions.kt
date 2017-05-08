@@ -10,3 +10,7 @@ import android.view.ViewGroup
 
 fun Fragment.getParrentContainerId() = (view?.parent as? ViewGroup)?.id
 
+fun Fragment.PresentDialer(phoneNumber : String) {
+    context.PresentDialer(phoneNumber)
+}
+

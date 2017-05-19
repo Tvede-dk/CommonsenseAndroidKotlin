@@ -68,13 +68,10 @@ fun Activity.startUrl(url: String, forceHttps: Boolean = true, useInbuildBrowser
     }
 }
 
-
-//TODO make annotations for length
 fun Activity.safeToast(@StringRes message: Int, length: Int) {
-    if (isVisible) {
-
+    try {
+        Toast.makeText(this, message, length).show()
+    } catch (e: Exception) {
+        L.error("Activity.safeToast", "failed to show toast", e)
     }
 }
-
-val Activity.isVisible: Boolean
-    get() = false

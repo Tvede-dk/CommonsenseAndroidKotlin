@@ -2,6 +2,7 @@ package com.commonsense.android.kotlin.android
 
 import android.content.Context
 import android.content.SharedPreferences
+import com.commonsense.android.kotlin.android.extensions.editWith
 
 /**
  * Created by admin on 29-10-2016.
@@ -20,34 +21,36 @@ class DeviceSettings(val context: Context) {
     }
 
     //<editor-fold desc="save functions">
-    fun saveDeviceSetting(value: String, key: String) = sharedPrefs.edit().putString(key, value).apply()
+    fun saveSetting(value: String, key: String) = sharedPrefs.editWith { putString(key, value) }
 
-    fun saveDeviceSetting(value: Int, key: String) = sharedPrefs.edit().putInt(key, value).apply()
+    fun saveSetting(value: Int, key: String) = sharedPrefs.editWith { putInt(key, value) }
 
-    fun saveDeviceSetting(value: Float, key: String) = sharedPrefs.edit().putFloat(key, value).apply()
+    fun saveSetting(value: Float, key: String) = sharedPrefs.editWith { putFloat(key, value) }
 
-    fun saveDeviceSetting(value: Boolean, key: String) = sharedPrefs.edit().putBoolean(key, value).apply()
+    fun saveSetting(value: Boolean, key: String) = sharedPrefs.editWith { putBoolean(key, value) }
 
-    fun saveDeviceSetting(value: Long, key: String) = sharedPrefs.edit().putLong(key, value).apply()
+    fun saveSetting(value: Long, key: String) = sharedPrefs.editWith { putLong(key, value) }
 
 
-    inline fun <U> saveDeviceSetting(item: U,crossinline converter: (U) -> String?, key: String) = sharedPrefs.edit().putString(key, converter(item)).apply()
+    inline fun <U> saveSetting(item: U, crossinline converter: (U) -> String?, key: String) = sharedPrefs.editWith { putString(key, converter(item)) }
     //</editor-fold>
 
     //<editor-fold desc="load functions">
-    fun loadDeviceSetting(key: String, default: String? = null): String? = sharedPrefs.getString(key, default)
+    fun loadSetting(key: String, default: String? = null): String? = sharedPrefs.getString(key, default)
 
-    fun loadDeviceSetting(key: String, default: Int = 0) = sharedPrefs.getInt(key, default)
+    fun loadSetting(key: String, default: Int = 0) = sharedPrefs.getInt(key, default)
 
-    fun loadDeviceSetting(key: String, default: Float = 0f) = sharedPrefs.getFloat(key, default)
+    fun loadSetting(key: String, default: Float = 0f) = sharedPrefs.getFloat(key, default)
 
-    fun loadDeviceSetting(key: String, default: Boolean = false) = sharedPrefs.getBoolean(key, default)
+    fun loadSetting(key: String, default: Boolean = false) = sharedPrefs.getBoolean(key, default)
 
-    fun loadDeviceSetting(key: String, default: Long = 0) = sharedPrefs.getLong(key, default)
+    fun loadSetting(key: String, default: Long = 0) = sharedPrefs.getLong(key, default)
 
-    inline fun <U> loadDeviceSetting(key: String,crossinline converter: (String?) -> U?, default: U?) = sharedPrefs.getString(key, null)?.let { converter(it) } ?: default
+    inline fun <U> loadSetting(key: String, crossinline converter: (String?) -> U?, default: U?) = sharedPrefs.getString(key, null)?.let { converter(it) } ?: default
 
     fun haveSetting(key: String): Boolean = sharedPrefs.contains(key)
+
+    fun removeSetting(key: String) = sharedPrefs.editWith { remove(key) }
     //</editor-fold>
 
 

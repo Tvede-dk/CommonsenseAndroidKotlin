@@ -6,6 +6,8 @@ import android.support.v4.app.Fragment
 import android.support.v4.app.FragmentActivity
 import android.support.v7.app.AppCompatActivity
 import com.commonsense.android.kotlin.android.PermissionsHandling
+import com.commonsense.android.kotlin.android.extensions.transactionCommit
+import com.commonsense.android.kotlin.android.extensions.transactionCommitNow
 
 /**
  * Created by admin on 29-09-2016.
@@ -26,15 +28,19 @@ open class BaseActivity : AppCompatActivity() {
 
 }
 
-fun Activity.postFinish() {
-    runOnUiThread { finish() }
-}
+inline fun Activity.safeFinish() = runOnUiThread(this::finish)
+
 
 fun FragmentActivity.replaceFragment(@IdRes container: Int, fragment: Fragment) {
-    supportFragmentManager.beginTransaction().replace(container, fragment).commitNow()
+    supportFragmentManager.transactionCommitNow {
+        replace(container, fragment)
+    }
 }
 
 fun FragmentActivity.pushNewFragmentTo(@IdRes container: Int, fragment: Fragment) {
-    supportFragmentManager.beginTransaction().replace(container, fragment).addToBackStack(fragment.id.toString()).commit()
+    supportFragmentManager.transactionCommit {
+        replace(container, fragment)
+        addToBackStack(fragment.id.toString())
+    }
 }
 

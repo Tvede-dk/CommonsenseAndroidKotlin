@@ -20,7 +20,7 @@ abstract class BaseDatabindingFragment<out T : ViewDataBinding> : BaseFragment()
         LayoutInflater.from(context)
     }
 
-    abstract fun createView(layoutInflater: LayoutInflater, parent: ViewGroup?): T
+    abstract fun createView(inflater: LayoutInflater, parent: ViewGroup?): T
 
     val binding: T by lazy {
         createView(layoutInflator, parentView)

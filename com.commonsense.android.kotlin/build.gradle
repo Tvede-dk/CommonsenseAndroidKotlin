@@ -3,9 +3,6 @@ apply plugin: 'kotlin-android'
 apply plugin: 'kotlin-kapt'
 
 android {
-
-    defaultPublishConfig "fullRelease"
-    publishNonDefault true
     compileSdkVersion 25
     buildToolsVersion "25.0.3"
 
@@ -16,30 +13,19 @@ android {
         versionName "1.0"
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
     }
+
     dataBinding {
         enabled true
     }
+
     buildTypes {
+
         release {
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }
     }
-    sourceSets {
-        main.java.srcDirs += 'src/main/kotlin'
-    }
 
-    productFlavors {
-        dev {
-
-        }
-        full {
-
-        }
-    }
-
-    defaultPublishConfig "dev"
-    defaultPublishConfig "full"
 
 }
 dependencies {

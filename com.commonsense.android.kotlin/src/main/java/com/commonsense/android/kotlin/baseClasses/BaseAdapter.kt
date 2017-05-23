@@ -6,7 +6,7 @@ import android.widget.ArrayAdapter
 import java.util.*
 
 /**
- * Created by admin on 29-09-2016.
+ * created by Kasper Tvede on 29-09-2016.
  */
 open class BaseAdapter<T>(context: Context) : ArrayAdapter<T>(context, 0) {
 

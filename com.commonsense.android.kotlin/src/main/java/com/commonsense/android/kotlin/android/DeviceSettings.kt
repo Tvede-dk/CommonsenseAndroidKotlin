@@ -5,7 +5,7 @@ import android.content.SharedPreferences
 import com.commonsense.android.kotlin.android.extensions.editWith
 
 /**
- * Created by admin on 29-10-2016.
+ * created by Kasper Tvede on 29-10-2016.
  */
 
 

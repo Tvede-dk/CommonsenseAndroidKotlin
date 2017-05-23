@@ -11,7 +11,7 @@ import com.commonsense.android.kotlin.baseClasses.BaseAdapter
 import com.commonsense.android.kotlin.extensions.collections.clearAndSet
 
 /**
- * Created by admin on 30-09-2016.
+ * created by Kasper Tvede on 30-09-2016.
  */
 open class BaseDataBindingAdapter(context: Context) : BaseAdapter<BaseAdapterItemBinding<*>>(context) {
     private val viewTypes = SparseIntArray()

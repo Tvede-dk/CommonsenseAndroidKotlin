@@ -5,7 +5,7 @@ import android.view.LayoutInflater
 import com.commonsense.android.kotlin.baseClasses.BaseActivity
 
 /**
- * Created by admin on 29-09-2016.
+ * created by Kasper Tvede on 29-09-2016.
  */
 abstract class BaseDatabindingActivity<out T : android.databinding.ViewDataBinding> : BaseActivity() {
 

@@ -21,28 +21,53 @@ data class BaseViewHolderItem<out T : ViewDataBinding>(val item: T) : RecyclerVi
     val viewBindingTypeValue = item.javaClass.hashCode()
 }
 
-data class RenderModelItem<T : Any, Vm : ViewDataBinding>(val item: T, val classType: Class<Vm>,
-                                                          val renderFunction: (view: Vm, model: T) -> Unit,
-                                                          val inflaterFunction: (inflater: LayoutInflater, parent: ViewGroup?, attach: Boolean) -> Vm) {
-    fun bindToViewHolder(holder: BaseViewHolderItem<*>) {
+interface IRenderModelItem<in T : Any, Vm : ViewDataBinding> {
+    fun inflaterFunction(inflater: LayoutInflater, parent: ViewGroup?, attach: Boolean): Vm
+    val typeValue: Int
+    fun renderFunction(view: Vm, model: T)
+    fun bindToViewHolder(holder: BaseViewHolderItem<*>)
+}
+
+abstract class BaseRenderModel<T : Any, Vm : ViewDataBinding>(val item: T, classType: Class<Vm>) : IRenderModelItem<T, Vm> {
+
+    override val typeValue: Int by lazy {
+        classType.hashCode()
+    }
+
+    override fun bindToViewHolder(holder: BaseViewHolderItem<*>) {
         if (holder.viewBindingTypeValue == typeValue) {
             @Suppress("UNCHECKED_CAST")
-            bindDataToView(holder.item as Vm, item)
+            renderFunction(holder.item as Vm, item)
             //we are now "sure" that the binding class is the same as ours, thus casting "should" be "ok". (we basically introduced our own type system)
         } else {
             L.debug("RenderModelItem", "unable to bind to view even though it should be correct type$typeValue expected, got : ${holder.viewBindingTypeValue}")
         }
     }
 
-    fun bindDataToView(viewBinding: Vm, toShow: T) {
-        renderFunction(viewBinding, toShow)
+}
+
+open class RenderModelItem<T : Any, Vm : ViewDataBinding>(val item: T,
+                                                          val vmInflater: (inflater: LayoutInflater, parent: ViewGroup?, attach: Boolean) -> Vm,
+                                                          val classType: Class<Vm>,
+                                                          val vmRender: (view: Vm, model: T) -> Unit) : IRenderModelItem<T, Vm> {
+    override fun inflaterFunction(inflater: LayoutInflater, parent: ViewGroup?, attach: Boolean) = vmInflater(inflater, parent, false)
+
+    override fun renderFunction(view: Vm, model: T) = vmRender(view, model)
+
+    override fun bindToViewHolder(holder: BaseViewHolderItem<*>) {
+        if (holder.viewBindingTypeValue == typeValue) {
+            @Suppress("UNCHECKED_CAST")
+            renderFunction(holder.item as Vm, item)
+            //we are now "sure" that the binding class is the same as ours, thus casting "should" be "ok". (we basically introduced our own type system)
+        } else {
+            L.debug("RenderModelItem", "unable to bind to view even though it should be correct type$typeValue expected, got : ${holder.viewBindingTypeValue}")
+        }
     }
 
     //more performant than an inline getter that retrives it.
-    val typeValue : Int by lazy {
+    override val typeValue: Int by lazy {
         classType.hashCode()
-    } 
-
+    }
 }
 
 
@@ -52,17 +77,15 @@ class BaseDataBindingRecyclerView(context: Context) : RecyclerView.Adapter<BaseV
         LayoutInflater.from(context)
     }
 
-    private val data: MutableList<RenderModelItem<*, *>> = mutableListOf()
+    private val data: MutableList<IRenderModelItem<*, *>> = mutableListOf()
 
-    private val lookup: SparseArray<RenderModelItem<*, *>> = SparseArray()
+    private val lookup: SparseArray<IRenderModelItem<*, *>> = SparseArray()
 
     override fun onCreateViewHolder(parent: ViewGroup?, @IntRange(from = 0) viewType: Int): BaseViewHolderItem<*> {
-        L.error("recycler binder","creating item for viewtype $viewType")
         return BaseViewHolderItem(lookup[viewType].inflaterFunction(inflater, parent, false))
     }
 
     override fun getItemViewType(@IntRange(from = 0) position: Int): Int {
-        L.error("recycler binder","Getting viewtype for $position")
         return data[position].typeValue
 
     }
@@ -70,7 +93,6 @@ class BaseDataBindingRecyclerView(context: Context) : RecyclerView.Adapter<BaseV
     override fun onBindViewHolder(holder: BaseViewHolderItem<*>, @IntRange(from = 0) position: Int) {
         //lookup type to converter, then apply model on view using converter
         val render = data[position]
-        L.error("recycler binder","binding view at position $position")
         render.bindToViewHolder(holder)
     }
 
@@ -78,19 +100,19 @@ class BaseDataBindingRecyclerView(context: Context) : RecyclerView.Adapter<BaseV
     override fun getItemCount(): Int = data.size
 
 
-    fun add(newItem: RenderModelItem<*, *>) {
+    fun add(newItem: IRenderModelItem<*, *>) {
         addTypeIfMissing(newItem)
         data.add(newItem)
         notifyItemInserted(data.size - 1)
     }
 
-    fun addAll(items: List<RenderModelItem<*, *>>) {
+    fun addAll(items: List<IRenderModelItem<*, *>>) {
         addTypesIfMissing(items)
         data.addAll(items)
         notifyDataSetChanged()
     }
 
-    fun remove(newItem: RenderModelItem<*, *>) {
+    fun remove(newItem: IRenderModelItem<*, *>) {
         val index = data.indexOf(newItem)
         if (index >= 0 && index < data.size) {
             data.removeAt(index)
@@ -107,8 +129,8 @@ class BaseDataBindingRecyclerView(context: Context) : RecyclerView.Adapter<BaseV
     }
 
 
-    private fun addTypeIfMissing(newItem: RenderModelItem<*, *>) {
-        if (lookup.indexOfKey(newItem.typeValue) == -1) {
+    private fun addTypeIfMissing(newItem: IRenderModelItem<*, *>) {
+        if (lookup.indexOfKey(newItem.typeValue) < 0) {
             lookup.put(newItem.typeValue, newItem)
         }
     }
@@ -118,7 +140,7 @@ class BaseDataBindingRecyclerView(context: Context) : RecyclerView.Adapter<BaseV
         addTypesIfMissing(data)
     }
 
-    private fun addTypesIfMissing(items: List<RenderModelItem<*, *>>) {
+    private fun addTypesIfMissing(items: List<IRenderModelItem<*, *>>) {
         items.forEach(this::addTypeIfMissing)
     }
 

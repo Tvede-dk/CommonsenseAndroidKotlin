@@ -10,7 +10,7 @@ import android.view.ViewGroup
 import com.commonsense.android.kotlin.baseClasses.BaseAdapter
 
 /**
- * Created by admin on 29-09-2016.
+ * created by Kasper Tvede on 29-09-2016.
  */
 
 abstract class BaseSingleDataBindingAdapter<T, VB : ViewDataBinding>(context: Context, var viewbindingClass: Class<VB>, @LayoutRes var layoutRes: Int) : BaseAdapter<T>(context) {

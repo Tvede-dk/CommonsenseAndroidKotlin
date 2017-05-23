@@ -1,11 +1,9 @@
 package com.commonsense.android.kotlin.baseClasses
 
-import android.support.v4.app.Fragment
+import android.support.v4.app.DialogFragment
 
 /**
- * Created by admin on 29-09-2016.
+ * created by Kasper Tvede on 29-09-2016.
  */
 
-open class BaseFragment : Fragment() {
-
-}
+open class BaseFragment : DialogFragment()

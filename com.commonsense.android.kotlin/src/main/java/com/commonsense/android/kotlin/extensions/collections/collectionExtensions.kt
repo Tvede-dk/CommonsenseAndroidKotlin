@@ -39,3 +39,11 @@ inline fun <T> MutableList<T>.findAndRemoveAll(crossinline findAction: (T) -> Bo
     removeAll(collection)
     return collection
 }
+
+fun <T> Collection<T>.getSafe(index: Int): T? {
+    return if (this.isIndexValid(index)) {
+        this.elementAt(index)
+    } else {
+        null
+    }
+}

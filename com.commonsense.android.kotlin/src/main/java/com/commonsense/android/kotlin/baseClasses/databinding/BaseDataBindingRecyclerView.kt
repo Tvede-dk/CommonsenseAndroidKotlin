@@ -8,6 +8,8 @@ import android.util.SparseArray
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import com.commonsense.android.kotlin.android.logging.L
+import com.commonsense.android.kotlin.extensions.collections.getSafe
+import com.commonsense.android.kotlin.extensions.collections.isIndexValid
 
 /**
  * Created by kasper on 17/05/2017.
@@ -114,13 +116,19 @@ class BaseDataBindingRecyclerView(context: Context) : RecyclerView.Adapter<BaseV
 
     fun remove(newItem: IRenderModelItem<*, *>) {
         val index = data.indexOf(newItem)
-        if (index >= 0 && index < data.size) {
+        removeAt(index)
+    }
+
+    fun removeAt(index: Int) {
+        if (data.isIndexValid(index)) {
             data.removeAt(index)
             notifyItemRemoved(index)
             recalculateAllTypes()
             //recalculate the lookup
         }
     }
+
+    fun getItem(index: Int): IRenderModelItem<*, *>? = data.getSafe(index)
 
     fun clear() {
         data.clear()

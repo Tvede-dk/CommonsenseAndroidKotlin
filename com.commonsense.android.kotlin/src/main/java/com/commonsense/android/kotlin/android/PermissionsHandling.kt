@@ -40,7 +40,7 @@ class PermissionsHandling(val handlerRequestCode: Int = 999) {
         return (requestCode == handlerRequestCode).onTrue {
             val requests = requestsInFlight.findAndRemoveAll { it.permission == permissions.firstOrNull() }
             val isGranted = grantedResults.firstOrNull()?.isGranted() ?: false
-            requests.forEach { isGranted.onTrue { it.onGranted() }.onFalse { it.onFailed() } }
+            requests.forEach { isGranted.onTrue(it.onGranted).onFalse(it.onFailed) }
         }
     }
 

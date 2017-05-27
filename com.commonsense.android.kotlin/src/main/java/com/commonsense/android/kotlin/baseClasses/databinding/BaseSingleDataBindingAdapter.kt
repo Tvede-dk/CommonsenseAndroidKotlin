@@ -13,8 +13,7 @@ import com.commonsense.android.kotlin.baseClasses.BaseAdapter
  * created by Kasper Tvede on 29-09-2016.
  */
 
-abstract class BaseSingleDataBindingAdapter<T, VB : ViewDataBinding>(context: Context, var viewbindingClass: Class<VB>, @LayoutRes var layoutRes: Int) : BaseAdapter<T>(context) {
-
+abstract class BaseSingleDataBindingAdapter<T, VB : ViewDataBinding>(context: Context, val viewbindingClass: Class<VB>, @LayoutRes val layoutRes: Int) : BaseAdapter<T>(context) {
 
     abstract fun populateView(item: T, binding: VB)
 

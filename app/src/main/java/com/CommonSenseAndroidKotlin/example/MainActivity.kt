@@ -12,7 +12,6 @@ import com.commonsense.android.kotlin.baseClasses.databinding.BaseDatabindingAct
 
 class MainActivity : BaseDatabindingActivity<ActivityMainBinding>() {
     override fun useBinding() {
-        binding.mainTitle.setText(R.string.testTitle)
         val adapter = BaseDataBindingAdapter(this)
 //        adapter.add(BaseAdapterItemBindingFunc(R.layout.simple_list_item, SimpleListItemBinding::class.java, {
 //            it.useData("asd")

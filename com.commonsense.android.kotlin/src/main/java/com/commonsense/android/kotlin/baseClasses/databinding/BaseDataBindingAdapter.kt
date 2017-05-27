@@ -38,6 +38,7 @@ open class BaseDataBindingAdapter(context: Context) : BaseAdapter<BaseAdapterIte
     }
 
     @IntRange(from = 1)
+
     override fun getViewTypeCount() = Math.max(viewTypes.size(), 1)
 
     fun calculateViewTypes(): Int {
@@ -49,7 +50,7 @@ open class BaseDataBindingAdapter(context: Context) : BaseAdapter<BaseAdapterIte
 
     override fun add(obj: BaseAdapterItemBinding<*>) {
         super.add(obj)
-        obj?.let(this::addHashCodeIfNeeded)
+        obj.let(this::addHashCodeIfNeeded)
     }
 
     fun addHashCodeIfNeeded(obj: BaseAdapterItemBinding<*>) {

@@ -24,24 +24,19 @@ inline fun View.setOnClickView(crossinline listener: (View) -> Unit) {
 
 @UiThread
 inline fun View.measureSize(crossinline afterMeasureAction: (with: Int, height: Int) -> Unit) {
-    if (viewTreeObserver.isAlive) {
-        viewTreeObserver.addOnGlobalLayoutListener(object : ViewTreeObserver.OnGlobalLayoutListener {
-            override fun onGlobalLayout() {
-                viewTreeObserver.removeOnGlobalLayoutListenerCompact(this)
-                afterMeasureAction(width, height)
-            }
-
-        })
+    if (!viewTreeObserver.isAlive) {
+        return
     }
+    viewTreeObserver.addOnGlobalLayoutListener(object : ViewTreeObserver.OnGlobalLayoutListener {
+        override fun onGlobalLayout() {
+            viewTreeObserver.removeOnGlobalLayoutListenerCompact(this)
+            afterMeasureAction(width, height)
+        }
+    })
 }
 
 @UiThread
 @TargetApi(Build.VERSION_CODES.JELLY_BEAN)
 fun ViewTreeObserver.removeOnGlobalLayoutListenerCompact(listener: ViewTreeObserver.OnGlobalLayoutListener) {
-    if (Build.VERSION.SDK_INT < Build.VERSION_CODES.JELLY_BEAN) {
-        @Suppress("DEPRECATION")
-        removeGlobalOnLayoutListener(listener)
-    } else {
-        removeOnGlobalLayoutListener(listener)
-    }
+    removeOnGlobalLayoutListener(listener)
 }

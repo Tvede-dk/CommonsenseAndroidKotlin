@@ -1,6 +1,7 @@
 package com.commonsense.android.kotlin
 
 import android.app.Activity
+import android.content.Context
 import com.commonsense.kotlin.BuildConfig
 import org.junit.runner.RunWith
 import org.robolectric.Robolectric
@@ -16,7 +17,7 @@ import org.robolectric.annotation.Config
 @RunWith(RobolectricTestRunner::class)
 @Config(constants = BuildConfig::class)
 abstract class BaseRoboElectricTest {
-    val context by lazy {
+    val context: Context by lazy {
         RuntimeEnvironment.application
     }
 

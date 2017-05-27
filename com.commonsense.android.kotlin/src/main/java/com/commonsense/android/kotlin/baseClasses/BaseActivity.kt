@@ -28,7 +28,7 @@ open class BaseActivity : AppCompatActivity() {
 
 }
 
-inline fun Activity.safeFinish() = runOnUiThread(this::finish)
+fun Activity.safeFinish() = runOnUiThread(this::finish)
 
 
 fun FragmentActivity.replaceFragment(@IdRes container: Int, fragment: Fragment) {

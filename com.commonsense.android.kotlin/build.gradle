@@ -26,9 +26,14 @@ android {
         }
     }
 
+
     lintOptions {
         xmlReport true
         xmlOutput = new File("lint-results.xml")
+    }
+    configurations {
+        Debug
+        Release
     }
 
 }

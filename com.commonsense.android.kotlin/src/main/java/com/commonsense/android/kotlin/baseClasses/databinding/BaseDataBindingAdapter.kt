@@ -21,7 +21,7 @@ open class BaseDataBindingAdapter(context: Context) : BaseAdapter<BaseAdapterIte
     }
 
     override fun getView(position: Int, convertView: View?, parent: ViewGroup): View {
-        val item = getItem(position)
+        val item = getItem(position) ?: throw RuntimeException()
         val otherClass = convertView?.tag as ViewDataBinding?
         val binding = if (otherClass != null && otherClass::class.java == item.viewBindingClass) {
             item.useConvertedView(otherClass)
@@ -33,7 +33,8 @@ open class BaseDataBindingAdapter(context: Context) : BaseAdapter<BaseAdapterIte
     }
 
     override fun getItemViewType(position: Int): Int {
-        return viewTypes.get(getItem(position)::class.java.hashCode(), IGNORE_ITEM_VIEW_TYPE)
+        val item = getItem(position)?.let { it::class.java.hashCode() } ?: 0
+        return viewTypes.get(item, IGNORE_ITEM_VIEW_TYPE)
     }
 
     @IntRange(from = 1)
@@ -48,7 +49,7 @@ open class BaseDataBindingAdapter(context: Context) : BaseAdapter<BaseAdapterIte
 
     override fun add(obj: BaseAdapterItemBinding<*>) {
         super.add(obj)
-        addHashCodeIfNeeded(obj)
+        obj?.let(this::addHashCodeIfNeeded)
     }
 
     fun addHashCodeIfNeeded(obj: BaseAdapterItemBinding<*>) {
@@ -65,7 +66,7 @@ open class BaseDataBindingAdapter(context: Context) : BaseAdapter<BaseAdapterIte
 
     override fun addAll(vararg items: BaseAdapterItemBinding<*>) {
         super.addAll(*items)
-        items.forEach { addHashCodeIfNeeded(it) }
+        items.forEach(this::addHashCodeIfNeeded)
     }
 
     override fun clear() {

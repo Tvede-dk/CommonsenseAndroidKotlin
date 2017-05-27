@@ -44,12 +44,19 @@ open class BaseAdapter<T>(context: Context) : ArrayAdapter<T>(context, 0) {
         items.forEach { this.add(it) }
     }
 
-    override fun getItem(position: Int): T {
-        return super.getItem(position)
+    override fun getItem(position: Int): T? {
+        if (isIndexValid(position)) {
+            return super.getItem(position)
+        }
+        return null
     }
 
     fun getItems(): List<T> {
-        return IntRange(0, count - 1).map { getItem(it) }
+        val list = mutableListOf<T>()
+        (0..count - 1).forEach {
+            getItem(it)?.let(list::add)
+        }
+        return list
     }
 
     override fun clear() {
@@ -80,9 +87,10 @@ open class BaseAdapter<T>(context: Context) : ArrayAdapter<T>(context, 0) {
         }
     }
 
-    override fun getItemId(position: Int): Long {
-        return super.getItemId(position)
+    fun isIndexValid(index: Int): Boolean {
+        return index in 0..(count - 1)
     }
+
 
     fun addAll(map: List<T>) {
         map.forEach { add(it) }

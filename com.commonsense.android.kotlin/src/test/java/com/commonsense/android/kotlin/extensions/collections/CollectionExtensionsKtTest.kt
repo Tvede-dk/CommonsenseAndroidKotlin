@@ -1,46 +1,37 @@
 package com.commonsense.android.kotlin.extensions.collections
 
 import android.util.SparseIntArray
-import com.commonsense.kotlin.BuildConfig
+import com.commonsense.android.kotlin.BaseRoboElectricTest
 import org.junit.Assert
 import org.junit.Test
-import org.junit.runner.RunWith
-import org.robolectric.RobolectricTestRunner
-import org.robolectric.annotation.Config
 
 /**
  * Created by Kasper Tvede on 27-05-2017.
  */
-@RunWith(RobolectricTestRunner::class)
-@Config(constants = BuildConfig::class)
-class CollectionExtensionsKtTest {
+class CollectionExtensionsKtTest : BaseRoboElectricTest() {
     @Test
     fun clearAndSet() {
         val array = SparseIntArray()
-        with(array) {
-            put(20, 20)
-            Assert.assertEquals(size(), 1)
-            clearAndSet(listOf(Pair(10, 10), Pair(30, 30)))
-            Assert.assertEquals(size(), 2)
-            Assert.assertEquals(get(10), 10)
-            Assert.assertEquals(get(30), 30)
-        }
+        array.put(20, 20)
+        Assert.assertEquals(array.size(), 1)
+        array.clearAndSet(listOf(Pair(10, 10), Pair(30, 30)))
+        Assert.assertEquals(array.size(), 2)
+        Assert.assertEquals(array.get(10), 10)
+        Assert.assertEquals(array.get(30), 30)
     }
 
     @Test
     fun clearAndSet1() {
         val array = SparseIntArray()
-        with(array) {
-            put(20, 20)
-            Assert.assertEquals(array.size(), 1)
-            val map = HashMap<Int, Int>()
-            map.put(10, 10)
-            map.put(30, 30)
-            clearAndSet(map)
-            Assert.assertEquals(array.size(), 2)
-            Assert.assertEquals(array[10], 10)
-            Assert.assertEquals(array[30], 30)
-        }
+        array.put(20, 20)
+        Assert.assertEquals(array.size(), 1)
+        val map = HashMap<Int, Int>()
+        map.put(10, 10)
+        map.put(30, 30)
+        array.clearAndSet(map)
+        Assert.assertEquals(array.size(), 2)
+        Assert.assertEquals(array[10], 10)
+        Assert.assertEquals(array[30], 30)
     }
 
     @Test

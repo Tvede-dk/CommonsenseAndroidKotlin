@@ -4,26 +4,20 @@ import android.content.Context
 import android.databinding.DataBindingComponent
 import android.databinding.ViewDataBinding
 import android.view.View
-import com.commonsense.kotlin.BuildConfig
+import com.commonsense.android.kotlin.BaseRoboElectricTest
 import org.junit.Assert
 import org.junit.Test
-import org.junit.runner.RunWith
-import org.robolectric.RobolectricTestRunner
-import org.robolectric.RuntimeEnvironment
-import org.robolectric.annotation.Config
 
 /**
  * Created by Kasper Tvede on 27-05-2017.
  */
 
-@RunWith(RobolectricTestRunner::class)
-@Config(constants = BuildConfig::class)
-class BaseDataBindingRecyclerViewTest {
+class BaseDataBindingRecyclerViewTest : BaseRoboElectricTest() {
 
 
     @Test
     fun testLookup() {
-        val recycler = BaseDataBindingRecyclerView(RuntimeEnvironment.application)
+        val recycler = BaseDataBindingRecyclerView(context)
         recycler.add(createVm1RenderModel())
         Assert.assertNotEquals(recycler.getItemViewType(0), 0)
         recycler.add(createVm1RenderModel())
@@ -56,13 +50,13 @@ class BaseDataBindingRecyclerViewTest {
 
     private fun createVm2RenderModel(): RenderModelItem<String, TestVm2> {
         return RenderModelItem("",
-                { _, _, _ -> TestVm2(RuntimeEnvironment.application) },
+                { _, _, _ -> TestVm2(context) },
                 TestVm2::class.java, { view, model -> })
     }
 
     private fun createVm1RenderModel(): RenderModelItem<String, TestVm1> {
         return RenderModelItem("",
-                { _, _, _ -> TestVm1(RuntimeEnvironment.application) },
+                { _, _, _ -> TestVm1(context) },
                 TestVm1::class.java, { view, model -> })
     }
 

@@ -19,6 +19,7 @@ abstract class BaseSingleDataBindingAdapter<T, VB : ViewDataBinding>(context: Co
     abstract fun populateView(item: T, binding: VB)
 
     override fun getView(position: Int, convertView: View?, parent: ViewGroup): View {
+        val item: T = getItem(position) ?: throw RuntimeException()
         val binding: VB
         if (convertView != null && convertView.tag?.let { it::class.java } == viewbindingClass) {
             binding = viewbindingClass.cast(convertView.tag)
@@ -26,7 +27,7 @@ abstract class BaseSingleDataBindingAdapter<T, VB : ViewDataBinding>(context: Co
             binding = DataBindingUtil.inflate(LayoutInflater.from(context), layoutRes, parent, false)
             binding.root.tag = binding
         }
-        populateView(getItem(position), binding)
+        populateView(item, binding)
         return binding.root
     }
 }

@@ -1,13 +1,13 @@
-package com.tvede.CommonSenseAndroidKotlin.example
+package com.CommonSenseAndroidKotlin.example
 
 
 import android.support.annotation.DrawableRes
 import android.view.LayoutInflater
+import com.CommonSenseAndroidKotlin.example.databinding.ActivityMainBinding
+import com.CommonSenseAndroidKotlin.example.databinding.SimpleListImageItemBinding
+import com.CommonSenseAndroidKotlin.example.databinding.SimpleListItemBinding
 import com.commonsense.android.kotlin.baseClasses.databinding.BaseDataBindingAdapter
 import com.commonsense.android.kotlin.baseClasses.databinding.BaseDatabindingActivity
-import com.tvede.CommonSenseAndroidKotlin.example.databinding.ActivityMainBinding
-import com.tvede.CommonSenseAndroidKotlin.example.databinding.SimpleListImageItemBinding
-import com.tvede.CommonSenseAndroidKotlin.example.databinding.SimpleListItemBinding
 
 
 class MainActivity : BaseDatabindingActivity<ActivityMainBinding>() {

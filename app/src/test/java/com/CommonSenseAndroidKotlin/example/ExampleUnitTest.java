@@ -1,4 +1,4 @@
-package com.tvede.CommonSenseAndroidKotlin.example;
+package com.CommonSenseAndroidKotlin.example;
 
 import org.junit.Test;
 

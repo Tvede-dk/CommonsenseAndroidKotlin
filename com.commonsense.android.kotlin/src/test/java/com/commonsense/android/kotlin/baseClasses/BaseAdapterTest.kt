@@ -44,7 +44,24 @@ class BaseAdapterTest : BaseRoboElectricTest() {
 
     }
 
-    
 
+    @Test
+    fun testFluentFunctions() {
+        val adapter = BaseAdapter<String>(context)
+        adapter.addF("2").addF("1")
+        Assert.assertEquals(adapter.getItem(0), "2")
+        Assert.assertEquals(adapter.getItem(1), "1")
+
+
+        adapter.addF("3", "4")
+        Assert.assertEquals(adapter.getItem(2), "3")
+        Assert.assertEquals(adapter.getItem(3), "4")
+
+        adapter.addAllF(listOf("5", "7", "6"))
+        Assert.assertEquals(adapter.getItem(4), "5")
+        Assert.assertEquals(adapter.getItem(5), "7")
+        Assert.assertEquals(adapter.getItem(6), "6")
+
+    }
 
 }

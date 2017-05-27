@@ -15,14 +15,14 @@ import com.commonsense.android.kotlin.android.extensions.transactionCommitNow
 
 open class BaseActivity : AppCompatActivity() {
 
-    val PermissionHandler by lazy {
+    val permissionHandler by lazy {
         PermissionsHandling()
     }
 
 
     override fun onRequestPermissionsResult(requestCode: Int, permissions: Array<out String>, grantResults: IntArray) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults)
-        PermissionHandler.onRequestPermissionResult(requestCode, permissions, grantResults)
+        permissionHandler.onRequestPermissionResult(requestCode, permissions, grantResults)
     }
 
 

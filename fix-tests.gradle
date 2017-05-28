@@ -6,7 +6,7 @@ class NoUpToDateTests implements Plugin<Project> {
         }
     }
 
-    void handleProject(Project project) {
+    static void handleProject(Project project) {
         println "Disabling up to date state for tests in project [$project.name]"
         project.tasks.matching { it.name.contains("test") }.forEach {
             println "\tdisabling up-to-date for $it.name"

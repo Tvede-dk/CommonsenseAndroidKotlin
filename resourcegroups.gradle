@@ -4,10 +4,8 @@ class MultiDirRes implements Plugin<Project> {
     void apply(Project project) {
 
         if (project.pluginManager.hasPlugin("com.android.application")) {
-            println("android application")
             applyMultiSourceDir(project)
         } else if (project.pluginManager.hasPlugin("com.android.library")) {
-            println("android library")
             applyMultiSourceDir(project)
         } else {
             println("Not android based project, thus disabling plugin.")
@@ -18,6 +16,7 @@ class MultiDirRes implements Plugin<Project> {
             "anims",
             "colors",
             "drawables",
+            "mipmap",
             "drawables-hdpi",
             "drawables-mdpi",
             "drawables-xhdpi",
@@ -28,6 +27,7 @@ class MultiDirRes implements Plugin<Project> {
 
     void applyMultiSourceDir(Project project) {
         project.afterEvaluate {
+            println "Multi res dir enabled for $project.name"
             project.android.sourceSets.each {
                 def rootResDir = it.res.srcDirs[0]
 
@@ -44,6 +44,7 @@ class MultiDirRes implements Plugin<Project> {
         def resDir = new File(rootResDir, dirName)
         def subLayoutDirs = []
         if (resDir.exists()) {
+
             resDir.eachDir {
                 subLayoutDirs.add it
                 println "\t - adding dir $it to category $dirName"

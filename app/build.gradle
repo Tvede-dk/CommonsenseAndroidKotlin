@@ -49,3 +49,6 @@ dependencies {
 repositories {
     mavenCentral()
 }
+
+
+apply from: "../resourcegroups.gradle"

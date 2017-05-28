@@ -1,38 +1,57 @@
-afterEvaluate {
-    println "Configuring multi directory solution"
-    android.sourceSets.each {
-        def rootResDir = it.res.srcDirs[0]
-        println "**rootResDir: $rootResDir"
+class MultiDirRes implements Plugin<Project> {
 
-        def getSubDirs = { dirName ->
+    @Override
+    void apply(Project project) {
 
-            def layoutsDir = new File(rootResDir, dirName)
-            def subLayoutDirs = []
-            if (layoutsDir.exists()) {
-                println "**- exists ? " + layoutsDir.exists()
-                println "Searching in $rootResDir/$dirName"
-                layoutsDir.eachDir {
-                    subLayoutDirs.add it
-                    println "\t - adding dir $it to $dirName"
+        if (project.pluginManager.hasPlugin("com.android.application")) {
+            println("android application")
+            applyMultiSourceDir(project)
+        } else if (project.pluginManager.hasPlugin("com.android.library")) {
+            println("android library")
+            applyMultiSourceDir(project)
+        } else {
+            println("Not android based project, thus disabling plugin.")
+        }
+    }
+
+    def resDirs = [
+            "anims",
+            "colors",
+            "drawables",
+            "drawables-hdpi",
+            "drawables-mdpi",
+            "drawables-xhdpi",
+            "drawables-xxhdpi",
+            "layout",
+            "values",
+    ]
+
+    void applyMultiSourceDir(Project project) {
+        project.afterEvaluate {
+            project.android.sourceSets.each {
+                def rootResDir = it.res.srcDirs[0]
+
+                def srcDirs = resDirs.collect {
+                    getSubDirs(it, rootResDir)
                 }
+                it.res.srcDirs = [srcDirs, rootResDir]
             }
-            return subLayoutDirs
-        }
-        def resDirs = [
-                "anims",
-                "colors",
-                "drawables",
-                "drawables-hdpi",
-                "drawables-mdpi",
-                "drawables-xhdpi",
-                "drawables-xxhdpi",
-                "layouts",
-                "values",
-        ]
-        def srcDirs = resDirs.collect {
-            getSubDirs(it)
         }
 
-        it.res.srcDirs = [srcDirs, rootResDir]
+    }
+    def getSubDirs = { dirName, rootResDir ->
+
+        def resDir = new File(rootResDir, dirName)
+        def subLayoutDirs = []
+        if (resDir.exists()) {
+            resDir.eachDir {
+                subLayoutDirs.add it
+                println "\t - adding dir $it to category $dirName"
+            }
+        }
+        return subLayoutDirs
     }
 }
+
+apply plugin: MultiDirRes
+

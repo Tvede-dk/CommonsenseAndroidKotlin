@@ -21,3 +21,12 @@ inline fun Boolean.onFalse(crossinline action: () -> Unit): Boolean {
     }
     return this
 }
+
+
+inline fun <reified T : kotlin.Enum<T>> valueOfOrUnsafe(type: String?, orValue: T?): T? {
+    return java.lang.Enum.valueOf(T::class.java, type) ?: orValue
+}
+
+inline fun <reified T : kotlin.Enum<T>> enumFromOr(type: String?, orValue: T): T {
+    return java.lang.Enum.valueOf(T::class.java, type) ?: orValue
+}

@@ -63,5 +63,3 @@ dependencies {
     kapt "com.android.databinding:compiler:2.4.+"
     compile "org.jetbrains.kotlin:kotlin-stdlib:$kotlin_version"
 }
-
-

@@ -1,28 +1,38 @@
-sourceSets.each {
-    def rootResDir = it.res.srcDirs[0]
-    def getSubDirs = { dirName ->
-        def layoutsDir = new File(rootResDir, dirName)
-        def subLayoutDirs = []
-        if (layoutsDir.exists()) {
-            layoutsDir.eachDir {
-                subLayoutDirs.add it
+afterEvaluate {
+    println "Configuring multi directory solution"
+    android.sourceSets.each {
+        def rootResDir = it.res.srcDirs[0]
+        println "**rootResDir: $rootResDir"
+
+        def getSubDirs = { dirName ->
+
+            def layoutsDir = new File(rootResDir, dirName)
+            def subLayoutDirs = []
+            if (layoutsDir.exists()) {
+                println "**- exists ? " + layoutsDir.exists()
+                println "Searching in $rootResDir/$dirName"
+                layoutsDir.eachDir {
+                    subLayoutDirs.add it
+                    println "\t - adding dir $it to $dirName"
+                }
             }
+            return subLayoutDirs
         }
-        return subLayoutDirs
+        def resDirs = [
+                "anims",
+                "colors",
+                "drawables",
+                "drawables-hdpi",
+                "drawables-mdpi",
+                "drawables-xhdpi",
+                "drawables-xxhdpi",
+                "layouts",
+                "values",
+        ]
+        def srcDirs = resDirs.collect {
+            getSubDirs(it)
+        }
+
+        it.res.srcDirs = [srcDirs, rootResDir]
     }
-    def resDirs = [
-            "anims",
-            "colors",
-            "drawables",
-            "drawables-hdpi",
-            "drawables-mdpi",
-            "drawables-xhdpi",
-            "drawables-xxhdpi",
-            "layouts",
-            "valuess",
-    ]
-    def srcDirs = resDirs.collect {
-        getSubDirs(it)
-    }
-    it.res.srcDirs = [srcDirs, rootResDir]
 }

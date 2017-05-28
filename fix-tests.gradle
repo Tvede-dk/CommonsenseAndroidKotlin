@@ -1,0 +1,10 @@
+gradle.projectsEvaluated {
+    allprojects { project ->
+        println "Disabling up to date state for tests in project [$project.name]"
+        project.tasks.matching { it.name.contains("test") }.forEach {
+            println "\tdisabling up-to-date for $it.name"
+            it.outputs.upToDateWhen { false }
+        }
+    }
+}
+

@@ -35,7 +35,16 @@ fun Context.getDrawableSafe(@DrawableRes drawable: Int): Drawable? {
     return AppCompatResources.getDrawable(this, drawable)
 }
 
-fun Context.safeToast(@StringRes message: Int, length: Int) {
+fun Context.safeToast(@StringRes message: Int, length: Int = Toast.LENGTH_SHORT) {
+    try {
+        Toast.makeText(this, message, length).show()
+    } catch (e: Exception) {
+        L.error("Activity.safeToast", "failed to show toast", e)
+    }
+}
+
+
+fun Context.safeToast(message: String, length: Int = Toast.LENGTH_SHORT) {
     try {
         Toast.makeText(this, message, length).show()
     } catch (e: Exception) {

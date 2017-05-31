@@ -1,9 +1,9 @@
 package com.commonsense.android.kotlin.baseClasses
 
 import android.app.Application
-import android.os.Build
 import android.os.StrictMode
 import android.support.v7.app.AppCompatDelegate
+import com.commonsense.android.kotlin.android.extensions.isApiLowerThan
 import com.commonsense.android.kotlin.android.logging.logDebug
 import com.squareup.leakcanary.LeakCanary
 
@@ -34,7 +34,7 @@ abstract class BaseApplication : Application() {
     }
 
     private fun setupVectorDrawableOldAndroid() {
-        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.LOLLIPOP) {
+        if (isApiLowerThan(21)) {
             AppCompatDelegate.setCompatVectorFromResourcesEnabled(true)
         }
     }

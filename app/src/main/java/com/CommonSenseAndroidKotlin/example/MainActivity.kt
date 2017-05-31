@@ -1,42 +1,28 @@
 package com.CommonSenseAndroidKotlin.example
 
 
-import android.support.annotation.DrawableRes
+import android.content.Intent
 import android.view.LayoutInflater
+import com.CommonSenseAndroidKotlin.example.activity.DemoActivity
 import com.CommonSenseAndroidKotlin.example.databinding.ActivityMainBinding
-import com.CommonSenseAndroidKotlin.example.databinding.SimpleListImageItemBinding
-import com.CommonSenseAndroidKotlin.example.databinding.SimpleListItemBinding
-import com.commonsense.android.kotlin.baseClasses.databinding.BaseDataBindingAdapter
+import com.commonsense.android.kotlin.android.extensions.widets.setOnClick
+import com.commonsense.android.kotlin.baseClasses.databinding.BaseDataBindingRecyclerView
 import com.commonsense.android.kotlin.baseClasses.databinding.BaseDatabindingActivity
 
 
 class MainActivity : BaseDatabindingActivity<ActivityMainBinding>() {
+    private val adapter by lazy {
+        BaseDataBindingRecyclerView(this.applicationContext)
+    }
+
     override fun useBinding() {
-        val adapter = BaseDataBindingAdapter(this)
-//        adapter.add(BaseAdapterItemBindingFunc(R.layout.simple_list_item, SimpleListItemBinding::class.java, {
-//            it.useData("asd")
-//        }))
-//        adapter.add(BaseAdapterItemBindingFunc(R.layout.simple_list_image_item, SimpleListImageItemBinding::class.java, {
-//            it.useImage(R.mipmap.ic_launcher)
-//        }))
-//        adapter.add(BaseAdapterItemBindingFunc(R.layout.simple_list_item, SimpleListItemBinding::class.java, {
-//            it.useData("asd")
-//        }))
-        binding.mainList.adapter = adapter
+        binding.mainTitle.setOnClick {
+            startActivity(Intent(this@MainActivity, DemoActivity::class.java))
+        }
     }
 
     override fun createBinding(inflater: LayoutInflater) = ActivityMainBinding.inflate(inflater)
 
 
 }
-
-fun SimpleListItemBinding.useData(data: String) {
-    simpleListText.text = data
-}
-
-fun SimpleListImageItemBinding.useImage(@DrawableRes image: Int) {
-    simpleListItemImageImage.setImageResource(image)
-}
-
-
 

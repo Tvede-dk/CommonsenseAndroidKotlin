@@ -7,17 +7,14 @@
         android:orientation="vertical">
 
         <TextView
-            android:id="@+id/main_title"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:gravity="center_horizontal"
-            android:text="title" />
+            android:text="A simple demo for some recycler views :) dont waste, recycle, with ease" />
 
-        <com.commonsense.android.kotlin.widgets.SwipeRefreshRecylerView
-            android:id="@+id/main_list"
+        <android.support.v7.widget.RecyclerView
+            android:id="@+id/demo_recycler_simple_view_recyclerview"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:background="#eee" />
+            android:layout_height="match_parent" />
 
     </LinearLayout>
 </layout>

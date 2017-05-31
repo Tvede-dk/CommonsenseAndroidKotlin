@@ -8,7 +8,13 @@
 
         <TextView
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:text="from magic place - in activities" />
+            android:layout_height="wrap_content"
+            android:text="Choose a demo from the navigation bar, and see it in action" />
+
+        <FrameLayout
+            android:id="@+id/demo_activity_container"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent" />
+
     </LinearLayout>
 </layout>

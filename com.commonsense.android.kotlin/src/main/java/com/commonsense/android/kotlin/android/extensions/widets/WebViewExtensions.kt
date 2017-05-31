@@ -1,4 +1,4 @@
-package com.commonsense.android.kotlin.android.extensions
+package com.commonsense.android.kotlin.android.extensions.widets
 
 import android.webkit.WebView
 

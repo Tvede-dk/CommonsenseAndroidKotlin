@@ -4,9 +4,11 @@ import android.content.Context
 import android.databinding.ViewDataBinding
 import kotlinx.coroutines.experimental.CommonPool
 import kotlinx.coroutines.experimental.android.UI
+import kotlinx.coroutines.experimental.channels.Channel
 import kotlinx.coroutines.experimental.channels.actor
 import kotlinx.coroutines.experimental.channels.consumeEach
 import kotlinx.coroutines.experimental.launch
+import kotlinx.coroutines.experimental.sync.Mutex
 
 /**
  * Created by kasper on 01/06/2017.
@@ -35,12 +37,16 @@ open class BaseSearchableDataBindingRecyclerView<F : Any>(context: Context) : Ab
         get() = filterValue != null
 
     //the "gatekeeper" for our filter function. will restrict acces so only one gets in. thus if we spam the filter, we should only use the latest filter.
-    private val eventActor = actor<Unit>(CommonPool) {
+    private var eventActor = actor<Unit>(CommonPool, capacity = Channel.CONFLATED) {
         channel.consumeEach {
             val res = allDataCollection.filter(this@BaseSearchableDataBindingRecyclerView::isAcceptedByFilter)
-            updateVisibile(res)
+            if (isFiltering) {
+                updateVisibile(res)
+            }
         }
     }
+
+    private val uiMutex = Mutex()
 
     override fun add(newItem: IRenderModelSearchItem<*, *, F>) {
         allDataCollection.add(newItem)
@@ -96,10 +102,12 @@ open class BaseSearchableDataBindingRecyclerView<F : Any>(context: Context) : Ab
         eventActor.offer(Unit)
     }
 
-    private fun updateVisibile(data: List<IRenderModelSearchItem<*, *, F>>) {
+    private fun updateVisibile(data: List<IRenderModelSearchItem<*, *, F>>) = launch(CommonPool) {
+        uiMutex.lock()
         super.clearAndSetItemsNoNotify(data)
         launch(UI) {
             super.notifyDataSetChanged()
+            uiMutex.unlock()
         }
     }
 

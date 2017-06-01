@@ -4,12 +4,11 @@ import android.content.Context
 import android.databinding.ViewDataBinding
 import android.support.annotation.IntRange
 import android.support.v7.widget.RecyclerView
-import android.util.SparseArray
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import com.commonsense.android.kotlin.android.logging.L
-import com.commonsense.android.kotlin.extensions.collections.getSafe
-import com.commonsense.android.kotlin.extensions.collections.isIndexValid
+import com.commonsense.android.kotlin.collections.TypeHashCodeLookup
+import com.commonsense.android.kotlin.collections.TypeLookupCollection
 
 /**
  * Created by kasper on 17/05/2017.
@@ -23,26 +22,29 @@ data class BaseViewHolderItem<out T : ViewDataBinding>(val item: T) : RecyclerVi
     val viewBindingTypeValue = item.javaClass.hashCode()
 }
 
-interface IRenderModelItem<in T : Any, Vm : ViewDataBinding> {
+interface IRenderModelItem<T : Any, Vm : ViewDataBinding> : TypeHashCodeLookup {
+    fun getValue(): T
     fun inflaterFunction(inflater: LayoutInflater, parent: ViewGroup?, attach: Boolean): Vm
-    val typeValue: Int
     fun renderFunction(view: Vm, model: T)
     fun bindToViewHolder(holder: BaseViewHolderItem<*>)
 }
 
 abstract class BaseRenderModel<T : Any, Vm : ViewDataBinding>(val item: T, classType: Class<Vm>) : IRenderModelItem<T, Vm> {
 
-    override val typeValue: Int by lazy {
+    override fun getValue(): T = item
+
+    override fun getTypeValue() = vmTypeValue
+    val vmTypeValue: Int by lazy {
         classType.hashCode()
     }
 
     override fun bindToViewHolder(holder: BaseViewHolderItem<*>) {
-        if (holder.viewBindingTypeValue == typeValue) {
+        if (holder.viewBindingTypeValue == vmTypeValue) {
             @Suppress("UNCHECKED_CAST")
             renderFunction(holder.item as Vm, item)
             //we are now "sure" that the binding class is the same as ours, thus casting "should" be "ok". (we basically introduced our own type system)
         } else {
-            L.debug("RenderModelItem", "unable to bind to view even though it should be correct type$typeValue expected, got : ${holder.viewBindingTypeValue}")
+            L.debug("RenderModelItem", "unable to bind to view even though it should be correct type$vmTypeValue expected, got : ${holder.viewBindingTypeValue}")
         }
     }
 
@@ -52,104 +54,107 @@ open class RenderModelItem<T : Any, Vm : ViewDataBinding>(val item: T,
                                                           val vmInflater: (inflater: LayoutInflater, parent: ViewGroup?, attach: Boolean) -> Vm,
                                                           val classType: Class<Vm>,
                                                           val vmRender: (view: Vm, model: T) -> Unit) : IRenderModelItem<T, Vm> {
+    override fun getValue(): T = item
+
+    override fun getTypeValue(): Int = vmTypeValue
+
     override fun inflaterFunction(inflater: LayoutInflater, parent: ViewGroup?, attach: Boolean) = vmInflater(inflater, parent, false)
 
     override fun renderFunction(view: Vm, model: T) = vmRender(view, model)
 
     override fun bindToViewHolder(holder: BaseViewHolderItem<*>) {
-        if (holder.viewBindingTypeValue == typeValue) {
+        if (holder.viewBindingTypeValue == vmTypeValue) {
             @Suppress("UNCHECKED_CAST")
             renderFunction(holder.item as Vm, item)
             //we are now "sure" that the binding class is the same as ours, thus casting "should" be "ok". (we basically introduced our own type system)
         } else {
-            L.debug("RenderModelItem", "unable to bind to view even though it should be correct type$typeValue expected, got : ${holder.viewBindingTypeValue}")
+            L.debug("RenderModelItem", "unable to bind to view even though it should be correct type$vmTypeValue expected, got : ${holder.viewBindingTypeValue}")
         }
     }
 
     //more performant than an inline getter that retrives it.
-    override val typeValue: Int by lazy {
+    val vmTypeValue: Int by lazy {
         classType.hashCode()
     }
 }
 
+abstract class AbstractDataBindingRecyclerView<T : IRenderModelItem<*, *>>(context: Context) : RecyclerView.Adapter<BaseViewHolderItem<*>>() {
+    protected val dataCollection: TypeLookupCollection<T> = TypeLookupCollection()
 
-class BaseDataBindingRecyclerView(context: Context) : RecyclerView.Adapter<BaseViewHolderItem<*>>() {
-
-    private val inflater by lazy {
+    protected val inflater: LayoutInflater by lazy {
         LayoutInflater.from(context)
     }
 
-    private val data: MutableList<IRenderModelItem<*, *>> = mutableListOf()
-
-    private val lookup: SparseArray<IRenderModelItem<*, *>> = SparseArray()
-
-    override fun onCreateViewHolder(parent: ViewGroup?, @IntRange(from = 0) viewType: Int): BaseViewHolderItem<*> {
-        return BaseViewHolderItem(lookup[viewType].inflaterFunction(inflater, parent, false))
+    override fun onCreateViewHolder(parent: ViewGroup?, @IntRange(from = 0) viewType: Int): BaseViewHolderItem<*>? {
+        return dataCollection.getAnItemFromType(viewType)
+                ?.inflaterFunction(inflater, parent, false)
+                ?.let { BaseViewHolderItem(it) }
     }
 
     override fun getItemViewType(@IntRange(from = 0) position: Int): Int {
-        return data[position].typeValue
+        return dataCollection[position]?.getTypeValue() ?: 0
 
     }
 
     override fun onBindViewHolder(holder: BaseViewHolderItem<*>, @IntRange(from = 0) position: Int) {
         //lookup type to converter, then apply model on view using converter
-        val render = data[position]
-        render.bindToViewHolder(holder)
+        val render = dataCollection[position]
+        render?.bindToViewHolder(holder)
     }
 
-    @IntRange(from = 0)
-    override fun getItemCount(): Int = data.size
 
+    override fun getItemCount(): Int = dataCollection.getCount()
 
-    fun add(newItem: IRenderModelItem<*, *>) {
-        addTypeIfMissing(newItem)
-        data.add(newItem)
-        notifyItemInserted(data.size - 1)
+    open fun add(newItem: T) {
+        dataCollection.add(newItem)
+        notifyItemInserted(dataCollection.getCount())
     }
 
-    fun addAll(items: List<IRenderModelItem<*, *>>) {
-        addTypesIfMissing(items)
-        data.addAll(items)
-        notifyDataSetChanged()
+    open fun addAll(items: List<T>) {
+        val startPos = itemCount
+        dataCollection.addAll(items)
+        notifyItemRangeInserted(startPos, items.size)
     }
 
-    fun remove(newItem: IRenderModelItem<*, *>) {
-        val index = data.indexOf(newItem)
-        removeAt(index)
+
+    open fun remove(newItem: T) {
+        removeAt(dataCollection.indexOf(newItem))
     }
 
-    fun removeAt(index: Int) {
-        if (data.isIndexValid(index)) {
-            data.removeAt(index)
+    open fun removeAt(index: Int) {
+        if (dataCollection.isIndexValid(index)) {
+            dataCollection.removeAt(index)
             notifyItemRemoved(index)
-            recalculateAllTypes()
-            //recalculate the lookup
         }
     }
 
-    fun getItem(index: Int): IRenderModelItem<*, *>? = data.getSafe(index)
+    open fun getItem(index: Int): IRenderModelItem<*, *>? = dataCollection[index]
 
-    fun clear() {
-        data.clear()
-        notifyDataSetChanged()
-        lookup.clear()
+    open fun clear() {
+        val size = dataCollection.getCount()
+        dataCollection.clear()
+        notifyItemRangeRemoved(0, size)
     }
 
 
-    private fun addTypeIfMissing(newItem: IRenderModelItem<*, *>) {
-        if (lookup.indexOfKey(newItem.typeValue) < 0) {
-            lookup.put(newItem.typeValue, newItem)
-        }
+    protected fun addNoNotify(item: T) {
+        dataCollection.add(item)
     }
 
-    private fun recalculateAllTypes() {
-        lookup.clear()
-        addTypesIfMissing(data)
+    protected fun addNoNotify(items: List<T>) {
+        dataCollection.addAll(items)
     }
 
-    private fun addTypesIfMissing(items: List<IRenderModelItem<*, *>>) {
-        items.forEach(this::addTypeIfMissing)
+    fun clearAndSetItems(items: List<T>) {
+        clear()
+        addAll(items)
     }
 
+    protected fun clearAndSetItemsNoNotify(items: List<T>) {
+        dataCollection.clearAndSet(items)
+    }
 }
+
+open class BaseDataBindingRecyclerView(context: Context) : AbstractDataBindingRecyclerView<IRenderModelItem<*, *>>(context)
+
+

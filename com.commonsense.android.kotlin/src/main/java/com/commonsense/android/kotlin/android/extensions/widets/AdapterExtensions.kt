@@ -1,5 +1,6 @@
 package com.commonsense.android.kotlin.android.extensions.widets
 
+import android.databinding.ViewDataBinding
 import android.support.v7.widget.RecyclerView
 import com.commonsense.android.kotlin.baseClasses.databinding.BaseDataBindingRecyclerView
 import com.commonsense.android.kotlin.baseClasses.databinding.IRenderModelItem
@@ -9,7 +10,7 @@ import com.commonsense.android.kotlin.baseClasses.databinding.IRenderModelItem
  */
 
 
-fun <T : IRenderModelItem<*, *>> BaseDataBindingRecyclerView.clearAndSet(items: List<T>) {
+fun <T : IRenderModelItem<*, ViewDataBinding>> BaseDataBindingRecyclerView.clearAndSet(items: List<T>) {
     clear()
     addAll(items)
 }

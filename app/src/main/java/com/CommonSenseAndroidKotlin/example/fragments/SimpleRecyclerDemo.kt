@@ -17,7 +17,7 @@ import com.commonsense.android.kotlin.baseClasses.databinding.BaseRenderModel
 /**
  * Created by Kasper Tvede on 31-05-2017.
  */
-class SimpleRecyclerDemo : BaseDatabindingFragment<DemoRecyclerSimpleViewBinding>() {
+open class SimpleRecyclerDemo : BaseDatabindingFragment<DemoRecyclerSimpleViewBinding>() {
 
     val adapter by lazy {
         BaseDataBindingRecyclerView(context.applicationContext)
@@ -27,10 +27,12 @@ class SimpleRecyclerDemo : BaseDatabindingFragment<DemoRecyclerSimpleViewBinding
 
     override fun useBinding() {
         adapter.clear()
-        adapter.add(SimpleListItemRender("First"))
-        adapter.add(SimpleListImageItemRender(Color.BLUE))
-        adapter.add(SimpleListItemRender("Whats up"))
-        adapter.add(SimpleListImageItemRender(Color.RED))
+        for (i in 0..200) {
+            adapter.add(SimpleListItemRender("First"))
+            adapter.add(SimpleListImageItemRender(Color.BLUE))
+            adapter.add(SimpleListItemRender("Whats up"))
+            adapter.add(SimpleListImageItemRender(Color.RED))
+        }
         binding.demoRecyclerSimpleViewRecyclerview.setup(adapter, LinearLayoutManager(context.applicationContext))
     }
 

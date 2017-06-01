@@ -7,24 +7,20 @@
         android:orientation="vertical">
 
         <TextView
-            android:id="@+id/main_title"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:gravity="center_horizontal"
-            android:text="title" />
+            android:text="A simple demo for some recycler views :) dont waste, recycle, with ease, and search!" />
 
-
-        <Button
-            android:id="@+id/activity_main_basic_recycler_demo"
+        <EditText
             android:layout_width="match_parent"
+            android:id="@+id/demo_recycler_searchable_edit"
             android:layout_height="wrap_content"
-            android:text="Simple recycler view demo" />
+            android:hint="search by typing" />
 
-        <Button
-            android:id="@+id/activity_main_advance_recycler_demo"
+        <com.commonsense.android.kotlin.widgets.SwipeRefreshRecylerView
+            android:id="@+id/demo_recycler_searchable_recyclerview"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="advanced recycler view demo" />
+            android:layout_height="match_parent" />
 
     </LinearLayout>
 </layout>

@@ -11,7 +11,7 @@ import com.commonsense.android.kotlin.baseClasses.replaceFragment
  */
 
 
-class DemoActivity : BaseDatabindingActivity<DemoActivityBinding>() {
+open class DemoActivity : BaseDatabindingActivity<DemoActivityBinding>() {
     override fun createBinding(inflater: LayoutInflater): DemoActivityBinding = DemoActivityBinding.inflate(inflater)
     override fun useBinding() {
         replaceFragment(binding.demoActivityContainer.id, SimpleRecyclerDemo())

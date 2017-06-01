@@ -39,7 +39,7 @@ open class SimpleRecyclerDemo : BaseDatabindingFragment<DemoRecyclerSimpleViewBi
 }
 
 
-class SimpleListItemRender(text: String) : BaseRenderModel<String, SimpleListItemBinding>(text, SimpleListItemBinding::class.java) {
+open class SimpleListItemRender(text: String) : BaseRenderModel<String, SimpleListItemBinding>(text, SimpleListItemBinding::class.java) {
     override fun inflaterFunction(inflater: LayoutInflater, parent: ViewGroup?, attach: Boolean): SimpleListItemBinding = SimpleListItemBinding.inflate(inflater, parent, attach)
     override fun renderFunction(view: SimpleListItemBinding, model: String) {
         view.simpleListText.text = model

@@ -23,6 +23,10 @@ class RenderSearchableModelItem<T : Any, Vm : ViewDataBinding, in F : Any>(val f
     override fun isAcceptedByFilter(value: F): Boolean = filterFunction(value, renderModel.getValue())
 }
 
+abstract class BaseSearchRenderModel<T : Any, Vm : ViewDataBinding, in F : Any>(item: T, classType: Class<Vm>)
+    : BaseRenderModel<T, Vm>(item, classType), IRenderModelSearchItem<T, Vm, F>
+
+
 fun <T : Any, Vm : ViewDataBinding, F : Any> IRenderModelItem<T, Vm>.toSearchable(filterFunction: (F, T) -> Boolean): RenderSearchableModelItem<T, Vm, F> {
     return RenderSearchableModelItem(filterFunction, this)
 }

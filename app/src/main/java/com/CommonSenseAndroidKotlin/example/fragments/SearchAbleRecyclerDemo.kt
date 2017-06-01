@@ -7,14 +7,20 @@ import android.text.TextWatcher
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import com.CommonSenseAndroidKotlin.example.databinding.DemoRecyclerSearchableBinding
+import com.CommonSenseAndroidKotlin.example.databinding.SimpleListItemBinding
 import com.commonsense.android.kotlin.android.extensions.widets.setup
 import com.commonsense.android.kotlin.baseClasses.databinding.BaseDatabindingFragment
 import com.commonsense.android.kotlin.baseClasses.databinding.BaseSearchableDataBindingRecyclerView
+import com.commonsense.android.kotlin.baseClasses.databinding.IRenderModelSearchItem
 import com.commonsense.android.kotlin.baseClasses.databinding.toSearchable
 
 /**
  * Created by kasper on 01/06/2017.
  */
+
+class SearchAbleSimpleListItemRender(item: String) : SimpleListItemRender(item), IRenderModelSearchItem<String, SimpleListItemBinding, String> {
+    override fun isAcceptedByFilter(value: String): Boolean = item.contains(value)
+}
 
 class SearchAbleRecyclerDemo : BaseDatabindingFragment<DemoRecyclerSearchableBinding>() {
     override fun createView(inflater: LayoutInflater, parent: ViewGroup?): DemoRecyclerSearchableBinding = DemoRecyclerSearchableBinding.inflate(inflater, parent, false)
@@ -27,9 +33,9 @@ class SearchAbleRecyclerDemo : BaseDatabindingFragment<DemoRecyclerSearchableBin
 
         adapter.clear()
         for (i in 0..50000) {
-            adapter.add(SimpleListItemRender("First $i").toSearchable { filter, item -> item.contains(filter) })
+            adapter.add(SearchAbleSimpleListItemRender("First $i"))
             adapter.add(SimpleListImageItemRender(Color.BLUE).toSearchable { _, _ -> false })
-            adapter.add(SimpleListItemRender("Whats up $i").toSearchable { filter, item -> item.contains(filter) })
+            adapter.add(SearchAbleSimpleListItemRender("Whats up $i"))
             adapter.add(SimpleListImageItemRender(Color.RED).toSearchable { _, _ -> false })
         }
 

@@ -63,3 +63,12 @@ fun <T> List<T>.categorizeInto(filterA: (T) -> Boolean, filterB: (T) -> Boolean)
     }
     return CategorizationResult(listA, listB)
 }
+
+
+fun <T> List<T>.repeate(repeateBy: Int): List<T> {
+    val resultList = this.toMutableList()
+    for (i in 0..repeateBy - 2) {
+        resultList.addAll(this)
+    }
+    return resultList
+}

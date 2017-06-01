@@ -65,7 +65,7 @@ class TypeLookupCollection<T : TypeHashCodeLookup> {
 
     private fun addLookupIfMissing(item: T) {
         val type = getType(item)
-        lookupCounter.put(type, lookupCounter.get(type, 0))
+        lookupCounter.put(type, lookupCounter.get(type, 0) + 1)
         if (lookup.indexOfKey(type) < 0) { // <0 => non existing
             lookup.put(type, item)
         }
@@ -78,6 +78,10 @@ class TypeLookupCollection<T : TypeHashCodeLookup> {
             lookupCounter.remove(type)
             lookup.remove(type)
         } else { // more items.
+            val foundVal: T? = data.find { it.getTypeValue() == type }
+            foundVal?.let {
+                lookup.put(type, it)
+            }
             lookupCounter.put(type, oldCounter - 1)
         }
     }

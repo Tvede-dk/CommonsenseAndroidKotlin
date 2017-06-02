@@ -5,6 +5,10 @@ import android.os.Build
 import android.support.annotation.UiThread
 import android.view.View
 import android.view.ViewTreeObserver
+import kotlinx.coroutines.experimental.android.UI
+import kotlinx.coroutines.experimental.channels.Channel
+import kotlinx.coroutines.experimental.channels.actor
+import kotlinx.coroutines.experimental.channels.consumeEach
 
 
 /**
@@ -39,4 +43,14 @@ inline fun View.measureSize(crossinline afterMeasureAction: (with: Int, height: 
 @TargetApi(Build.VERSION_CODES.JELLY_BEAN)
 fun ViewTreeObserver.removeOnGlobalLayoutListenerCompact(listener: ViewTreeObserver.OnGlobalLayoutListener) {
     removeOnGlobalLayoutListener(listener)
+}
+
+@UiThread
+fun View.setOnclickAsync(action: suspend () -> Unit) {
+    // launch one actor
+    val eventActor = actor<Unit>(UI, capacity = Channel.CONFLATED) {
+        channel.consumeEach { action() }
+    }
+    // install a listener to activate this actor
+    setOnClick { eventActor.offer(Unit) }
 }

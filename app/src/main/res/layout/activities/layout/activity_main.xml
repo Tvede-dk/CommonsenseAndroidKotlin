@@ -26,5 +26,12 @@
             android:layout_height="wrap_content"
             android:text="advanced recycler view demo" />
 
+
+        <Button
+            android:id="@+id/activity_main_advance_async_button"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="advanced Async button (please spam)" />
+
     </LinearLayout>
 </layout>

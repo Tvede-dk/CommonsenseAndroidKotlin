@@ -68,7 +68,14 @@ fun <T> List<T>.categorizeInto(filterA: (T) -> Boolean, filterB: (T) -> Boolean)
 fun <T> List<T>.repeate(repeateBy: Int): List<T> {
     val resultList = this.toMutableList()
     for (i in 0..repeateBy - 2) {
-        resultList.addAll(this)
+        resultList += this
     }
     return resultList
+}
+
+inline fun <reified T> List<T>.repeateToSize(size: Int): List<T> {
+    val timesToRepeate = size / count()
+    val missingItemsToCopy = size % count()
+    val resultList = this.repeate(timesToRepeate)
+    return resultList + this.subList(0, missingItemsToCopy)
 }

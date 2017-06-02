@@ -2,13 +2,13 @@ package com.commonsense.android.kotlin.baseClasses.databinding
 
 import android.content.Context
 import android.databinding.ViewDataBinding
+import com.commonsense.android.kotlin.android.logging.L
 import kotlinx.coroutines.experimental.CommonPool
 import kotlinx.coroutines.experimental.android.UI
 import kotlinx.coroutines.experimental.channels.Channel
 import kotlinx.coroutines.experimental.channels.actor
 import kotlinx.coroutines.experimental.channels.consumeEach
 import kotlinx.coroutines.experimental.launch
-import kotlinx.coroutines.experimental.sync.Mutex
 
 /**
  * Created by kasper on 01/06/2017.
@@ -37,28 +37,37 @@ open class BaseSearchableDataBindingRecyclerView<F : Any>(context: Context) : Ab
     private val allDataCollection = mutableListOf<IRenderModelSearchItem<*, *, F>>()
     private var filterValue: F? = null
 
-    private val isFiltering
-        get() = filterValue != null
-
     //the "gatekeeper" for our filter function. will restrict acces so only one gets in. thus if we spam the filter, we should only use the latest filter.
-    private var eventActor = actor<Unit>(CommonPool, capacity = Channel.CONFLATED) {
-        channel.consumeEach {
-            val res = allDataCollection.filter(this@BaseSearchableDataBindingRecyclerView::isAcceptedByFilter)
-            if (isFiltering) {
-                updateVisibile(res)
+    private var eventActor = actor<F?>(CommonPool, capacity = Channel.CONFLATED) {
+        channel.consumeEach { filter ->
+            try {
+                if (filter != filterValue) {
+                    return@consumeEach
+                }
+                val items: List<IRenderModelSearchItem<*, *, F>>
+                if (filter == null) {
+                    L.error("test", "clearing, " + allDataCollection.count())
+                    items = allDataCollection.toList()
+                } else {
+                    L.error("test", "filtering" + allDataCollection.count())
+                    items = allDataCollection.toList().filter { isAcceptedByFilter(it, filter) }
+                }
+                updateVisibly(items)
+            } catch (exception: Exception) {
+                L.error("fatal", "..", exception)
             }
         }
     }
 
-    private val uiMutex = Mutex()
-
     override fun add(newItem: IRenderModelSearchItem<*, *, F>) {
+        L.error("temp", "add item")
         allDataCollection.add(newItem)
         performActionIfIsValidFilter(newItem, { super.add(newItem) })
     }
 
 
     override fun addAll(items: List<IRenderModelSearchItem<*, *, F>>) {
+        L.error("temp", "add All")
         allDataCollection.addAll(items)
         items.forEach {
             performActionIfIsValidFilter(it, { super.add(it) })
@@ -67,29 +76,34 @@ open class BaseSearchableDataBindingRecyclerView<F : Any>(context: Context) : Ab
     }
 
     private inline fun performActionIfIsValidFilter(newItem: IRenderModelSearchItem<*, *, F>, crossinline action: (IRenderModelSearchItem<*, *, F>) -> Unit) {
-        if (!isFiltering || isAcceptedByFilter(newItem)) {
+        if (isAcceptedByFilter(newItem, filterValue)) {
             action(newItem)
         }
     }
 
     override fun remove(newItem: IRenderModelSearchItem<*, *, F>) {
-        allDataCollection.remove(newItem)
         super.remove(newItem)
+        L.error("temp", "remove")
+        allDataCollection.remove(newItem)
     }
 
     override fun removeAt(index: Int) {
-        allDataCollection.removeAt(index)
         super.removeAt(index)
+        L.error("temp", "removeAt")
+        allDataCollection.removeAt(index)
     }
 
     override fun clear() {
+        L.error("temp", "clear")
         allDataCollection.clear()
         super.clear()
     }
 
-    private fun isAcceptedByFilter(newItem: IRenderModelSearchItem<*, *, F>): Boolean {
-        return filterValue?.let(newItem::isAcceptedByFilter) ?: true
-
+    private fun isAcceptedByFilter(newItem: IRenderModelSearchItem<*, *, F>?, value: F?): Boolean {
+        if (value == null || newItem == null) {
+            return true
+        }
+        return newItem.isAcceptedByFilter(value)
     }
 
     fun filterOrClearBy(potentialFilter: F?) {
@@ -102,21 +116,22 @@ open class BaseSearchableDataBindingRecyclerView<F : Any>(context: Context) : Ab
 
 
     fun filterBy(newFilter: F) {
+        L.error("temp", "filter by " + newFilter)
         filterValue = newFilter
-        eventActor.offer(Unit)
+        eventActor.offer(newFilter)
     }
 
-    private fun updateVisibile(data: List<IRenderModelSearchItem<*, *, F>>) = launch(CommonPool) {
-        uiMutex.lock()
+    private suspend fun updateVisibly(data: List<IRenderModelSearchItem<*, *, F>>) {
+        L.error("temp", "update visibile")
         super.clearAndSetItemsNoNotify(data)
         launch(UI) {
             super.notifyDataSetChanged()
-            uiMutex.unlock()
         }
     }
 
     fun removeFilter() {
+        L.error("temp", "remove filter")
         filterValue = null
-        updateVisibile(allDataCollection)
+        eventActor.offer(null)
     }
 }

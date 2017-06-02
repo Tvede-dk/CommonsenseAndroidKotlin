@@ -13,6 +13,7 @@ import com.commonsense.android.kotlin.baseClasses.databinding.BaseDatabindingFra
 import com.commonsense.android.kotlin.baseClasses.databinding.BaseSearchableDataBindingRecyclerView
 import com.commonsense.android.kotlin.baseClasses.databinding.IRenderModelSearchItem
 import com.commonsense.android.kotlin.baseClasses.databinding.toSearchable
+import com.commonsense.android.kotlin.extensions.collections.repeateToSize
 
 /**
  * Created by kasper on 01/06/2017.
@@ -30,16 +31,16 @@ class SearchAbleRecyclerDemo : BaseDatabindingFragment<DemoRecyclerSearchableBin
     }
 
     override fun useBinding() {
+        val items = mutableListOf<IRenderModelSearchItem<*, *, String>>(
+                SearchAbleSimpleListItemRender("First "),
+                SimpleListImageItemRender(Color.BLUE).toSearchable { _, _ -> false },
+                SearchAbleSimpleListItemRender("Whats up "),
+                SimpleListImageItemRender(Color.RED).toSearchable { _, _ -> false }
+        ).repeateToSize(50000)
 
-        adapter.clear()
-        for (i in 0..50000) {
-            adapter.add(SearchAbleSimpleListItemRender("First $i"))
-            adapter.add(SimpleListImageItemRender(Color.BLUE).toSearchable { _, _ -> false })
-            adapter.add(SearchAbleSimpleListItemRender("Whats up $i"))
-            adapter.add(SimpleListImageItemRender(Color.RED).toSearchable { _, _ -> false })
-        }
-
+        adapter.clearAndSetItems(items)
         binding.demoRecyclerSearchableRecyclerview.recyclerView.setup(adapter, LinearLayoutManager(context.applicationContext))
+        binding.demoRecyclerSearchableRecyclerview2.recyclerView.setup(adapter, LinearLayoutManager(context.applicationContext))
         binding.demoRecyclerSearchableEdit.addTextChangedListener(object : TextWatcher {
             override fun afterTextChanged(s: Editable?) {
                 val temp = s?.toString()

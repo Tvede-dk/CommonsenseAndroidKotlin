@@ -106,11 +106,13 @@ abstract class AbstractDataBindingRecyclerView<T : IRenderModelItem<*, *>>(conte
     override fun getItemCount(): Int = dataCollection.getCount()
 
     open fun add(newItem: T) {
+        stopScroll()
         dataCollection.add(newItem)
         notifyItemInserted(dataCollection.getCount())
     }
 
     open fun addAll(items: List<T>) {
+        stopScroll()
         val startPos = itemCount
         dataCollection.addAll(items)
         notifyItemRangeInserted(startPos, items.size)
@@ -123,6 +125,7 @@ abstract class AbstractDataBindingRecyclerView<T : IRenderModelItem<*, *>>(conte
 
     open fun removeAt(index: Int) {
         if (dataCollection.isIndexValid(index)) {
+            stopScroll()
             dataCollection.removeAt(index)
             notifyItemRemoved(index)
         }
@@ -131,9 +134,9 @@ abstract class AbstractDataBindingRecyclerView<T : IRenderModelItem<*, *>>(conte
     open fun getItem(index: Int): IRenderModelItem<*, *>? = dataCollection[index]
 
     open fun clear() {
-        val size = dataCollection.getCount()
+        stopScroll()
         dataCollection.clear()
-        notifyItemRangeRemoved(0, size)
+        notifyDataSetChanged()
     }
 
 
@@ -151,7 +154,30 @@ abstract class AbstractDataBindingRecyclerView<T : IRenderModelItem<*, *>>(conte
     }
 
     protected fun clearAndSetItemsNoNotify(items: List<T>) {
+        stopScroll()
         dataCollection.clearAndSet(items)
+    }
+
+    protected fun stopScroll() {
+        listeningRecyclers.forEach { recyclerView ->
+            recyclerView.stopScroll()
+        }
+    }
+
+    private val listeningRecyclers = mutableSetOf<RecyclerView>()
+
+    override fun onAttachedToRecyclerView(recyclerView: RecyclerView?) {
+        super.onAttachedToRecyclerView(recyclerView)
+        if (recyclerView != null) {
+            listeningRecyclers.add(recyclerView)
+        }
+    }
+
+    override fun onDetachedFromRecyclerView(recyclerView: RecyclerView?) {
+        super.onDetachedFromRecyclerView(recyclerView)
+        if (recyclerView != null) {
+            listeningRecyclers.remove(recyclerView)
+        }
     }
 }
 

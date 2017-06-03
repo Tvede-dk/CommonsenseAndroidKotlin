@@ -2,6 +2,7 @@ package com.commonsense.android.kotlin.widgets
 
 import android.content.Context
 import android.support.v4.widget.SwipeRefreshLayout
+import android.support.v7.widget.LinearLayoutManager
 import android.support.v7.widget.RecyclerView
 import android.util.AttributeSet
 import android.view.LayoutInflater
@@ -47,5 +48,13 @@ class SwipeRefreshRecylerView : FrameLayout, SwipeRefreshLayout.OnRefreshListene
 
     fun stopRefreshing() {
         refreshLayout.isRefreshing = false
+    }
+
+    fun setupAll(newAdapter: RecyclerView.Adapter<*>, newLayoutManager: LinearLayoutManager, refreshCallback: () -> Unit) {
+        with(recyclerView) {
+            adapter = newAdapter
+            layoutManager = newLayoutManager
+        }
+        onRefreshListener = refreshCallback
     }
 }

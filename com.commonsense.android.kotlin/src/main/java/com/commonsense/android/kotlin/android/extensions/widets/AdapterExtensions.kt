@@ -1,7 +1,8 @@
 package com.commonsense.android.kotlin.android.extensions.widets
 
 import android.support.v7.widget.RecyclerView
-import com.commonsense.android.kotlin.baseClasses.databinding.BaseDataBindingRecyclerView
+import com.commonsense.android.kotlin.baseClasses.databinding.AbstractDataBindingRecyclerAdapter
+import com.commonsense.android.kotlin.baseClasses.databinding.BaseDataBindingRecyclerAdapter
 import com.commonsense.android.kotlin.baseClasses.databinding.IRenderModelItem
 
 /**
@@ -9,7 +10,7 @@ import com.commonsense.android.kotlin.baseClasses.databinding.IRenderModelItem
  */
 
 
-fun <T : IRenderModelItem<*, *>> BaseDataBindingRecyclerView.clearAndSet(items: List<T>) {
+fun <T : IRenderModelItem<*, *>> BaseDataBindingRecyclerAdapter.clearAndSet(items: List<T>) {
     clear()
     addAll(items)
 }
@@ -18,4 +19,16 @@ fun <T : IRenderModelItem<*, *>> BaseDataBindingRecyclerView.clearAndSet(items: 
 fun RecyclerView.setup(adapter: RecyclerView.Adapter<*>, layoutManager: RecyclerView.LayoutManager) {
     this.adapter = adapter
     this.layoutManager = layoutManager
+}
+
+fun <T : IRenderModelItem<*, *>> AbstractDataBindingRecyclerAdapter<T>.isIndexValid(index: Int): Boolean {
+    return index in 0..(itemCount - 1)
+}
+
+fun <T : IRenderModelItem<*, *>> AbstractDataBindingRecyclerAdapter<T>.getLastItem(): IRenderModelItem<*, *>? {
+    return getItem(itemCount - 1)
+}
+
+fun AbstractDataBindingRecyclerAdapter<*>.removeLast() {
+    removeAt(itemCount - 1)
 }

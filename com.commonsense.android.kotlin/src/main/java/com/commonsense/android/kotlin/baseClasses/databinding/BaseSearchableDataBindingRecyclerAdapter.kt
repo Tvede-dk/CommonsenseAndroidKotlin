@@ -2,9 +2,11 @@ package com.commonsense.android.kotlin.baseClasses.databinding
 
 import android.content.Context
 import android.databinding.ViewDataBinding
+import android.support.v7.widget.RecyclerView
 import com.commonsense.android.kotlin.android.logging.L
 import kotlinx.coroutines.experimental.CommonPool
 import kotlinx.coroutines.experimental.android.UI
+import kotlinx.coroutines.experimental.channels.ActorJob
 import kotlinx.coroutines.experimental.channels.Channel
 import kotlinx.coroutines.experimental.channels.actor
 import kotlinx.coroutines.experimental.channels.consumeEach
@@ -32,30 +34,31 @@ fun <T : Any, Vm : ViewDataBinding, F : Any> IRenderModelItem<T, Vm>.toSearchabl
 }
 
 
-open class BaseSearchableDataBindingRecyclerView<F : Any>(context: Context) : AbstractDataBindingRecyclerView<IRenderModelSearchItem<*, *, F>>(context) {
+open class BaseSearchableDataBindingRecyclerAdapter<F : Any>(context: Context) : AbstractDataBindingRecyclerAdapter<IRenderModelSearchItem<*, *, F>>(context.applicationContext) {
 
     private val allDataCollection = mutableListOf<IRenderModelSearchItem<*, *, F>>()
     private var filterValue: F? = null
 
     //the "gatekeeper" for our filter function. will restrict acces so only one gets in. thus if we spam the filter, we should only use the latest filter.
-    private var eventActor = actor<F?>(CommonPool, capacity = Channel.CONFLATED) {
-        channel.consumeEach { filter ->
-            try {
-                if (filter != filterValue) {
-                    return@consumeEach
-                }
-                val items: List<IRenderModelSearchItem<*, *, F>>
-                if (filter == null) {
-                    L.error("test", "clearing, " + allDataCollection.count())
-                    items = allDataCollection.toList()
-                } else {
-                    L.error("test", "filtering" + allDataCollection.count())
-                    items = allDataCollection.toList().filter { isAcceptedByFilter(it, filter) }
-                }
-                updateVisibly(items)
-            } catch (exception: Exception) {
-                L.error("fatal", "..", exception)
+    private val filterActor: ConflatedActorHelper<F> = ConflatedActorHelper()
+
+
+    suspend fun filterBySuspend(filter: F?): Unit {
+        try {
+            if (filter != filterValue) {
+                return
             }
+            val items: List<IRenderModelSearchItem<*, *, F>>
+            if (filter == null) {
+                L.error("test", "clearing, " + allDataCollection.count())
+                items = allDataCollection.toList()
+            } else {
+                L.error("test", "filtering" + allDataCollection.count())
+                items = allDataCollection.toList().filter { isAcceptedByFilter(it, filter) }
+            }
+            updateVisibly(items)
+        } catch (exception: Exception) {
+            L.error("fatal", "..", exception)
         }
     }
 
@@ -118,7 +121,8 @@ open class BaseSearchableDataBindingRecyclerView<F : Any>(context: Context) : Ab
     fun filterBy(newFilter: F) {
         L.error("temp", "filter by " + newFilter)
         filterValue = newFilter
-        eventActor.offer(newFilter)
+//        eventActor?.offer(newFilter)
+        filterActor.offer(newFilter)
     }
 
     private suspend fun updateVisibly(data: List<IRenderModelSearchItem<*, *, F>>) {
@@ -132,6 +136,47 @@ open class BaseSearchableDataBindingRecyclerView<F : Any>(context: Context) : Ab
     fun removeFilter() {
         L.error("temp", "remove filter")
         filterValue = null
-        eventActor.offer(null)
+        filterActor.offer(null)
+//        eventActor?.offer(null)
     }
+
+    override fun onAttachedToRecyclerView(recyclerView: RecyclerView?) {
+        super.onAttachedToRecyclerView(recyclerView)
+        filterActor.setup {
+            filterBySuspend(it)
+        }
+//        (eventActor == null).onTrue(this::setupActor)
+    }
+
+    override fun onDetachedFromRecyclerView(recyclerView: RecyclerView?) {
+        super.onDetachedFromRecyclerView(recyclerView)
+        filterActor.clear()
+//        listeningRecyclers.isEmpty().onFalse { eventActor = null }
+    }
+
+}
+
+private class ConflatedActorHelper<F : Any> {
+
+    private var eventActor: ActorJob<F?>? = null
+
+    fun offer(filter: F?) {
+
+        eventActor?.offer(filter)
+    }
+
+    fun setup(callback: suspend (F?) -> Unit) {
+        if (eventActor != null) {
+            return
+        }
+        eventActor = actor(CommonPool, capacity = Channel.CONFLATED) {
+            channel.consumeEach(callback)
+        }
+
+    }
+
+    fun clear() {
+        eventActor = null
+    }
+
 }

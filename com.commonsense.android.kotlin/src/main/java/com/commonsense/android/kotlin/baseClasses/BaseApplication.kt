@@ -60,8 +60,8 @@ abstract class BaseApplication : Application() {
                         penaltyFlashScreen().
                         build())
 
-        StrictMode.setVmPolicy(
-                StrictMode.VmPolicy.Builder().build())
+        StrictMode.setVmPolicy(StrictMode.VmPolicy.Builder().detectAll()
+                .penaltyLog().penaltyDeath().build())
     }
 
 

@@ -7,8 +7,9 @@ import android.support.v7.widget.RecyclerView
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import com.commonsense.android.kotlin.android.logging.L
-import com.commonsense.android.kotlin.collections.TypeHashCodeLookup
-import com.commonsense.android.kotlin.collections.TypeLookupCollection
+import com.commonsense.android.kotlin.collections.TypeHashCodeLookupRepresentive
+import com.commonsense.android.kotlin.collections.TypeLookupCollectionRepresentive
+import java.lang.ref.WeakReference
 
 /**
  * Created by kasper on 17/05/2017.
@@ -16,16 +17,17 @@ import com.commonsense.android.kotlin.collections.TypeLookupCollection
 
 typealias BindingFunction = (BaseViewHolderItem<*>) -> Unit
 
-typealias InflatingFunction<T> = (inflater: LayoutInflater) -> T
+typealias InflatingFunction<T> = (inflater: LayoutInflater, parent: ViewGroup?, attach: Boolean) -> T
 
 data class BaseViewHolderItem<out T : ViewDataBinding>(val item: T) : RecyclerView.ViewHolder(item.root) {
     val viewBindingTypeValue = item.javaClass.hashCode()
 }
 
-interface IRenderModelItem<T : Any, Vm : ViewDataBinding> : TypeHashCodeLookup {
+interface IRenderModelItem<T : Any, Vm : ViewDataBinding> : TypeHashCodeLookupRepresentive<InflatingFunction<Vm>> {
     fun getValue(): T
-    fun inflaterFunction(inflater: LayoutInflater, parent: ViewGroup?, attach: Boolean): Vm
+    //    fun inflaterFunction(inflater: LayoutInflater, parent: ViewGroup?, attach: Boolean): Vm
     fun renderFunction(view: Vm, model: T)
+
     fun bindToViewHolder(holder: BaseViewHolderItem<*>)
 }
 
@@ -54,11 +56,13 @@ open class RenderModelItem<T : Any, Vm : ViewDataBinding>(val item: T,
                                                           val vmInflater: (inflater: LayoutInflater, parent: ViewGroup?, attach: Boolean) -> Vm,
                                                           val classType: Class<Vm>,
                                                           val vmRender: (view: Vm, model: T) -> Unit) : IRenderModelItem<T, Vm> {
+    override fun getRepresentive(): InflatingFunction<Vm> = this.vmInflater
+
     override fun getValue(): T = item
 
     override fun getTypeValue(): Int = vmTypeValue
 
-    override fun inflaterFunction(inflater: LayoutInflater, parent: ViewGroup?, attach: Boolean) = vmInflater(inflater, parent, false)
+//    override fun inflaterFunction(inflater: LayoutInflater, parent: ViewGroup?, attach: Boolean) = vmInflater(inflater, parent, false)
 
     override fun renderFunction(view: Vm, model: T) = vmRender(view, model)
 
@@ -78,17 +82,19 @@ open class RenderModelItem<T : Any, Vm : ViewDataBinding>(val item: T,
     }
 }
 
-abstract class AbstractDataBindingRecyclerView<T : IRenderModelItem<*, *>>(context: Context) : RecyclerView.Adapter<BaseViewHolderItem<*>>() {
-    protected val dataCollection: TypeLookupCollection<T> = TypeLookupCollection()
+abstract class AbstractDataBindingRecyclerAdapter<T : IRenderModelItem<*, *>>(context: Context) : RecyclerView.Adapter<BaseViewHolderItem<*>>() {
+    protected val dataCollection: TypeLookupCollectionRepresentive<T, InflatingFunction<ViewDataBinding>> = TypeLookupCollectionRepresentive()
+
+    protected val listeningRecyclers = mutableSetOf<WeakReference<RecyclerView>>()
+
 
     protected val inflater: LayoutInflater by lazy {
         LayoutInflater.from(context)
     }
 
     override fun onCreateViewHolder(parent: ViewGroup?, @IntRange(from = 0) viewType: Int): BaseViewHolderItem<*>? {
-        return dataCollection.getAnItemFromType(viewType)
-                ?.inflaterFunction(inflater, parent, false)
-                ?.let { BaseViewHolderItem(it) }
+        val rep = dataCollection.getTypeRepresentativeFromTypeValue(viewType)
+        return rep?.invoke(inflater, parent, false)?.let { BaseViewHolderItem(it) }
     }
 
     override fun getItemViewType(@IntRange(from = 0) position: Int): Int {
@@ -103,12 +109,12 @@ abstract class AbstractDataBindingRecyclerView<T : IRenderModelItem<*, *>>(conte
     }
 
 
-    override fun getItemCount(): Int = dataCollection.getCount()
+    override fun getItemCount(): Int = dataCollection.size
 
     open fun add(newItem: T) {
         stopScroll()
         dataCollection.add(newItem)
-        notifyItemInserted(dataCollection.getCount())
+        notifyItemInserted(dataCollection.size)
     }
 
     open fun addAll(items: List<T>) {
@@ -160,27 +166,29 @@ abstract class AbstractDataBindingRecyclerView<T : IRenderModelItem<*, *>>(conte
 
     protected fun stopScroll() {
         listeningRecyclers.forEach { recyclerView ->
-            recyclerView.stopScroll()
+            recyclerView.get()?.stopScroll()
         }
     }
 
-    private val listeningRecyclers = mutableSetOf<RecyclerView>()
 
     override fun onAttachedToRecyclerView(recyclerView: RecyclerView?) {
         super.onAttachedToRecyclerView(recyclerView)
         if (recyclerView != null) {
-            listeningRecyclers.add(recyclerView)
+            listeningRecyclers.add(WeakReference(recyclerView))
         }
     }
 
     override fun onDetachedFromRecyclerView(recyclerView: RecyclerView?) {
         super.onDetachedFromRecyclerView(recyclerView)
         if (recyclerView != null) {
-            listeningRecyclers.remove(recyclerView)
+            listeningRecyclers.removeAll {
+                val temp = it.get()
+                temp == null || temp == recyclerView
+            }
         }
     }
 }
 
-open class BaseDataBindingRecyclerView(context: Context) : AbstractDataBindingRecyclerView<IRenderModelItem<*, *>>(context)
+open class BaseDataBindingRecyclerAdapter(context: Context) : AbstractDataBindingRecyclerAdapter<IRenderModelItem<*, *>>(context)
 
 

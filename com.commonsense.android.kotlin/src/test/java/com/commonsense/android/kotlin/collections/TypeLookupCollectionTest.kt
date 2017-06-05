@@ -9,7 +9,7 @@ import org.junit.Test
  * Created by kasper on 01/06/2017.
  */
 
-class TestClass<out T>(val someData: T, val viewType: Int) : TypeHashCodeLookup {
+class TestClassLookupHashcode<out T>(val someData: T, val viewType: Int) : TypeHashCodeLookup {
     override fun getTypeValue(): Int = viewType
 }
 
@@ -17,14 +17,14 @@ class TypeLookupCollectionTest : BaseRoboElectricTest() {
 
     @Test
     fun testInsertDifferentItems() {
-        val collection = TypeLookupCollection<TestClass<*>>()
-        val onlyClass = TestClass("asd", 1)
+        val collection = TypeLookupCollection<TestClassLookupHashcode<*>>()
+        val onlyClass = TestClassLookupHashcode("asd", 1)
         collection.add(onlyClass)
         Assert.assertEquals(collection.getCount(), 1)
         Assert.assertEquals(collection[0], onlyClass)
         Assert.assertEquals(collection.getAnItemFromType(1), onlyClass)
 
-        val otherClass = TestClass("qwe", 2)
+        val otherClass = TestClassLookupHashcode("qwe", 2)
         collection.add(otherClass)
         Assert.assertEquals(collection.getCount(), 2)
         Assert.assertEquals(collection[1], otherClass)
@@ -35,11 +35,11 @@ class TypeLookupCollectionTest : BaseRoboElectricTest() {
 
     @Test
     fun testGetAnItemFromType() {
-        val collection = TypeLookupCollection<TestClass<*>>()
-        val firstClass = TestClass("asd", 1)
-        val secondClass = TestClass("asd", 2)
-        val thirdClass = TestClass("asd", 3)
-        val firstSecClass = TestClass("asd2", 1)
+        val collection = TypeLookupCollection<TestClassLookupHashcode<*>>()
+        val firstClass = TestClassLookupHashcode("asd", 1)
+        val secondClass = TestClassLookupHashcode("asd", 2)
+        val thirdClass = TestClassLookupHashcode("asd", 3)
+        val firstSecClass = TestClassLookupHashcode("asd2", 1)
         collection.addAll(firstClass, secondClass, thirdClass, firstSecClass)
         Assert.assertEquals(collection.getCount(), 4)
         Assert.assertEquals(collection.getAnItemFromType(1), firstClass)
@@ -51,11 +51,11 @@ class TypeLookupCollectionTest : BaseRoboElectricTest() {
 
     @Test
     fun testGetAnItemFromTypeRemoveal() {
-        val collection = TypeLookupCollection<TestClass<*>>()
-        val firstClass = TestClass("asd", 1)
-        val secondClass = TestClass("asd", 2)
-        val thirdClass = TestClass("asd", 3)
-        val firstSecClass = TestClass("asd2", 1)
+        val collection = TypeLookupCollection<TestClassLookupHashcode<*>>()
+        val firstClass = TestClassLookupHashcode("asd", 1)
+        val secondClass = TestClassLookupHashcode("asd", 2)
+        val thirdClass = TestClassLookupHashcode("asd", 3)
+        val firstSecClass = TestClassLookupHashcode("asd2", 1)
         collection.addAll(firstClass, secondClass, thirdClass, firstSecClass)
         Assert.assertEquals(collection.getCount(), 4)
         Assert.assertEquals(collection.getAnItemFromType(1), firstClass)
@@ -70,8 +70,8 @@ class TypeLookupCollectionTest : BaseRoboElectricTest() {
 
     @Test
     fun testRemove() {
-        val collection = TypeLookupCollection<TestClass<*>>()
-        val firstClass = TestClass("asd", 1)
+        val collection = TypeLookupCollection<TestClassLookupHashcode<*>>()
+        val firstClass = TestClassLookupHashcode("asd", 1)
         collection.addAll(listOf(firstClass).repeate(10))
         Assert.assertEquals(collection.getCount(), 10)
         collection.remove(collection[5]!!)
@@ -82,11 +82,11 @@ class TypeLookupCollectionTest : BaseRoboElectricTest() {
 
     @Test
     fun testRemoveAll() {
-        val collection = TypeLookupCollection<TestClass<*>>()
-        val firstClass = TestClass("asd", 1)
-        val secondClass = TestClass("asd", 2)
-        val thirdClass = TestClass("asd", 3)
-        val firstSecClass = TestClass("asd2", 1)
+        val collection = TypeLookupCollection<TestClassLookupHashcode<*>>()
+        val firstClass = TestClassLookupHashcode("asd", 1)
+        val secondClass = TestClassLookupHashcode("asd", 2)
+        val thirdClass = TestClassLookupHashcode("asd", 3)
+        val firstSecClass = TestClassLookupHashcode("asd2", 1)
         collection.addAll(firstClass, secondClass, thirdClass, firstSecClass)
         Assert.assertEquals(collection.getCount(), 4)
 
@@ -100,8 +100,8 @@ class TypeLookupCollectionTest : BaseRoboElectricTest() {
 
     @Test
     fun clear() {
-        val collection = TypeLookupCollection<TestClass<*>>()
-        val firstClass = TestClass("asd", 1)
+        val collection = TypeLookupCollection<TestClassLookupHashcode<*>>()
+        val firstClass = TestClassLookupHashcode("asd", 1)
         collection.addAll(listOf(firstClass).repeate(10))
         Assert.assertEquals(collection.getCount(), 10)
         collection.clear()

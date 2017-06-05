@@ -7,6 +7,7 @@ import android.support.v7.widget.RecyclerView
 import android.util.AttributeSet
 import android.view.LayoutInflater
 import android.widget.FrameLayout
+import com.commonsense.android.kotlin.android.extensions.widets.setup
 import com.commonsense.kotlin.databinding.SwipeRefreshRecylerViewBinding
 
 /**
@@ -23,7 +24,7 @@ class SwipeRefreshRecylerView : FrameLayout, SwipeRefreshLayout.OnRefreshListene
 
     init {
         viewBinding = SwipeRefreshRecylerViewBinding.inflate(LayoutInflater.from(context), this, true)
-        viewBinding.swipeRefreshRecyclerSwipeRefresh.setOnRefreshListener(this)
+//        viewBinding.swipeRefreshRecyclerSwipeRefresh.setOnRefreshListener(this)
     }
 
 
@@ -51,10 +52,11 @@ class SwipeRefreshRecylerView : FrameLayout, SwipeRefreshLayout.OnRefreshListene
     }
 
     fun setupAll(newAdapter: RecyclerView.Adapter<*>, newLayoutManager: LinearLayoutManager, refreshCallback: () -> Unit) {
-        with(recyclerView) {
-            adapter = newAdapter
-            layoutManager = newLayoutManager
-        }
+        recyclerView.setup(newAdapter, newLayoutManager)
         onRefreshListener = refreshCallback
     }
+}
+
+class delegateCallback(){
+
 }

@@ -10,7 +10,7 @@ import com.CommonSenseAndroidKotlin.example.databinding.DemoRecyclerSearchableBi
 import com.CommonSenseAndroidKotlin.example.databinding.SimpleListItemBinding
 import com.commonsense.android.kotlin.android.extensions.widets.setup
 import com.commonsense.android.kotlin.baseClasses.databinding.BaseDatabindingFragment
-import com.commonsense.android.kotlin.baseClasses.databinding.BaseSearchableDataBindingRecyclerView
+import com.commonsense.android.kotlin.baseClasses.databinding.BaseSearchableDataBindingRecyclerAdapter
 import com.commonsense.android.kotlin.baseClasses.databinding.IRenderModelSearchItem
 import com.commonsense.android.kotlin.baseClasses.databinding.toSearchable
 import com.commonsense.android.kotlin.extensions.collections.repeateToSize
@@ -27,7 +27,7 @@ class SearchAbleRecyclerDemo : BaseDatabindingFragment<DemoRecyclerSearchableBin
     override fun createView(inflater: LayoutInflater, parent: ViewGroup?): DemoRecyclerSearchableBinding = DemoRecyclerSearchableBinding.inflate(inflater, parent, false)
 
     private val adapter by lazy {
-        BaseSearchableDataBindingRecyclerView<String>(context.applicationContext)
+        BaseSearchableDataBindingRecyclerAdapter<String>(context)
     }
 
     override fun useBinding() {
@@ -39,29 +39,36 @@ class SearchAbleRecyclerDemo : BaseDatabindingFragment<DemoRecyclerSearchableBin
         ).repeateToSize(50000)
 
         adapter.clearAndSetItems(items)
-        binding.demoRecyclerSearchableRecyclerview.recyclerView.setup(adapter, LinearLayoutManager(context.applicationContext))
-        binding.demoRecyclerSearchableRecyclerview2.recyclerView.setup(adapter, LinearLayoutManager(context.applicationContext))
-        binding.demoRecyclerSearchableEdit.addTextChangedListener(object : TextWatcher {
-            override fun afterTextChanged(s: Editable?) {
-                val temp = s?.toString()
-                if (temp.isNullOrEmpty()) {
-                    adapter.removeFilter()
-                } else {
-                    temp?.let(adapter::filterBy)
-                }
+        binding.demoRecyclerSearchableRecyclerview.recyclerView.setup(adapter, LinearLayoutManager(context))
+        binding.demoRecyclerSearchableRecyclerview2.recyclerView.setup(adapter, LinearLayoutManager(context))
 
-            }
-
-            override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {
-
-
-            }
-
-            override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
-
-            }
-        })
+        binding.demoRecyclerSearchableEdit.addTextChangedListener(SafeTextWatcher(this::performFilter))
     }
 
+    fun performFilter(s: Editable) {
+        val temp = s.toString()
+        if (temp.isNullOrEmpty()) {
+            adapter.removeFilter()
+        } else {
+            temp.let(adapter::filterBy)
+        }
 
+    }
+}
+
+class SafeTextWatcher(val onAfterTextChanged: (Editable) -> Unit) : TextWatcher {
+
+    override fun afterTextChanged(afterChanged: Editable?) {
+        if (afterChanged != null) {
+            this.onAfterTextChanged(afterChanged)
+        }
+    }
+
+    override fun beforeTextChanged(changedText: CharSequence?, p1: Int, p2: Int, p3: Int) {
+
+    }
+
+    override fun onTextChanged(afterChanged: CharSequence?, p1: Int, p2: Int, p3: Int) {
+
+    }
 }

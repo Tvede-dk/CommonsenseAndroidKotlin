@@ -3,6 +3,7 @@
     package="com.CommonSenseAndroidKotlin.example">
 
     <application
+        android:name=".MainApplication"
         android:allowBackup="true"
         android:fullBackupContent="true"
         android:icon="@mipmap/ic_launcher"

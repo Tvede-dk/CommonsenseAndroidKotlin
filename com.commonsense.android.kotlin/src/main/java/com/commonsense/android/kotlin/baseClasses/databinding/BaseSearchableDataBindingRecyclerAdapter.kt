@@ -129,7 +129,6 @@ open class BaseSearchableDataBindingRecyclerAdapter<F : Any>(context: Context) :
     fun filterBy(newFilter: F) {
         L.error("temp", "filter by " + newFilter)
         filterValue = newFilter
-//        eventActor?.offer(newFilter)
         filterActor.offer(newFilter)
     }
 
@@ -160,6 +159,10 @@ open class BaseSearchableDataBindingRecyclerAdapter<F : Any>(context: Context) :
         super.onDetachedFromRecyclerView(recyclerView)
         filterActor.clear()
 //        listeningRecyclers.isEmpty().onFalse { eventActor = null }
+    }
+
+    fun getFilter(): F? {
+        return filterValue
     }
 
 }

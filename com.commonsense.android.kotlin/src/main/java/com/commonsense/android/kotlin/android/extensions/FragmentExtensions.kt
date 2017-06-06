@@ -2,6 +2,7 @@ package com.commonsense.android.kotlin.android.extensions
 
 import android.support.v4.app.DialogFragment
 import android.support.v4.app.Fragment
+import android.support.v7.app.AppCompatActivity
 import android.view.ViewGroup
 import android.view.WindowManager
 
@@ -16,6 +17,9 @@ fun Fragment.PresentDialer(phoneNumber: String) {
     context.PresentDialer(phoneNumber)
 }
 
+fun Fragment.getActivityAsCompat(): AppCompatActivity? {
+    return activity as? AppCompatActivity
+}
 
 fun DialogFragment.dialogFillParentView() {
     // Get existing layout params for the window

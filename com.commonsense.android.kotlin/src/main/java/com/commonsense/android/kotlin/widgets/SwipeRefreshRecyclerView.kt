@@ -13,7 +13,7 @@ import com.commonsense.kotlin.databinding.SwipeRefreshRecylerViewBinding
 /**
  * Created by Kasper Tvede on 30-05-2017.
  */
-class SwipeRefreshRecylerView : FrameLayout, SwipeRefreshLayout.OnRefreshListener {
+class SwipeRefreshRecyclerView : FrameLayout, SwipeRefreshLayout.OnRefreshListener {
 
 
     constructor(context: Context) : super(context)
@@ -24,7 +24,7 @@ class SwipeRefreshRecylerView : FrameLayout, SwipeRefreshLayout.OnRefreshListene
 
     init {
         viewBinding = SwipeRefreshRecylerViewBinding.inflate(LayoutInflater.from(context), this, true)
-//        viewBinding.swipeRefreshRecyclerSwipeRefresh.setOnRefreshListener(this)
+        viewBinding.swipeRefreshRecyclerSwipeRefresh.setOnRefreshListener(this)
     }
 
 
@@ -55,8 +55,4 @@ class SwipeRefreshRecylerView : FrameLayout, SwipeRefreshLayout.OnRefreshListene
         recyclerView.setup(newAdapter, newLayoutManager)
         onRefreshListener = refreshCallback
     }
-}
-
-class delegateCallback(){
-
 }

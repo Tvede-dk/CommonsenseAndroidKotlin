@@ -41,7 +41,7 @@ open class SimpleRecyclerDemo : BaseDatabindingFragment<DemoRecyclerSimpleViewBi
 
 
 open class SimpleListItemRender(text: String) : BaseRenderModel<String, SimpleListItemBinding>(text, SimpleListItemBinding::class.java) {
-    override fun getRepresentive(): InflatingFunction<SimpleListItemBinding> {
+    override fun getInflaterFunction(): InflatingFunction<SimpleListItemBinding> {
         return SimpleListItemBinding::inflate
     }
 
@@ -51,10 +51,8 @@ open class SimpleListItemRender(text: String) : BaseRenderModel<String, SimpleLi
 }
 
 class SimpleListImageItemRender(color: Int) : BaseRenderModel<Int, SimpleListImageItemBinding>(color, SimpleListImageItemBinding::class.java) {
-    override fun getRepresentive(): InflatingFunction<SimpleListImageItemBinding> {
-        return SimpleListImageItemBinding::inflate
+    override fun getInflaterFunction(): InflatingFunction<SimpleListImageItemBinding> = SimpleListImageItemBinding::inflate
 
-    }
 
     override fun renderFunction(view: SimpleListImageItemBinding, model: Int) {
         view.simpleListItemImageImage.colorFilter = PorterDuffColorFilter(model, PorterDuff.Mode.ADD)

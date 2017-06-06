@@ -154,7 +154,7 @@ abstract class AbstractDataBindingRecyclerAdapter<T : IRenderModelItem<*, *>>(co
         dataCollection.addAll(items)
     }
 
-    fun clearAndSetItems(items: List<T>) {
+    fun clearAndSet(items: List<T>) {
         clear()
         addAll(items)
     }

@@ -21,7 +21,10 @@ interface IRenderModelSearchItem<T : Any, Vm : ViewDataBinding, in F : Any> : IR
 }
 
 
-class RenderSearchableModelItem<T : Any, Vm : ViewDataBinding, in F : Any>(val filterFunction: (F, T) -> Boolean, val renderModel: IRenderModelItem<T, Vm>) : IRenderModelItem<T, Vm> by renderModel, IRenderModelSearchItem<T, Vm, F> {
+class RenderSearchableModelItem<T : Any, Vm : ViewDataBinding, in F : Any>(
+        val filterFunction: (F, T) -> Boolean,
+        val renderModel: IRenderModelItem<T, Vm>)
+    : IRenderModelItem<T, Vm> by renderModel, IRenderModelSearchItem<T, Vm, F> {
     override fun isAcceptedByFilter(value: F): Boolean = filterFunction(value, renderModel.getValue())
 }
 
@@ -29,8 +32,13 @@ abstract class BaseSearchRenderModel<T : Any, Vm : ViewDataBinding, in F : Any>(
     : BaseRenderModel<T, Vm>(item, classType), IRenderModelSearchItem<T, Vm, F>
 
 
-fun <T : Any, Vm : ViewDataBinding, F : Any> IRenderModelItem<T, Vm>.toSearchable(filterFunction: (F, T) -> Boolean): RenderSearchableModelItem<T, Vm, F> {
+fun <T : Any, Vm : ViewDataBinding, F : Any> IRenderModelItem<T, Vm>.toSearchable(filterFunction: (F, T) -> Boolean):
+        RenderSearchableModelItem<T, Vm, F> {
     return RenderSearchableModelItem(filterFunction, this)
+}
+
+fun <T : Any, Vm : ViewDataBinding, F : Any> IRenderModelItem<T, Vm>.toSearchableIgnore(): RenderSearchableModelItem<T, Vm, F> {
+    return RenderSearchableModelItem({ _: F, _: T -> false }, this)
 }
 
 
@@ -43,7 +51,7 @@ open class BaseSearchableDataBindingRecyclerAdapter<F : Any>(context: Context) :
     private val filterActor: ConflatedActorHelper<F> = ConflatedActorHelper()
 
 
-    suspend fun filterBySuspend(filter: F?): Unit {
+    private suspend fun filterBySuspend(filter: F?): Unit {
         try {
             if (filter != filterValue) {
                 return

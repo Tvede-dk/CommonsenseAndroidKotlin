@@ -38,7 +38,7 @@ class SearchAbleRecyclerDemo : BaseDatabindingFragment<DemoRecyclerSearchableBin
                 SimpleListImageItemRender(Color.RED).toSearchable { _, _ -> false }
         ).repeateToSize(50000)
 
-        adapter.clearAndSetItems(items)
+        adapter.clearAndSet(items)
         binding.demoRecyclerSearchableRecyclerview.recyclerView.setup(adapter, LinearLayoutManager(context))
         binding.demoRecyclerSearchableRecyclerview2.recyclerView.setup(adapter, LinearLayoutManager(context))
 

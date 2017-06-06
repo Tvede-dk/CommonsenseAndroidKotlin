@@ -11,8 +11,8 @@ import kotlin.system.measureNanoTime
  * Created by Kasper Tvede on 05-06-2017.
  */
 
-class TestClassTypeLookupHashcode<out T>(val someData: T, val viewType: Int) : TypeHashCodeLookupRepresentive<String> {
-    override fun getRepresentive(): String {
+class TestClassTypeLookupHashcode<out T>(val someData: T, val viewType: Int) : TypeHashCodeLookupRepresent<String> {
+    override fun getInflaterFunction(): String {
         return ""
     }
 
@@ -46,7 +46,7 @@ class TypeLookupCollectionRepresentiveTest : BaseRoboElectricTest() {
         collection.removeAll(firstClass, firstSecClass, thirdClass)
         Assert.assertEquals(collection.size, 1)
         Assert.assertEquals(collection.getTypeRepresentativeFromTypeValue(1), null)
-        Assert.assertEquals(collection.getTypeRepresentativeFromTypeValue(2), secondClass.getRepresentive())
+        Assert.assertEquals(collection.getTypeRepresentativeFromTypeValue(2), secondClass.getInflaterFunction())
         Assert.assertEquals(collection.getTypeRepresentativeFromTypeValue(3), null)
     }
 
@@ -70,13 +70,13 @@ class TypeLookupCollectionRepresentiveTest : BaseRoboElectricTest() {
         collection.add(onlyClass)
         Assert.assertEquals(collection.size, 1)
         Assert.assertEquals(collection[0], onlyClass)
-        Assert.assertEquals(collection.getTypeRepresentativeFromTypeValue(1), onlyClass.getRepresentive())
+        Assert.assertEquals(collection.getTypeRepresentativeFromTypeValue(1), onlyClass.getInflaterFunction())
 
         val otherClass = TestClassTypeLookupHashcode("qwe", 2)
         collection.add(otherClass)
         Assert.assertEquals(collection.size, 2)
         Assert.assertEquals(collection[1], otherClass)
-        Assert.assertEquals(collection.getTypeRepresentativeFromTypeValue(2), otherClass.getRepresentive())
+        Assert.assertEquals(collection.getTypeRepresentativeFromTypeValue(2), otherClass.getInflaterFunction())
 
 
     }
@@ -90,9 +90,9 @@ class TypeLookupCollectionRepresentiveTest : BaseRoboElectricTest() {
         val firstSecClass = TestClassTypeLookupHashcode("asd2", 1)
         collection.addAll(firstClass, secondClass, thirdClass, firstSecClass)
         Assert.assertEquals(collection.size, 4)
-        Assert.assertEquals(collection.getTypeRepresentativeFromTypeValue(1), firstClass.getRepresentive())
-        Assert.assertEquals(collection.getTypeRepresentativeFromTypeValue(2), secondClass.getRepresentive())
-        Assert.assertEquals(collection.getTypeRepresentativeFromTypeValue(3), thirdClass.getRepresentive())
+        Assert.assertEquals(collection.getTypeRepresentativeFromTypeValue(1), firstClass.getInflaterFunction())
+        Assert.assertEquals(collection.getTypeRepresentativeFromTypeValue(2), secondClass.getInflaterFunction())
+        Assert.assertEquals(collection.getTypeRepresentativeFromTypeValue(3), thirdClass.getInflaterFunction())
         //the firstSecClass should be there, its just not the first type (1) that gets inserted.
         Assert.assertEquals(collection[3], firstSecClass)
     }
@@ -106,9 +106,9 @@ class TypeLookupCollectionRepresentiveTest : BaseRoboElectricTest() {
         val firstSecClass = TestClassTypeLookupHashcode("asd2", 1)
         collection.addAll(firstClass, secondClass, thirdClass, firstSecClass)
         Assert.assertEquals(collection.size, 4)
-        Assert.assertEquals(collection.getTypeRepresentativeFromTypeValue(1), firstClass.getRepresentive())
+        Assert.assertEquals(collection.getTypeRepresentativeFromTypeValue(1), firstClass.getInflaterFunction())
         collection.removeAt(0)
-        Assert.assertEquals(collection.getTypeRepresentativeFromTypeValue(1), firstSecClass.getRepresentive())
+        Assert.assertEquals(collection.getTypeRepresentativeFromTypeValue(1), firstSecClass.getInflaterFunction())
         collection.remove(firstSecClass)
         Assert.assertEquals(collection.getTypeRepresentativeFromTypeValue(1), null)
     }

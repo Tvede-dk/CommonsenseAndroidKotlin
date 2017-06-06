@@ -12,13 +12,13 @@ import android.util.SparseArray
 // (a loop over stuff when removing is not a good idea).
 
 
-interface TypeHashCodeLookupRepresentive<out U> : TypeHashCodeLookup {
+interface TypeHashCodeLookupRepresent<out U> : TypeHashCodeLookup {
 
-    fun getRepresentive(): U
+    fun getInflaterFunction(): U
 }
 
 //so the types are as
-class TypeLookupCollectionRepresentive<T : TypeHashCodeLookupRepresentive<Rep>, out Rep : Any> {
+class TypeLookupCollectionRepresentive<T : TypeHashCodeLookupRepresent<Rep>, out Rep : Any> {
 
     //collection of the data
     private val data: MutableList<T> = mutableListOf()
@@ -34,7 +34,7 @@ class TypeLookupCollectionRepresentive<T : TypeHashCodeLookupRepresentive<Rep>, 
 
     fun add(item: T) {
         val type = item.getTypeValue()
-        createIfMissing(type, item.getRepresentive())
+        createIfMissing(type, item.getInflaterFunction())
         lookupCounter.put(type, lookupCounter[type] + 1)
         data.add(item)
     }

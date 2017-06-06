@@ -7,7 +7,7 @@ import android.support.v7.widget.RecyclerView
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import com.commonsense.android.kotlin.android.logging.L
-import com.commonsense.android.kotlin.collections.TypeHashCodeLookupRepresentive
+import com.commonsense.android.kotlin.collections.TypeHashCodeLookupRepresent
 import com.commonsense.android.kotlin.collections.TypeLookupCollectionRepresentive
 import java.lang.ref.WeakReference
 
@@ -23,9 +23,9 @@ data class BaseViewHolderItem<out T : ViewDataBinding>(val item: T) : RecyclerVi
     val viewBindingTypeValue = item.javaClass.hashCode()
 }
 
-interface IRenderModelItem<T : Any, Vm : ViewDataBinding> : TypeHashCodeLookupRepresentive<InflatingFunction<Vm>> {
+interface IRenderModelItem<T : Any, Vm : ViewDataBinding> : TypeHashCodeLookupRepresent<InflatingFunction<Vm>> {
     fun getValue(): T
-    //    fun inflaterFunction(inflater: LayoutInflater, parent: ViewGroup?, attach: Boolean): Vm
+
     fun renderFunction(view: Vm, model: T)
 
     fun bindToViewHolder(holder: BaseViewHolderItem<*>)
@@ -56,7 +56,7 @@ open class RenderModelItem<T : Any, Vm : ViewDataBinding>(val item: T,
                                                           val vmInflater: (inflater: LayoutInflater, parent: ViewGroup?, attach: Boolean) -> Vm,
                                                           val classType: Class<Vm>,
                                                           val vmRender: (view: Vm, model: T) -> Unit) : IRenderModelItem<T, Vm> {
-    override fun getRepresentive(): InflatingFunction<Vm> = this.vmInflater
+    override fun getInflaterFunction(): InflatingFunction<Vm> = this.vmInflater
 
     override fun getValue(): T = item
 

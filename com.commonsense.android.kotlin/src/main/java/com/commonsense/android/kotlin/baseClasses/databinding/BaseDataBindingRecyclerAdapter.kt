@@ -137,7 +137,7 @@ abstract class AbstractDataBindingRecyclerAdapter<T : IRenderModelItem<*, *>>(co
         }
     }
 
-    open fun getItem(index: Int): IRenderModelItem<*, *>? = dataCollection[index]
+    open fun getItem(index: Int): T? = dataCollection[index]
 
     open fun clear() {
         stopScroll()

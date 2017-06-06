@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout>
+
+    <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical">
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="A simple demo for some recycler views :) dont waste, recycle, with ease, and search!" />
+
+        <EditText
+            android:id="@+id/demo_recycler_searchable_edit"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="search by typing" />
+
+
+        <FrameLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="horizontal">
+
+            <com.commonsense.android.kotlin.widgets.SwipeRefreshRecyclerView
+                android:id="@+id/demo_recycler_searchable_recyclerview"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:background="#780" />
+
+            <com.futuremind.recyclerviewfastscroll.FastScroller
+                android:id="@+id/demo_recycler_searchable_fastscroll"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:layout_gravity="end"
+                android:orientation="vertical" />
+        </FrameLayout>
+    </LinearLayout>
+</layout>

@@ -10,6 +10,9 @@ import android.util.SparseArray
 //TODO -- the idea is that, for each "type" we want a "representative", alongside the counter.
 // the other collection sorta have this, howver its VERY inefficient with large data sets
 // (a loop over stuff when removing is not a good idea).
+interface TypeHashCodeLookup {
+    fun getTypeValue(): Int
+}
 
 
 interface TypeHashCodeLookupRepresent<out U> : TypeHashCodeLookup {

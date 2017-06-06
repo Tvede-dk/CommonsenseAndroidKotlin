@@ -23,6 +23,9 @@ class MainActivity : BaseDatabindingActivity<ActivityMainBinding>() {
         binding.activityMainAdvanceRecyclerDemo.setOnClick {
             startActivity(Intent(applicationContext, Demo2Activity::class.java))
         }
+        binding.activityMainAdvanceRecyclerDemoFastScroller.setOnClick {
+            startActivity(Intent(applicationContext, Demo3Activity::class.java))
+        }
 
         binding.activityMainAdvanceAsyncButton.setOnclickAsync {
             safeToast("async clicked ${counter++}")

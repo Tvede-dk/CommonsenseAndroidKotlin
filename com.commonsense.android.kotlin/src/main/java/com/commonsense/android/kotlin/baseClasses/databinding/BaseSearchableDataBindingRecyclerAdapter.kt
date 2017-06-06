@@ -41,10 +41,11 @@ fun <T : Any, Vm : ViewDataBinding, F : Any> IRenderModelItem<T, Vm>.toSearchabl
     return RenderSearchableModelItem({ _: F, _: T -> false }, this)
 }
 
+typealias IGenericSearchRender<F> = IRenderModelSearchItem<*, *, F>
 
-open class BaseSearchableDataBindingRecyclerAdapter<F : Any>(context: Context) : AbstractDataBindingRecyclerAdapter<IRenderModelSearchItem<*, *, F>>(context.applicationContext) {
-
-    private val allDataCollection = mutableListOf<IRenderModelSearchItem<*, *, F>>()
+open class AbstractSearchableDataBindingRecyclerAdapter<T : IGenericSearchRender<F>, F : Any>(context: Context)
+    : AbstractDataBindingRecyclerAdapter<T>(context.applicationContext) {
+    private val allDataCollection = mutableListOf<T>()
     private var filterValue: F? = null
 
     //the "gatekeeper" for our filter function. will restrict acces so only one gets in. thus if we spam the filter, we should only use the latest filter.
@@ -70,14 +71,14 @@ open class BaseSearchableDataBindingRecyclerAdapter<F : Any>(context: Context) :
         }
     }
 
-    override fun add(newItem: IRenderModelSearchItem<*, *, F>) {
+    override fun add(newItem: T) {
         L.error("temp", "add item")
         allDataCollection.add(newItem)
         performActionIfIsValidFilter(newItem, { super.add(newItem) })
     }
 
 
-    override fun addAll(items: List<IRenderModelSearchItem<*, *, F>>) {
+    override fun addAll(items: List<T>) {
         L.error("temp", "add All")
         allDataCollection.addAll(items)
         items.forEach {
@@ -86,13 +87,13 @@ open class BaseSearchableDataBindingRecyclerAdapter<F : Any>(context: Context) :
 
     }
 
-    private inline fun performActionIfIsValidFilter(newItem: IRenderModelSearchItem<*, *, F>, crossinline action: (IRenderModelSearchItem<*, *, F>) -> Unit) {
+    private inline fun performActionIfIsValidFilter(newItem: T, crossinline action: (T) -> Unit) {
         if (isAcceptedByFilter(newItem, filterValue)) {
             action(newItem)
         }
     }
 
-    override fun remove(newItem: IRenderModelSearchItem<*, *, F>) {
+    override fun remove(newItem: T) {
         super.remove(newItem)
         L.error("temp", "remove")
         allDataCollection.remove(newItem)
@@ -110,7 +111,7 @@ open class BaseSearchableDataBindingRecyclerAdapter<F : Any>(context: Context) :
         super.clear()
     }
 
-    private fun isAcceptedByFilter(newItem: IRenderModelSearchItem<*, *, F>?, value: F?): Boolean {
+    private fun isAcceptedByFilter(newItem: T?, value: F?): Boolean {
         if (value == null || newItem == null) {
             return true
         }
@@ -132,7 +133,7 @@ open class BaseSearchableDataBindingRecyclerAdapter<F : Any>(context: Context) :
         filterActor.offer(newFilter)
     }
 
-    private suspend fun updateVisibly(data: List<IRenderModelSearchItem<*, *, F>>) {
+    private suspend fun updateVisibly(data: List<T>) {
         L.error("temp", "update visibile")
         super.clearAndSetItemsNoNotify(data)
         launch(UI) {
@@ -164,8 +165,10 @@ open class BaseSearchableDataBindingRecyclerAdapter<F : Any>(context: Context) :
     fun getFilter(): F? {
         return filterValue
     }
-
 }
+
+open class BaseSearchableDataBindingRecyclerAdapter<F : Any>(context: Context) : AbstractSearchableDataBindingRecyclerAdapter<IRenderModelSearchItem<*, *, F>, F>(context)
+
 
 private class ConflatedActorHelper<F : Any> {
 

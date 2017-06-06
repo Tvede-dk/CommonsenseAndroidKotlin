@@ -23,19 +23,19 @@
             android:layout_height="match_parent"
             android:orientation="horizontal">
 
-            <com.commonsense.android.kotlin.widgets.SwipeRefreshRecylerView
+            <com.commonsense.android.kotlin.widgets.SwipeRefreshRecyclerView
                 android:id="@+id/demo_recycler_searchable_recyclerview"
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
-                android:background="#780"
-                android:layout_weight="1" />
+                android:layout_weight="1"
+                android:background="#780" />
 
-            <com.commonsense.android.kotlin.widgets.SwipeRefreshRecylerView
+            <com.commonsense.android.kotlin.widgets.SwipeRefreshRecyclerView
                 android:id="@+id/demo_recycler_searchable_recyclerview_2"
                 android:layout_width="0dp"
-                android:background="#789"
+                android:layout_height="match_parent"
                 android:layout_weight="1"
-                android:layout_height="match_parent" />
+                android:background="#789" />
         </LinearLayout>
     </LinearLayout>
 </layout>

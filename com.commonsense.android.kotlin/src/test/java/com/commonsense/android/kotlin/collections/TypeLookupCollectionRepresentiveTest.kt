@@ -118,8 +118,7 @@ class TypeLookupCollectionRepresentiveTest : BaseRoboElectricTest() {
         val collection = TypeLookupCollectionRepresentive<TestClassTypeLookupHashcode<*>, String>()
         collection.add(TestClassTypeLookupHashcode("asd", 1))
         collection.add(TestClassTypeLookupHashcode("asd", 1))
-        collection.add(TestClassTypeLookupHashcode("asd", 1))
-        val list = listOf(TestClassTypeLookupHashcode("2", 2)).repeateToSize(500_000)
+        collection.addAll(listOf(TestClassTypeLookupHashcode("2", 2)).repeateToSize(500_000))
         collection.add(TestClassTypeLookupHashcode("asd", 1))
 
         collection.removeAt(0) //warm up system.
@@ -131,8 +130,8 @@ class TypeLookupCollectionRepresentiveTest : BaseRoboElectricTest() {
             collection.removeAt(0) //worst case , since the representative is after 500_000 elements.
             // a forloop would be extremly slow
         }
-        Assert.assertTrue(worstCase < baseLine * 2) //allow a margin of double the baseline.
-        // this would still dictate a O(1) since O(1) * 2 = O(1)
+        Assert.assertTrue(worstCase < baseLine * 10) //allow a margin of double the baseline.
+        // this would still dictate a O(1) since O(1) * 10 = O(1)
 
     }
 

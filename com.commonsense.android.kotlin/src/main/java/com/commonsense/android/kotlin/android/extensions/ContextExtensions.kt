@@ -15,6 +15,8 @@ import android.widget.Toast
 import com.commonsense.android.kotlin.android.DangerousPermissionString
 import com.commonsense.android.kotlin.android.logging.L
 import com.commonsense.kotlin.R
+import kotlinx.coroutines.experimental.android.UI
+import kotlinx.coroutines.experimental.launch
 
 /**
  * Created by Kasper Tvede on 06-12-2016.
@@ -45,10 +47,12 @@ fun Context.safeToast(@StringRes message: Int, length: Int = Toast.LENGTH_SHORT)
 
 
 fun Context.safeToast(message: String, length: Int = Toast.LENGTH_SHORT) {
-    try {
-        Toast.makeText(this, message, length).show()
-    } catch (e: Exception) {
-        L.error("Activity.safeToast", "failed to show toast", e)
+    launch(UI) {
+        try {
+            Toast.makeText(this@safeToast, message, length).show()
+        } catch (e: Exception) {
+            L.error("Activity.safeToast", "failed to show toast", e)
+        }
     }
 }
 

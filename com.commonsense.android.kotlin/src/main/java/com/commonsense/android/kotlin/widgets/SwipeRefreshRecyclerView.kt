@@ -1,6 +1,7 @@
 package com.commonsense.android.kotlin.widgets
 
 import android.content.Context
+import android.support.annotation.MainThread
 import android.support.v4.widget.SwipeRefreshLayout
 import android.support.v7.widget.LinearLayoutManager
 import android.support.v7.widget.RecyclerView
@@ -9,6 +10,10 @@ import android.view.LayoutInflater
 import android.widget.FrameLayout
 import com.commonsense.android.kotlin.android.extensions.widets.setup
 import com.commonsense.kotlin.databinding.SwipeRefreshRecylerViewBinding
+import kotlinx.coroutines.experimental.CommonPool
+import kotlinx.coroutines.experimental.Job
+import kotlinx.coroutines.experimental.android.UI
+import kotlinx.coroutines.experimental.launch
 
 /**
  * Created by Kasper Tvede on 30-05-2017.
@@ -47,12 +52,26 @@ class SwipeRefreshRecyclerView : FrameLayout, SwipeRefreshLayout.OnRefreshListen
 
     var onRefreshListener: (() -> Unit)? = null
 
+    @MainThread
     fun stopRefreshing() {
         refreshLayout.isRefreshing = false
     }
 
-    fun setupAll(newAdapter: RecyclerView.Adapter<*>, newLayoutManager: LinearLayoutManager, refreshCallback: () -> Unit) {
+    @MainThread
+    fun setup(newAdapter: RecyclerView.Adapter<*>, newLayoutManager: LinearLayoutManager, refreshCallback: () -> Unit) {
         recyclerView.setup(newAdapter, newLayoutManager)
         onRefreshListener = refreshCallback
     }
+
+    @MainThread
+    fun setupAsync(newAdapter: RecyclerView.Adapter<*>, newLayoutManager: LinearLayoutManager, refreshCallback: () -> Job) {
+        recyclerView.setup(newAdapter, newLayoutManager)
+        onRefreshListener = {
+            launch(CommonPool) {
+                refreshCallback().join()
+                launch(UI) { stopRefreshing() }
+            }
+        }
+    }
 }
+

@@ -49,11 +49,13 @@ android {
 kotlin { experimental { coroutines "enable" } }
 
 dependencies {
-    compile 'com.android.support:appcompat-v7:25.3.1'
-    compile 'com.android.support:design:25.3.1'
+    compile 'com.android.support:appcompat-v7:25.4.0'
+    compile 'com.android.support:design:25.4.0'
 
-    compile 'org.jetbrains.kotlinx:kotlinx-coroutines-core:0.15'
-    compile group: 'org.jetbrains.kotlinx', name: 'kotlinx-coroutines-android', version: '0.15'
+
+
+    compile 'org.jetbrains.kotlinx:kotlinx-coroutines-core:0.16'
+    compile group: 'org.jetbrains.kotlinx', name: 'kotlinx-coroutines-android', version: '0.16'
 
     androidTestCompile('com.android.support.test.espresso:espresso-core:2.2.2', {
         exclude group: 'com.android.support', module: 'support-annotations'
@@ -65,6 +67,12 @@ dependencies {
     testCompile 'junit:junit:4.12'
     testCompile "org.robolectric:robolectric:3.3.2"
 
-    kapt "com.android.databinding:compiler:2.4.+"
+    kapt "com.android.databinding:compiler:3.0+"
     compile "org.jetbrains.kotlin:kotlin-stdlib:$kotlin_version"
+}
+
+repositories {
+    maven {
+        url "https://maven.google.com"
+    }
 }

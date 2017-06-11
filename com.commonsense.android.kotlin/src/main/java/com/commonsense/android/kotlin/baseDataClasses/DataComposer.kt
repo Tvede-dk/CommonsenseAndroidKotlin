@@ -33,6 +33,11 @@ class DataComposer<T, U> : callback<T> {
 
     @AnyThread
     fun load() = launch(CommonPool) {
+        loadAsync()
+    }
+
+    @AnyThread
+    suspend fun loadAsync() {
         val fromServer = startRetriveData()
         onLoadedFromServer(fromServer)
     }

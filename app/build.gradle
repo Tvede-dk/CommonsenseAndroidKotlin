@@ -5,7 +5,7 @@ apply plugin: 'kotlin-kapt'
 
 android {
     compileSdkVersion 25
-    buildToolsVersion "25.0.3"
+    buildToolsVersion "26.0.0"
     defaultConfig {
         applicationId "com.tvede.CommonSenseAndroidKotlin.example"
         minSdkVersion 16
@@ -31,30 +31,45 @@ android {
     }
 
 }
+def supportVersion = "25.4.0"
+def coroutinesVersion = "0.16"
 
 dependencies {
-    compile fileTree(include: ['*.jar'], dir: 'libs')
+
+    //coroutines
+    compile "org.jetbrains.kotlinx:kotlinx-coroutines-core:$coroutinesVersion"
+    compile "org.jetbrains.kotlinx:kotlinx-coroutines-android:$coroutinesVersion"
+
+    //support libs
+    compile "com.android.support:appcompat-v7:$supportVersion"
+    compile "com.android.support:design:$supportVersion"
+
+    //UI libs
+    compile 'com.futuremind.recyclerfastscroll:fastscroll:0.2.5'
+
+    //time libs
+    compile group: 'joda-time', name: 'joda-time', version: '2.9.9'
+
+    //commonSense
+    debugCompile project(path: ':com.commonsense.android.kotlin', configuration: "debug")
+    releaseCompile project(path: ':com.commonsense.android.kotlin', configuration: "release")
+
+    //tests libs
     androidTestCompile('com.android.support.test.espresso:espresso-core:2.2.2', {
         exclude group: 'com.android.support', module: 'support-annotations'
     })
-    // TEMP: this uses java 7
-    kapt "com.android.databinding:compiler:2.4.+"
-    compile 'org.jetbrains.kotlinx:kotlinx-coroutines-core:0.15'
-    compile group: 'org.jetbrains.kotlinx', name: 'kotlinx-coroutines-android', version: '0.15'
-    compile 'com.android.support:appcompat-v7:25.3.1'
-    compile 'com.android.support:design:25.3.1'
     testCompile 'junit:junit:4.12'
-    compile 'com.futuremind.recyclerfastscroll:fastscroll:0.2.5'
-    compile "org.jetbrains.kotlin:kotlin-stdlib:$kotlin_version"
-    compile group: 'joda-time', name: 'joda-time', version: '2.9.9'
 
-    debugCompile project(path: ':com.commonsense.android.kotlin', configuration: "debug")
-    releaseCompile project(path: ':com.commonsense.android.kotlin', configuration: "release")
-//    compile project(':com.commonsense.android.kotlin')
+    //kotlin specific
+    compile "org.jetbrains.kotlin:kotlin-stdlib:$kotlin_version"
+    kapt "com.android.databinding:compiler:3.+"
 }
 
 repositories {
     mavenCentral()
+    maven {
+        url "https://maven.google.com"
+    }
 }
 
 

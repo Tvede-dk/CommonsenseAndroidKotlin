@@ -26,10 +26,14 @@ class PermissionsHandling(val handlerRequestCode: Int = 999) {
         activity.checkPermission(permission)
                 .onTrue(onGranted)
                 .onFalse {
-                    val anyRequests = requestsInFlight.isEmpty()
-                    requestsInFlight.add(PermissionRequest(permission, onGranted, onFailed))
-                    anyRequests.onTrue { ActivityCompat.requestPermissions(activity, arrayOf(permission), handlerRequestCode) }
+                    requestPermissionFor(permission, activity, onGranted, onFailed)
                 }
+    }
+
+    private fun requestPermissionFor(@DangerousPermissionString permission: String, activity: Activity, onGranted: () -> Unit, onFailed: () -> Unit) {
+        val anyRequests = requestsInFlight.isEmpty()
+        requestsInFlight.add(PermissionRequest(permission, onGranted, onFailed))
+        anyRequests.onTrue { ActivityCompat.requestPermissions(activity, arrayOf(permission), handlerRequestCode) }
     }
 
     /**
@@ -47,6 +51,16 @@ class PermissionsHandling(val handlerRequestCode: Int = 999) {
     private fun Int.isGranted(): Boolean {
         return this == PackageManager.PERMISSION_GRANTED
     }
+
+    fun requestPermissions(@DangerousPermissionString permission: String, activity: Activity) {
+        activity.checkPermission(permission).onFalse {
+            requestPermissionFor(permission, activity, { }, { })
+        }
+    }
+}
+
+enum class PermissionEnum(val permissionValue: String) {
+
 }
 
 /**

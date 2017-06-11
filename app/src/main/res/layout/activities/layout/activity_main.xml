@@ -34,6 +34,13 @@
 
 
         <Button
+            android:id="@+id/activity_main_demo4"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="databinding demo" />
+
+
+        <Button
             android:id="@+id/activity_main_advance_async_button"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"

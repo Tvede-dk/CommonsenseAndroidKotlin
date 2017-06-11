@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout>
+
+    <data>
+
+        <variable
+            name="user"
+            type="com.CommonSenseAndroidKotlin.example.models.User" />
+    </data>
+
+    <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical">
+
+
+        <TextView
+            android:id="@+id/user_view_username"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@{user.getUsername()}"
+            android:textColor="@color/black" />
+
+        <TextView
+            android:id="@+id/user_view_password"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@{user.getPassword()}"
+            android:textColor="@color/black" />
+
+        <TextView
+            android:id="@+id/user_view_email"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@{user.getEmail()}"
+            android:textColor="@color/black" />
+
+        <TextView
+            android:id="@+id/user_view_realname"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@{user.getRealName()}"
+            android:textColor="@color/black" />
+
+
+    </LinearLayout>
+</layout>

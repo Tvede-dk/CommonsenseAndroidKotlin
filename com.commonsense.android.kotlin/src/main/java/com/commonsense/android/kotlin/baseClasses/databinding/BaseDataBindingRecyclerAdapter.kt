@@ -124,6 +124,19 @@ abstract class AbstractDataBindingRecyclerAdapter<T : IRenderModelItem<*, *>>(co
         notifyItemRangeInserted(startPos, items.size)
     }
 
+    open fun add(item: T, at: Int) {
+        dataCollection.add(item, at)
+    }
+
+    open fun addAll(items: Collection<T>, startPosition: Int) {
+        dataCollection.addAll(items, startPosition)
+        notifyItemRangeInserted(startPosition, items.size)
+    }
+
+    open fun addAll(vararg items: T, startPosition: Int) {
+        dataCollection.addAll(items.asList(), startPosition)
+        notifyItemRangeInserted(startPosition, items.size)
+    }
 
     open fun remove(newItem: T) {
         removeAt(dataCollection.indexOf(newItem))
@@ -136,6 +149,12 @@ abstract class AbstractDataBindingRecyclerAdapter<T : IRenderModelItem<*, *>>(co
             notifyItemRemoved(index)
         }
     }
+
+
+    open fun removeIn(range: kotlin.ranges.IntRange) {
+        range.forEach(this::removeAt)
+    }
+
 
     open fun getItem(index: Int): T? = dataCollection[index]
 

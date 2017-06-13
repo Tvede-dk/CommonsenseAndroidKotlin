@@ -59,10 +59,8 @@ open class AbstractSearchableDataBindingRecyclerAdapter<T : IGenericSearchRender
             }
             val items: List<IRenderModelSearchItem<*, *, F>>
             if (filter == null) {
-                L.error("test", "clearing, " + allDataCollection.count())
                 items = allDataCollection.toList()
             } else {
-                L.error("test", "filtering" + allDataCollection.count())
                 items = allDataCollection.toList().filter { isAcceptedByFilter(it, filter) }
             }
             updateVisibly(items)
@@ -72,14 +70,11 @@ open class AbstractSearchableDataBindingRecyclerAdapter<T : IGenericSearchRender
     }
 
     override fun add(newItem: T) {
-        L.error("temp", "add item")
         allDataCollection.add(newItem)
         performActionIfIsValidFilter(newItem, { super.add(newItem) })
     }
 
-
     override fun addAll(items: List<T>) {
-        L.error("temp", "add All")
         allDataCollection.addAll(items)
         items.forEach {
             performActionIfIsValidFilter(it, { super.add(it) })
@@ -101,9 +96,26 @@ open class AbstractSearchableDataBindingRecyclerAdapter<T : IGenericSearchRender
 
     override fun removeAt(index: Int) {
         super.removeAt(index)
-        L.error("temp", "removeAt")
         allDataCollection.removeAt(index)
     }
+
+    override fun addAll(items: Collection<T>, startPosition: Int) {
+        super.addAll(items, startPosition)
+        allDataCollection.addAll(startPosition, items)
+    }
+
+    override fun addAll(vararg items: T, startPosition: Int) {
+        val asList = items.asList()
+        super.addAll(asList, startPosition)
+        allDataCollection.addAll(startPosition, asList)
+
+    }
+
+    override fun removeIn(range: IntRange) {
+        super.removeIn(range)
+        range.forEach(dataCollection::removeAt)
+    }
+
 
     override fun clear() {
         L.error("temp", "clear")

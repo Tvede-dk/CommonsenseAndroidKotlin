@@ -1,5 +1,6 @@
 package com.commonsense.android.kotlin.extensions.collections
 
+import android.support.annotation.Size
 import android.util.SparseIntArray
 import onTrue
 
@@ -51,17 +52,28 @@ fun <T> Collection<T>.getSafe(index: Int): T? {
 
 data class CategorizationResult<out T>(val categoryA: List<T>, val categoryB: List<T>)
 
-fun <T> List<T>.categorizeInto(filterA: (T) -> Boolean, filterB: (T) -> Boolean): CategorizationResult<T> {
-    val listA = mutableListOf<T>()
-    val listB = mutableListOf<T>()
-    forEach {
-        if (filterA(it)) {
-            listA.add(it)
-        } else if (filterB(it)) {
-            listB.add(it)
+@Size(min = 0)
+fun <T> List<T>.categorizeInto(vararg filters: (T) -> Boolean): List<List<T>> {
+    val result = filters.map { mutableListOf<T>() }
+    this.forEach {
+        filters.forEachIndexed { index, filterAccepts ->
+            filterAccepts(it).onTrue { result[index].add(it) }
         }
     }
-    return CategorizationResult(listA, listB)
+    return result
+}
+
+fun <T> List<T>.categorize(categorizer: (T) -> String): Map<String, List<T>> {
+    val result = sortedMapOf<String, MutableList<T>>()
+    forEach {
+        val key = categorizer(it)
+        if (result[key] == null) {
+            result.put(key, mutableListOf(it))
+        } else {
+            result[key]?.add(it)
+        }
+    }
+    return result
 }
 
 

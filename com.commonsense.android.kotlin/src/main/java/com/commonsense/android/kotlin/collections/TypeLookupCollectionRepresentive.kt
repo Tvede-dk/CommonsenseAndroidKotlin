@@ -36,15 +36,33 @@ class TypeLookupCollectionRepresentive<T : TypeHashCodeLookupRepresent<Rep>, out
         get() = data.size
 
     fun add(item: T) {
+        addType(item)
+        data.add(item)
+    }
+
+    private fun addType(item: T) {
         val type = item.getTypeValue()
         createIfMissing(type, item.getInflaterFunction())
         lookupCounter.put(type, lookupCounter[type] + 1)
-        data.add(item)
     }
 
     fun addAll(vararg items: T) = items.forEach(this::add)
 
     fun addAll(items: Iterable<T>) = items.forEach(this::add)
+
+    fun add(item: T, at: Int) {
+        if (at >= 0 && at < data.size) {
+            addType(item)
+            data.add(at, item)
+        }
+    }
+
+    fun addAll(items: Iterable<T>, startPosition: Int) {
+        items.forEachIndexed { index: Int, item: T ->
+            add(item, index + startPosition)
+        }
+    }
+
 
     fun remove(item: T) {
         data.remove(item)

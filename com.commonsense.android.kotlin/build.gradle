@@ -86,3 +86,5 @@ repositories {
         url "https://maven.google.com"
     }
 }
+
+apply from: "../resourcegroups.gradle"

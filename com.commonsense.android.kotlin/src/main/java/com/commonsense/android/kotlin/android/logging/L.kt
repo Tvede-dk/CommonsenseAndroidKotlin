@@ -2,6 +2,7 @@ package com.commonsense.android.kotlin.android.logging
 
 import android.content.ComponentCallbacks
 import android.util.Log
+import android.view.View
 import onTrue
 
 /**
@@ -32,4 +33,16 @@ fun ComponentCallbacks.logWarning(message: String, exception: Throwable? = null)
 
 fun ComponentCallbacks.logDebug(message: String, exception: Throwable? = null) {
     L.debug(this.javaClass.simpleName, message, exception)
+}
+
+fun View.logDebug(message: String, exception: Throwable? = null) {
+    L.debug(this.javaClass.simpleName, message, exception)
+}
+
+fun View.logWarning(message: String, exception: Throwable? = null) {
+    L.warning(this.javaClass.simpleName, message, exception)
+}
+
+fun View.logError(message: String, exception: Throwable? = null) {
+    L.error(this.javaClass.simpleName, message, exception)
 }

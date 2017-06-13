@@ -1,16 +1,17 @@
-package com.commonsense.android.kotlin.widgets
+package com.commonsense.android.kotlin.android.widgets
 
 import android.content.Context
 import android.support.annotation.MainThread
+import android.support.annotation.UiThread
 import android.support.v4.widget.SwipeRefreshLayout
 import android.support.v7.widget.LinearLayoutManager
 import android.support.v7.widget.RecyclerView
 import android.util.AttributeSet
 import android.view.LayoutInflater
-import android.widget.FrameLayout
+import android.view.ViewGroup
 import com.commonsense.android.kotlin.android.extensions.widets.setup
+import com.commonsense.android.kotlin.android.widgets.base.CustomDataBindingView
 import com.commonsense.kotlin.databinding.SwipeRefreshRecylerViewBinding
-import kotlinx.coroutines.experimental.CommonPool
 import kotlinx.coroutines.experimental.Job
 import kotlinx.coroutines.experimental.android.UI
 import kotlinx.coroutines.experimental.launch
@@ -18,31 +19,31 @@ import kotlinx.coroutines.experimental.launch
 /**
  * Created by Kasper Tvede on 30-05-2017.
  */
-class SwipeRefreshRecyclerView : FrameLayout, SwipeRefreshLayout.OnRefreshListener {
-
+class SwipeRefreshRecyclerView : CustomDataBindingView<SwipeRefreshRecylerViewBinding>, SwipeRefreshLayout.OnRefreshListener {
+    override fun inflate(): (LayoutInflater, ViewGroup, Boolean) -> SwipeRefreshRecylerViewBinding
+            = SwipeRefreshRecylerViewBinding::inflate
 
     constructor(context: Context) : super(context)
     constructor(context: Context, attrs: AttributeSet) : super(context, attrs)
     constructor(context: Context, attrs: AttributeSet, defStyleAttr: Int) : super(context, attrs, defStyleAttr)
 
-    private val viewBinding: SwipeRefreshRecylerViewBinding
-
     init {
-        viewBinding = SwipeRefreshRecylerViewBinding.inflate(LayoutInflater.from(context), this, true)
-        viewBinding.swipeRefreshRecyclerSwipeRefresh.setOnRefreshListener(this)
+        binding.swipeRefreshRecyclerSwipeRefresh.setOnRefreshListener(this)
     }
 
 
     val refreshLayout: SwipeRefreshLayout
-        get() = viewBinding.swipeRefreshRecyclerSwipeRefresh
+        get() = binding.swipeRefreshRecyclerSwipeRefresh
 
     val recyclerView: RecyclerView
-        get() = viewBinding.swipeRefreshRecyclerRecycler
+        get() = binding.swipeRefreshRecyclerRecycler
+
 
     var adapter: RecyclerView.Adapter<*>?
-        get() = viewBinding.swipeRefreshRecyclerRecycler.adapter
+        get() = binding.swipeRefreshRecyclerRecycler.adapter
+        @UiThread
         set(value) {
-            viewBinding.swipeRefreshRecyclerRecycler.adapter = value
+            binding.swipeRefreshRecyclerRecycler.adapter = value
         }
 
     override fun onRefresh() {
@@ -67,8 +68,7 @@ class SwipeRefreshRecyclerView : FrameLayout, SwipeRefreshLayout.OnRefreshListen
     fun setupAsync(newAdapter: RecyclerView.Adapter<*>, newLayoutManager: LinearLayoutManager, refreshCallback: () -> Job) {
         recyclerView.setup(newAdapter, newLayoutManager)
         onRefreshListener = {
-            launch(CommonPool) {
-                refreshCallback().join()
+            refreshCallback().invokeOnCompletion {
                 launch(UI) { stopRefreshing() }
             }
         }

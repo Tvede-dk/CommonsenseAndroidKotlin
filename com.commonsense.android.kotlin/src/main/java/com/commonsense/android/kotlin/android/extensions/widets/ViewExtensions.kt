@@ -1,8 +1,11 @@
 package com.commonsense.android.kotlin.android.extensions.widets
 
 import android.annotation.TargetApi
+import android.content.res.TypedArray
 import android.os.Build
+import android.support.annotation.StyleableRes
 import android.support.annotation.UiThread
+import android.util.AttributeSet
 import android.view.View
 import android.view.ViewTreeObserver
 import kotlinx.coroutines.experimental.android.UI
@@ -53,4 +56,12 @@ fun View.setOnclickAsync(action: suspend () -> Unit) {
     }
     // install a listener to activate this actor
     setOnClick { eventActor.offer(Unit) }
+}
+
+
+fun View.getTypedArrayFor(attributeSet: AttributeSet,
+                          @StyleableRes style: IntArray,
+                          defStyleAttr: Int = 0,
+                          defStyleRes: Int = 0): TypedArray {
+    return context.theme.obtainStyledAttributes(attributeSet, style, defStyleAttr, defStyleRes)
 }

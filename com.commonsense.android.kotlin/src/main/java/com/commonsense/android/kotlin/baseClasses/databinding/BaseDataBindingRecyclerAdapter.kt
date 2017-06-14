@@ -111,71 +111,77 @@ abstract class AbstractDataBindingRecyclerAdapter<T : IRenderModelItem<*, *>>(co
 
     override fun getItemCount(): Int = dataCollection.size
 
-    open fun add(newItem: T) {
+    open fun add(newItem: T) = updateData {
         stopScroll()
         dataCollection.add(newItem)
         notifyItemInserted(dataCollection.size)
     }
 
-    open fun addAll(items: List<T>) {
-        stopScroll()
+    open fun addAll(items: List<T>) = updateData {
         val startPos = itemCount
         dataCollection.addAll(items)
         notifyItemRangeInserted(startPos, items.size)
     }
 
-    open fun add(item: T, at: Int) {
+    open fun add(item: T, at: Int) = updateData {
         dataCollection.add(item, at)
     }
 
-    open fun addAll(items: Collection<T>, startPosition: Int) {
+    open fun addAll(items: Collection<T>, startPosition: Int) = updateData {
         dataCollection.addAll(items, startPosition)
         notifyItemRangeInserted(startPosition, items.size)
     }
 
-    open fun addAll(vararg items: T, startPosition: Int) {
+    open fun addAll(vararg items: T, startPosition: Int) = updateData {
         dataCollection.addAll(items.asList(), startPosition)
         notifyItemRangeInserted(startPosition, items.size)
     }
 
-    open fun remove(newItem: T) {
+    open fun remove(newItem: T) = updateData {
         removeAt(dataCollection.indexOf(newItem))
     }
 
-    open fun removeAt(index: Int) {
+    open fun removeAt(index: Int) = updateData {
         if (dataCollection.isIndexValid(index)) {
-            stopScroll()
             dataCollection.removeAt(index)
             notifyItemRemoved(index)
         }
     }
 
 
-    open fun removeIn(range: kotlin.ranges.IntRange) {
-        range.forEach(this::removeAt)
+    open fun removeIn(range: kotlin.ranges.IntRange) = updateData {
+        if (dataCollection.isRangeValid(range)) {
+            dataCollection.removeIn(range)
+            notifyItemRangeRemoved(range.start, range.endInclusive - range.start)
+        }
+
     }
 
 
     open fun getItem(index: Int): T? = dataCollection[index]
 
-    open fun clear() {
-        stopScroll()
+    open fun clear() = updateData {
         dataCollection.clear()
         notifyDataSetChanged()
     }
 
 
-    protected fun addNoNotify(item: T) {
+    protected fun addNoNotify(item: T) = updateData {
         dataCollection.add(item)
     }
 
-    protected fun addNoNotify(items: List<T>) {
+    protected fun addNoNotify(items: List<T>) = updateData {
         dataCollection.addAll(items)
     }
 
     fun clearAndSet(items: List<T>) {
         clear()
         addAll(items)
+    }
+
+    open fun replace(newItem: T, position: Int) = updateData {
+        dataCollection.replace(newItem, position)
+        notifyItemChanged(position)
     }
 
     protected fun clearAndSetItemsNoNotify(items: List<T>) {
@@ -206,6 +212,16 @@ abstract class AbstractDataBindingRecyclerAdapter<T : IRenderModelItem<*, *>>(co
             }
         }
     }
+
+
+    /**
+     * must be called from all things that manipulate the dataCollection.
+     */
+    private fun updateData(action: () -> Unit) {
+        stopScroll()
+        action()
+    }
+
 }
 
 open class BaseDataBindingRecyclerAdapter(context: Context) : AbstractDataBindingRecyclerAdapter<IRenderModelItem<*, *>>(context)

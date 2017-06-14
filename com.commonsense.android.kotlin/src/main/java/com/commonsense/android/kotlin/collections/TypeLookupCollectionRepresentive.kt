@@ -112,6 +112,13 @@ class TypeLookupCollectionRepresentive<T : TypeHashCodeLookupRepresent<Rep>, out
         }
     }
 
+    fun replace(newItem: T, position: Int) {
+        if (isIndexValid(position)) {
+            add(newItem, position)
+            removeAt(position + 1)
+        }
+    }
+
     private fun handleRemove(itemRemoved: T) {
         val type = itemRemoved.getTypeValue()
         val counter = lookupCounter.get(type)
@@ -130,6 +137,17 @@ class TypeLookupCollectionRepresentive<T : TypeHashCodeLookupRepresent<Rep>, out
 
     fun removeAll(vararg toRemove: T) {
         toRemove.forEach(this::remove)
+    }
+
+    fun isRangeValid(range: IntRange): Boolean {
+        return range.start >= 0 && range.endInclusive < size
+    }
+
+    fun removeIn(range: IntRange) {
+        range.forEach {
+            removeAt(range.start)
+        }
+
     }
 
 

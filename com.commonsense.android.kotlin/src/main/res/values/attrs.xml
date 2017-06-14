@@ -3,5 +3,7 @@
     <declare-styleable name="ToggleImageButton">
         <attr name="selectedColor" format="color" />
         <attr name="unselectedColor" format="color" />
+        <attr name="unselectedBackground" format="reference" />
+        <attr name="selectedBackground" format="reference" />
     </declare-styleable>
 </resources>

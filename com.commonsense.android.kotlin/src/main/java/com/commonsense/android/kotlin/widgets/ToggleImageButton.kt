@@ -1,7 +1,8 @@
-package com.commonsense.android.kotlin.android.widgets
+package com.commonsense.android.kotlin.widgets
 
 import android.content.Context
 import android.content.res.TypedArray
+import android.graphics.drawable.Drawable
 import android.support.v4.graphics.drawable.DrawableCompat
 import android.support.v7.widget.AppCompatImageView
 import android.util.AttributeSet
@@ -16,7 +17,7 @@ import com.commonsense.kotlin.R
 /**
  * Created by Kasper Tvede on 13-06-2017.
  */
-class ToggleImageButton : AppCompatImageView, ViewAttribute, View.OnClickListener {
+open class ToggleImageButton : AppCompatImageView, ViewAttribute, View.OnClickListener {
 
     private val noColor = 0
 
@@ -45,6 +46,14 @@ class ToggleImageButton : AppCompatImageView, ViewAttribute, View.OnClickListene
     }
 
 
+    private val internalBackgroundSelected by lazy {
+        UpdateVariable(background, this::updateView)
+    }
+
+    private val internalBackgroundUnselected by lazy {
+        UpdateVariable(background, this::updateView)
+    }
+
     var isChecked
         get() = internalChecked.value
         set(value) {
@@ -64,6 +73,18 @@ class ToggleImageButton : AppCompatImageView, ViewAttribute, View.OnClickListene
             internalUnselectedColor.value = value
         }
 
+    var selectedBackground: Drawable?
+        get() = internalBackgroundSelected.value
+        set(value) {
+            internalBackgroundSelected.value = value
+        }
+
+    var unselectedBackground: Drawable?
+        get() = internalBackgroundUnselected.value
+        set(value) {
+            internalBackgroundUnselected.value = value
+        }
+
     var internalOnclickListener: OnClickListener? = null
 
     override fun getStyleResource(): IntArray? {
@@ -71,22 +92,39 @@ class ToggleImageButton : AppCompatImageView, ViewAttribute, View.OnClickListene
     }
 
     override fun parseTypedArray(data: TypedArray) {
+        //colors
         internalSelectedColor.setWithNoUpdate(data.getColorSafe(R.styleable.ToggleImageButton_selectedColor, noColor))
         internalUnselectedColor.setWithNoUpdate(data.getColorSafe(R.styleable.ToggleImageButton_unselectedColor, noColor))
+        //background
+        internalBackgroundSelected.setWithNoUpdate(data.getDrawableSafe(R.styleable.ToggleImageButton_selectedBackground, context))
+        internalBackgroundUnselected.setWithNoUpdate(data.getDrawableSafe(R.styleable.ToggleImageButton_unselectedBackground, context))
+
     }
 
     override fun updateView() {
-        val color = if (isChecked) {
+
+        DrawableCompat.setTint(drawable.mutate(), getCheckColor())
+        val checkBackground = getCheckBackground()
+        if (checkBackground != background) {
+            background = checkBackground
+        }
+        invalidate()
+    }
+
+    fun getCheckColor(): Int {
+        return if (isChecked) {
             selectedColor
         } else {
             unselectedColor
         }
-        if (color != noColor) {
-            DrawableCompat.setTint(drawable, color)
+    }
+
+    fun getCheckBackground(): Drawable? {
+        return if (isChecked) {
+            selectedBackground
         } else {
-            DrawableCompat.setTint(drawable, noColor)
+            unselectedBackground
         }
-        invalidate()
     }
 
     override fun afterSetupView() {
@@ -94,7 +132,6 @@ class ToggleImageButton : AppCompatImageView, ViewAttribute, View.OnClickListene
         if (background == null) {
             background = context.getDrawableSafe(R.drawable.card_bg)
         }
-
     }
 
     override fun onClick(sender: View?) {

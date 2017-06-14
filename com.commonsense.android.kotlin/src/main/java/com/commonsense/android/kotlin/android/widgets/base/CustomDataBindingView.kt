@@ -12,6 +12,7 @@ import android.widget.FrameLayout
  * Made for custom "controls" (collections of view(s))
  *
  */
+typealias InflaterFunction<Vm> = (inflater: LayoutInflater, parent: ViewGroup, attach: Boolean) -> Vm
 abstract class CustomDataBindingView<T : ViewDataBinding> : FrameLayout {
 
     val binding: T  by lazy {
@@ -26,7 +27,7 @@ abstract class CustomDataBindingView<T : ViewDataBinding> : FrameLayout {
     constructor(context: Context, attrs: AttributeSet, defStyleAttr: Int) : super(context, attrs, defStyleAttr)
 
 
-    abstract fun inflate(): (inflater: LayoutInflater, parent: ViewGroup, attach: Boolean) -> T
+    abstract fun inflate(): InflaterFunction<T>
 
 
 }

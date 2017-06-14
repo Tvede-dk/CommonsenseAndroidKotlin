@@ -1,5 +1,6 @@
 package com.commonsense.android.kotlin.extensions.collections
 
+import android.support.annotation.IntRange
 import android.support.annotation.Size
 import android.util.SparseIntArray
 import onTrue
@@ -90,4 +91,12 @@ inline fun <reified T> List<T>.repeateToSize(size: Int): List<T> {
     val missingItemsToCopy = size % count()
     val resultList = this.repeate(timesToRepeate)
     return resultList + this.subList(0, missingItemsToCopy)
+}
+
+
+fun <T> MutableList<T>.replace(item: T, @IntRange(from = 0) position: Int) {
+    if (isIndexValid(position)) {
+        this.add(position, item)
+        this.removeAt(position + 1) //the +1 : we just moved all content before the original position.
+    }
 }

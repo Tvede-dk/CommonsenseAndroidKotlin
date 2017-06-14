@@ -4,6 +4,7 @@ import android.content.Context
 import android.databinding.ViewDataBinding
 import android.support.v7.widget.RecyclerView
 import com.commonsense.android.kotlin.android.logging.L
+import com.commonsense.android.kotlin.extensions.collections.replace
 import kotlinx.coroutines.experimental.CommonPool
 import kotlinx.coroutines.experimental.android.UI
 import kotlinx.coroutines.experimental.channels.ActorJob
@@ -16,7 +17,7 @@ import kotlinx.coroutines.experimental.launch
  * Created by kasper on 01/06/2017.
  */
 
-interface IRenderModelSearchItem<T : Any, Vm : ViewDataBinding, in F : Any> : IRenderModelItem<T, Vm> {
+interface IRenderModelSearchItem<T : Any, Vm : ViewDataBinding, in F> : IRenderModelItem<T, Vm> {
     fun isAcceptedByFilter(value: F): Boolean
 }
 
@@ -43,7 +44,7 @@ fun <T : Any, Vm : ViewDataBinding, F : Any> IRenderModelItem<T, Vm>.toSearchabl
 
 typealias IGenericSearchRender<F> = IRenderModelSearchItem<*, *, F>
 
-open class AbstractSearchableDataBindingRecyclerAdapter<T : IGenericSearchRender<F>, F : Any>(context: Context)
+open class AbstractSearchableDataBindingRecyclerAdapter<T : IGenericSearchRender<F>, F>(context: Context)
     : AbstractDataBindingRecyclerAdapter<T>(context.applicationContext) {
     private val allDataCollection = mutableListOf<T>()
     private var filterValue: F? = null
@@ -90,7 +91,6 @@ open class AbstractSearchableDataBindingRecyclerAdapter<T : IGenericSearchRender
 
     override fun remove(newItem: T) {
         super.remove(newItem)
-        L.error("temp", "remove")
         allDataCollection.remove(newItem)
     }
 
@@ -108,7 +108,11 @@ open class AbstractSearchableDataBindingRecyclerAdapter<T : IGenericSearchRender
         val asList = items.asList()
         super.addAll(asList, startPosition)
         allDataCollection.addAll(startPosition, asList)
+    }
 
+    override fun replace(newItem: T, position: Int) {
+        super.replace(newItem, position)
+        allDataCollection.replace(newItem, position)
     }
 
     override fun removeIn(range: IntRange) {
@@ -118,7 +122,6 @@ open class AbstractSearchableDataBindingRecyclerAdapter<T : IGenericSearchRender
 
 
     override fun clear() {
-        L.error("temp", "clear")
         allDataCollection.clear()
         super.clear()
     }
@@ -140,13 +143,11 @@ open class AbstractSearchableDataBindingRecyclerAdapter<T : IGenericSearchRender
 
 
     fun filterBy(newFilter: F) {
-        L.error("temp", "filter by " + newFilter)
         filterValue = newFilter
         filterActor.offer(newFilter)
     }
 
     private suspend fun updateVisibly(data: List<T>) {
-        L.error("temp", "update visibile")
         super.clearAndSetItemsNoNotify(data)
         launch(UI) {
             super.notifyDataSetChanged()
@@ -154,10 +155,8 @@ open class AbstractSearchableDataBindingRecyclerAdapter<T : IGenericSearchRender
     }
 
     fun removeFilter() {
-        L.error("temp", "remove filter")
         filterValue = null
         filterActor.offer(null)
-//        eventActor?.offer(null)
     }
 
     override fun onAttachedToRecyclerView(recyclerView: RecyclerView?) {
@@ -165,13 +164,11 @@ open class AbstractSearchableDataBindingRecyclerAdapter<T : IGenericSearchRender
         filterActor.setup {
             filterBySuspend(it)
         }
-//        (eventActor == null).onTrue(this::setupActor)
     }
 
     override fun onDetachedFromRecyclerView(recyclerView: RecyclerView?) {
         super.onDetachedFromRecyclerView(recyclerView)
         filterActor.clear()
-//        listeningRecyclers.isEmpty().onFalse { eventActor = null }
     }
 
     fun getFilter(): F? {
@@ -179,10 +176,10 @@ open class AbstractSearchableDataBindingRecyclerAdapter<T : IGenericSearchRender
     }
 }
 
-open class BaseSearchableDataBindingRecyclerAdapter<F : Any>(context: Context) : AbstractSearchableDataBindingRecyclerAdapter<IRenderModelSearchItem<*, *, F>, F>(context)
+open class BaseSearchableDataBindingRecyclerAdapter<F>(context: Context) : AbstractSearchableDataBindingRecyclerAdapter<IRenderModelSearchItem<*, *, F>, F>(context)
 
 
-private class ConflatedActorHelper<F : Any> {
+private class ConflatedActorHelper<F> {
 
     private var eventActor: ActorJob<F?>? = null
 
@@ -198,7 +195,6 @@ private class ConflatedActorHelper<F : Any> {
         eventActor = actor(CommonPool, capacity = Channel.CONFLATED) {
             channel.consumeEach(callback)
         }
-
     }
 
     fun clear() {

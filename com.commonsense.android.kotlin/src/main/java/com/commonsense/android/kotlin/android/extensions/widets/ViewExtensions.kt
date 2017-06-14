@@ -65,3 +65,15 @@ fun View.getTypedArrayFor(attributeSet: AttributeSet,
                           defStyleRes: Int = 0): TypedArray {
     return context.theme.obtainStyledAttributes(attributeSet, style, defStyleAttr, defStyleRes)
 }
+
+
+/**
+ * Toggles between visible and gone.
+ */
+fun View.toggleVisibilityGone() {
+    if (visibility == View.VISIBLE) {
+        visibility = View.GONE
+    } else {
+        visibility = View.VISIBLE
+    }
+}

@@ -9,6 +9,7 @@ import android.view.ViewGroup
 import com.commonsense.android.kotlin.android.logging.L
 import com.commonsense.android.kotlin.collections.TypeHashCodeLookupRepresent
 import com.commonsense.android.kotlin.collections.TypeLookupCollectionRepresentive
+import length
 import java.lang.ref.WeakReference
 
 /**
@@ -17,21 +18,32 @@ import java.lang.ref.WeakReference
 
 typealias BindingFunction = (BaseViewHolderItem<*>) -> Unit
 
-typealias InflatingFunction<T> = (inflater: LayoutInflater, parent: ViewGroup?, attach: Boolean) -> T
+typealias ViewInflatingFunction<Vm> = (inflater: LayoutInflater, parent: ViewGroup?, attach: Boolean) -> Vm
 
-data class BaseViewHolderItem<out T : ViewDataBinding>(val item: T) : RecyclerView.ViewHolder(item.root) {
+typealias InflatingFunction<Vm> = (inflater: LayoutInflater, parent: ViewGroup?, attach: Boolean) -> BaseViewHolderItem<Vm>
+
+open class BaseViewHolderItem<T : ViewDataBinding>(val item: T) : RecyclerView.ViewHolder(item.root) {
     val viewBindingTypeValue = item.javaClass.hashCode()
 }
 
-interface IRenderModelItem<T : Any, Vm : ViewDataBinding> : TypeHashCodeLookupRepresent<InflatingFunction<Vm>> {
+interface IRenderModelItem<T : Any, Vm : ViewDataBinding> :
+        TypeHashCodeLookupRepresent<InflatingFunction<Vm>> {
+
     fun getValue(): T
 
     fun renderFunction(view: Vm, model: T)
 
     fun bindToViewHolder(holder: BaseViewHolderItem<*>)
+
+    fun createViewHolder(inflatedView: Vm): BaseViewHolderItem<Vm>
+
+    fun getInflaterFunction(): ViewInflatingFunction<Vm>
 }
 
-abstract class BaseRenderModel<T : Any, Vm : ViewDataBinding>(val item: T, classType: Class<Vm>) : IRenderModelItem<T, Vm> {
+abstract class BaseRenderModel<
+        T : Any,
+        Vm : ViewDataBinding>(val item: T, classType: Class<Vm>)
+    : IRenderModelItem<T, Vm> {
 
     override fun getValue(): T = item
 
@@ -50,19 +62,39 @@ abstract class BaseRenderModel<T : Any, Vm : ViewDataBinding>(val item: T, class
         }
     }
 
+    override fun createViewHolder(inflatedView: Vm): BaseViewHolderItem<Vm> {
+        return BaseViewHolderItem(inflatedView)
+    }
+
+    override fun getCreatorFunction(): InflatingFunction<Vm> {
+        return { inflater: LayoutInflater, parent: ViewGroup?, attach: Boolean ->
+            createViewHolder(getInflaterFunction().invoke(inflater, parent, attach))
+        }
+    }
 }
 
-open class RenderModelItem<T : Any, Vm : ViewDataBinding>(val item: T,
-                                                          val vmInflater: (inflater: LayoutInflater, parent: ViewGroup?, attach: Boolean) -> Vm,
-                                                          val classType: Class<Vm>,
-                                                          val vmRender: (view: Vm, model: T) -> Unit) : IRenderModelItem<T, Vm> {
-    override fun getInflaterFunction(): InflatingFunction<Vm> = this.vmInflater
+open class RenderModelItem<
+        T : Any,
+        Vm : ViewDataBinding>(val item: T,
+                              val vmInflater: ViewInflatingFunction<Vm>,
+                              val classType: Class<Vm>,
+                              val vmRender: (view: Vm, model: T) -> Unit) : IRenderModelItem<T, Vm> {
+    override fun getInflaterFunction() = vmInflater
+
+
+    override fun createViewHolder(inflatedView: Vm): BaseViewHolderItem<Vm> {
+        return BaseViewHolderItem(inflatedView)
+    }
+
+    override fun getCreatorFunction(): InflatingFunction<Vm> {
+        return { inflater: LayoutInflater, parent: ViewGroup?, attach: Boolean ->
+            createViewHolder(vmInflater(inflater, parent, attach))
+        }
+    }
 
     override fun getValue(): T = item
 
     override fun getTypeValue(): Int = vmTypeValue
-
-//    override fun inflaterFunction(inflater: LayoutInflater, parent: ViewGroup?, attach: Boolean) = vmInflater(inflater, parent, false)
 
     override fun renderFunction(view: Vm, model: T) = vmRender(view, model)
 
@@ -82,8 +114,12 @@ open class RenderModelItem<T : Any, Vm : ViewDataBinding>(val item: T,
     }
 }
 
-abstract class AbstractDataBindingRecyclerAdapter<T : IRenderModelItem<*, *>>(context: Context) : RecyclerView.Adapter<BaseViewHolderItem<*>>() {
-    protected val dataCollection: TypeLookupCollectionRepresentive<T, InflatingFunction<ViewDataBinding>> = TypeLookupCollectionRepresentive()
+abstract class AbstractDataBindingRecyclerAdapter<T>(context: Context) :
+        RecyclerView.Adapter<BaseViewHolderItem<*>>() where T : IRenderModelItem<*, *> {
+
+    protected val dataCollection: TypeLookupCollectionRepresentive<
+            T, InflatingFunction<*>>
+            = TypeLookupCollectionRepresentive()
 
     protected val listeningRecyclers = mutableSetOf<WeakReference<RecyclerView>>()
 
@@ -94,7 +130,7 @@ abstract class AbstractDataBindingRecyclerAdapter<T : IRenderModelItem<*, *>>(co
 
     override fun onCreateViewHolder(parent: ViewGroup?, @IntRange(from = 0) viewType: Int): BaseViewHolderItem<*>? {
         val rep = dataCollection.getTypeRepresentativeFromTypeValue(viewType)
-        return rep?.invoke(inflater, parent, false)?.let { BaseViewHolderItem(it) }
+        return rep?.invoke(inflater, parent, false)
     }
 
     override fun getItemViewType(@IntRange(from = 0) position: Int): Int {
@@ -152,7 +188,7 @@ abstract class AbstractDataBindingRecyclerAdapter<T : IRenderModelItem<*, *>>(co
     open fun removeIn(range: kotlin.ranges.IntRange) = updateData {
         if (dataCollection.isRangeValid(range)) {
             dataCollection.removeIn(range)
-            notifyItemRangeRemoved(range.start, range.endInclusive - range.start)
+            notifyItemRangeRemoved(range.start, range.length)
         }
 
     }
@@ -224,6 +260,8 @@ abstract class AbstractDataBindingRecyclerAdapter<T : IRenderModelItem<*, *>>(co
 
 }
 
-open class BaseDataBindingRecyclerAdapter(context: Context) : AbstractDataBindingRecyclerAdapter<IRenderModelItem<*, *>>(context)
+open class BaseDataBindingRecyclerAdapter(context: Context) :
+        AbstractDataBindingRecyclerAdapter<IRenderModelItem<*, *>>(context)
 
 
+class DefaultDataBindingRecyclerAdapter(context: Context) : BaseDataBindingRecyclerAdapter(context)

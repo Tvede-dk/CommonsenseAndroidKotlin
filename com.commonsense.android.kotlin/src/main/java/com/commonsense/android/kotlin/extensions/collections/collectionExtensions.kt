@@ -100,3 +100,16 @@ fun <T> MutableList<T>.replace(item: T, @IntRange(from = 0) position: Int) {
         this.removeAt(position + 1) //the +1 : we just moved all content before the original position.
     }
 }
+
+fun <E> MutableCollection<E>.clearAndAddAll(collection: Collection<E>) {
+    clear()
+    addAll(collection)
+}
+
+fun <T> MutableSet<T>.toggleExistance(item: T) {
+    if (contains(item)) {
+        remove(item)
+    } else {
+        add(item)
+    }
+}

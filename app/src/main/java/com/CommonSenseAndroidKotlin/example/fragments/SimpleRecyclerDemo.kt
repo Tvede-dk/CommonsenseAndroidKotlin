@@ -13,7 +13,7 @@ import com.commonsense.android.kotlin.android.extensions.widets.setup
 import com.commonsense.android.kotlin.baseClasses.databinding.BaseDataBindingRecyclerAdapter
 import com.commonsense.android.kotlin.baseClasses.databinding.BaseDatabindingFragment
 import com.commonsense.android.kotlin.baseClasses.databinding.BaseRenderModel
-import com.commonsense.android.kotlin.baseClasses.databinding.InflatingFunction
+import com.commonsense.android.kotlin.baseClasses.databinding.ViewInflatingFunction
 
 /**
  * Created by Kasper Tvede on 31-05-2017.
@@ -41,7 +41,7 @@ open class SimpleRecyclerDemo : BaseDatabindingFragment<DemoRecyclerSimpleViewBi
 
 
 open class SimpleListItemRender(text: String) : BaseRenderModel<String, SimpleListItemBinding>(text, SimpleListItemBinding::class.java) {
-    override fun getInflaterFunction(): InflatingFunction<SimpleListItemBinding> {
+    override fun getInflaterFunction(): ViewInflatingFunction<SimpleListItemBinding> {
         return SimpleListItemBinding::inflate
     }
 
@@ -51,7 +51,7 @@ open class SimpleListItemRender(text: String) : BaseRenderModel<String, SimpleLi
 }
 
 class SimpleListImageItemRender(color: Int) : BaseRenderModel<Int, SimpleListImageItemBinding>(color, SimpleListImageItemBinding::class.java) {
-    override fun getInflaterFunction(): InflatingFunction<SimpleListImageItemBinding> = SimpleListImageItemBinding::inflate
+    override fun getInflaterFunction(): ViewInflatingFunction<SimpleListImageItemBinding> = SimpleListImageItemBinding::inflate
 
 
     override fun renderFunction(view: SimpleListImageItemBinding, model: Int) {

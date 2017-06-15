@@ -7,7 +7,7 @@ import android.support.v4.app.FragmentPagerAdapter
 
 private data class FragmentWithTitle(val fragment: Fragment, val title: CharSequence)
 
-public class BaseFragmentPagerAdapter(manager: FragmentManager) : FragmentPagerAdapter(manager) {
+class BaseFragmentPagerAdapter(manager: FragmentManager) : FragmentPagerAdapter(manager) {
 
     private var data = mutableListOf<FragmentWithTitle>()
 

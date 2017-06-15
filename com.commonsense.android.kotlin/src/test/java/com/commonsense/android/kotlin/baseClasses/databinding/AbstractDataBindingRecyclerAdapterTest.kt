@@ -18,8 +18,9 @@ import org.robolectric.RuntimeEnvironment
  * Created by Kasper Tvede on 04-06-2017.
  */
 
-class openAbstractRecycler(context: Context) : AbstractDataBindingRecyclerAdapter<RenderModelItem<*, *>>(context) {
-    fun getData(): TypeLookupCollectionRepresentive<RenderModelItem<*, *>, InflatingFunction<ViewDataBinding>> {
+class openAbstractRecycler(context: Context) : AbstractDataBindingRecyclerAdapter<
+        RenderModelItem<*, *>>(context) {
+    fun getData(): TypeLookupCollectionRepresentive<RenderModelItem<*, *>, InflatingFunction<*>> {
         return dataCollection
     }
 }
@@ -36,15 +37,15 @@ class EmptyViewBinding2 : EmptyViewBinding()
 
 class EmptyViewRenderModelItem(data: String) : RenderModelItem<String, EmptyViewBinding>(
         data,
-        { inflater, parent, attach -> EmptyViewBinding() },
-        EmptyViewBinding::class.java, { view, model -> })
+        { _, _, _ -> EmptyViewBinding() },
+        EmptyViewBinding::class.java, { _, _ -> })
 
 class EmptyViewRenderModelItem2(data: Int) : RenderModelItem<Int, EmptyViewBinding2>(
         data,
-        { inflater, parent, attach -> EmptyViewBinding2() },
+        { _, _, _ -> EmptyViewBinding2() },
         EmptyViewBinding2::
         class.java,
-        { view, model -> })
+        { _, _ -> })
 
 class AbstractDataBindingRecyclerAdapterTest : BaseRoboElectricTest() {
 

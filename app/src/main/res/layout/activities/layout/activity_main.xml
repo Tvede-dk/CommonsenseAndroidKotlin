@@ -47,7 +47,7 @@
             android:layout_height="wrap_content"
             android:text="advanced Async button (please spam)" />
 
-        <com.commonsense.android.kotlin.android.widgets.ToggleImageButton
+        <com.commonsense.android.kotlin.widgets.ToggleImageButton
             android:layout_width="200dp"
             android:layout_height="200dp"
             android:layout_gravity="center"

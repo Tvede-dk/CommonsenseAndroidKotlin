@@ -6,8 +6,6 @@ import android.view.MenuItem
 /**
  * Created by kasper on 06/06/2017.
  */
-
-
 inline fun MenuItem.useSearchView(crossinline action: (SearchView) -> Unit) {
     val item = actionView as? SearchView
     item?.let(action)

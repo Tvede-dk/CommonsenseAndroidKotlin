@@ -33,6 +33,8 @@ open class ToggleImageButton : AppCompatImageView, ViewAttribute, View.OnClickLi
         prepareAttributes(this, attrs, defStyleAttr)
     }
 
+    private var onCheckedChanged: ((Boolean) -> Unit)? = null
+
     private val internalChecked by lazy {
         UpdateVariable(false, this::updateView)
     }
@@ -57,6 +59,7 @@ open class ToggleImageButton : AppCompatImageView, ViewAttribute, View.OnClickLi
     var isChecked
         get() = internalChecked.value
         set(value) {
+            onCheckedChanged?.invoke(value)
             internalChecked.value = value
         }
 
@@ -143,5 +146,9 @@ open class ToggleImageButton : AppCompatImageView, ViewAttribute, View.OnClickLi
         internalOnclickListener = newOnclickListener
     }
 
+
+    fun setOnCheckedChangListener(onCheckedChanged: (Boolean) -> Unit) {
+        this.onCheckedChanged = onCheckedChanged
+    }
 
 }

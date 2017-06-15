@@ -13,6 +13,11 @@ inline fun Boolean.onTrue(crossinline action: () -> Unit): Boolean {
 }
 
 /**
+ * Makes a more "elegant" sentence for some expressions, same as "onTrue"
+ */
+inline fun Boolean.ifTrue(crossinline action: () -> Unit): Boolean = onTrue(action)
+
+/**
  * performs the action if the boolean is false.
  */
 inline fun Boolean.onFalse(crossinline action: () -> Unit): Boolean {
@@ -23,6 +28,11 @@ inline fun Boolean.onFalse(crossinline action: () -> Unit): Boolean {
 }
 
 
+/**
+ * Makes a more "elegant" sentence for some expressions, same as "onTrue"
+ */
+inline fun Boolean.ifFalse(crossinline action: () -> Unit): Boolean = onFalse(action)
+
 inline fun <reified T : kotlin.Enum<T>> valueOfOrUnsafe(type: String?, orValue: T?): T? {
     return java.lang.Enum.valueOf(T::class.java, type) ?: orValue
 }
@@ -30,6 +40,11 @@ inline fun <reified T : kotlin.Enum<T>> valueOfOrUnsafe(type: String?, orValue: 
 inline fun <reified T : kotlin.Enum<T>> enumFromOr(type: String?, orValue: T): T {
     return java.lang.Enum.valueOf(T::class.java, type) ?: orValue
 }
+
 inline fun <reified T : kotlin.Enum<T>> enumFromOrNull(type: String?): T? {
     return java.lang.Enum.valueOf(T::class.java, type) ?: null
 }
+
+
+val IntRange.length
+    get() = (last - start) + 1 //+1 since start is inclusive.

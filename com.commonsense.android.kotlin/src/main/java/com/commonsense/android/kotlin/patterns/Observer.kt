@@ -3,6 +3,7 @@ package com.commonsense.android.kotlin.patterns
 /**
  * Created by kasper on 23/05/2017.
  */
+//TODO remove and use the default in stdlib ?
 typealias callback<T> = (T) -> Unit
 class ObserverPattern<T> {
 

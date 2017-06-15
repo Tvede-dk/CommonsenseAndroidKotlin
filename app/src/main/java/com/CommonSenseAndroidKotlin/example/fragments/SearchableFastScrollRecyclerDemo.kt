@@ -10,7 +10,7 @@ import com.commonsense.android.kotlin.android.extensions.widets.setup
 import com.commonsense.android.kotlin.baseClasses.databinding.AbstractSearchableDataBindingRecyclerAdapter
 import com.commonsense.android.kotlin.baseClasses.databinding.BaseDatabindingFragment
 import com.commonsense.android.kotlin.baseClasses.databinding.BaseSearchRenderModel
-import com.commonsense.android.kotlin.baseClasses.databinding.InflatingFunction
+import com.commonsense.android.kotlin.baseClasses.databinding.ViewInflatingFunction
 import com.futuremind.recyclerviewfastscroll.SectionTitleProvider
 import org.joda.time.DateTime
 
@@ -39,7 +39,7 @@ class SearchAbleSimpleListDateTime(item: DateTime) : BaseSearchRenderModel<DateT
         return false
     }
 
-    override fun getInflaterFunction(): InflatingFunction<SimpleListItemBinding> {
+    override fun getInflaterFunction(): ViewInflatingFunction<SimpleListItemBinding> {
         return SimpleListItemBinding::inflate
     }
 

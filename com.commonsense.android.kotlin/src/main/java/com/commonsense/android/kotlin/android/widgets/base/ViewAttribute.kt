@@ -15,20 +15,19 @@ interface ViewAttribute {
     /**
      * if any custom attributes, return the name of the styles.
      */
-    @StyleableRes
-    abstract fun getStyleResource(): IntArray?
+    @StyleableRes fun getStyleResource(): IntArray?
 
     /**
      * if any custom attributes, parse them
      */
-    abstract fun parseTypedArray(data: TypedArray)
+    fun parseTypedArray(data: TypedArray)
 
     /**
      * callback for when to update the ui (from state).
      */
-    abstract fun updateView()
+    fun updateView()
 
-    abstract fun afterSetupView()
+    fun afterSetupView()
 }
 
 

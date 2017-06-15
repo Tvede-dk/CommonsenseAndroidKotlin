@@ -24,7 +24,9 @@ class DataComposer<T, U> : callback<T> {
 
     private var oldData: T? = null
 
-    constructor(startRetriveData: suspend () -> T, transformData: (T) -> U, onUpdateUI: (U, Boolean) -> Unit) {
+    constructor(startRetriveData: suspend () -> T,
+                transformData: (T) -> U,
+                onUpdateUI: (U, Boolean) -> Unit) {
         this.startRetriveData = startRetriveData
         this.transformData = transformData
         this.onUpdateUI = onUpdateUI

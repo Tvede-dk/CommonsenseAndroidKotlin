@@ -44,8 +44,11 @@ fun <T : Any, Vm : ViewDataBinding, F : Any> IRenderModelItem<T, Vm>.toSearchabl
 
 typealias IGenericSearchRender<F> = IRenderModelSearchItem<*, *, F>
 
-open class AbstractSearchableDataBindingRecyclerAdapter<T : IGenericSearchRender<F>, F>(context: Context)
+open class AbstractSearchableDataBindingRecyclerAdapter<
+        T : IGenericSearchRender<F>,
+        F>(context: Context)
     : AbstractDataBindingRecyclerAdapter<T>(context.applicationContext) {
+
     private val allDataCollection = mutableListOf<T>()
     private var filterValue: F? = null
 
@@ -176,7 +179,10 @@ open class AbstractSearchableDataBindingRecyclerAdapter<T : IGenericSearchRender
     }
 }
 
-open class BaseSearchableDataBindingRecyclerAdapter<F>(context: Context) : AbstractSearchableDataBindingRecyclerAdapter<IRenderModelSearchItem<*, *, F>, F>(context)
+open class BaseSearchableDataBindingRecyclerAdapter<F>(context: Context)
+    : AbstractSearchableDataBindingRecyclerAdapter<
+        IRenderModelSearchItem<*, *, F>,
+        F>(context)
 
 
 private class ConflatedActorHelper<F> {
@@ -202,3 +208,8 @@ private class ConflatedActorHelper<F> {
     }
 
 }
+
+open class DefaultSearchableDatabindingRecyclerAdapter<
+        T : IGenericSearchRender<F>,
+        F>(context: Context)
+    : AbstractSearchableDataBindingRecyclerAdapter<T, F>(context)

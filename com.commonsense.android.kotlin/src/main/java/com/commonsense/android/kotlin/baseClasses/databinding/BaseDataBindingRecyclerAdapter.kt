@@ -31,7 +31,7 @@ interface IRenderModelItem<T : Any, Vm : ViewDataBinding> :
 
     fun getValue(): T
 
-    fun renderFunction(view: Vm, model: T)
+    fun renderFunction(view: Vm, model: T, viewHolder: BaseViewHolderItem<Vm>)
 
     fun bindToViewHolder(holder: BaseViewHolderItem<*>)
 
@@ -55,7 +55,7 @@ abstract class BaseRenderModel<
     override fun bindToViewHolder(holder: BaseViewHolderItem<*>) {
         if (holder.viewBindingTypeValue == vmTypeValue) {
             @Suppress("UNCHECKED_CAST")
-            renderFunction(holder.item as Vm, item)
+            renderFunction(holder.item as Vm, item, holder as BaseViewHolderItem<Vm>)
             //we are now "sure" that the binding class is the same as ours, thus casting "should" be "ok". (we basically introduced our own type system)
         } else {
             L.debug("RenderModelItem", "unable to bind to view even though it should be correct type$vmTypeValue expected, got : ${holder.viewBindingTypeValue}")
@@ -78,7 +78,8 @@ open class RenderModelItem<
         Vm : ViewDataBinding>(val item: T,
                               val vmInflater: ViewInflatingFunction<Vm>,
                               val classType: Class<Vm>,
-                              val vmRender: (view: Vm, model: T) -> Unit) : IRenderModelItem<T, Vm> {
+                              val vmRender: (view: Vm, model: T, viewHolder: BaseViewHolderItem<Vm>) -> Unit)
+    : IRenderModelItem<T, Vm> {
     override fun getInflaterFunction() = vmInflater
 
 
@@ -96,12 +97,13 @@ open class RenderModelItem<
 
     override fun getTypeValue(): Int = vmTypeValue
 
-    override fun renderFunction(view: Vm, model: T) = vmRender(view, model)
+    override fun renderFunction(view: Vm, model: T, viewHolder: BaseViewHolderItem<Vm>)
+            = vmRender(view, model, viewHolder)
 
     override fun bindToViewHolder(holder: BaseViewHolderItem<*>) {
         if (holder.viewBindingTypeValue == vmTypeValue) {
             @Suppress("UNCHECKED_CAST")
-            renderFunction(holder.item as Vm, item)
+            renderFunction(holder.item as Vm, item, holder as BaseViewHolderItem<Vm>)
             //we are now "sure" that the binding class is the same as ours, thus casting "should" be "ok". (we basically introduced our own type system)
         } else {
             L.debug("RenderModelItem", "unable to bind to view even though it should be correct type$vmTypeValue expected, got : ${holder.viewBindingTypeValue}")
@@ -256,6 +258,10 @@ abstract class AbstractDataBindingRecyclerAdapter<T>(context: Context) :
     private fun updateData(action: () -> Unit) {
         stopScroll()
         action()
+    }
+
+    fun getRepresentUsingType(viewHolderItem: BaseViewHolderItem<*>): InflatingFunction<*>? {
+        return dataCollection.getTypeRepresentativeFromTypeValue(viewHolderItem.viewBindingTypeValue)
     }
 
 }

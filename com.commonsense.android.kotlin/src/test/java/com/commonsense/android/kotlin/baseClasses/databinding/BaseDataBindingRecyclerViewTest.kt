@@ -51,13 +51,13 @@ class BaseDataBindingRecyclerViewTest : BaseRoboElectricTest() {
     private fun createVm2RenderModel(): RenderModelItem<String, TestVm2> {
         return RenderModelItem("",
                 { _, _, _ -> TestVm2(context) },
-                TestVm2::class.java, { _, _ -> })
+                TestVm2::class.java, { _, _, _ -> })
     }
 
     private fun createVm1RenderModel(): RenderModelItem<String, TestVm1> {
         return RenderModelItem("",
                 { _, _, _ -> TestVm1(context) },
-                TestVm1::class.java, { _, _ -> })
+                TestVm1::class.java, { _, _, _ -> })
     }
 
 }

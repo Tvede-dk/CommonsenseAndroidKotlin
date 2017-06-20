@@ -151,4 +151,11 @@ open class ToggleImageButton : AppCompatImageView, ViewAttribute, View.OnClickLi
         this.onCheckedChanged = onCheckedChanged
     }
 
+    var checkedNoNotify: Boolean
+        get() = internalChecked.value
+        set(value) {
+            internalChecked.value = value
+        }
+
+
 }

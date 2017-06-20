@@ -38,14 +38,14 @@ class EmptyViewBinding2 : EmptyViewBinding()
 class EmptyViewRenderModelItem(data: String) : RenderModelItem<String, EmptyViewBinding>(
         data,
         { _, _, _ -> EmptyViewBinding() },
-        EmptyViewBinding::class.java, { _, _ -> })
+        EmptyViewBinding::class.java, { _, _, _ -> })
 
 class EmptyViewRenderModelItem2(data: Int) : RenderModelItem<Int, EmptyViewBinding2>(
         data,
         { _, _, _ -> EmptyViewBinding2() },
         EmptyViewBinding2::
         class.java,
-        { _, _ -> })
+        { _, _, _ -> })
 
 class AbstractDataBindingRecyclerAdapterTest : BaseRoboElectricTest() {
 

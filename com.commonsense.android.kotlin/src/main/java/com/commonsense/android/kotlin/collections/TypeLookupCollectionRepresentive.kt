@@ -74,7 +74,11 @@ class TypeLookupCollectionRepresentive<T : TypeHashCodeLookupRepresent<Rep>, out
     }
 
     fun getDataBy(position: Int): T? {
-        return data[position]
+        return if (isIndexValid(position)) {
+            data[position]
+        } else {
+            null
+        }
     }
 
     fun getTypeRepresentative(item: T): Rep? {

@@ -18,7 +18,7 @@ class JobContainerTest {
         val jobs = mutableListOf<Job>()
         for (i in 0..(1000 - 1)) {
             jobs += launch(CommonPool) {
-                jobContainer.performAction(CommonPool, action = { delay(1) })
+                jobContainer.performAction(CommonPool, action = { })
             }
             jobs += launch(CommonPool) {
                 jobContainer.performAction(CommonPool, scopedAction = { })
@@ -31,6 +31,7 @@ class JobContainerTest {
         jobs.forEach { it.join() }
         jobContainer.performAction(CommonPool, action = { })
         jobContainer.removeDoneJobs()
+        delay(100)
         Assert.assertEquals(jobContainer.getRemainingJobs(), 0)
 
     }

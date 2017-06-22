@@ -113,3 +113,11 @@ fun <T> MutableSet<T>.toggleExistance(item: T) {
         add(item)
     }
 }
+
+/**
+ * Returns a limited view of this list, by limiting the size of it (if the list is shorter than the limit,
+ * then the result will be the lists' length).
+ */
+fun <E> List<E>.limitToSize(size: Int): List<E> {
+    return subList(0, Math.min(size, this.size))
+}

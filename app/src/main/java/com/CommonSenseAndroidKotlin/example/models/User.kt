@@ -3,6 +3,7 @@ package com.CommonSenseAndroidKotlin.example.models
 import android.databinding.ObservableField
 import com.CommonSenseAndroidKotlin.example.databinding.UserViewBinding
 import com.commonsense.android.kotlin.baseClasses.databinding.BaseSearchRenderModel
+import com.commonsense.android.kotlin.baseClasses.databinding.BaseViewHolderItem
 import com.commonsense.android.kotlin.baseClasses.databinding.ViewInflatingFunction
 
 /**
@@ -16,7 +17,8 @@ data class User(
 
 
 class UserListItemRender<F : Any>(item: User) : BaseSearchRenderModel<User, UserViewBinding, F>(item, UserViewBinding::class.java) {
-
+    override fun renderFunction(view: UserViewBinding, model: User, viewHolder: BaseViewHolderItem<UserViewBinding>) {
+    }
 
     override fun isAcceptedByFilter(value: F): Boolean {
         //TODO impl me.
@@ -24,10 +26,6 @@ class UserListItemRender<F : Any>(item: User) : BaseSearchRenderModel<User, User
     }
 
     override fun getInflaterFunction(): ViewInflatingFunction<UserViewBinding> = UserViewBinding::inflate
-
-    override fun renderFunction(view: UserViewBinding, model: User) {
-        //TODO impl me.
-    }
 }
 
 class UserViewModel {

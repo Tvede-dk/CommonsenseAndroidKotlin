@@ -7,10 +7,7 @@ import android.view.ViewGroup
 import com.CommonSenseAndroidKotlin.example.databinding.DemoRecyclerFastscrollSearchableBinding
 import com.CommonSenseAndroidKotlin.example.databinding.SimpleListItemBinding
 import com.commonsense.android.kotlin.android.extensions.widets.setup
-import com.commonsense.android.kotlin.baseClasses.databinding.AbstractSearchableDataBindingRecyclerAdapter
-import com.commonsense.android.kotlin.baseClasses.databinding.BaseDatabindingFragment
-import com.commonsense.android.kotlin.baseClasses.databinding.BaseSearchRenderModel
-import com.commonsense.android.kotlin.baseClasses.databinding.ViewInflatingFunction
+import com.commonsense.android.kotlin.baseClasses.databinding.*
 import com.futuremind.recyclerviewfastscroll.SectionTitleProvider
 import org.joda.time.DateTime
 
@@ -26,6 +23,10 @@ interface FastScrollListItemInterface {
 
 class SearchAbleSimpleListDateTime(item: DateTime) : BaseSearchRenderModel<DateTime, SimpleListItemBinding, String>(item, SimpleListItemBinding::class.java)
         , FastScrollListItemInterface {
+    override fun renderFunction(view: SimpleListItemBinding, model: DateTime, viewHolder: BaseViewHolderItem<SimpleListItemBinding>) {
+        view.simpleListText.text = model.toString()
+
+    }
 
     private val internalTitle by lazy {
         item.toString("MM/YYYY")
@@ -41,10 +42,6 @@ class SearchAbleSimpleListDateTime(item: DateTime) : BaseSearchRenderModel<DateT
 
     override fun getInflaterFunction(): ViewInflatingFunction<SimpleListItemBinding> {
         return SimpleListItemBinding::inflate
-    }
-
-    override fun renderFunction(view: SimpleListItemBinding, model: DateTime) {
-        view.simpleListText.text = model.toString()
     }
 
 

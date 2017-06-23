@@ -3,6 +3,7 @@ package com.commonsense.android.kotlin.baseClasses
 import android.support.v4.app.DialogFragment
 import com.commonsense.android.kotlin.helperClasses.JobContainer
 import kotlinx.coroutines.experimental.CommonPool
+import kotlinx.coroutines.experimental.Job
 import kotlinx.coroutines.experimental.android.UI
 
 /**
@@ -20,14 +21,21 @@ open class BaseFragment : DialogFragment() {
         super.dismiss()
     }
 
+    /**
+     * in case you have something else than a regular "launch" / async style, then you can still
+     * add the jobs manually. eg some api composing of async / launch api'
+     */
+    fun addLocalJob(job: Job) {
+        localJobs.addJob(job)
+    }
 
-    fun LaunchInBackground(action: suspend () -> Unit) {
-        localJobs.performAction(CommonPool, action)
+    fun LaunchInBackground(action: suspend () -> Unit): Job {
+        return localJobs.performAction(CommonPool, action)
     }
 
 
-    fun LaunchInUi(action: suspend () -> Unit) {
-        localJobs.performAction(UI, action)
+    fun LaunchInUi(action: suspend () -> Unit): Job {
+        return localJobs.performAction(UI, action)
     }
 
 

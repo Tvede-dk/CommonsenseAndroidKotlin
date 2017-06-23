@@ -44,16 +44,24 @@ class JobContainer {
         localJobs.clear()
     }
 
-    fun performAction(context: CoroutineContext, action: suspend () -> Unit) {
-        addJobToLocal(launch(context) { action() })
+    fun performAction(context: CoroutineContext, action: suspend () -> Unit): Job {
+        val job = launch(context) { action() }
+        addJobToLocal(job)
+        return job
     }
 
-    fun performAction(context: CoroutineContext, scopedAction: suspend CoroutineScope.() -> Unit) {
-        addJobToLocal(launch(context, block = scopedAction))
+    fun performAction(context: CoroutineContext, scopedAction: suspend CoroutineScope.() -> Unit): Job {
+        val job = launch(context, block = scopedAction)
+        addJobToLocal(job)
+        return job
     }
 
     fun getRemainingJobs(): Int {
         removeDoneJobs()
         return localJobs.size
+    }
+
+    fun addJob(job: Job) {
+        addJobToLocal(job)
     }
 }

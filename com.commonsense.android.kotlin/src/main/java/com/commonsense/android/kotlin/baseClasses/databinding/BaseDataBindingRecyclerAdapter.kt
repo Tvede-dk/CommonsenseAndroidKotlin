@@ -22,7 +22,7 @@ typealias ViewInflatingFunction<Vm> = (inflater: LayoutInflater, parent: ViewGro
 
 typealias InflatingFunction<Vm> = (inflater: LayoutInflater, parent: ViewGroup?, attach: Boolean) -> BaseViewHolderItem<Vm>
 
-open class BaseViewHolderItem<T : ViewDataBinding>(val item: T) : RecyclerView.ViewHolder(item.root) {
+open class BaseViewHolderItem<out T : ViewDataBinding>(val item: T) : RecyclerView.ViewHolder(item.root) {
     val viewBindingTypeValue = item.javaClass.hashCode()
 }
 

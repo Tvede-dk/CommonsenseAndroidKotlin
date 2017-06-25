@@ -14,6 +14,7 @@ import com.commonsense.android.kotlin.baseClasses.BaseFragment
 import com.commonsense.android.kotlin.baseClasses.pushNewFragmentTo
 import com.commonsense.android.kotlin.baseClasses.replaceFragment
 
+typealias InflateBinding<T> = (inflater: LayoutInflater, parent: ViewGroup?, attach: Boolean) -> T
 /**
  * created by Kasper Tvede on 29-09-2016.
  */
@@ -25,11 +26,10 @@ abstract class BaseDatabindingFragment<out T : ViewDataBinding> : BaseFragment()
 
     var showDialogAsFullScreen = false
 
-
-    abstract fun createView(inflater: LayoutInflater, parent: ViewGroup?): T
+    abstract fun getInflater(): InflateBinding<T>
 
     val binding: T by lazy {
-        createView(layoutInflator, parentView)
+        getInflater().invoke(layoutInflater, parentView, false)
     }
 
     private var parentView: ViewGroup? = null

@@ -252,6 +252,7 @@ abstract class AbstractDataBindingRecyclerAdapter<T>(context: Context) :
     }
 
 
+
     /**
      * must be called from all things that manipulate the dataCollection.
      */

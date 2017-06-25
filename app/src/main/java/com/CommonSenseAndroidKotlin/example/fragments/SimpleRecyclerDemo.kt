@@ -4,8 +4,6 @@ import android.graphics.Color
 import android.graphics.PorterDuff
 import android.graphics.PorterDuffColorFilter
 import android.support.v7.widget.LinearLayoutManager
-import android.view.LayoutInflater
-import android.view.ViewGroup
 import com.CommonSenseAndroidKotlin.example.databinding.DemoRecyclerSimpleViewBinding
 import com.CommonSenseAndroidKotlin.example.databinding.SimpleListImageItemBinding
 import com.CommonSenseAndroidKotlin.example.databinding.SimpleListItemBinding
@@ -16,12 +14,13 @@ import com.commonsense.android.kotlin.baseClasses.databinding.*
  * Created by Kasper Tvede on 31-05-2017.
  */
 open class SimpleRecyclerDemo : BaseDatabindingFragment<DemoRecyclerSimpleViewBinding>() {
+    override fun getInflater(): InflateBinding<DemoRecyclerSimpleViewBinding>
+            = DemoRecyclerSimpleViewBinding::inflate
 
     val adapter by lazy {
         BaseDataBindingRecyclerAdapter(context.applicationContext)
     }
 
-    override fun createView(inflater: LayoutInflater, parent: ViewGroup?): DemoRecyclerSimpleViewBinding = DemoRecyclerSimpleViewBinding.inflate(inflater, parent, false)
 
     override fun useBinding() {
         adapter.clear()

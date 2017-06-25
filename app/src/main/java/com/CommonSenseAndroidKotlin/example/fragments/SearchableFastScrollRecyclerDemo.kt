@@ -57,9 +57,8 @@ class FastScrollAdapter(context: Context) : AbstractSearchableDataBindingRecycle
 }
 
 class SearchableFastScrollRecyclerDemo : BaseDatabindingFragment<DemoRecyclerFastscrollSearchableBinding>() {
-    override fun createView(inflater: LayoutInflater, parent: ViewGroup?): DemoRecyclerFastscrollSearchableBinding {
-        return DemoRecyclerFastscrollSearchableBinding.inflate(inflater, parent, false)
-    }
+    override fun getInflater(): InflateBinding<DemoRecyclerFastscrollSearchableBinding>
+            = DemoRecyclerFastscrollSearchableBinding::inflate
 
     private val adapter by lazy {
         FastScrollAdapter(context)

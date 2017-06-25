@@ -179,10 +179,10 @@ open class AbstractSearchableDataBindingRecyclerAdapter<
     }
 }
 
-open class BaseSearchableDataBindingRecyclerAdapter<F>(context: Context)
+open class BaseSearchableDataBindingRecyclerAdapter<Filter>(context: Context)
     : AbstractSearchableDataBindingRecyclerAdapter<
-        IRenderModelSearchItem<*, *, F>,
-        F>(context)
+        IRenderModelSearchItem<*, *, Filter>,
+        Filter>(context)
 
 
 private class ConflatedActorHelper<F> {

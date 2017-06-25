@@ -4,15 +4,10 @@ import android.graphics.Color
 import android.support.v7.widget.LinearLayoutManager
 import android.text.Editable
 import android.text.TextWatcher
-import android.view.LayoutInflater
-import android.view.ViewGroup
 import com.CommonSenseAndroidKotlin.example.databinding.DemoRecyclerSearchableBinding
 import com.CommonSenseAndroidKotlin.example.databinding.SimpleListItemBinding
 import com.commonsense.android.kotlin.android.extensions.widets.setup
-import com.commonsense.android.kotlin.baseClasses.databinding.BaseDatabindingFragment
-import com.commonsense.android.kotlin.baseClasses.databinding.BaseSearchableDataBindingRecyclerAdapter
-import com.commonsense.android.kotlin.baseClasses.databinding.IRenderModelSearchItem
-import com.commonsense.android.kotlin.baseClasses.databinding.toSearchable
+import com.commonsense.android.kotlin.baseClasses.databinding.*
 import com.commonsense.android.kotlin.extensions.collections.repeateToSize
 
 /**
@@ -24,7 +19,8 @@ class SearchAbleSimpleListItemRender(item: String) : SimpleListItemRender(item),
 }
 
 class SearchAbleRecyclerDemo : BaseDatabindingFragment<DemoRecyclerSearchableBinding>() {
-    override fun createView(inflater: LayoutInflater, parent: ViewGroup?): DemoRecyclerSearchableBinding = DemoRecyclerSearchableBinding.inflate(inflater, parent, false)
+    override fun getInflater(): InflateBinding<DemoRecyclerSearchableBinding>
+            = DemoRecyclerSearchableBinding::inflate
 
     private val adapter by lazy {
         BaseSearchableDataBindingRecyclerAdapter<String>(context)

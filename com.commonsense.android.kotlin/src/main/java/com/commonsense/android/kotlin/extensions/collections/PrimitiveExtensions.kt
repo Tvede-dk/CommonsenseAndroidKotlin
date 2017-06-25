@@ -12,6 +12,16 @@ inline fun Boolean.onTrue(crossinline action: () -> Unit): Boolean {
     return this
 }
 
+
+fun <T> Boolean.map(ifTrue: T, ifFalse: T): T {
+    if (this) {
+        return ifTrue
+    } else {
+        return ifFalse
+    }
+}
+
+
 /**
  * Makes a more "elegant" sentence for some expressions, same as "onTrue"
  */

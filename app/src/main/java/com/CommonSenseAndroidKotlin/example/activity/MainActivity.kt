@@ -29,6 +29,9 @@ class MainActivity : BaseDatabindingActivity<ActivityMainBinding>() {
         binding.activityMainDemo4.setOnClick {
             startActivity(Intent(applicationContext, Demo4Activity::class.java))
         }
+        binding.activityMainDemo5.setOnClick {
+            startActivity(Intent(applicationContext, Demo5Activity::class.java))
+        }
 
 
 

@@ -75,3 +75,8 @@ repositories {
 
 
 apply from: "../resourcegroups.gradle"
+kotlin {
+    experimental {
+        coroutines "enable"
+    }
+}

@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout>
+
+    <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical">
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="An super advance demo for some recycler views :)
+             dont waste, recycle, with all the features
+            all product owners could need ;)" />
+
+        <EditText
+            android:id="@+id/demo_recycler_searchable_edit"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="search by typing" />
+
+
+        <com.commonsense.android.kotlin.widgets.SwipeRefreshRecyclerView
+            android:id="@+id/demo_recycler_searchable_recyclerview"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent" />
+    </LinearLayout>
+</layout>

@@ -5,9 +5,11 @@ import android.graphics.Canvas
 import android.support.v7.widget.RecyclerView
 import android.support.v7.widget.helper.ItemTouchHelper
 import android.view.View
-import com.commonsense.android.kotlin.android.extensions.widets.isVisible
 import com.commonsense.android.kotlin.baseClasses.databinding.AbstractDataBindingRecyclerAdapter
+import com.commonsense.android.kotlin.baseClasses.databinding.BaseDataBindingRecyclerAdapter
+import com.commonsense.android.kotlin.baseClasses.databinding.BaseSearchableDataBindingRecyclerAdapter
 import com.commonsense.android.kotlin.baseClasses.databinding.BaseViewHolderItem
+import map
 
 /**
  * Created by Kasper Tvede on 22-06-2017.
@@ -30,10 +32,27 @@ fun Int.ToDirection(): Direction? {
 }
 
 interface SwipeableItem {
-    fun getMovementFlags(): Int
     fun onSwiped(direction: Direction, viewModel: ViewDataBinding)
-    fun onChildDraw(c: Canvas, viewModel: ViewDataBinding, dx: Float, dy: Float)
-    fun clearView(viewModel: ViewDataBinding)
+    //to consider.
+    fun startView(binding: ViewDataBinding): View?
+
+    fun endView(binding: ViewDataBinding): View?
+    fun floatingView(binding: ViewDataBinding): View
+
+
+}
+
+fun BaseDataBindingRecyclerAdapter.attachSwipeFeature(
+        view: RecyclerView) {
+    val swipe = RecyclerSwipe(this)
+    swipe.attachToRecyclerView(view)
+}
+
+
+fun <Filter> BaseSearchableDataBindingRecyclerAdapter<Filter>.attachSwipeFeature(
+        view: RecyclerView) {
+    val swipe = RecyclerSwipe(this)
+    swipe.attachToRecyclerView(view)
 }
 
 /**
@@ -42,23 +61,28 @@ interface SwipeableItem {
 class RecyclerSwipe(recyclerAdapter: AbstractDataBindingRecyclerAdapter<*>)
     : ItemTouchHelper(innerSwipeHelper(recyclerAdapter))
 
+private data class SwipeItemViews(val startView: View?, val endView: View?, val mainView: View)
+
 private class innerSwipeHelper(val recyclerAdapter: AbstractDataBindingRecyclerAdapter<*>)
     : ItemTouchHelper.Callback() {
-    override fun getMovementFlags(
-            recyclerView: RecyclerView?,
-            viewHolder: RecyclerView.ViewHolder?): Int {
-        val optInterface = getOptInterface(viewHolder)
-        if (recyclerView == null || viewHolder == null || optInterface == null) {
-            return 0
-        }
-        return optInterface.getMovementFlags()
+
+    override fun getMovementFlags(recyclerView: RecyclerView?, viewHolder: RecyclerView.ViewHolder?): Int {
+        val swipeItem = getOptInterface(viewHolder) ?: return 0
+        val baseViewHolder = viewHolder as? BaseViewHolderItem<*> ?: return 0
+        val (startView, endView, _) = getViews(swipeItem, baseViewHolder.item)
+        val startMovement = (startView != null).map(ifTrue = ItemTouchHelper.START, ifFalse = 0)
+        val endMovement = (endView != null).map(ifTrue = ItemTouchHelper.END, ifFalse = 0)
+
+        return ItemTouchHelper.Callback.makeMovementFlags(0, startMovement or endMovement)
     }
 
-    private fun getOptInterface(viewHolder: RecyclerView.ViewHolder?): SwipeableItem? {
+    private fun getOptInterface(viewHolder: RecyclerView.ViewHolder?)
+            : SwipeableItem? {
         return viewHolder?.adapterPosition?.let {
             recyclerAdapter.getItem(it) as? SwipeableItem
         }
     }
+
 
     override fun onChildDraw(canvas: Canvas?,
                              recyclerView: RecyclerView?,
@@ -68,10 +92,76 @@ private class innerSwipeHelper(val recyclerAdapter: AbstractDataBindingRecyclerA
                              actionState: Int,
                              isCurrentlyActive: Boolean) {
         super.onChildDraw(canvas, recyclerView, viewHolder, dX, dY, actionState, isCurrentlyActive)
-        val temp = viewHolder as? BaseViewHolderItem<*>
-        if (canvas != null && temp != null) {
-            getOptInterface(viewHolder)?.onChildDraw(canvas, temp.item, dX, dY)
+        val swipeItem = getOptInterface(viewHolder) ?: return
+        val baseViewBinding = viewHolder as? BaseViewHolderItem<*> ?: return
+        val (startView, endView, mainView) = getViews(swipeItem, baseViewBinding.item)
+        baseViewBinding.item.root.translationX = 0f
+        mainView.translationX = dX
+
+        if (!isCurrentlyActive) {
+            baseViewBinding.item.root.postDelayed({
+                resetItem(swipeItem, baseViewBinding.item)
+            }, getAnimationDuration(recyclerView, DEFAULT_SWIPE_ANIMATION_DURATION, dX, dY))
+            return
         }
+
+        if (dX in (-0.1f..0.1f)) { //nothing is visible. just hide it
+            goneViews(startView, endView)
+        } else if (dX > 0) { //else, what side.
+            showGoneView(startView, endView)
+        } else {
+            showGoneView(endView, startView)
+            startView?.visibility = View.GONE
+            endView?.visibility = View.VISIBLE
+        }
+    }
+
+    override fun onChildDrawOver(c: Canvas?, recyclerView: RecyclerView?, viewHolder: RecyclerView.ViewHolder?, dX: Float, dY: Float, actionState: Int, isCurrentlyActive: Boolean) {
+        super.onChildDrawOver(c, recyclerView, viewHolder, dX, dY, actionState, isCurrentlyActive)
+    }
+
+    private fun goneViews(vararg views: View?) {
+        views.forEach { it?.visibility = View.GONE }
+    }
+
+    private fun showGoneView(toShow: View?, toGone: View?) {
+        toShow?.visibility = View.VISIBLE
+        goneViews(toGone)
+    }
+
+
+    override fun onSelectedChanged(viewHolder: RecyclerView.ViewHolder?, actionState: Int) {
+        super.onSelectedChanged(viewHolder, actionState)
+        val swipeItem = getOptInterface(viewHolder) ?: return
+        val baseViewBinding = viewHolder as? BaseViewHolderItem<*> ?: return
+        if (actionState == ItemTouchHelper.ACTION_STATE_IDLE) {
+            resetItem(swipeItem, baseViewBinding.item)
+        }
+
+    }
+
+    override fun clearView(recyclerView: RecyclerView?, viewHolder: RecyclerView.ViewHolder?) {
+        super.clearView(recyclerView, viewHolder)
+        val view = (viewHolder as? BaseViewHolderItem<*>)?.item ?: return
+        val swipeInterface = getOptInterface(viewHolder) ?: return
+        resetItem(swipeInterface, view)
+    }
+
+    private fun resetItem(swipeInterface: SwipeableItem, view: ViewDataBinding) {
+        val (startView, endView, mainView) = getViews(swipeInterface, view)
+        startView?.visibility = View.GONE
+        endView?.visibility = View.GONE
+        mainView.visibility = View.VISIBLE
+        mainView.translationX = 0f
+        view.root.translationX = 0f
+    }
+
+
+    fun getViews(swipeableItem: SwipeableItem, viewModel: ViewDataBinding): SwipeItemViews {
+        val startView: View? = swipeableItem.startView(viewModel)
+        val endView: View? = swipeableItem.endView(viewModel)
+        val mainView: View = swipeableItem.floatingView(viewModel)
+        return SwipeItemViews(startView, endView, mainView)
     }
 
     //move is reordering. we only deal with swipe for simplicity.
@@ -99,73 +189,4 @@ private class innerSwipeHelper(val recyclerAdapter: AbstractDataBindingRecyclerA
     }
 }
 
-
-class CellItemInteraction<in T : ViewDataBinding>(val mainView: (T) -> View,
-                                                  val startEndView: ((T) -> View)?,
-                                                  val endStartView: ((T) -> View)?,
-                                                  val onStartToEnd: () -> Unit,
-                                                  val onEndToStart: () -> Unit
-) : SwipeableItem {
-
-    override fun getMovementFlags(): Int {
-        val swipeStart = valueOr(startEndView != null, ItemTouchHelper.START, 0)
-        val swipeEnd = valueOr(endStartView != null, ItemTouchHelper.END, 0)
-        val swipeFlags = swipeStart or swipeEnd
-        return ItemTouchHelper.Callback.makeMovementFlags(0, swipeFlags)
-    }
-
-    private fun <T> valueOr(condition: Boolean, valueIf: T, valueOr: T): T {
-        return if (condition) {
-            valueIf
-        } else {
-            valueOr
-        }
-    }
-
-    override fun onSwiped(direction: Direction, viewModel: ViewDataBinding) {
-        val binding = viewModel as? T ?: return
-        if (!binding.root.isVisible) {
-            return
-        }
-        if (direction == Direction.startToEnd) {
-            onEndToStart()
-        } else {
-            onStartToEnd()
-        }
-    }
-
-    override fun onChildDraw(c: Canvas, viewModel: ViewDataBinding, dx: Float, dy: Float) {
-        val binding = viewModel as? T ?: return
-
-        val main = mainView(binding)
-        val start = startEndView?.invoke(binding)
-        val end = endStartView?.invoke(binding)
-        binding.root.translationX = 0F
-        main.translationX = dx
-        if (!main.isVisible) {
-            return
-        }
-        if (dx > 0) {
-            start?.visibility = View.VISIBLE
-            end?.visibility = View.GONE
-        } else {
-            start?.visibility = View.GONE
-            end?.visibility = View.VISIBLE
-        }
-
-    }
-
-    override fun clearView(viewModel: ViewDataBinding) {
-        val binding = viewModel as? T ?: return
-        //rest all state here. (that we did modify).
-        val main = mainView(binding)
-        val start = startEndView?.invoke(binding)
-        val end = endStartView?.invoke(binding)
-        main.visibility = View.VISIBLE
-        end?.visibility = View.GONE
-        start?.visibility = View.GONE
-    }
-
-
-}
 

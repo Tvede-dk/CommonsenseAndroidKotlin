@@ -1,12 +1,11 @@
 package com.CommonSenseAndroidKotlin.example.fragments
 
-import android.view.LayoutInflater
-import android.view.ViewGroup
 import com.CommonSenseAndroidKotlin.example.databinding.UserExampleViewBinding
 import com.CommonSenseAndroidKotlin.example.models.User
 import com.CommonSenseAndroidKotlin.example.models.UserViewModel
 import com.commonsense.android.kotlin.android.extensions.widets.setOnclickAsync
 import com.commonsense.android.kotlin.baseClasses.databinding.BaseDatabindingFragment
+import com.commonsense.android.kotlin.baseClasses.databinding.InflateBinding
 
 /**
  * Created by Kasper Tvede on 11-06-2017.
@@ -15,9 +14,8 @@ class EditDatabindingFragment : BaseDatabindingFragment<UserExampleViewBinding>(
 
     val user = User("", "", "", "")
 
-    override fun createView(inflater: LayoutInflater, parent: ViewGroup?): UserExampleViewBinding {
-        return UserExampleViewBinding.inflate(inflater, parent, false)
-    }
+    override fun getInflater(): InflateBinding<UserExampleViewBinding>
+            = UserExampleViewBinding::inflate
 
     override fun useBinding() {
         binding.userExampleItemView?.user = user

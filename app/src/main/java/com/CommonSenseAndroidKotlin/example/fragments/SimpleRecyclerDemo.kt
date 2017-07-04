@@ -25,9 +25,9 @@ open class SimpleRecyclerDemo : BaseDatabindingFragment<DemoRecyclerSimpleViewBi
     override fun useBinding() {
         adapter.clear()
         for (i in 0..200) {
-            adapter.add(SimpleListItemRender("First"))
+            adapter.add(SimpleListItemRender("First text is good text"))
             adapter.add(SimpleListImageItemRender(Color.BLUE))
-            adapter.add(SimpleListItemRender("Whats up"))
+            adapter.add(SimpleListItemRender("Whats up test ?"))
             adapter.add(SimpleListImageItemRender(Color.RED))
         }
         binding.demoRecyclerSimpleViewRecyclerview.setup(adapter, LinearLayoutManager(context.applicationContext))

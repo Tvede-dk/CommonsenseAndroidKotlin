@@ -4,12 +4,12 @@ apply plugin: 'kotlin-kapt'
 
 
 android {
-    compileSdkVersion 25
+    compileSdkVersion 26
     buildToolsVersion "26.0.0"
     defaultConfig {
         applicationId "com.tvede.CommonSenseAndroidKotlin.example"
         minSdkVersion 16
-        targetSdkVersion 25
+        targetSdkVersion 26
         versionCode 1
         vectorDrawables.useSupportLibrary = true
         versionName "1.0"
@@ -32,38 +32,38 @@ android {
     }
 
 }
-def supportVersion = "25.4.0"
+def supportVersion = "26.0.+"
 def coroutinesVersion = "0.16"
 
 dependencies {
 
     //coroutines
-    compile "org.jetbrains.kotlinx:kotlinx-coroutines-core:$coroutinesVersion"
-    compile "org.jetbrains.kotlinx:kotlinx-coroutines-android:$coroutinesVersion"
+    implementation "org.jetbrains.kotlinx:kotlinx-coroutines-core:$coroutinesVersion"
+    implementation "org.jetbrains.kotlinx:kotlinx-coroutines-android:$coroutinesVersion"
 
     //support libs
-    compile "com.android.support:appcompat-v7:$supportVersion"
-    compile "com.android.support:design:$supportVersion"
+    implementation "com.android.support:appcompat-v7:$supportVersion"
+    implementation "com.android.support:design:$supportVersion"
 
     //UI libs
-    compile 'com.futuremind.recyclerfastscroll:fastscroll:0.2.5'
+    implementation 'com.futuremind.recyclerfastscroll:fastscroll:0.2.5'
 
     //time libs
-    compile group: 'joda-time', name: 'joda-time', version: '2.9.9'
+    implementation group: 'joda-time', name: 'joda-time', version: '2.9.9'
 
     //commonSense
-    debugCompile project(path: ':com.commonsense.android.kotlin', configuration: "debug")
-    releaseCompile project(path: ':com.commonsense.android.kotlin', configuration: "release")
+    implementation project(':com.commonsense.android.kotlin')
+//    implementation project(path: ':com.commonsense.android.kotlin', configuration: "debug")
 
     //tests libs
-    androidTestCompile('com.android.support.test.espresso:espresso-core:2.2.2', {
+    androidTestImplementation('com.android.support.test.espresso:espresso-core:2.2.2', {
         exclude group: 'com.android.support', module: 'support-annotations'
     })
-    testCompile 'junit:junit:4.12'
+    testImplementation 'junit:junit:4.12'
 
     //kotlin specific
-    compile "org.jetbrains.kotlin:kotlin-stdlib:$kotlin_version"
-    kapt "com.android.databinding:compiler:3.+"
+    implementation "org.jetbrains.kotlin:kotlin-stdlib:$kotlin_version"
+    kapt "com.android.databinding:compiler:3.0.0-alpha5"
 }
 
 repositories {

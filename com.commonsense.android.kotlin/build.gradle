@@ -10,15 +10,16 @@ android {
     defaultPublishConfig "release"
     publishNonDefault true
 
-    compileSdkVersion 25
+    compileSdkVersion 26
     buildToolsVersion "26.0.0"
 
     defaultConfig {
         minSdkVersion 16
-        targetSdkVersion 25
+        targetSdkVersion 26
         versionCode 1
         versionName "1.0"
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
+        flavorSelection 'helpers', 'all'
     }
 
     dataBinding {
@@ -30,6 +31,20 @@ android {
         release {
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+        }
+    }
+
+    // Specifies a flavor dimension.
+    flavorDimensions "helpers"
+    productFlavors {
+        all {
+            // Assigns this product flavor to the 'color' flavor dimension.
+            // This step is optional if you are using only one dimension.
+            dimension "helpers"
+        }
+
+        none {
+            dimension "helpers"
         }
     }
 
@@ -49,7 +64,7 @@ android {
 
 kotlin { experimental { coroutines "enable" } }
 
-def supportVersion = "25.4.0"
+def supportVersion = "26.0.+"
 def coroutinesVersion = "0.16"
 def leakCanaryVersion = "1.5.1"
 
@@ -57,28 +72,28 @@ dependencies {
     //------------ Main libs --------------------
 
     //support libs
-    compile "com.android.support:appcompat-v7:$supportVersion"
-    compile "com.android.support:design:$supportVersion"
+    implementation "com.android.support:appcompat-v7:$supportVersion"
+    implementation "com.android.support:design:$supportVersion"
 
     //kotlin specific libs.
-    kapt "com.android.databinding:compiler:3.0.0-alpha3"
-    compile "org.jetbrains.kotlin:kotlin-stdlib:$kotlin_version"
+    kapt "com.android.databinding:compiler:3.0.0-alpha5"
+    api "org.jetbrains.kotlin:kotlin-stdlib:$kotlin_version"
 
     //coroutines libs
-    compile "org.jetbrains.kotlinx:kotlinx-coroutines-core:$coroutinesVersion"
-    compile "org.jetbrains.kotlinx:kotlinx-coroutines-android:$coroutinesVersion"
+    implementation "org.jetbrains.kotlinx:kotlinx-coroutines-core:$coroutinesVersion"
+    implementation "org.jetbrains.kotlinx:kotlinx-coroutines-android:$coroutinesVersion"
 
     //leak canary libs
-    debugCompile "com.squareup.leakcanary:leakcanary-android:$leakCanaryVersion"
-    releaseCompile "com.squareup.leakcanary:leakcanary-android-no-op:$leakCanaryVersion"
-    testCompile "com.squareup.leakcanary:leakcanary-android-no-op:$leakCanaryVersion"
+    debugImplementation "com.squareup.leakcanary:leakcanary-android:$leakCanaryVersion"
+    releaseImplementation "com.squareup.leakcanary:leakcanary-android-no-op:$leakCanaryVersion"
+    testImplementation "com.squareup.leakcanary:leakcanary-android-no-op:$leakCanaryVersion"
 
     //------------ Test libs --------------------
-    androidTestCompile('com.android.support.test.espresso:espresso-core:2.2.2', {
+    androidTestImplementation('com.android.support.test.espresso:espresso-core:2.2.2', {
         exclude group: 'com.android.support', module: 'support-annotations'
     })
-    testCompile 'junit:junit:4.12'
-    testCompile "org.robolectric:robolectric:3.3.2"
+    testImplementation 'junit:junit:4.12'
+    testImplementation "org.robolectric:robolectric:3.3.2"
 }
 
 repositories {

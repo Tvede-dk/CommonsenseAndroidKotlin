@@ -33,12 +33,9 @@ class MainActivity : BaseDatabindingActivity<ActivityMainBinding>() {
             startActivity(Intent(applicationContext, Demo5Activity::class.java))
         }
 
-
-
-
         binding.activityMainAdvanceAsyncButton.setOnclickAsync {
             safeToast("async clicked ${counter++}")
-            delay(2000)
+            delay(4000)
         }
 
     }

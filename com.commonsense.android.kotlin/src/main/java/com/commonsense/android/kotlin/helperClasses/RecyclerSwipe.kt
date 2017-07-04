@@ -99,9 +99,10 @@ private class innerSwipeHelper(val recyclerAdapter: AbstractDataBindingRecyclerA
         mainView.translationX = dX
 
         if (!isCurrentlyActive) {
-            baseViewBinding.item.root.postDelayed({
-                resetItem(swipeItem, baseViewBinding.item)
-            }, getAnimationDuration(recyclerView, DEFAULT_SWIPE_ANIMATION_DURATION, dX, dY))
+            resetItem(swipeItem, baseViewBinding.item)
+//            baseViewBinding.item.root.postDelayed({
+//                resetItem(swipeItem, baseViewBinding.item)
+//            }, getAnimationDuration(recyclerView, DEFAULT_SWIPE_ANIMATION_DURATION, dX, dY))
             return
         }
 

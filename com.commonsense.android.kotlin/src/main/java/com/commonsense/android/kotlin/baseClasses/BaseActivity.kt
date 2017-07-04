@@ -33,12 +33,12 @@ open class BaseActivity : AppCompatActivity() {
     }
 
 
-    fun LaunchInBackground(action: suspend () -> Unit) {
+    fun LaunchInBackground(group: String, action: suspend () -> Unit) {
         localJobs.performAction(CommonPool, action)
     }
 
 
-    fun LaunchInUi(action: suspend () -> Unit) {
+    fun LaunchInUi(group: String, action: suspend () -> Unit) {
         localJobs.performAction(UI, action)
     }
 

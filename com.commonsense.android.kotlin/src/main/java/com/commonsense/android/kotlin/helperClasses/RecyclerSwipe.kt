@@ -5,9 +5,10 @@ import android.graphics.Canvas
 import android.support.v7.widget.RecyclerView
 import android.support.v7.widget.helper.ItemTouchHelper
 import android.view.View
+import com.commonsense.android.kotlin.android.extensions.widets.ViewHelper
 import com.commonsense.android.kotlin.baseClasses.databinding.AbstractDataBindingRecyclerAdapter
+import com.commonsense.android.kotlin.baseClasses.databinding.AbstractSearchableDataBindingRecyclerAdapter
 import com.commonsense.android.kotlin.baseClasses.databinding.BaseDataBindingRecyclerAdapter
-import com.commonsense.android.kotlin.baseClasses.databinding.BaseSearchableDataBindingRecyclerAdapter
 import com.commonsense.android.kotlin.baseClasses.databinding.BaseViewHolderItem
 import map
 
@@ -49,7 +50,7 @@ fun BaseDataBindingRecyclerAdapter.attachSwipeFeature(
 }
 
 
-fun <Filter> BaseSearchableDataBindingRecyclerAdapter<Filter>.attachSwipeFeature(
+fun AbstractSearchableDataBindingRecyclerAdapter<*, *>.attachSwipeFeature(
         view: RecyclerView) {
     val swipe = RecyclerSwipe(this)
     swipe.attachToRecyclerView(view)
@@ -99,19 +100,18 @@ private class innerSwipeHelper(val recyclerAdapter: AbstractDataBindingRecyclerA
         mainView.translationX = dX
 
         if (!isCurrentlyActive) {
-            resetItem(swipeItem, baseViewBinding.item)
-//            baseViewBinding.item.root.postDelayed({
-//                resetItem(swipeItem, baseViewBinding.item)
-//            }, getAnimationDuration(recyclerView, DEFAULT_SWIPE_ANIMATION_DURATION, dX, dY))
+            /*  baseViewBinding.item.root.postDelayed({
+                  resetItem(swipeItem, baseViewBinding.item)
+              }, getAnimationDuration(recyclerView, DEFAULT_SWIPE_ANIMATION_DURATION, dX, dY))*/
             return
         }
 
         if (dX in (-0.1f..0.1f)) { //nothing is visible. just hide it
-            goneViews(startView, endView)
+            ViewHelper.goneViews(startView, endView)
         } else if (dX > 0) { //else, what side.
-            showGoneView(startView, endView)
+            ViewHelper.showGoneView(startView, endView)
         } else {
-            showGoneView(endView, startView)
+            ViewHelper.showGoneView(endView, startView)
             startView?.visibility = View.GONE
             endView?.visibility = View.VISIBLE
         }
@@ -119,15 +119,6 @@ private class innerSwipeHelper(val recyclerAdapter: AbstractDataBindingRecyclerA
 
     override fun onChildDrawOver(c: Canvas?, recyclerView: RecyclerView?, viewHolder: RecyclerView.ViewHolder?, dX: Float, dY: Float, actionState: Int, isCurrentlyActive: Boolean) {
         super.onChildDrawOver(c, recyclerView, viewHolder, dX, dY, actionState, isCurrentlyActive)
-    }
-
-    private fun goneViews(vararg views: View?) {
-        views.forEach { it?.visibility = View.GONE }
-    }
-
-    private fun showGoneView(toShow: View?, toGone: View?) {
-        toShow?.visibility = View.VISIBLE
-        goneViews(toGone)
     }
 
 
@@ -150,11 +141,7 @@ private class innerSwipeHelper(val recyclerAdapter: AbstractDataBindingRecyclerA
 
     private fun resetItem(swipeInterface: SwipeableItem, view: ViewDataBinding) {
         val (startView, endView, mainView) = getViews(swipeInterface, view)
-        startView?.visibility = View.GONE
-        endView?.visibility = View.GONE
-        mainView.visibility = View.VISIBLE
-        mainView.translationX = 0f
-        view.root.translationX = 0f
+        resetViews(mainView, startView, endView, view.root)
     }
 
 
@@ -190,4 +177,18 @@ private class innerSwipeHelper(val recyclerAdapter: AbstractDataBindingRecyclerA
     }
 }
 
+private fun resetViews(mainView: View, startView: View?, endView: View?, rootView: View) {
+    startView?.visibility = View.GONE
+    endView?.visibility = View.GONE
+    mainView.visibility = View.VISIBLE
+    mainView.translationX = 0f
+    rootView.translationX = 0f
+    endView?.translationX = 0f
+    startView?.translationX = 0f
+}
+
+
+fun SwipeableItem.clearSwipe(mainView: View, startView: View?, endView: View?, rootView: View) {
+    resetViews(mainView, startView, endView, rootView)
+}
 

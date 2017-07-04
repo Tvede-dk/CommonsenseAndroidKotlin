@@ -15,33 +15,60 @@ import kotlin.coroutines.experimental.CoroutineContext
 
 class JobContainer {
 
-    private val mutex = Mutex()
+    private val localJobMutex = Mutex()
+
+    private val groupJobMutex = Mutex()
 
     private val localJobs = mutableListOf<WeakReference<Job>>()
 
+    private val groupedJobs = HashMap<String, WeakReference<Job>>()
+
+    //<editor-fold desc="Add job ">
     private fun addJobToLocal(job: Job) {
-        changeList { localJobs.add(WeakReference(job)) }
+        changeLocalJob { localJobs.add(WeakReference(job)) }
+        handleCompletedCompletion(job)
+    }
+
+    private fun addJobToGroup(job: Job, group: String) = changeGroupJob {
+        this[group]?.get()?.cancel()
+        this[group] = WeakReference(job)
+        handleCompletedCompletion(job)
+    }
+    //</editor-fold>
+
+    private fun handleCompletedCompletion(job: Job) {
         job.invokeOnCompletion {
             removeDoneJobs()
         }
     }
 
-    fun removeDoneJobs() = changeList {
-        this.localJobs.removeAll { it.get()?.isCompleted ?: true }
-    }
+    //<editor-fold desc="Description">
+    fun removeDoneJobs() {
+        changeLocalJob { removeAll { it.get()?.isCompleted ?: true } }
 
-    private inline fun changeList(crossinline action: () -> Unit) = runBlocking {
-        mutex.lock()
-        try {
-            action()
-        } finally {
-            mutex.unlock()
+        changeGroupJob {
+            this.filter { it.value.get() == null }
+                    .forEach { remove(it.key) }
         }
     }
 
-    fun cleanJobs() = changeList {
-        localJobs.forEach { it.get()?.cancel() }
-        localJobs.clear()
+
+    fun cleanJobs() {
+        changeLocalJob {
+            forEach { it.get()?.cancel() }
+            clear()
+        }
+        changeGroupJob {
+            forEach { it.value.get()?.cancel() }
+            clear()
+        }
+    }
+    //</editor-fold>
+
+
+    //<editor-fold desc="regular non grouped Actions">
+    fun addJob(job: Job) {
+        addJobToLocal(job)
     }
 
     fun performAction(context: CoroutineContext, action: suspend () -> Unit): Job {
@@ -55,13 +82,57 @@ class JobContainer {
         addJobToLocal(job)
         return job
     }
+    //</editor-fold>
 
+    //<editor-fold desc="get jobs">
     fun getRemainingJobs(): Int {
         removeDoneJobs()
         return localJobs.size
     }
 
-    fun addJob(job: Job) {
-        addJobToLocal(job)
+    fun getRemainingGroupedJobs(): Int {
+        removeDoneJobs()
+        return groupedJobs.size
     }
+    //</editor-fold>
+
+    //<editor-fold desc="group action">
+
+    fun addJob(job: Job, group: String) {
+        addJobToGroup(job, group)
+    }
+
+    fun performAction(context: CoroutineContext, scopedAction: suspend CoroutineScope.() -> Unit, forGroup: String): Job {
+        val job = launch(context, block = scopedAction)
+        addJobToGroup(job, forGroup)
+        return job
+    }
+
+    fun performAction(context: CoroutineContext, action: suspend () -> Unit, forGroup: String): Job {
+        val job = launch(context) { action() }
+        addJobToGroup(job, forGroup)
+        return job
+    }
+    //</editor-fold>
+
+    //<editor-fold desc="Inline mutex functions">
+    private inline fun changeLocalJob(crossinline action: MutableList<WeakReference<Job>>.() -> Unit) = runBlocking {
+        localJobMutex.lock()
+        try {
+            action(localJobs)
+        } finally {
+            localJobMutex.unlock()
+        }
+    }
+
+    private inline fun changeGroupJob(crossinline action: HashMap<String, WeakReference<Job>>.() -> Unit)
+            = runBlocking {
+        groupJobMutex.lock()
+        try {
+            action(groupedJobs)
+        } finally {
+            groupJobMutex.unlock()
+        }
+    }
+    //</editor-fold>
 }

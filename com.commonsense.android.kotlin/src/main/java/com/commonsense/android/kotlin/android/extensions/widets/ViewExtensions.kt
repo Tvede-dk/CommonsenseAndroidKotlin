@@ -71,17 +71,15 @@ fun View.getTypedArrayFor(attributeSet: AttributeSet,
  * Toggles between visible and gone.
  */
 fun View.toggleVisibilityGone() {
-    if (visibility == View.VISIBLE) {
-        visibility = View.GONE
+    if (isVisible) {
+        gone()
     } else {
-        visibility = View.VISIBLE
+        visible()
     }
 }
 
-
 val View.isVisible: Boolean
     get() = visibility == View.VISIBLE
-
 
 val View.isGone: Boolean
     get() = visibility == View.GONE
@@ -89,3 +87,40 @@ val View.isGone: Boolean
 val View.isInvisible: Boolean
     get() = visibility == View.INVISIBLE
 
+
+object ViewHelper {
+
+    fun goneViews(vararg views: View?) {
+        views.forEach { it?.gone() }
+    }
+
+    fun goneViews(views: Iterable<View?>) {
+        views.forEach { it?.gone() }
+    }
+
+    fun showGoneView(toShow: View?, toGone: View?) {
+        toShow?.visible()
+        goneViews(listOf(toGone))
+    }
+}
+
+fun View.gone() {
+    this.visibility = View.GONE
+}
+
+fun View.visible() {
+    this.visibility = View.VISIBLE
+}
+
+fun View.invisible() {
+    this.visibility = View.INVISIBLE
+}
+
+
+fun Array<View?>.goneViews() {
+    ViewHelper.goneViews(*this)
+}
+
+fun List<View?>.goneViews() {
+    ViewHelper.goneViews(this)
+}

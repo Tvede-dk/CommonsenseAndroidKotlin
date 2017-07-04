@@ -20,16 +20,19 @@ typealias InflateBinding<T> = (inflater: LayoutInflater, parent: ViewGroup?, att
  */
 abstract class BaseDatabindingFragment<out T : ViewDataBinding> : BaseFragment() {
 
-    val layoutInflator: LayoutInflater by lazy {
-        LayoutInflater.from(context)
-    }
-
     var showDialogAsFullScreen = false
 
     abstract fun getInflater(): InflateBinding<T>
 
+    private val ourLayoutInflater: LayoutInflater by lazy {
+        LayoutInflater.from(context)
+    }
+    private val inflationFunction by lazy {
+        getInflater()
+    }
+
     val binding: T by lazy {
-        getInflater().invoke(layoutInflater, parentView, false)
+        inflationFunction(ourLayoutInflater, parentView, false)
     }
 
     private var parentView: ViewGroup? = null
@@ -54,6 +57,7 @@ abstract class BaseDatabindingFragment<out T : ViewDataBinding> : BaseFragment()
         getParrentContainerId()?.let { activity.replaceFragment(it, otherFragment()) }
     }
 
+    //adds a new fragment after the current fragment
     inline fun Fragment.pushThisFragment(otherFragment: () -> Fragment) {
         getParrentContainerId()?.let { activity.pushNewFragmentTo(it, otherFragment()) }
     }

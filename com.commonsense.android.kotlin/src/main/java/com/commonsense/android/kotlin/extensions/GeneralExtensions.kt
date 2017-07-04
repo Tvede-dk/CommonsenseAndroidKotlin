@@ -1,5 +1,6 @@
 package com.commonsense.android.kotlin.extensions
 
+import android.text.Editable
 import kotlin.system.measureNanoTime
 
 /**
@@ -8,4 +9,11 @@ import kotlin.system.measureNanoTime
 fun measureSecondTime(function: () -> Unit): Long {
     val time = measureNanoTime(function)
     return time / 10_00_000_00L //nano = 100 millionth of a second
+}
+
+/**
+ * converts an immutable string to an editable edition :)
+ */
+fun String.toEditable(): Editable {
+    return Editable.Factory.getInstance().newEditable(this)
 }

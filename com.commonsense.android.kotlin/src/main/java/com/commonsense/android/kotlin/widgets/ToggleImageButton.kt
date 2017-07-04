@@ -59,8 +59,8 @@ open class ToggleImageButton : AppCompatImageView, ViewAttribute, View.OnClickLi
     var isChecked
         get() = internalChecked.value
         set(value) {
-            onCheckedChanged?.invoke(value)
             internalChecked.value = value
+            onCheckedChanged?.invoke(value)
         }
 
 

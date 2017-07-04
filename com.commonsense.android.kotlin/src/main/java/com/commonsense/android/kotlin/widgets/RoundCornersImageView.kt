@@ -1,9 +1,11 @@
 package com.commonsense.android.kotlin.widgets
 
+import android.support.v7.widget.AppCompatImageView
+
 /**
  * Created by kasper on 29/05/2017.
  */
-class RoundCornersImageView : android.widget.ImageView {
+class RoundCornersImageView : AppCompatImageView {
 
     constructor(context: android.content.Context) : super(context)
     constructor(context: android.content.Context, attrs: android.util.AttributeSet) : super(context, attrs) {

@@ -25,17 +25,17 @@ open class BaseFragment : DialogFragment() {
      * in case you have something else than a regular "launch" / async style, then you can still
      * add the jobs manually. eg some api composing of async / launch api'
      */
-    fun addLocalJob(job: Job) {
-        localJobs.addJob(job)
+    fun addLocalJob(group: String, job: Job) {
+        localJobs.addJob(job, group)
     }
 
-    fun LaunchInBackground(action: suspend () -> Unit): Job {
-        return localJobs.performAction(CommonPool, action)
+    fun LaunchInBackground(group: String, action: suspend () -> Unit): Job {
+        return localJobs.performAction(CommonPool, action, group)
     }
 
 
-    fun LaunchInUi(action: suspend () -> Unit): Job {
-        return localJobs.performAction(UI, action)
+    fun LaunchInUi(group: String, action: suspend () -> Unit): Job {
+        return localJobs.performAction(UI, action, group)
     }
 
 

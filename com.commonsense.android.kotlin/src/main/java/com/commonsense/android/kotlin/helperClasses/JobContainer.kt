@@ -29,9 +29,11 @@ class JobContainer {
         handleCompletedCompletion(job)
     }
 
-    private fun addJobToGroup(job: Job, group: String) = changeGroupJob {
-        this[group]?.get()?.cancel()
-        this[group] = WeakReference(job)
+    private fun addJobToGroup(job: Job, group: String) {
+        changeGroupJob {
+            this[group]?.get()?.cancel()
+            this[group] = WeakReference(job)
+        }
         handleCompletedCompletion(job)
     }
     //</editor-fold>
@@ -45,7 +47,6 @@ class JobContainer {
     //<editor-fold desc="Description">
     fun removeDoneJobs() {
         changeLocalJob { removeAll { it.get()?.isCompleted ?: true } }
-
         changeGroupJob {
             this.filter { it.value.get() == null }
                     .forEach { remove(it.key) }
@@ -54,14 +55,8 @@ class JobContainer {
 
 
     fun cleanJobs() {
-        changeLocalJob {
-            forEach { it.get()?.cancel() }
-            clear()
-        }
-        changeGroupJob {
-            forEach { it.value.get()?.cancel() }
-            clear()
-        }
+        localJobs.forEach { it.get()?.cancel() }
+        groupedJobs.forEach { it.value.get()?.cancel() }
     }
     //</editor-fold>
 
@@ -102,7 +97,9 @@ class JobContainer {
         addJobToGroup(job, group)
     }
 
-    fun performAction(context: CoroutineContext, scopedAction: suspend CoroutineScope.() -> Unit, forGroup: String): Job {
+    fun performAction(context: CoroutineContext,
+                      scopedAction: suspend CoroutineScope.() -> Unit,
+                      forGroup: String): Job {
         val job = launch(context, block = scopedAction)
         addJobToGroup(job, forGroup)
         return job

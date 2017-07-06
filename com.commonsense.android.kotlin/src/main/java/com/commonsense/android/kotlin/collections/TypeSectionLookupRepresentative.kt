@@ -4,6 +4,7 @@ import android.support.annotation.IntRange
 import android.util.SparseArray
 import com.commonsense.android.kotlin.extensions.collections.getSafe
 import com.commonsense.android.kotlin.extensions.collections.toList
+import length
 
 /**
  * Created by kasper on 05/07/2017.
@@ -54,9 +55,7 @@ class TypeSectionLookupRepresentative<T : TypeHashCodeLookupRepresent<Rep>, out 
     fun addAll(items: Collection<T>, @IntRange(from = 0) atSection: Int) = ensureSection(atSection) {
         cachedSize += items.count()
         data.get(atSection).collection.addAll(items)
-
         lookup.addAll(items)
-
     }
 
     fun removeItem(item: T, @IntRange(from = 0) atSection: Int) {
@@ -104,9 +103,17 @@ class TypeSectionLookupRepresentative<T : TypeHashCodeLookupRepresent<Rep>, out 
         lookup.add(item)
     }
 
-    fun clearAndSet(items: List<T>, atSection: Int) {
-        clear()
+    /**
+     * returns what have changed. (the diff).
+     */
+    fun clearAndSetSection(items: List<T>, atSection: Int): kotlin.ranges.IntRange? {
+        val removed = clearSection(atSection)
         addAll(items, atSection)
+        if (removed == null) {
+            return calculateLocationForSection(atSection)
+        }
+        val largestLength = maxOf(removed.length, items.size)
+        return removed.start until largestLength
     }
 
     fun replace(newItem: T, position: Int) {
@@ -193,6 +200,13 @@ class TypeSectionLookupRepresentative<T : TypeHashCodeLookupRepresent<Rep>, out 
 
     fun getSectionLocation(sectionIndex: Int): kotlin.ranges.IntRange? {
         return calculateLocationForSection(sectionIndex)
+    }
+
+    fun clearSection(atSection: Int): kotlin.ranges.IntRange? {
+        addSectionIfMissing(atSection)
+        val location = calculateLocationForSection(atSection) ?: return null
+        data[atSection].collection.clear()
+        return location
     }
 
 }

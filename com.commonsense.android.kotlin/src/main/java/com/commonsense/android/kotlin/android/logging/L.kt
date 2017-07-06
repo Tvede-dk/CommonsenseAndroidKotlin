@@ -18,7 +18,7 @@ object L {
         isLoggingAllowed.onTrue { Log.d(tag, msg, exception) }
     }
 
-    fun warning(tag: String, message: String, exception: Throwable?) {
+    fun warning(tag: String, message: String, exception: Throwable? = null) {
         isLoggingAllowed.onTrue { Log.w(tag, message, exception) }
     }
 }

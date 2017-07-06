@@ -219,9 +219,14 @@ abstract class AbstractDataBindingRecyclerAdapter<T>(context: Context) :
         dataCollection.addAll(items, atSection)
     }
 
-    fun clearAndSet(items: List<T>, atSection: Int) {
-        clear()
-        addAll(items, atSection)
+    open fun clearAndSetSection(items: List<T>, atSection: Int) {
+        val changes = dataCollection.clearAndSetSection(items, atSection) ?: return
+        notifyItemRangeChanged(changes.start, changes.length)
+    }
+
+    private fun clearSection(atSection: Int) {
+        val location = dataCollection.clearSection(atSection) ?: return
+        notifyItemRangeRemoved(location.start, location.length)
     }
 
     open fun replace(newItem: T, position: Int) = updateData {
@@ -231,7 +236,7 @@ abstract class AbstractDataBindingRecyclerAdapter<T>(context: Context) :
 
     protected fun clearAndSetItemsNoNotify(items: List<T>, atSection: Int) {
         stopScroll()
-        dataCollection.clearAndSet(items, atSection)
+        dataCollection.clearAndSetSection(items, atSection)
     }
 
     private fun stopScroll() {

@@ -67,8 +67,6 @@ class PermissionsHandling(val handlerRequestCode: Int = 999) {
     }
 }
 
-//TODO make this.
-
 /**
  * This is a collection of "dangerous permissions" thus requiring user allowance.
  * https://developer.android.com/guide/topics/permissions/requesting.html#permission-groups

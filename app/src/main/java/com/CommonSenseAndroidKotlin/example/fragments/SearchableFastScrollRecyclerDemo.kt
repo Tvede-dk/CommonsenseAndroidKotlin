@@ -2,8 +2,6 @@ package com.CommonSenseAndroidKotlin.example.fragments
 
 import android.content.Context
 import android.support.v7.widget.LinearLayoutManager
-import android.view.LayoutInflater
-import android.view.ViewGroup
 import com.CommonSenseAndroidKotlin.example.databinding.DemoRecyclerFastscrollSearchableBinding
 import com.CommonSenseAndroidKotlin.example.databinding.SimpleListItemBinding
 import com.commonsense.android.kotlin.android.extensions.widets.setup
@@ -50,7 +48,7 @@ class SearchAbleSimpleListDateTime(item: DateTime) : BaseSearchRenderModel<DateT
 class FastScrollAdapter(context: Context) : AbstractSearchableDataBindingRecyclerAdapter<SearchAbleSimpleListDateTime, String>(context),
         SectionTitleProvider {
     override fun getSectionTitle(p0: Int): String {
-        return getItem(p0)?.getTitle() ?: "<no title>"
+        return getItem(p0, 0)?.getTitle() ?: "<no title>"
     }
 
 
@@ -74,7 +72,7 @@ class SearchableFastScrollRecyclerDemo : BaseDatabindingFragment<DemoRecyclerFas
 //                SearchAbleSimpleListDateTime(DateTime.now())
 //        ).repeateToSize(50000)
 
-        adapter.clearAndSet(items)
+        adapter.clearAndSet(items, 0)
         binding.demoRecyclerSearchableRecyclerview.recyclerView.setup(adapter, LinearLayoutManager(context))
         binding.demoRecyclerSearchableFastscroll.setRecyclerView(binding.demoRecyclerSearchableRecyclerview.recyclerView)
     }

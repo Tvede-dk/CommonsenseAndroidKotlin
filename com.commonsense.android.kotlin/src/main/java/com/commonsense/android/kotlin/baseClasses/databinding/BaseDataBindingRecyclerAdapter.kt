@@ -8,7 +8,7 @@ import android.view.LayoutInflater
 import android.view.ViewGroup
 import com.commonsense.android.kotlin.android.logging.L
 import com.commonsense.android.kotlin.collections.TypeHashCodeLookupRepresent
-import com.commonsense.android.kotlin.collections.TypeLookupCollectionRepresentive
+import com.commonsense.android.kotlin.collections.TypeSectionLookupRepresentative
 import length
 import java.lang.ref.WeakReference
 
@@ -48,7 +48,7 @@ abstract class BaseRenderModel<
     override fun getValue(): T = item
 
     override fun getTypeValue() = vmTypeValue
-    val vmTypeValue: Int by lazy {
+    private val vmTypeValue: Int by lazy {
         classType.hashCode()
     }
 
@@ -75,10 +75,10 @@ abstract class BaseRenderModel<
 
 open class RenderModelItem<
         T : Any,
-        Vm : ViewDataBinding>(val item: T,
-                              val vmInflater: ViewInflatingFunction<Vm>,
-                              val classType: Class<Vm>,
-                              val vmRender: (view: Vm, model: T, viewHolder: BaseViewHolderItem<Vm>) -> Unit)
+        Vm : ViewDataBinding>(private val item: T,
+                              private val vmInflater: ViewInflatingFunction<Vm>,
+                              private val classType: Class<Vm>,
+                              private val vmRender: (view: Vm, model: T, viewHolder: BaseViewHolderItem<Vm>) -> Unit)
     : IRenderModelItem<T, Vm> {
     override fun getInflaterFunction() = vmInflater
 
@@ -111,22 +111,21 @@ open class RenderModelItem<
     }
 
     //more performant than an inline getter that retrives it.
-    val vmTypeValue: Int by lazy {
+    private val vmTypeValue: Int by lazy {
         classType.hashCode()
     }
 }
 
+//Base class for data binding recycler adapters.
 abstract class AbstractDataBindingRecyclerAdapter<T>(context: Context) :
         RecyclerView.Adapter<BaseViewHolderItem<*>>() where T : IRenderModelItem<*, *> {
 
-    protected val dataCollection: TypeLookupCollectionRepresentive<
-            T, InflatingFunction<*>>
-            = TypeLookupCollectionRepresentive()
+    protected val dataCollection: TypeSectionLookupRepresentative<T, InflatingFunction<*>>
+            = TypeSectionLookupRepresentative()
 
-    protected val listeningRecyclers = mutableSetOf<WeakReference<RecyclerView>>()
+    private val listeningRecyclers = mutableSetOf<WeakReference<RecyclerView>>()
 
-
-    protected val inflater: LayoutInflater by lazy {
+    private val inflater: LayoutInflater by lazy {
         LayoutInflater.from(context)
     }
 
@@ -136,67 +135,75 @@ abstract class AbstractDataBindingRecyclerAdapter<T>(context: Context) :
     }
 
     override fun getItemViewType(@IntRange(from = 0) position: Int): Int {
-        return dataCollection[position]?.getTypeValue() ?: 0
+        val (row, section) = dataCollection.indexToPath(position)
+        return dataCollection[row, section]?.getTypeValue() ?: 0
 
     }
 
     override fun onBindViewHolder(holder: BaseViewHolderItem<*>, @IntRange(from = 0) position: Int) {
         //lookup type to converter, then apply model on view using converter
-        val render = dataCollection[position]
+        val (row, section) = dataCollection.indexToPath(position)
+        val render = dataCollection[row, section]
         render?.bindToViewHolder(holder)
     }
 
 
     override fun getItemCount(): Int = dataCollection.size
 
-    open fun add(newItem: T) = updateData {
+    open fun add(newItem: T, atSection: Int) = updateData {
         stopScroll()
-        dataCollection.add(newItem)
+        dataCollection.add(newItem, atSection)
         notifyItemInserted(dataCollection.size)
     }
 
-    open fun addAll(items: List<T>) = updateData {
+    open fun addAll(items: Collection<T>, atSection: Int) = updateData {
         val startPos = itemCount
-        dataCollection.addAll(items)
+        dataCollection.addAll(items, atSection)
         notifyItemRangeInserted(startPos, items.size)
     }
 
-    open fun add(item: T, at: Int) = updateData {
-        dataCollection.add(item, at)
+    open fun add(item: T, atSection: Int, atRow: Int) = updateData {
+        dataCollection.add(item, atSection, atRow)
     }
 
-    open fun addAll(items: Collection<T>, startPosition: Int) = updateData {
-        dataCollection.addAll(items, startPosition)
+    open fun addAll(items: Collection<T>, atSection: Int, startPosition: Int) = updateData {
+        dataCollection.addAll(items, atSection, startPosition)
         notifyItemRangeInserted(startPosition, items.size)
     }
 
-    open fun addAll(vararg items: T, startPosition: Int) = updateData {
+    open fun addAll(vararg items: T, atSection: Int, startPosition: Int) = updateData {
         dataCollection.addAll(items.asList(), startPosition)
         notifyItemRangeInserted(startPosition, items.size)
     }
 
-    open fun remove(newItem: T) = updateData {
-        removeAt(dataCollection.indexOf(newItem))
+    open fun remove(newItem: T, atSection: Int) = updateData {
+        removeAt(dataCollection.indexOf(newItem, atSection), atSection) // ?????
     }
 
-    open fun removeAt(index: Int) = updateData {
-        if (dataCollection.isIndexValid(index)) {
-            dataCollection.removeAt(index)
-            notifyItemRemoved(index)
+    open fun removeAt(row: Int, inSection: Int) = updateData {
+        //if (dataCollection.isIndexValid(row)) {
+        if (dataCollection.removeAt(row, inSection)) {
+            notifyItemRemoved(row)
         }
+        //}
     }
 
 
-    open fun removeIn(range: kotlin.ranges.IntRange) = updateData {
-        if (dataCollection.isRangeValid(range)) {
-            dataCollection.removeIn(range)
+    open fun removeIn(range: kotlin.ranges.IntRange, atSection: Int) = updateData {
+
+        if (dataCollection.removeInRange(range, atSection)) {
             notifyItemRangeRemoved(range.start, range.length)
         }
 
+//        if (dataCollection.isRangeValid(range)) {
+//            dataCollection.removeIn(range)
+//            notifyItemRangeRemoved(range.start, range.length)
+//        }
+
     }
 
 
-    open fun getItem(index: Int): T? = dataCollection[index]
+    open fun getItem(atRow: Int, atSection: Int): T? = dataCollection[atRow, atSection]
 
     open fun clear() = updateData {
         dataCollection.clear()
@@ -204,17 +211,17 @@ abstract class AbstractDataBindingRecyclerAdapter<T>(context: Context) :
     }
 
 
-    protected fun addNoNotify(item: T) = updateData {
-        dataCollection.add(item)
+    protected fun addNoNotify(item: T, atSection: Int) = updateData {
+        dataCollection.add(item, atSection)
     }
 
-    protected fun addNoNotify(items: List<T>) = updateData {
-        dataCollection.addAll(items)
+    protected fun addNoNotify(items: List<T>, atSection: Int) = updateData {
+        dataCollection.addAll(items, atSection)
     }
 
-    fun clearAndSet(items: List<T>) {
+    fun clearAndSet(items: List<T>, atSection: Int) {
         clear()
-        addAll(items)
+        addAll(items, atSection)
     }
 
     open fun replace(newItem: T, position: Int) = updateData {
@@ -222,12 +229,12 @@ abstract class AbstractDataBindingRecyclerAdapter<T>(context: Context) :
         notifyItemChanged(position)
     }
 
-    protected fun clearAndSetItemsNoNotify(items: List<T>) {
+    protected fun clearAndSetItemsNoNotify(items: List<T>, atSection: Int) {
         stopScroll()
-        dataCollection.clearAndSet(items)
+        dataCollection.clearAndSet(items, atSection)
     }
 
-    protected fun stopScroll() {
+    private fun stopScroll() {
         listeningRecyclers.forEach { recyclerView ->
             recyclerView.get()?.stopScroll()
         }
@@ -252,7 +259,6 @@ abstract class AbstractDataBindingRecyclerAdapter<T>(context: Context) :
     }
 
 
-
     /**
      * must be called from all things that manipulate the dataCollection.
      */
@@ -263,6 +269,21 @@ abstract class AbstractDataBindingRecyclerAdapter<T>(context: Context) :
 
     fun getRepresentUsingType(viewHolderItem: BaseViewHolderItem<*>): InflatingFunction<*>? {
         return dataCollection.getTypeRepresentativeFromTypeValue(viewHolderItem.viewBindingTypeValue)
+    }
+
+    fun getItemFromRawIndex(rawIndex: Int): T {
+        val (row, section) = dataCollection.indexToPath(rawIndex)
+        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+    }
+
+    fun hideSection(sectionIndex: Int) {
+        val sectionLocation = dataCollection.ignoreSection(sectionIndex)
+        notifyItemRangeRemoved(sectionLocation.start, sectionLocation.endInclusive - sectionLocation.start)
+    }
+
+    fun showSection(sectionIndex: Int) {
+        val sectionLocation = dataCollection.acceptSection(sectionIndex)
+        notifyItemRangeInserted(sectionLocation.start, sectionLocation.endInclusive - sectionLocation.start)
     }
 
 }

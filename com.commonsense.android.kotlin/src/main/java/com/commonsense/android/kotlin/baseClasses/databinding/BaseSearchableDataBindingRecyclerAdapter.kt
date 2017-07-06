@@ -73,15 +73,15 @@ open class AbstractSearchableDataBindingRecyclerAdapter<
         }
     }
 
-    override fun add(newItem: T) {
+    override fun add(newItem: T, atSection: Int) {
         allDataCollection.add(newItem)
-        performActionIfIsValidFilter(newItem, { super.add(newItem) })
+        performActionIfIsValidFilter(newItem, { super.add(newItem, atSection) })
     }
 
-    override fun addAll(items: List<T>) {
+    override fun addAll(items: Collection<T>, atSection: Int) {
         allDataCollection.addAll(items)
         items.forEach {
-            performActionIfIsValidFilter(it, { super.add(it) })
+            performActionIfIsValidFilter(it, { super.add(it, atSection) })
         }
 
     }
@@ -92,22 +92,22 @@ open class AbstractSearchableDataBindingRecyclerAdapter<
         }
     }
 
-    override fun remove(newItem: T) {
-        super.remove(newItem)
+    override fun remove(newItem: T, atSection: Int) {
+        super.remove(newItem, atSection)
         allDataCollection.remove(newItem)
     }
 
-    override fun removeAt(index: Int) {
-        super.removeAt(index)
-        allDataCollection.removeAt(index)
+    override fun removeAt(row: Int, inSection: Int) {
+        super.removeAt(row, inSection)
+        allDataCollection.removeAt(row)
     }
 
-    override fun addAll(items: Collection<T>, startPosition: Int) {
+    override fun addAll(items: Collection<T>, atSection: Int, startPosition: Int) {
         super.addAll(items, startPosition)
         allDataCollection.addAll(startPosition, items)
     }
 
-    override fun addAll(vararg items: T, startPosition: Int) {
+    override fun addAll(vararg items: T, atSection: Int, startPosition: Int) {
         val asList = items.asList()
         super.addAll(asList, startPosition)
         allDataCollection.addAll(startPosition, asList)
@@ -118,9 +118,9 @@ open class AbstractSearchableDataBindingRecyclerAdapter<
         allDataCollection.replace(newItem, position)
     }
 
-    override fun removeIn(range: IntRange) {
-        super.removeIn(range)
-        range.forEach(dataCollection::removeAt)
+    override fun removeIn(range: IntRange, atSection: Int) {
+        super.removeIn(range, atSection)
+        dataCollection.removeInRange(range, atSection)
     }
 
 
@@ -151,7 +151,7 @@ open class AbstractSearchableDataBindingRecyclerAdapter<
     }
 
     private suspend fun updateVisibly(data: List<T>) {
-        super.clearAndSetItemsNoNotify(data)
+        super.clearAndSetItemsNoNotify(data, 0)//TODO !!!!!!!!!!!!
         launch(UI) {
             super.notifyDataSetChanged()
         }

@@ -13,6 +13,7 @@ import com.commonsense.android.kotlin.android.extensions.getParrentContainerId
 import com.commonsense.android.kotlin.baseClasses.BaseFragment
 import com.commonsense.android.kotlin.baseClasses.pushNewFragmentTo
 import com.commonsense.android.kotlin.baseClasses.replaceFragment
+import com.commonsense.kotlin.R
 
 typealias InflateBinding<T> = (inflater: LayoutInflater, parent: ViewGroup?, attach: Boolean) -> T
 /**
@@ -63,12 +64,11 @@ abstract class BaseDatabindingFragment<out T : ViewDataBinding> : BaseFragment()
     }
 
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
-        val builder = AlertDialog.Builder(context)
+        val builder = AlertDialog.Builder(context, R.style.TransperantDialog)
         val res = builder
                 .setCustomTitle(null)
                 .setView(binding.root)
                 .create()
-
         return res
     }
 

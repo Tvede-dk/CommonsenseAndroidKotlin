@@ -24,7 +24,7 @@ class TestClassTypeLookupHashcode<out T>(val someData: T, val viewType: Int) : T
 class TypeLookupCollectionRepresentiveTest : BaseRoboElectricTest() {
     @Test
     fun testRemove() {
-        val collection = TypeLookupCollectionRepresentive<TestClassTypeLookupHashcode<*>, String>()
+        val collection = TypeLookupCollectionRepresentative<TestClassTypeLookupHashcode<*>, String>()
         val firstClass = TestClassTypeLookupHashcode("asd", 1)
         collection.addAll(listOf(firstClass).repeate(10))
         Assert.assertEquals(collection.size, 10)
@@ -36,7 +36,7 @@ class TypeLookupCollectionRepresentiveTest : BaseRoboElectricTest() {
 
     @Test
     fun testRemoveAll() {
-        val collection = TypeLookupCollectionRepresentive<TestClassTypeLookupHashcode<*>, String>()
+        val collection = TypeLookupCollectionRepresentative<TestClassTypeLookupHashcode<*>, String>()
         val firstClass = TestClassTypeLookupHashcode("asd", 1)
         val secondClass = TestClassTypeLookupHashcode("asd", 2)
         val thirdClass = TestClassTypeLookupHashcode("asd", 3)
@@ -54,7 +54,7 @@ class TypeLookupCollectionRepresentiveTest : BaseRoboElectricTest() {
 
     @Test
     fun clear() {
-        val collection = TypeLookupCollectionRepresentive<TestClassTypeLookupHashcode<*>, String>()
+        val collection = TypeLookupCollectionRepresentative<TestClassTypeLookupHashcode<*>, String>()
         val firstClass = TestClassTypeLookupHashcode("asd", 1)
         collection.addAll(listOf(firstClass).repeate(10))
         Assert.assertEquals(collection.size, 10)
@@ -66,7 +66,7 @@ class TypeLookupCollectionRepresentiveTest : BaseRoboElectricTest() {
 
     @Test
     fun testInsertDifferentItems() {
-        val collection = TypeLookupCollectionRepresentive<TestClassTypeLookupHashcode<*>, String>()
+        val collection = TypeLookupCollectionRepresentative<TestClassTypeLookupHashcode<*>, String>()
         val onlyClass = TestClassTypeLookupHashcode("asd", 1)
         collection.add(onlyClass)
         Assert.assertEquals(collection.size, 1)
@@ -84,7 +84,7 @@ class TypeLookupCollectionRepresentiveTest : BaseRoboElectricTest() {
 
     @Test
     fun testGetAnItemFromType() {
-        val collection = TypeLookupCollectionRepresentive<TestClassTypeLookupHashcode<*>, String>()
+        val collection = TypeLookupCollectionRepresentative<TestClassTypeLookupHashcode<*>, String>()
         val firstClass = TestClassTypeLookupHashcode("asd", 1)
         val secondClass = TestClassTypeLookupHashcode("asd", 2)
         val thirdClass = TestClassTypeLookupHashcode("asd", 3)
@@ -101,7 +101,7 @@ class TypeLookupCollectionRepresentiveTest : BaseRoboElectricTest() {
     @Ignore
     @Test
     fun testGetAnItemFromTypeRemoveal() {
-        val collection = TypeLookupCollectionRepresentive<TestClassTypeLookupHashcode<*>, String>()
+        val collection = TypeLookupCollectionRepresentative<TestClassTypeLookupHashcode<*>, String>()
         val firstClass = TestClassTypeLookupHashcode("asd", 1)
         val secondClass = TestClassTypeLookupHashcode("asd", 2)
         val thirdClass = TestClassTypeLookupHashcode("asd", 3)
@@ -117,7 +117,7 @@ class TypeLookupCollectionRepresentiveTest : BaseRoboElectricTest() {
 
     @Test
     fun testReplaceIn() {
-        val collection = TypeLookupCollectionRepresentive<TestClassTypeLookupHashcode<*>, String>()
+        val collection = TypeLookupCollectionRepresentative<TestClassTypeLookupHashcode<*>, String>()
         val firstItem = TestClassTypeLookupHashcode("asd0", 1)
         collection.add(firstItem)
         collection.add(TestClassTypeLookupHashcode("asd1", 1))
@@ -137,7 +137,7 @@ class TypeLookupCollectionRepresentiveTest : BaseRoboElectricTest() {
     @Ignore
     @Test
     fun testPerformanceWorstCaseRemoval() {
-        val collection = TypeLookupCollectionRepresentive<TestClassTypeLookupHashcode<*>, String>()
+        val collection = TypeLookupCollectionRepresentative<TestClassTypeLookupHashcode<*>, String>()
         collection.add(TestClassTypeLookupHashcode("asd", 1))
         collection.add(TestClassTypeLookupHashcode("asd", 1))
         collection.addAll(listOf(TestClassTypeLookupHashcode("2", 2)).repeateToSize(500_000))

@@ -14,7 +14,7 @@ import com.commonsense.android.kotlin.extensions.collections.repeateToSize
  * Created by kasper on 01/06/2017.
  */
 
-class SearchAbleSimpleListItemRender(item: String) : SimpleListItemRender(item), IRenderModelSearchItem<String, SimpleListItemBinding, String> {
+class SearchAbleSimpleListItemRender(item: String) : SimpleListItemRender(item, 0, {}), IRenderModelSearchItem<String, SimpleListItemBinding, String> {
     override fun isAcceptedByFilter(value: String): Boolean = item.contains(value)
 }
 
@@ -34,7 +34,7 @@ class SearchAbleRecyclerDemo : BaseDatabindingFragment<DemoRecyclerSearchableBin
                 SimpleListImageItemRender(Color.RED).toSearchable { _, _ -> false }
         ).repeateToSize(50000)
 
-        adapter.clearAndSet(items)
+        adapter.clearAndSet(items, 0)
         binding.demoRecyclerSearchableRecyclerview.recyclerView.setup(adapter, LinearLayoutManager(context))
         binding.demoRecyclerSearchableRecyclerview2.recyclerView.setup(adapter, LinearLayoutManager(context))
 
@@ -52,7 +52,7 @@ class SearchAbleRecyclerDemo : BaseDatabindingFragment<DemoRecyclerSearchableBin
     }
 }
 
-class SafeTextWatcher(val onAfterTextChanged: (Editable) -> Unit) : TextWatcher {
+class SafeTextWatcher(private val onAfterTextChanged: (Editable) -> Unit) : TextWatcher {
 
     override fun afterTextChanged(afterChanged: Editable?) {
         if (afterChanged != null) {

@@ -17,3 +17,9 @@ fun measureSecondTime(function: () -> Unit): Long {
 fun String.toEditable(): Editable {
     return Editable.Factory.getInstance().newEditable(this)
 }
+
+val Any?.isNull
+    get() = this == null
+
+val Any?.isNotNull
+    get() = this != null

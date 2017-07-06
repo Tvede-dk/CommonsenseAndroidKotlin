@@ -80,7 +80,7 @@ private class innerSwipeHelper(val recyclerAdapter: AbstractDataBindingRecyclerA
     private fun getOptInterface(viewHolder: RecyclerView.ViewHolder?)
             : SwipeableItem? {
         return viewHolder?.adapterPosition?.let {
-            recyclerAdapter.getItem(it) as? SwipeableItem
+            recyclerAdapter.getItemFromRawIndex(it) as? SwipeableItem
         }
     }
 

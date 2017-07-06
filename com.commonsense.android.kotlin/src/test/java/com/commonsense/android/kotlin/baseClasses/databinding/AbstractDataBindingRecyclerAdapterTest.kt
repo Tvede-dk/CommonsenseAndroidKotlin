@@ -5,8 +5,7 @@ import android.databinding.DataBindingComponent
 import android.databinding.ViewDataBinding
 import android.view.View
 import com.commonsense.android.kotlin.BaseRoboElectricTest
-import com.commonsense.android.kotlin.android.extensions.widets.removeLast
-import com.commonsense.android.kotlin.collections.TypeLookupCollectionRepresentive
+import com.commonsense.android.kotlin.collections.TypeSectionLookupRepresentative
 import com.commonsense.android.kotlin.extensions.collections.repeateToSize
 import com.commonsense.android.kotlin.extensions.measureSecondTime
 import org.junit.Assert
@@ -20,7 +19,7 @@ import org.robolectric.RuntimeEnvironment
 
 class openAbstractRecycler(context: Context) : AbstractDataBindingRecyclerAdapter<
         RenderModelItem<*, *>>(context) {
-    fun getData(): TypeLookupCollectionRepresentive<RenderModelItem<*, *>, InflatingFunction<*>> {
+    fun getData(): TypeSectionLookupRepresentative<RenderModelItem<*, *>, InflatingFunction<*>> {
         return dataCollection
     }
 }
@@ -60,25 +59,25 @@ class AbstractDataBindingRecyclerAdapterTest : BaseRoboElectricTest() {
         val adapter = openAbstractRecycler(context)
 
         val timeBaseLine = measureSecondTime {
-            adapter.removeAt(0)
+            adapter.removeAt(0, 0)
         }
         val timelimit = 1 + timeBaseLine * 10
 
         val timeAddAll = measureSecondTime {
-            adapter.addAll(list)
+            adapter.addAll(list, 0)
         }
         Assert.assertTrue(timeAddAll < timelimit)
 
         val timeRemoveFirst = measureSecondTime {
-            adapter.removeAt(0)
+            adapter.removeAt(0, 0)
         }
         Assert.assertTrue(timeRemoveFirst < timelimit)
         val timeRemoveMiddel = measureSecondTime {
-            adapter.removeAt(size / 2)
+            adapter.removeAt(size / 2, 0)
         }
         Assert.assertTrue(timeRemoveMiddel < 1)
         val timeRemoveLast = measureSecondTime {
-            adapter.removeAt(adapter.itemCount - 1)
+            adapter.removeAt(adapter.itemCount - 1, 0)
         }
         Assert.assertTrue(timeRemoveLast < timelimit)
 
@@ -93,16 +92,16 @@ class AbstractDataBindingRecyclerAdapterTest : BaseRoboElectricTest() {
         val size = 2000000
         val list = listOf(EmptyViewRenderModelItem("")).repeateToSize(size)
         val adapter = openAbstractRecycler(context)
-        adapter.add(EmptyViewRenderModelItem2(1))
-        adapter.addAll(list)
-        adapter.add(EmptyViewRenderModelItem2(1))
+        adapter.add(EmptyViewRenderModelItem2(1), 0)
+        adapter.addAll(list, 0)
+        adapter.add(EmptyViewRenderModelItem2(1), 0)
 
         val timeBaseLine = measureSecondTime {
-            adapter.removeAt(0)
+            adapter.removeAt(0, 0)
         }
         val timelimit = 1 + timeBaseLine * 10
         val timeRemoveFirst = measureSecondTime {
-            adapter.removeAt(0)
+            adapter.removeAt(0, 0)
         }
         Assert.assertTrue(timeRemoveFirst < timelimit)
 
@@ -112,7 +111,7 @@ class AbstractDataBindingRecyclerAdapterTest : BaseRoboElectricTest() {
         Assert.assertTrue(timeLookup < timelimit)
 
         val timeRemoveLast = measureSecondTime {
-            adapter.removeLast()
+            adapter.removeAt(adapter.itemCount - 1, 0)
         }
         Assert.assertTrue(timeRemoveLast < timelimit)
     }

@@ -1,63 +1,52 @@
 <?xml version="1.0" encoding="utf-8"?>
-<layout
-    xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools">
+<layout xmlns:android="http://schemas.android.com/apk/res/android">
 
     <data>
+
         <variable
             name="user"
-            type="com.CommonSenseAndroidKotlin.example.models.UserViewModel"/>
+            type="com.CommonSenseAndroidKotlin.example.models.UserViewModel" />
     </data>
+
 
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
+        android:layout_height="wrap_content"
         android:orientation="vertical">
 
 
-
         <EditText
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="@={user.Username}"
-            android:hint="String"
             android:id="@+id/user_edit_view_username"
-            android:textColor="@color/black"/>
-
-        <EditText
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="@={user.password}"
             android:hint="String"
+            android:text="@={user.Username}"
+            android:textColor="@color/black" />
+
+        <EditText
             android:id="@+id/user_edit_view_password"
-            android:textColor="@color/black"/>
-
-        <EditText
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="@={user.email}"
             android:hint="String"
+            android:text="@={user.password}"
+            android:textColor="@color/black" />
+
+        <EditText
             android:id="@+id/user_edit_view_email"
-            android:textColor="@color/black"/>
-
-        <EditText
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="@={user.realName}"
             android:hint="String"
+            android:text="@={user.email}"
+            android:textColor="@color/black" />
+
+        <EditText
             android:id="@+id/user_edit_view_realname"
-            android:textColor="@color/black"/>
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="String"
+            android:text="@={user.realName}"
+            android:textColor="@color/black" />
 
+    </LinearLayout>
 
-
-
-
-
-
-
-
-
-
-
-    </LinearLayout></layout>
+</layout>

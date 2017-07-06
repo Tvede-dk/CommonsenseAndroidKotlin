@@ -4,11 +4,10 @@ package com.CommonSenseAndroidKotlin.example.activity
 import android.content.Intent
 import android.view.LayoutInflater
 import com.CommonSenseAndroidKotlin.example.databinding.ActivityMainBinding
-import com.commonsense.android.kotlin.android.extensions.safeToast
+import com.CommonSenseAndroidKotlin.example.fragments.EditDatabindingFragment
 import com.commonsense.android.kotlin.android.extensions.widets.setOnClick
 import com.commonsense.android.kotlin.android.extensions.widets.setOnclickAsync
 import com.commonsense.android.kotlin.baseClasses.databinding.BaseDatabindingActivity
-import kotlinx.coroutines.experimental.delay
 
 
 class MainActivity : BaseDatabindingActivity<ActivityMainBinding>() {
@@ -34,8 +33,9 @@ class MainActivity : BaseDatabindingActivity<ActivityMainBinding>() {
         }
 
         binding.activityMainAdvanceAsyncButton.setOnclickAsync {
-            safeToast("async clicked ${counter++}")
-            delay(4000)
+            //safeToast("async clicked ${counter++}")
+            EditDatabindingFragment().show(supportFragmentManager, "test")
+            //delay(4000)
         }
 
     }

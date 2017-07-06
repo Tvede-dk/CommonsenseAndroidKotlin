@@ -7,6 +7,7 @@ import android.support.v7.widget.LinearLayoutManager
 import com.CommonSenseAndroidKotlin.example.databinding.DemoRecyclerSimpleViewBinding
 import com.CommonSenseAndroidKotlin.example.databinding.SimpleListImageItemBinding
 import com.CommonSenseAndroidKotlin.example.databinding.SimpleListItemBinding
+import com.commonsense.android.kotlin.android.extensions.widets.setOnclickAsync
 import com.commonsense.android.kotlin.android.extensions.widets.setup
 import com.commonsense.android.kotlin.baseClasses.databinding.*
 
@@ -17,28 +18,32 @@ open class SimpleRecyclerDemo : BaseDatabindingFragment<DemoRecyclerSimpleViewBi
     override fun getInflater(): InflateBinding<DemoRecyclerSimpleViewBinding>
             = DemoRecyclerSimpleViewBinding::inflate
 
-    val adapter by lazy {
+    private val adapter by lazy {
         BaseDataBindingRecyclerAdapter(context.applicationContext)
     }
 
 
     override fun useBinding() {
         adapter.clear()
-        for (i in 0..200) {
-            adapter.add(SimpleListItemRender("First text is good text"))
-            adapter.add(SimpleListImageItemRender(Color.BLUE))
-            adapter.add(SimpleListItemRender("Whats up test ?"))
-            adapter.add(SimpleListImageItemRender(Color.RED))
+        for (section in 0..5) {
+            for (i in 0..10) {
+                adapter.add(SimpleListItemRender("First text is good text", section, { adapter.hideSection(section) }), section)
+                adapter.add(SimpleListImageItemRender(Color.BLUE), section)
+                adapter.add(SimpleListItemRender("Whats up test ?", section, {}), section)
+                adapter.add(SimpleListImageItemRender(Color.RED), section)
+            }
         }
+
         binding.demoRecyclerSimpleViewRecyclerview.setup(adapter, LinearLayoutManager(context.applicationContext))
     }
 
 }
 
 
-open class SimpleListItemRender(text: String) : BaseRenderModel<String, SimpleListItemBinding>(text, SimpleListItemBinding::class.java) {
+open class SimpleListItemRender(text: String, private val section: Int, private val callback: () -> Unit) : BaseRenderModel<String, SimpleListItemBinding>(text, SimpleListItemBinding::class.java) {
     override fun renderFunction(view: SimpleListItemBinding, model: String, viewHolder: BaseViewHolderItem<SimpleListItemBinding>) {
-        view.simpleListText.text = model
+        view.simpleListText.text = model + " section - " + section
+        view.root.setOnclickAsync { callback() }
     }
 
     override fun getInflaterFunction(): ViewInflatingFunction<SimpleListItemBinding> {

@@ -24,9 +24,9 @@ class SectionSwipeAdapterFragment : BaseDatabindingFragment<DemoRecyclerSectionS
 
     override fun useBinding() {
         LaunchInBackground("useBinding") {
-            val items = (0..100).map { SimpleSwipeItem("") { adapter.removeAt(it) } }
+            val items = (0..100).map { SimpleSwipeItem("") { adapter.removeAt(it, 0) } }
             LaunchInUi("useBindingInside") {
-                adapter.addAll(items)
+                adapter.addAll(items,0)
                 adapter.attachSwipeFeature(binding.demoRecyclerSearchableRecyclerview.recyclerView)
                 binding.demoRecyclerSearchableRecyclerview.setupAsync(adapter, LinearLayoutManager(context), this::refresh)
             }

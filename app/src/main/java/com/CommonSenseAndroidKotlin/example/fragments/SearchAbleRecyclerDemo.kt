@@ -29,9 +29,9 @@ class SearchAbleRecyclerDemo : BaseDatabindingFragment<DemoRecyclerSearchableBin
     override fun useBinding() {
         val items = mutableListOf<IRenderModelSearchItem<*, *, String>>(
                 SearchAbleSimpleListItemRender("First "),
-                SimpleListImageItemRender(Color.BLUE).toSearchable { _, _ -> false },
+                SimpleListImageItemRender(Color.BLUE, 0).toSearchable { _, _ -> false },
                 SearchAbleSimpleListItemRender("Whats up "),
-                SimpleListImageItemRender(Color.RED).toSearchable { _, _ -> false }
+                SimpleListImageItemRender(Color.RED, 0).toSearchable { _, _ -> false }
         ).repeateToSize(50000)
 
         adapter.clearAndSet(items, 0)

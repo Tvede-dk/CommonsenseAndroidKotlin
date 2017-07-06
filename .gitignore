@@ -35,3 +35,4 @@ captures/
 # Keystore files
 *.jks
 projectFilesBackup/
+reports/

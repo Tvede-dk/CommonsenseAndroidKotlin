@@ -277,12 +277,12 @@ abstract class AbstractDataBindingRecyclerAdapter<T>(context: Context) :
     }
 
     fun hideSection(sectionIndex: Int) {
-        val sectionLocation = dataCollection.ignoreSection(sectionIndex)
+        val sectionLocation = dataCollection.ignoreSection(sectionIndex) ?: return
         notifyItemRangeRemoved(sectionLocation.start, sectionLocation.endInclusive - sectionLocation.start)
     }
 
     fun showSection(sectionIndex: Int) {
-        val sectionLocation = dataCollection.acceptSection(sectionIndex)
+        val sectionLocation = dataCollection.acceptSection(sectionIndex) ?: return
         notifyItemRangeInserted(sectionLocation.start, sectionLocation.endInclusive - sectionLocation.start)
     }
 

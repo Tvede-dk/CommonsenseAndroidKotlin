@@ -143,8 +143,8 @@ class TypeSectionLookupRepresentative<T : TypeHashCodeLookupRepresent<Rep>, out 
     }
 
 
-    fun calculateLocationForSection(sectionIndex: Int): kotlin.ranges.IntRange? {
-        val dataItems = data.toList(sectionIndex).filter { !it.isIgnored }
+    fun calculateLocationForSection(@IntRange(from = 0) sectionIndex: Int): kotlin.ranges.IntRange? {
+        val dataItems = data.toList(sectionIndex + 1).filter { !it.isIgnored }
         if (dataItems.isEmpty()) {
             return null
         }
@@ -167,22 +167,28 @@ class TypeSectionLookupRepresentative<T : TypeHashCodeLookupRepresent<Rep>, out 
         TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
     }
 
-    fun ignoreSection(sectionIndex: Int): kotlin.ranges.IntRange {
+    fun ignoreSection(sectionIndex: Int): kotlin.ranges.IntRange? {
         addSectionIfMissing(sectionIndex)
         val location = calculateLocationForSection(sectionIndex)
+        if (data[sectionIndex].isIgnored) {
+            return null
+        }
         data[sectionIndex].isIgnored = true
         cachedSize -= data[sectionIndex].size
-        return location ?: 0..0
+        return location
     }
 
     /**
      * Inverse of ignore section.
      */
-    fun acceptSection(sectionIndex: Int): kotlin.ranges.IntRange {
+    fun acceptSection(sectionIndex: Int): kotlin.ranges.IntRange? {
         addSectionIfMissing(sectionIndex)
+        if (!data[sectionIndex].isIgnored) {
+            return null
+        }
         data[sectionIndex].isIgnored = false
         cachedSize += data[sectionIndex].size
-        return calculateLocationForSection(sectionIndex) ?: 0..0
+        return calculateLocationForSection(sectionIndex)
     }
 
     fun getSectionLocation(sectionIndex: Int): kotlin.ranges.IntRange? {

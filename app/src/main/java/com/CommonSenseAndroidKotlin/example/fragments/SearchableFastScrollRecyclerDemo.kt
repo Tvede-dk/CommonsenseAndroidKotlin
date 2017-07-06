@@ -72,7 +72,7 @@ class SearchableFastScrollRecyclerDemo : BaseDatabindingFragment<DemoRecyclerFas
 //                SearchAbleSimpleListDateTime(DateTime.now())
 //        ).repeateToSize(50000)
 
-        adapter.clearAndSet(items, 0)
+        adapter.clearAndSetSection(items, 0)
         binding.demoRecyclerSearchableRecyclerview.recyclerView.setup(adapter, LinearLayoutManager(context))
         binding.demoRecyclerSearchableFastscroll.setRecyclerView(binding.demoRecyclerSearchableRecyclerview.recyclerView)
     }

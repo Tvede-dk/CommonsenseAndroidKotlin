@@ -4,7 +4,7 @@ import android.content.Context
 import android.databinding.ViewDataBinding
 import android.support.v7.widget.RecyclerView
 import com.commonsense.android.kotlin.android.logging.L
-import com.commonsense.android.kotlin.extensions.collections.replace
+import com.commonsense.android.kotlin.collections.TypeSectionLookupRepresentative
 import kotlinx.coroutines.experimental.CommonPool
 import kotlinx.coroutines.experimental.android.UI
 import kotlinx.coroutines.experimental.channels.ActorJob
@@ -49,7 +49,9 @@ open class AbstractSearchableDataBindingRecyclerAdapter<
         F>(context: Context)
     : AbstractDataBindingRecyclerAdapter<T>(context.applicationContext) {
 
-    private val allDataCollection = mutableListOf<T>()
+    private val allDataCollection: TypeSectionLookupRepresentative<T, InflatingFunction<*>>
+            = TypeSectionLookupRepresentative()
+
     private var filterValue: F? = null
 
     //the "gatekeeper" for our filter function. will restrict acces so only one gets in. thus if we spam the filter, we should only use the latest filter.
@@ -61,12 +63,11 @@ open class AbstractSearchableDataBindingRecyclerAdapter<
             if (filter != filterValue) {
                 return
             }
-            val items: List<IRenderModelSearchItem<*, *, F>>
-            if (filter == null) {
-                items = allDataCollection.toList()
-            } else {
-                items = allDataCollection.toList().filter { isAcceptedByFilter(it, filter) }
+            L.error("filter", "on " + allDataCollection.size)
+            val items = allDataCollection.map {
+                it.collection.filter { isAcceptedByFilter(it, filter) }
             }
+            L.error("filter", "resulted in " + items.size)
             updateVisibly(items)
         } catch (exception: Exception) {
             L.error("fatal", "..", exception)
@@ -74,12 +75,12 @@ open class AbstractSearchableDataBindingRecyclerAdapter<
     }
 
     override fun add(newItem: T, atSection: Int) {
-        allDataCollection.add(newItem)
+        allDataCollection.add(newItem, atSection)
         performActionIfIsValidFilter(newItem, { super.add(newItem, atSection) })
     }
 
     override fun addAll(items: Collection<T>, atSection: Int) {
-        allDataCollection.addAll(items)
+        allDataCollection.addAll(items, atSection)
         items.forEach {
             performActionIfIsValidFilter(it, { super.add(it, atSection) })
         }
@@ -94,28 +95,28 @@ open class AbstractSearchableDataBindingRecyclerAdapter<
 
     override fun remove(newItem: T, atSection: Int) {
         super.remove(newItem, atSection)
-        allDataCollection.remove(newItem)
+        allDataCollection.removeItem(newItem, atSection)
     }
 
     override fun removeAt(row: Int, inSection: Int) {
         super.removeAt(row, inSection)
-        allDataCollection.removeAt(row)
+        allDataCollection.removeAt(row, inSection)
     }
 
-    override fun addAll(items: Collection<T>, atSection: Int, startPosition: Int) {
+    override fun addAll(items: Collection<T>, startPosition: Int, atSection: Int) {
         super.addAll(items, startPosition)
-        allDataCollection.addAll(startPosition, items)
+        allDataCollection.addAll(items, atSection, startPosition)
     }
 
-    override fun addAll(vararg items: T, atSection: Int, startPosition: Int) {
+    override fun addAll(vararg items: T, startPosition: Int, atSection: Int) {
         val asList = items.asList()
         super.addAll(asList, startPosition)
-        allDataCollection.addAll(startPosition, asList)
+        allDataCollection.addAll(asList, atSection, startPosition)
     }
 
-    override fun replace(newItem: T, position: Int) {
-        super.replace(newItem, position)
-        allDataCollection.replace(newItem, position)
+    override fun replace(newItem: T, position: Int, atSection: Int) {
+        super.replace(newItem, position, atSection)
+        allDataCollection.replace(newItem, position, atSection)
     }
 
     override fun removeIn(range: IntRange, atSection: Int) {
@@ -150,11 +151,14 @@ open class AbstractSearchableDataBindingRecyclerAdapter<
         filterActor.offer(newFilter)
     }
 
-    private suspend fun updateVisibly(data: List<T>) {
-        super.clearAndSetItemsNoNotify(data, 0)//TODO !!!!!!!!!!!!
+    private suspend fun updateVisibly(data: List<List<T>>) {
         launch(UI) {
+            super.clearNoNotify()
+            data.forEachIndexed { index, list ->
+                super.clearAndSetItemsNoNotify(list, index)
+            }
             super.notifyDataSetChanged()
-        }
+        }.join()
     }
 
     fun removeFilter() {
@@ -174,9 +178,18 @@ open class AbstractSearchableDataBindingRecyclerAdapter<
         filterActor.clear()
     }
 
-    fun getFilter(): F? {
-        return filterValue
+    fun getFilter(): F? = filterValue
+
+    override fun add(item: T, atRow: Int, atSection: Int) {
+        super.add(item, atRow, atSection)
+        allDataCollection.add(item, atRow, atSection)
     }
+
+    override fun clearAndSetSection(items: List<T>, atSection: Int) {
+        allDataCollection.clearAndSetSection(items, atSection)
+        super.clearAndSetSection(items, atSection)
+    }
+
 }
 
 open class BaseSearchableDataBindingRecyclerAdapter<Filter>(context: Context)
@@ -190,7 +203,6 @@ private class ConflatedActorHelper<F> {
     private var eventActor: ActorJob<F?>? = null
 
     fun offer(filter: F?) {
-
         eventActor?.offer(filter)
     }
 

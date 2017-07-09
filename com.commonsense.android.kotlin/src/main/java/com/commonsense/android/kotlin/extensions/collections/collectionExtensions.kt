@@ -1,46 +1,12 @@
 package com.commonsense.android.kotlin.extensions.collections
 
-import android.support.annotation.IntRange
 import android.support.annotation.Size
-import android.util.SparseIntArray
 import onTrue
 
 /**
  * Created by Kasper Tvede on 30-09-2016.
  */
-
-
-fun SparseIntArray.clearAndSet(input: List<Pair<Int, Int>>) {
-    clear()
-    input.forEach { put(it.first, it.second) }
-}
-
-fun SparseIntArray.clearAndSet(input: Map<Int, Int>) {
-    clear()
-    input.forEach { put(it.key, it.value) }
-}
-
-fun <T> MutableList<T>.removeAtOr(index: Int, default: T?): T? {
-    return if (isIndexValid(index)) {
-        removeAt(index)
-    } else {
-        default
-    }
-}
-
 fun <T> Collection<T>.isIndexValid(index: Int) = index >= 0 && index < count()
-
-inline fun <T> MutableList<T>.findAndRemove(crossinline foundAction: (T) -> Boolean) {
-    val index = this.indexOfFirst(foundAction)
-    isIndexValid(index).onTrue { removeAt(index) }
-}
-
-
-inline fun <T> MutableList<T>.findAndRemoveAll(crossinline findAction: (T) -> Boolean): List<T> {
-    val collection = this.filter(findAction)
-    removeAll(collection)
-    return collection
-}
 
 fun <T> Collection<T>.getSafe(index: Int): T? {
     return if (this.isIndexValid(index)) {
@@ -49,7 +15,6 @@ fun <T> Collection<T>.getSafe(index: Int): T? {
         null
     }
 }
-
 
 data class CategorizationResult<out T>(val categoryA: List<T>, val categoryB: List<T>)
 
@@ -93,26 +58,6 @@ inline fun <reified T> List<T>.repeateToSize(size: Int): List<T> {
     return resultList + this.subList(0, missingItemsToCopy)
 }
 
-
-fun <T> MutableList<T>.replace(item: T, @IntRange(from = 0) position: Int) {
-    if (isIndexValid(position)) {
-        this.add(position, item)
-        this.removeAt(position + 1) //the +1 : we just moved all content before the original position.
-    }
-}
-
-fun <E> MutableCollection<E>.clearAndAddAll(collection: Collection<E>) {
-    clear()
-    addAll(collection)
-}
-
-fun <T> MutableSet<T>.toggleExistance(item: T) {
-    if (contains(item)) {
-        remove(item)
-    } else {
-        add(item)
-    }
-}
 
 /**
  * Returns a limited view of this list, by limiting the size of it (if the list is shorter than the limit,

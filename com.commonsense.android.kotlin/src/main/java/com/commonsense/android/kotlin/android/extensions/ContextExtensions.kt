@@ -13,6 +13,7 @@ import android.support.v4.content.ContextCompat
 import android.support.v7.content.res.AppCompatResources
 import android.widget.Toast
 import com.commonsense.android.kotlin.android.DangerousPermissionString
+import com.commonsense.android.kotlin.android.activities.InbuiltWebview
 import com.commonsense.android.kotlin.android.logging.L
 import com.commonsense.kotlin.R
 import kotlinx.coroutines.experimental.android.UI
@@ -75,11 +76,10 @@ fun Context.startUrl(url: String, forceHttps: Boolean = true, useInbuildBrowser:
     } catch (notFound: ActivityNotFoundException) {
         L.error("ActivityExtensions", "Activity not found to launch url:$safeUrl", notFound)
         if (useInbuildBrowser) {
-
+            InbuiltWebview.showUrl(safeUrl, this)
         } else {
             safeToast(R.string.missing_browser, Toast.LENGTH_SHORT)
         }
-        //TODO present inbuild webview.
     }
 }
 

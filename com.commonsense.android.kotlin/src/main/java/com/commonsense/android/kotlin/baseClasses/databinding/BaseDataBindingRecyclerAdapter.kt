@@ -2,7 +2,9 @@ package com.commonsense.android.kotlin.baseClasses.databinding
 
 import android.content.Context
 import android.databinding.ViewDataBinding
+import android.support.annotation.AnyThread
 import android.support.annotation.IntRange
+import android.support.annotation.UiThread
 import android.support.v7.widget.RecyclerView
 import android.view.LayoutInflater
 import android.view.ViewGroup
@@ -44,6 +46,7 @@ abstract class BaseRenderModel<
         T : Any,
         Vm : ViewDataBinding>(val item: T, classType: Class<Vm>)
     : IRenderModelItem<T, Vm> {
+
 
     override fun getValue(): T = item
 
@@ -120,6 +123,10 @@ open class RenderModelItem<
 abstract class AbstractDataBindingRecyclerAdapter<T>(context: Context) :
         RecyclerView.Adapter<BaseViewHolderItem<*>>() where T : IRenderModelItem<*, *> {
 
+    override fun getItemId(position: Int): Long {
+        return RecyclerView.NO_ID
+    }
+
     protected val dataCollection: TypeSectionLookupRepresentative<T, InflatingFunction<*>>
             = TypeSectionLookupRepresentative()
 
@@ -128,6 +135,7 @@ abstract class AbstractDataBindingRecyclerAdapter<T>(context: Context) :
     private val inflater: LayoutInflater by lazy {
         LayoutInflater.from(context)
     }
+
 
     override fun onCreateViewHolder(parent: ViewGroup?, @IntRange(from = 0) viewType: Int): BaseViewHolderItem<*>? {
         val rep = dataCollection.getTypeRepresentativeFromTypeValue(viewType)
@@ -162,16 +170,16 @@ abstract class AbstractDataBindingRecyclerAdapter<T>(context: Context) :
         notifyItemRangeInserted(startPos, items.size)
     }
 
-    open fun add(item: T, atSection: Int, atRow: Int) = updateData {
-        dataCollection.add(item, atSection, atRow)
+    open fun add(item: T, atRow: Int, atSection: Int) = updateData {
+        dataCollection.add(item, atRow, atSection)
     }
 
-    open fun addAll(items: Collection<T>, atSection: Int, startPosition: Int) = updateData {
+    open fun addAll(items: Collection<T>, startPosition: Int, atSection: Int) = updateData {
         dataCollection.addAll(items, atSection, startPosition)
         notifyItemRangeInserted(startPosition, items.size)
     }
 
-    open fun addAll(vararg items: T, atSection: Int, startPosition: Int) = updateData {
+    open fun addAll(vararg items: T, startPosition: Int, atSection: Int) = updateData {
         dataCollection.addAll(items.asList(), startPosition)
         notifyItemRangeInserted(startPosition, items.size)
     }
@@ -181,25 +189,16 @@ abstract class AbstractDataBindingRecyclerAdapter<T>(context: Context) :
     }
 
     open fun removeAt(row: Int, inSection: Int) = updateData {
-        //if (dataCollection.isIndexValid(row)) {
         if (dataCollection.removeAt(row, inSection)) {
             notifyItemRemoved(row)
         }
-        //}
     }
 
 
     open fun removeIn(range: kotlin.ranges.IntRange, atSection: Int) = updateData {
-
         if (dataCollection.removeInRange(range, atSection)) {
             notifyItemRangeRemoved(range.start, range.length)
         }
-
-//        if (dataCollection.isRangeValid(range)) {
-//            dataCollection.removeIn(range)
-//            notifyItemRangeRemoved(range.start, range.length)
-//        }
-
     }
 
 
@@ -229,17 +228,18 @@ abstract class AbstractDataBindingRecyclerAdapter<T>(context: Context) :
         notifyItemRangeRemoved(location.start, location.length)
     }
 
-    open fun replace(newItem: T, position: Int) = updateData {
-        dataCollection.replace(newItem, position)
+    open fun replace(newItem: T, position: Int, atSection: Int) = updateData {
+        dataCollection.replace(newItem, position, atSection)
         notifyItemChanged(position)
     }
 
+    @UiThread
     protected fun clearAndSetItemsNoNotify(items: List<T>, atSection: Int) {
         stopScroll()
         dataCollection.clearAndSetSection(items, atSection)
     }
 
-    private fun stopScroll() {
+    protected fun stopScroll() {
         listeningRecyclers.forEach { recyclerView ->
             recyclerView.get()?.stopScroll()
         }
@@ -276,9 +276,9 @@ abstract class AbstractDataBindingRecyclerAdapter<T>(context: Context) :
         return dataCollection.getTypeRepresentativeFromTypeValue(viewHolderItem.viewBindingTypeValue)
     }
 
-    fun getItemFromRawIndex(rawIndex: Int): T {
+    fun getItemFromRawIndex(rawIndex: Int): T? {
         val (row, section) = dataCollection.indexToPath(rawIndex)
-        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+        return dataCollection[row, section]
     }
 
     fun hideSection(sectionIndex: Int) {
@@ -289,6 +289,14 @@ abstract class AbstractDataBindingRecyclerAdapter<T>(context: Context) :
     fun showSection(sectionIndex: Int) {
         val sectionLocation = dataCollection.acceptSection(sectionIndex) ?: return
         notifyItemRangeInserted(sectionLocation.start, sectionLocation.endInclusive - sectionLocation.start)
+    }
+
+    val sectionCount: Int
+        get() = dataCollection.size
+
+    @AnyThread
+    protected fun clearNoNotify() {
+        dataCollection.clear()
     }
 
 }

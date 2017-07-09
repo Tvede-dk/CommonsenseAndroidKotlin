@@ -5,11 +5,9 @@ import android.graphics.PorterDuff
 import android.graphics.PorterDuffColorFilter
 import android.support.v7.widget.LinearLayoutManager
 import android.view.View
-import com.CommonSenseAndroidKotlin.example.R
 import com.CommonSenseAndroidKotlin.example.databinding.DemoRecyclerSimpleViewBinding
 import com.CommonSenseAndroidKotlin.example.databinding.SimpleListImageItemBinding
 import com.CommonSenseAndroidKotlin.example.databinding.SimpleListItemBinding
-import com.commonsense.android.kotlin.android.extensions.getColorSafe
 import com.commonsense.android.kotlin.android.extensions.widets.setOnClick
 import com.commonsense.android.kotlin.android.extensions.widets.setOnclickAsync
 import com.commonsense.android.kotlin.android.extensions.widets.setup
@@ -29,7 +27,7 @@ open class SimpleRecyclerDemo : BaseDatabindingFragment<DemoRecyclerSimpleViewBi
 
     override fun useBinding() {
         adapter.clear()
-        for (section in 0 until 5) {
+        for (section in 0 until 500) {
             for (i in 0 until 10) {
                 adapter.add(SimpleListItemRender("First text is good text", section, { adapter.hideSection(section) }), section)
                 adapter.add(SimpleListImageItemRender(Color.BLUE, section), section)
@@ -40,7 +38,7 @@ open class SimpleRecyclerDemo : BaseDatabindingFragment<DemoRecyclerSimpleViewBi
 
         binding.demoRecyclerSimpleViewRecyclerview.setup(adapter, LinearLayoutManager(context.applicationContext))
         binding.demoRecyclerSimpleViewReset.setOnClick {
-            for (i in 0 until 5) {
+            for (i in 0 until adapter.sectionCount) {
                 adapter.showSection(i)
             }
         }
@@ -48,16 +46,8 @@ open class SimpleRecyclerDemo : BaseDatabindingFragment<DemoRecyclerSimpleViewBi
 }
 
 fun setColorUsingBackground(view: View, section: Int) {
-    val color = when (section) {
-        0 -> R.color.colorPrimary
-        1 -> R.color.colorAccent
-        2 -> R.color.bright_foreground_material_dark
-        3 -> R.color.yellow
-        4 -> R.color.coffee
-
-        else -> R.color.GREEN
-    }
-    view.setBackgroundColor(view.context.getColorSafe(color))
+    val color = Color.rgb(section % 20 + 80, section % 50 + 50, section % 100 + 20)
+    view.setBackgroundColor(color)
 }
 
 

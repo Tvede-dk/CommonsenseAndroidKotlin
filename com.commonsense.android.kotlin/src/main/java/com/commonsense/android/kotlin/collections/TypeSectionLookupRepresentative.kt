@@ -3,6 +3,8 @@ package com.commonsense.android.kotlin.collections
 import android.support.annotation.IntRange
 import android.util.SparseArray
 import com.commonsense.android.kotlin.extensions.collections.getSafe
+import com.commonsense.android.kotlin.extensions.collections.removeAll
+import com.commonsense.android.kotlin.extensions.collections.replace
 import com.commonsense.android.kotlin.extensions.collections.toList
 import length
 
@@ -12,10 +14,7 @@ import length
 
 class TypeSection<T> {
     val size: Int
-        get() = collection.size /*+
-                header.isNotNull.map(1, 0) +
-                footer.isNotNull.map(1, 0)*/
-
+        get() = collection.size
 
     val collection: MutableList<T> = mutableListOf()
 
@@ -23,16 +22,15 @@ class TypeSection<T> {
      * if this section is to be ignored. (in ui terms, hidden for example)
      */
     var isIgnored = false
+//
+//    var header: T? = null
+//
+//    var footer: T? = null
 
-    var header: T? = null
-
-    var footer: T? = null
-
-
-    //todo, other things, like first and last things as well ?
 }
 
 class TypeSectionLookupRepresentative<T : TypeHashCodeLookupRepresent<Rep>, out Rep : Any> {
+
 
     private val lookup = TypeRepresentative<T, Rep>()
 
@@ -98,7 +96,7 @@ class TypeSectionLookupRepresentative<T : TypeHashCodeLookupRepresent<Rep>, out 
         return lookup.getTypeRepresentativeFromTypeValue(type)
     }
 
-    fun add(item: T, atSection: Int, atRow: Int) = ensureSection(atSection) {
+    fun add(item: T, atRow: Int, atSection: Int) = ensureSection(atSection) {
         data[atSection].collection.add(atRow, item)
         lookup.add(item)
     }
@@ -116,8 +114,8 @@ class TypeSectionLookupRepresentative<T : TypeHashCodeLookupRepresent<Rep>, out 
         return removed.start until largestLength
     }
 
-    fun replace(newItem: T, position: Int) {
-        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+    fun replace(newItem: T, position: Int, inSection: Int) = ensureSection(inSection) {
+        data[inSection].collection.replace(newItem, position)
     }
 
     fun clear() {
@@ -126,7 +124,7 @@ class TypeSectionLookupRepresentative<T : TypeHashCodeLookupRepresent<Rep>, out 
         cachedSize = 0
     }
 
-    fun addAll(items: Collection<T>, atSection: Int, startPosition: Int) = ensureSection(atSection) {
+    fun addAll(items: Collection<T>, startPosition: Int, atSection: Int) = ensureSection(atSection) {
         data[atSection].collection.addAll(startPosition, items)
         lookup.addAll(items)
     }
@@ -161,17 +159,20 @@ class TypeSectionLookupRepresentative<T : TypeHashCodeLookupRepresent<Rep>, out 
     }
 
     fun removeAt(row: Int, inSection: Int): Boolean {
-        val item = data.get(inSection)?.collection?.removeAt(row)
+        val item = data[inSection]?.collection?.removeAt(row)
         item?.let { lookup.remove(it) }
         return item != null
     }
 
     fun removeInRange(range: kotlin.ranges.IntRange, atSection: Int): Boolean {
-        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+        addSectionIfMissing(atSection)
+        val section = data[atSection]
+        return section.collection.removeAll(range)
     }
 
     fun indexOf(newItem: T, atSection: Int): Int {
-        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+        addSectionIfMissing(atSection)
+        return data[atSection].collection.indexOf(newItem)
     }
 
     fun ignoreSection(sectionIndex: Int): kotlin.ranges.IntRange? {
@@ -207,6 +208,10 @@ class TypeSectionLookupRepresentative<T : TypeHashCodeLookupRepresent<Rep>, out 
         val location = calculateLocationForSection(atSection) ?: return null
         data[atSection].collection.clear()
         return location
+    }
+
+    fun <U> map(converter: (TypeSection<T>) -> U): List<U> {
+        return (0 until data.size()).map { converter(data.get(it)) }
     }
 
 }

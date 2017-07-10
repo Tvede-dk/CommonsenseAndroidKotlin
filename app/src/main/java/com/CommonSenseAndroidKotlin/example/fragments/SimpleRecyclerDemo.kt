@@ -8,7 +8,6 @@ import android.view.View
 import com.CommonSenseAndroidKotlin.example.databinding.DemoRecyclerSimpleViewBinding
 import com.CommonSenseAndroidKotlin.example.databinding.SimpleListImageItemBinding
 import com.CommonSenseAndroidKotlin.example.databinding.SimpleListItemBinding
-import com.commonsense.android.kotlin.android.extensions.widets.setOnClick
 import com.commonsense.android.kotlin.android.extensions.widets.setOnclickAsync
 import com.commonsense.android.kotlin.android.extensions.widets.setup
 import com.commonsense.android.kotlin.baseClasses.databinding.*
@@ -24,7 +23,6 @@ open class SimpleRecyclerDemo : BaseDatabindingFragment<DemoRecyclerSimpleViewBi
         BaseDataBindingRecyclerAdapter(context.applicationContext)
     }
 
-
     override fun useBinding() {
         adapter.clear()
         for (section in 0..10 step 5) {
@@ -37,7 +35,7 @@ open class SimpleRecyclerDemo : BaseDatabindingFragment<DemoRecyclerSimpleViewBi
         }
 
         binding.demoRecyclerSimpleViewRecyclerview.setup(adapter, LinearLayoutManager(context.applicationContext))
-        binding.demoRecyclerSimpleViewReset.setOnClick {
+        binding.demoRecyclerSimpleViewReset.setOnclickAsync {
             for (i in 0 until adapter.sectionCount) {
                 adapter.showSection(i)
             }

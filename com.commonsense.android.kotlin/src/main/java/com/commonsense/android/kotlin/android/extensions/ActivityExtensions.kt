@@ -48,13 +48,3 @@ inline fun AppCompatActivity.setSupportActionBarAndApply(toolbar: Toolbar, cross
     setSupportActionBar(toolbar)
     supportActionBar?.apply(actionToApply)
 }
-
-fun Activity.openCamera() {
-    val takePictureIntent = Intent(MediaStore.ACTION_IMAGE_CAPTURE)
-    val photo = File(Environment.getExternalStorageDirectory(), "Pic.jpg")
-    intent.putExtra(MediaStore.EXTRA_OUTPUT,
-            Uri.fromFile(photo))
-    if (takePictureIntent.resolveActivity(packageManager) != null) {
-        startActivityForResult(takePictureIntent, 7896)//For testing.
-    }
-}

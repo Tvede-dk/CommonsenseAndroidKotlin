@@ -1,66 +1,80 @@
 <?xml version="1.0" encoding="utf-8"?>
-<layout xmlns:app="http://schemas.android.com/apk/res-auto">
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
 
-    <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+
+    <ScrollView
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:background="#EEE"
-        android:orientation="vertical">
+        android:layout_height="match_parent">
 
-        <TextView
-            android:id="@+id/main_title"
+        <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:gravity="center_horizontal"
-            android:text="title" />
+            android:layout_height="match_parent"
+            android:background="#EEE"
+            android:orientation="vertical">
+
+            <TextView
+                android:id="@+id/main_title"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center_horizontal"
+                android:text="title" />
 
 
-        <Button
-            android:id="@+id/activity_main_basic_recycler_demo"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="Simple recycler view demo" />
+            <Button
+                android:id="@+id/activity_main_basic_recycler_demo"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Simple recycler view demo" />
 
-        <Button
-            android:id="@+id/activity_main_advance_recycler_demo"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="advanced recycler view demo" />
+            <Button
+                android:id="@+id/activity_main_advance_recycler_demo"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="advanced recycler view demo" />
 
-        <Button
-            android:id="@+id/activity_main_advance_recycler_demo_fast_scroller"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="advanced recycler view demo" />
-
-
-        <Button
-            android:id="@+id/activity_main_demo4"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="databinding demo" />
-        <Button
-            android:id="@+id/activity_main_demo5"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="maxed out recycler" />
+            <Button
+                android:id="@+id/activity_main_advance_recycler_demo_fast_scroller"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="advanced recycler view demo" />
 
 
-        <Button
-            android:id="@+id/activity_main_advance_async_button"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="advanced Async button (please spam)" />
+            <Button
+                android:id="@+id/activity_main_demo4"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="databinding demo" />
 
-        <com.commonsense.android.kotlin.widgets.ToggleImageButton
-            android:layout_width="200dp"
-            android:layout_height="200dp"
-            android:layout_gravity="center"
-            android:clickable="true"
-            android:foreground="?selectableItemBackgroundBorderless"
-            app:selectedColor="#00f"
-            app:srcCompat="@drawable/ic_memory_black_24dp"
-            app:unselectedColor="#f00" />
+            <Button
+                android:id="@+id/activity_main_demo5"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="maxed out recycler" />
 
-    </LinearLayout>
+
+            <Button
+                android:id="@+id/activity_main_advance_async_button"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="advanced Async button (please spam)" />
+
+            <Button
+                android:id="@+id/activity_main_camera_button"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Camera fun" />
+
+            <com.commonsense.android.kotlin.widgets.ToggleImageButton
+                android:layout_width="200dp"
+                android:layout_height="200dp"
+                android:layout_gravity="center"
+                android:clickable="true"
+                android:foreground="?selectableItemBackgroundBorderless"
+                app:selectedColor="#00f"
+                app:srcCompat="@drawable/ic_memory_black_24dp"
+                app:unselectedColor="#f00" />
+
+        </LinearLayout>
+    </ScrollView>
 </layout>

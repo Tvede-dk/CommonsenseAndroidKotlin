@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout>
+
+    <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical">
+
+        <Button
+            android:id="@+id/camera_fragment_images_take"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="take picture" />
+
+        <Button
+            android:id="@+id/camera_fragment_images_choose"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="choose from library" />
+
+        <Button
+            android:id="@+id/camera_fragment_images_reset"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="clear" />
+
+        <com.commonsense.android.kotlin.widgets.SwipeRefreshRecyclerView
+            android:id="@+id/camera_fragment_images_list"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent" />
+
+    </LinearLayout>
+</layout>

@@ -58,6 +58,14 @@ inline fun <reified T> List<T>.repeateToSize(size: Int): List<T> {
     return resultList + this.subList(0, missingItemsToCopy)
 }
 
+inline fun <T> Collection<T>.foreachUntil(action: (item: T) -> Boolean) {
+    forEach {
+        if (action(it)) {
+            return@forEach //break all iteration.
+        }
+    }
+}
+
 
 /**
  * Returns a limited view of this list, by limiting the size of it (if the list is shorter than the limit,

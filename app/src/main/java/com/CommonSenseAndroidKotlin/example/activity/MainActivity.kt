@@ -12,8 +12,6 @@ import com.commonsense.android.kotlin.baseClasses.databinding.BaseDatabindingAct
 
 class MainActivity : BaseDatabindingActivity<ActivityMainBinding>() {
 
-    var counter = 0
-
     override fun useBinding() {
 
         binding.activityMainBasicRecyclerDemo.setOnClick {
@@ -33,10 +31,13 @@ class MainActivity : BaseDatabindingActivity<ActivityMainBinding>() {
         }
 
         binding.activityMainAdvanceAsyncButton.setOnclickAsync {
-            //safeToast("async clicked ${counter++}")
             EditDatabindingFragment().show(supportFragmentManager, "test")
-            //delay(4000)
         }
+
+        binding.activityMainCameraButton.setOnClick {
+            startActivity(Intent(applicationContext, CameraActivity::class.java))
+        }
+
 
     }
 

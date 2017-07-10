@@ -25,6 +25,8 @@
         <activity android:name=".activity.Demo3Activity" />
         <activity android:name=".activity.Demo4Activity" />
         <activity android:name=".activity.Demo5Activity" />
+        <activity android:name=".activity.CameraActivity" />
+
     </application>
 
 </manifest>

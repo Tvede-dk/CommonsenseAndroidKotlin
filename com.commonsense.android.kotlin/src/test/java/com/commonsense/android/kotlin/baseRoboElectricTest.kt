@@ -15,7 +15,7 @@ import org.robolectric.annotation.Config
  */
 
 @RunWith(RobolectricTestRunner::class)
-@Config(constants = BuildConfig::class)
+@Config(constants = BuildConfig::class, sdk = intArrayOf(24))
 abstract class BaseRoboElectricTest {
     val context: Context by lazy {
         RuntimeEnvironment.application

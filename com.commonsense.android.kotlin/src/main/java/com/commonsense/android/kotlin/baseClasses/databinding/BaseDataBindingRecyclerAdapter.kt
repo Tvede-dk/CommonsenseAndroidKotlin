@@ -143,15 +143,15 @@ abstract class AbstractDataBindingRecyclerAdapter<T>(context: Context) :
     }
 
     override fun getItemViewType(@IntRange(from = 0) position: Int): Int {
-        val (row, section) = dataCollection.indexToPath(position)
-        return dataCollection[row, section]?.getTypeValue() ?: 0
+        val index = dataCollection.indexToPath(position) ?: return 0
+        return dataCollection[index]?.getTypeValue() ?: 0
 
     }
 
     override fun onBindViewHolder(holder: BaseViewHolderItem<*>, @IntRange(from = 0) position: Int) {
         //lookup type to converter, then apply model on view using converter
-        val (row, section) = dataCollection.indexToPath(position)
-        val render = dataCollection[row, section]
+        val index = dataCollection.indexToPath(position) ?: return
+        val render = dataCollection[index]
         render?.bindToViewHolder(holder)
     }
 
@@ -277,8 +277,8 @@ abstract class AbstractDataBindingRecyclerAdapter<T>(context: Context) :
     }
 
     fun getItemFromRawIndex(rawIndex: Int): T? {
-        val (row, section) = dataCollection.indexToPath(rawIndex)
-        return dataCollection[row, section]
+        val index = dataCollection.indexToPath(rawIndex) ?: return null
+        return dataCollection[index]
     }
 
     fun hideSection(sectionIndex: Int) {

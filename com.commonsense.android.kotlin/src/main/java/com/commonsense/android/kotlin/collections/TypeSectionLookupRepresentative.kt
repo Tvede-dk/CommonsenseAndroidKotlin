@@ -81,6 +81,8 @@ class TypeSectionLookupRepresentative<T : TypeHashCodeLookupRepresent<Rep>, out 
 
     operator fun get(@IntRange(from = 0) atRow: Int, @IntRange(from = 0) atSection: Int): T? = getItem(atRow, atSection)
 
+    operator fun get(index: IndexPath): T? = getItem(index.row, index.section)
+
     private inline fun ensureSection(@IntRange(from = 0) atSection: Int, crossinline function: () -> Unit): Unit {
         addSectionIfMissing(atSection)
         function()
@@ -129,7 +131,7 @@ class TypeSectionLookupRepresentative<T : TypeHashCodeLookupRepresent<Rep>, out 
         lookup.addAll(items)
     }
 
-    fun indexToPath(position: Int): IndexPath {
+    fun indexToPath(position: Int): IndexPath? {
         //naive implementation
 
         var currentPosition = position
@@ -144,7 +146,7 @@ class TypeSectionLookupRepresentative<T : TypeHashCodeLookupRepresent<Rep>, out 
             }
             currentPosition -= item.size
         }
-        return IndexPath(0, 0)
+        return null
     }
 
 

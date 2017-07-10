@@ -1,6 +1,7 @@
 package com.commonsense.android.kotlin.extensions
 
 import android.text.Editable
+import com.commonsense.android.kotlin.android.logging.L
 import kotlin.system.measureNanoTime
 
 /**
@@ -23,3 +24,20 @@ val Any?.isNull
 
 val Any?.isNotNull
     get() = this != null
+
+
+inline fun tryAndLog(logTitle: String, crossinline action: () -> Unit) {
+    try {
+        action()
+    } catch (exception: Exception) {
+        L.error(logTitle, "", exception)
+    }
+}
+
+suspend fun tryAndLogSuspend(logTitle: String, action: suspend () -> Unit) {
+    try {
+        action()
+    } catch (exception: Exception) {
+        L.error(logTitle, "", exception)
+    }
+}

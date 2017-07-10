@@ -5,8 +5,8 @@ import android.app.Activity
 import android.content.Context
 import android.content.pm.PackageManager
 import android.support.annotation.IntRange
-import android.support.annotation.MainThread
 import android.support.annotation.StringDef
+import android.support.annotation.UiThread
 import android.support.v4.app.ActivityCompat
 import android.support.v4.content.ContextCompat
 import com.commonsense.android.kotlin.android.extensions.checkPermission
@@ -115,31 +115,35 @@ enum class PermissionEnum(@DangerousPermissionString val permissionValue: String
 
 }
 
-@MainThread
+@UiThread
 fun PermissionEnum.useIfPermitted(context: Context, usePermission: () -> Unit, useError: () -> Unit) {
     havePermission(context).ifTrue(usePermission).ifFalse(useError)
 }
 
-@MainThread
+@UiThread
 fun PermissionEnum.use(handler: PermissionsHandling, activity: Activity, function: () -> Unit, errorFunction: () -> Unit) {
     handler.performActionForPermission(permissionValue, activity, function, errorFunction)
 }
 
-@MainThread
+@UiThread
 inline fun PermissionEnum.use(context: Context, crossinline usePermission: () -> Unit) {
     havePermission(context).ifTrue(usePermission)
 }
 
-@MainThread
+@UiThread
 fun PermissionEnum.havePermission(context: Context): Boolean {
     return ContextCompat.checkSelfPermission(context, permissionValue).isGranted()
 }
 
-@MainThread
+@UiThread
 fun BaseActivity.use(permission: PermissionEnum, usePermission: () -> Unit, onFailed: (() -> Unit)? = null) {
     permissionHandler.performActionForPermission(permission.permissionValue, this, usePermission, onFailed ?: {})
 }
 
+@UiThread
+fun BaseActivity.askAndUsePermission(permission: PermissionEnum, usePermission: () -> Unit) {
+    permissionHandler.performActionForPermission(permission.permissionValue, this, usePermission, {})
+}
 
 /**
  * annotates all the dangerous permissions strings...

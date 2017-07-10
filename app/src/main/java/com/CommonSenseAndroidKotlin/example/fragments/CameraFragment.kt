@@ -20,7 +20,10 @@ class CameraFragment : BaseDatabindingFragment<CameraFragmentDemoBinding>() {
 
     override fun useBinding() {
         binding.cameraFragmentImagesTake.setOnclickAsync {
-            imageHelper.getImage()
+            imageHelper.getImage(fromCamera = true)
+        }
+        binding.cameraFragmentImagesChoose.setOnclickAsync {
+            imageHelper.getImage(fromCamera = false)
         }
     }
 

@@ -8,6 +8,8 @@ import android.support.annotation.UiThread
 import android.util.AttributeSet
 import android.view.View
 import android.view.ViewTreeObserver
+import com.commonsense.android.kotlin.extensions.tryAndLog
+import com.commonsense.android.kotlin.extensions.tryAndLogSuspend
 import kotlinx.coroutines.experimental.android.UI
 import kotlinx.coroutines.experimental.channels.Channel
 import kotlinx.coroutines.experimental.channels.actor
@@ -51,7 +53,7 @@ fun ViewTreeObserver.removeOnGlobalLayoutListenerCompact(listener: ViewTreeObser
 @UiThread
 fun View.setOnclickAsyncSuspend(action: suspend () -> Unit) {
     val eventActor = actor<Unit>(UI, capacity = Channel.CONFLATED) {
-        channel.consumeEach { action() }
+        channel.consumeEach { tryAndLogSuspend("onclickAsyncSuspend", action) }
     }
     setOnClick { eventActor.offer(Unit) }
 }
@@ -59,7 +61,9 @@ fun View.setOnclickAsyncSuspend(action: suspend () -> Unit) {
 @UiThread
 fun View.setOnclickAsync(action: () -> Unit) {
     val eventActor = actor<Unit>(UI, capacity = Channel.CONFLATED) {
-        channel.consumeEach { action() }
+        channel.consumeEach {
+            tryAndLog("onclickAsync", action)
+        }
     }
     setOnClick { eventActor.offer(Unit) }
 }

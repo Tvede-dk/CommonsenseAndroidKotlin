@@ -6,6 +6,7 @@ import com.commonsense.android.kotlin.extensions.collections.getSafe
 import com.commonsense.android.kotlin.extensions.collections.removeAll
 import com.commonsense.android.kotlin.extensions.collections.replace
 import com.commonsense.android.kotlin.extensions.collections.toList
+import ifTrue
 import length
 
 /**
@@ -101,6 +102,7 @@ class TypeSectionLookupRepresentative<T : TypeHashCodeLookupRepresent<Rep>, out 
     fun add(item: T, atRow: Int, atSection: Int) = ensureSection(atSection) {
         data[atSection].collection.add(atRow, item)
         lookup.add(item)
+        cachedSize += 1
     }
 
     /**
@@ -112,7 +114,7 @@ class TypeSectionLookupRepresentative<T : TypeHashCodeLookupRepresent<Rep>, out 
         if (removed == null) {
             return calculateLocationForSection(atSection)
         }
-        val largestLength = maxOf(removed.length, items.size)
+        val largestLength = removed.start + maxOf(removed.length, items.size) + 1
         return removed.start until largestLength
     }
 
@@ -129,6 +131,7 @@ class TypeSectionLookupRepresentative<T : TypeHashCodeLookupRepresent<Rep>, out 
     fun addAll(items: Collection<T>, startPosition: Int, atSection: Int) = ensureSection(atSection) {
         data[atSection].collection.addAll(startPosition, items)
         lookup.addAll(items)
+        cachedSize += items.size
     }
 
     fun indexToPath(position: Int): IndexPath? {
@@ -152,25 +155,30 @@ class TypeSectionLookupRepresentative<T : TypeHashCodeLookupRepresent<Rep>, out 
 
 
     fun calculateLocationForSection(@IntRange(from = 0) sectionIndex: Int): kotlin.ranges.IntRange? {
-        val dataItems = data.toList(sectionIndex + 1).filter { !it.isIgnored }
+        val dataItems = data.toList(sectionIndex).filter { !it.value.isIgnored }
         if (dataItems.isEmpty()) {
             return null
         }
-        val start = dataItems.dropLast(1).sumBy { it.size }
-        val end = dataItems.last().size + start
+        val start = dataItems.dropLast(1).sumBy { it.value.size }
+        val end = dataItems.last().value.size + start
         return start..end
     }
 
     fun removeAt(row: Int, inSection: Int): Boolean {
         val item = data[inSection]?.collection?.removeAt(row)
-        item?.let { lookup.remove(it) }
+        item?.let {
+            lookup.remove(it)
+            cachedSize += 1
+        }
         return item != null
     }
 
     fun removeInRange(range: kotlin.ranges.IntRange, atSection: Int): Boolean {
         addSectionIfMissing(atSection)
         val section = data[atSection]
-        return section.collection.removeAll(range)
+        val didRemove = section.collection.removeAll(range)
+        didRemove.ifTrue { cachedSize -= range.length }
+        return didRemove
     }
 
     fun indexOf(newItem: T, atSection: Int): Int {
@@ -209,6 +217,7 @@ class TypeSectionLookupRepresentative<T : TypeHashCodeLookupRepresent<Rep>, out 
     fun clearSection(atSection: Int): kotlin.ranges.IntRange? {
         addSectionIfMissing(atSection)
         val location = calculateLocationForSection(atSection) ?: return null
+        cachedSize -= data[atSection].collection.size
         data[atSection].collection.clear()
         return location
     }

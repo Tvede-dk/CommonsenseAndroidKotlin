@@ -1,11 +1,18 @@
 package com.CommonSenseAndroidKotlin.example.fragments
 
+import android.graphics.Bitmap
+import android.net.Uri
+import android.provider.MediaStore
+import android.support.v7.widget.LinearLayoutManager
 import com.CommonSenseAndroidKotlin.example.databinding.CameraFragmentDemoBinding
+import com.CommonSenseAndroidKotlin.example.databinding.SimpleImageListItemBinding
 import com.commonsense.android.kotlin.android.extensions.widets.setOnclickAsync
 import com.commonsense.android.kotlin.android.image.PictureRetriver
 import com.commonsense.android.kotlin.baseClasses.BaseActivity
-import com.commonsense.android.kotlin.baseClasses.databinding.BaseDatabindingFragment
-import com.commonsense.android.kotlin.baseClasses.databinding.InflateBinding
+import com.commonsense.android.kotlin.baseClasses.databinding.*
+import com.commonsense.android.kotlin.extensions.tryAndLog
+import kotlinx.coroutines.experimental.android.UI
+import kotlinx.coroutines.experimental.launch
 
 /**
  * Created by Kasper Tvede on 10-07-2017.
@@ -15,7 +22,11 @@ class CameraFragment : BaseDatabindingFragment<CameraFragmentDemoBinding>() {
             = CameraFragmentDemoBinding::inflate
 
     private val imageHelper by lazy {
-        PictureRetriver(activity as BaseActivity)
+        PictureRetriver(activity as BaseActivity, this::onImageSelected)
+    }
+
+    private val imageAdapter by lazy {
+        BaseDataBindingRecyclerAdapter(context)
     }
 
     override fun useBinding() {
@@ -25,6 +36,34 @@ class CameraFragment : BaseDatabindingFragment<CameraFragmentDemoBinding>() {
         binding.cameraFragmentImagesChoose.setOnclickAsync {
             imageHelper.getImage(fromCamera = false)
         }
+        binding.cameraFragmentImagesList.setupAsync(imageAdapter, LinearLayoutManager(context), {
+            launch(UI) {
+
+            }
+        })
     }
+
+    fun onImageSelected(imageUri: Uri) {
+        tryAndLog("bitmap") {
+            val bitmap = MediaStore.Images.Media.getBitmap(context.contentResolver, imageUri)
+            imageAdapter.add(ImageViewItemRender(bitmap), 0)
+        }
+    }
+
+}
+
+
+class ImageViewItemRender(bitmap: Bitmap) : BaseRenderModel<Bitmap, SimpleImageListItemBinding>(bitmap,
+        SimpleImageListItemBinding::class.java) {
+
+    override fun getInflaterFunction(): ViewInflatingFunction<SimpleImageListItemBinding>
+            = SimpleImageListItemBinding::inflate
+
+    override fun renderFunction(view: SimpleImageListItemBinding,
+                                model: Bitmap,
+                                viewHolder: BaseViewHolderItem<SimpleImageListItemBinding>) {
+        view.simpleImageListItemImage.setImageBitmap(model)
+    }
+
 
 }

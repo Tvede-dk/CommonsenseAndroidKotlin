@@ -17,7 +17,7 @@ import com.commonsense.android.kotlin.baseClasses.BaseActivity
 //TODO better name:
 //-picture - taker, image retriver, image fetcher, cameraGalleryImageHandler ?
 // -- hmm somewhat along those
-class PictureRetriver(private val activity: BaseActivity, private val requestCode: Int = 18877) : ActivityResultCallbackOk {
+class PictureRetriver(private val activity: BaseActivity, private val callback: (Uri) -> Unit, private val requestCode: Int = 18877) : ActivityResultCallbackOk {
 
     init {
         activity.addActivityResultListenerOnlyOk(requestCode, this)
@@ -57,12 +57,12 @@ class PictureRetriver(private val activity: BaseActivity, private val requestCod
         imageBitmap?.let {
             thumbnail = it
         }
+        //TODO , might wanna create a thumbnail in background before this point.
 
-        pictureUri?.let {
-            //            it.loadBitmapScaled(activity.contentResolver, activity.optimalThumbnailSize)
-//            val bitmap = MediaStore.Images.Media.getBitmap(activity.contentResolver, it)
+        activity.LaunchInUi(this::class.java.simpleName, {
+            pictureUri?.let(callback)
+        })
 
-        }
     }
 
     fun getImage(fromCamera: Boolean) {

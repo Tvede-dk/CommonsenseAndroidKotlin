@@ -2,12 +2,12 @@ package com.CommonSenseAndroidKotlin.example.fragments
 
 import android.graphics.Bitmap
 import android.net.Uri
-import android.provider.MediaStore
 import android.support.v7.widget.LinearLayoutManager
 import com.CommonSenseAndroidKotlin.example.databinding.CameraFragmentDemoBinding
 import com.CommonSenseAndroidKotlin.example.databinding.SimpleImageListItemBinding
 import com.commonsense.android.kotlin.android.extensions.widets.setOnclickAsync
 import com.commonsense.android.kotlin.android.image.PictureRetriver
+import com.commonsense.android.kotlin.android.image.loadBitmapScaled
 import com.commonsense.android.kotlin.baseClasses.BaseActivity
 import com.commonsense.android.kotlin.baseClasses.databinding.*
 import com.commonsense.android.kotlin.extensions.tryAndLog
@@ -50,8 +50,16 @@ class CameraFragment : BaseDatabindingFragment<CameraFragmentDemoBinding>() {
 
     fun onImageSelected(imageUri: Uri) {
         tryAndLog("bitmap") {
-            val bitmap = MediaStore.Images.Media.getBitmap(context.contentResolver, imageUri)
-            imageAdapter.add(ImageViewItemRender(bitmap), 0)
+            val toString = imageUri.toString()
+            LaunchInBackground("scaleUri" + toString) {
+                val bitmap = imageUri.loadBitmapScaled(context.contentResolver, 200)
+                        ?: return@LaunchInBackground
+                LaunchInUi("updateAdapter" + toString) {
+                    imageAdapter.add(ImageViewItemRender(bitmap), 0)
+                }
+            }
+//            val bitmap = MediaStore.Images.Media.getBitmap(context.contentResolver, imageUri)
+
         }
     }
 

@@ -100,6 +100,9 @@ class PermissionsHandlingTest : BaseRoboElectricTest() {
 }
 
 class AlwaysPermissionActivity : BaseActivity() {
+
+
+
     override fun checkPermission(permission: String?, pid: Int, uid: Int): Int {
         return PackageManager.PERMISSION_GRANTED
     }

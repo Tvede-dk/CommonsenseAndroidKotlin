@@ -36,6 +36,11 @@ class CameraFragment : BaseDatabindingFragment<CameraFragmentDemoBinding>() {
         binding.cameraFragmentImagesChoose.setOnclickAsync {
             imageHelper.getImage(fromCamera = false)
         }
+
+        binding.cameraFragmentImagesReset.setOnclickAsync {
+            imageAdapter.clear()
+        }
+
         binding.cameraFragmentImagesList.setupAsync(imageAdapter, LinearLayoutManager(context), {
             launch(UI) {
 

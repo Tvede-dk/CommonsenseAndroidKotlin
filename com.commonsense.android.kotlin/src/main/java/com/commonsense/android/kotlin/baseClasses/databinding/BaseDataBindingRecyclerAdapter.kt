@@ -145,7 +145,6 @@ abstract class AbstractDataBindingRecyclerAdapter<T>(context: Context) :
     override fun getItemViewType(@IntRange(from = 0) position: Int): Int {
         val index = dataCollection.indexToPath(position) ?: return 0
         return dataCollection[index]?.getTypeValue() ?: 0
-
     }
 
     override fun onBindViewHolder(holder: BaseViewHolderItem<*>, @IntRange(from = 0) position: Int) {

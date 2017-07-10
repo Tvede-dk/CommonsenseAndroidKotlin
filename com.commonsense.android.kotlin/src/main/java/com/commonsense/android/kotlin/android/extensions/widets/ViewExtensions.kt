@@ -49,12 +49,18 @@ fun ViewTreeObserver.removeOnGlobalLayoutListenerCompact(listener: ViewTreeObser
 }
 
 @UiThread
-fun View.setOnclickAsync(action: suspend () -> Unit) {
-    // launch one actor
+fun View.setOnclickAsyncSuspend(action: suspend () -> Unit) {
     val eventActor = actor<Unit>(UI, capacity = Channel.CONFLATED) {
         channel.consumeEach { action() }
     }
-    // install a listener to activate this actor
+    setOnClick { eventActor.offer(Unit) }
+}
+
+@UiThread
+fun View.setOnclickAsync(action: () -> Unit) {
+    val eventActor = actor<Unit>(UI, capacity = Channel.CONFLATED) {
+        channel.consumeEach { action() }
+    }
     setOnClick { eventActor.offer(Unit) }
 }
 

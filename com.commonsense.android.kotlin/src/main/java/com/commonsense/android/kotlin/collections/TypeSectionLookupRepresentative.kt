@@ -135,7 +135,8 @@ class TypeSectionLookupRepresentative<T : TypeHashCodeLookupRepresent<Rep>, out 
         //naive implementation
 
         var currentPosition = position
-        for (section in 0 until data.size()) {
+        for (dataIndex in 0 until data.size()) {
+            val section = data.keyAt(dataIndex)
             val item = data[section]
             if (item.isIgnored) {
                 continue//skip ignored entries.

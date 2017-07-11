@@ -39,8 +39,8 @@ class BaseDataBindingRecyclerViewTest : BaseRoboElectricTest() {
         //make sure that rendervm2's are the same type
         Assert.assertEquals(recycler.getItemViewType(2), recycler.getItemViewType(3))
 
-        recycler.removeAt(2, 0)
         recycler.removeAt(3, 0)
+        recycler.removeAt(2, 0)
 
         //now vm2 model is out, make sure that the type model are still correct.
         Assert.assertEquals(firstVm1Model1TypeCode, recycler.getItemViewType(0))

@@ -4,6 +4,8 @@ import android.content.ContentResolver
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
 import android.net.Uri
+import kotlinx.coroutines.experimental.CommonPool
+import kotlinx.coroutines.experimental.launch
 import map
 
 /**
@@ -14,37 +16,34 @@ import map
 /**
  * want to be able to load a "scaled bitmap"
  */
-fun Uri.loadBitmapScaled(contentResolver: ContentResolver, width: Int): Bitmap? {
-    var input = contentResolver.openInputStream(this)
-    val onlyBoundsOptions = BitmapFactory.Options()
-    try {
+suspend fun Uri.loadBitmapScaled(contentResolver: ContentResolver, width: Int): Bitmap? {
+    var result: Bitmap? = null
+    launch(CommonPool) {
+        val onlyBoundsOptions = BitmapFactory.Options()
+        contentResolver.openInputStream(this@loadBitmapScaled).use { input ->
+            onlyBoundsOptions.inJustDecodeBounds = true
+            onlyBoundsOptions.inPreferredConfig = Bitmap.Config.ARGB_8888//optional
+            BitmapFactory.decodeStream(input, null, onlyBoundsOptions)
+        }
 
-        onlyBoundsOptions.inJustDecodeBounds = true
-        onlyBoundsOptions.inPreferredConfig = Bitmap.Config.ARGB_8888//optional
-        BitmapFactory.decodeStream(input, null, onlyBoundsOptions)
-    } finally {
-        input.close()
-    }
+        if (onlyBoundsOptions.outWidth == -1 || onlyBoundsOptions.outHeight == -1) {
+            return@launch
+        }
 
-    if (onlyBoundsOptions.outWidth == -1 || onlyBoundsOptions.outHeight == -1) {
-        return null
-    }
+        val originalSize = (onlyBoundsOptions.outHeight > onlyBoundsOptions.outWidth)
+                .map(onlyBoundsOptions.outHeight, onlyBoundsOptions.outWidth)
 
-    val originalSize = (onlyBoundsOptions.outHeight > onlyBoundsOptions.outWidth)
-            .map(onlyBoundsOptions.outHeight, onlyBoundsOptions.outWidth)
+        val ratio = (originalSize > width).map(originalSize / width.toDouble(), 1.0)
+        val bitmapOptions = BitmapFactory.Options()
+        bitmapOptions.inSampleSize = getPowerOfTwoForSampleRatio(ratio)
+        bitmapOptions.inPreferredConfig = Bitmap.Config.ARGB_8888//
 
-    val ratio = (originalSize > width).map(originalSize / width.toDouble(), 1.0)
-
-    val bitmapOptions = BitmapFactory.Options()
-    bitmapOptions.inSampleSize = getPowerOfTwoForSampleRatio(ratio)
-    bitmapOptions.inDither = true //optional
-    bitmapOptions.inPreferredConfig = Bitmap.Config.ARGB_8888//
-    input = contentResolver.openInputStream(this)
-    return try {
-        BitmapFactory.decodeStream(input, null, bitmapOptions)
-    } finally {
-        input.close()
-    }
+        contentResolver.openInputStream(this@loadBitmapScaled).use { inputToDecode ->
+            result = BitmapFactory.decodeStream(inputToDecode, null, bitmapOptions)
+        }
+        return@launch
+    }.join()
+    return result
 }
 
 

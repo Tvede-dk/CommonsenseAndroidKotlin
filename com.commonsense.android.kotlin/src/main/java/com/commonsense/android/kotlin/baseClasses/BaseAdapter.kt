@@ -53,7 +53,7 @@ open class BaseAdapter<T>(context: Context) : ArrayAdapter<T>(context, 0) {
 
     fun getItems(): List<T> {
         val list = mutableListOf<T>()
-        (0..count - 1).forEach {
+        (0 until count).forEach {
             getItem(it)?.let(list::add)
         }
         return list

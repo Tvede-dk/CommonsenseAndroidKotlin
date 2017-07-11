@@ -1,12 +1,12 @@
 package com.commonsense.android.kotlin.widgets
 
+import android.support.v7.widget.AppCompatEditText
 import android.text.TextWatcher
-import android.widget.EditText
 
 /**
  * Created by kasper on 10/07/2017.
  */
-class ExtendedEditTextView : EditText {
+class ExtendedEditTextView : AppCompatEditText {
     constructor(context: android.content.Context) : super(context)
     constructor(context: android.content.Context, attrs: android.util.AttributeSet) : super(context, attrs)
     constructor(context: android.content.Context, attrs: android.util.AttributeSet, defStyleAttr: Int) : super(context, attrs, defStyleAttr)

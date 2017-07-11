@@ -1,6 +1,5 @@
 package com.CommonSenseAndroidKotlin.example
 
-import com.commonsense.android.kotlin.android.logging.logWarning
 import com.commonsense.android.kotlin.baseClasses.BaseApplication
 
 /**

@@ -3,9 +3,6 @@ package com.commonsense.android.kotlin.android.extensions
 import android.app.Activity
 import android.app.ProgressDialog
 import android.content.Intent
-import android.net.Uri
-import android.os.Environment
-import android.provider.MediaStore
 import android.support.annotation.StringRes
 import android.support.v4.widget.DrawerLayout
 import android.support.v7.app.ActionBar
@@ -13,7 +10,6 @@ import android.support.v7.app.ActionBarDrawerToggle
 import android.support.v7.app.AppCompatActivity
 import android.support.v7.widget.Toolbar
 import com.commonsense.kotlin.R
-import java.io.File
 
 /**
  * Created by Kasper Tvede on 30-10-2016.

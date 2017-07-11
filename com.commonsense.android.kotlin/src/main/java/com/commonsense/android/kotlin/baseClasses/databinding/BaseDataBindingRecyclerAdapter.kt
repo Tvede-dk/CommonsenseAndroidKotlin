@@ -218,8 +218,17 @@ abstract class AbstractDataBindingRecyclerAdapter<T>(context: Context) :
     }
 
     open fun clearAndSetSection(items: List<T>, atSection: Int) {
-        val changes = dataCollection.clearAndSetSection(items, atSection) ?: return
-        notifyItemRangeChanged(changes.start, changes.length)
+        val (changes, added, removed) = dataCollection.clearAndSetSection(items, atSection)
+        changes?.let {
+            notifyItemRangeChanged(it.start, it.length)
+        }
+        added?.let {
+            notifyItemRangeInserted(it.start, it.length)
+        }
+        removed?.let {
+            notifyItemRangeRemoved(it.start, it.length)
+
+        }
     }
 
     private fun clearSection(atSection: Int) {

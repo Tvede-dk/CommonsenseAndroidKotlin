@@ -108,14 +108,20 @@ class TypeSectionLookupRepresentative<T : TypeHashCodeLookupRepresent<Rep>, out 
     /**
      * returns what have changed. (the diff).
      */
-    fun clearAndSetSection(items: List<T>, atSection: Int): kotlin.ranges.IntRange? {
+    fun clearAndSetSection(items: List<T>, atSection: Int): SectionUpdate {
         val removed = clearSection(atSection)
         addAll(items, atSection)
         if (removed == null) {
-            return calculateLocationForSection(atSection)
+            return SectionUpdate(calculateLocationForSection(atSection), null, null)
         }
-        val largestLength = removed.start + maxOf(removed.length, items.size) + 1
-        return removed.start until largestLength
+        val changedEnd = removed.start + minOf(removed.length, items.size) + 1
+        val changedRange = removed.start until changedEnd
+        return if (removed.length > items.size) {
+            SectionUpdate(changedRange, null, changedEnd until removed.endInclusive + 1)
+        } else {
+            SectionUpdate(changedRange, changedEnd until items.size + 1, null)
+        }
+
     }
 
     fun replace(newItem: T, position: Int, inSection: Int) = ensureSection(inSection) {
@@ -229,3 +235,7 @@ class TypeSectionLookupRepresentative<T : TypeHashCodeLookupRepresent<Rep>, out 
 }
 
 data class IndexPath(val row: Int, val section: Int)
+
+data class SectionUpdate(val changes: kotlin.ranges.IntRange?,
+                         val optAdded: kotlin.ranges.IntRange?,
+                         val optRemoved: kotlin.ranges.IntRange?)

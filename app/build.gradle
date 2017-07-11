@@ -64,7 +64,7 @@ dependencies {
 
     //kotlin specific
     implementation "org.jetbrains.kotlin:kotlin-stdlib:$kotlin_version"
-    kapt "com.android.databinding:compiler:3.0.0-alpha5"
+    kapt "com.android.databinding:compiler:3.0.0-alpha6"
 }
 
 repositories {

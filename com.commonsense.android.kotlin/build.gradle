@@ -76,7 +76,7 @@ dependencies {
     implementation "com.android.support:design:$supportVersion"
 
     //kotlin specific libs.
-    kapt "com.android.databinding:compiler:3.0.0-alpha5"
+    kapt "com.android.databinding:compiler:3.0.0-alpha6"
     api "org.jetbrains.kotlin:kotlin-stdlib:$kotlin_version"
 
     //coroutines libs

@@ -8,6 +8,7 @@ import com.CommonSenseAndroidKotlin.example.databinding.SimpleImageListItemBindi
 import com.commonsense.android.kotlin.android.extensions.safeToast
 import com.commonsense.android.kotlin.android.extensions.widets.setOnclickAsync
 import com.commonsense.android.kotlin.android.image.PictureRetriver
+import com.commonsense.android.kotlin.android.image.calculateOptimalThumbnailSize
 import com.commonsense.android.kotlin.android.image.loadBitmapPreviews
 import com.commonsense.android.kotlin.baseClasses.BaseActivity
 import com.commonsense.android.kotlin.baseClasses.databinding.*
@@ -57,8 +58,9 @@ class CameraFragment : BaseDatabindingFragment<CameraFragmentDemoBinding>() {
             var images: List<Bitmap>? = null
             val scales = (100 downTo 50) step 1
             val time = measureTimeMillis {
+
                 images = imageUri.loadBitmapPreviews(scales.toIntArray(),
-                        1000, context.contentResolver)
+                        context.calculateOptimalThumbnailSize(), context.contentResolver)
                         .await() ?: return@tryAndLogSuspend
             }
             activity.safeToast("time is : $time ms")

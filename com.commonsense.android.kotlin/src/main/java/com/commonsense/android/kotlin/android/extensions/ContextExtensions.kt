@@ -4,6 +4,7 @@ import android.content.ActivityNotFoundException
 import android.content.Context
 import android.content.Intent
 import android.content.pm.PackageManager
+import android.graphics.Point
 import android.graphics.drawable.Drawable
 import android.net.Uri
 import android.support.annotation.ColorRes
@@ -11,6 +12,7 @@ import android.support.annotation.DrawableRes
 import android.support.annotation.StringRes
 import android.support.v4.content.ContextCompat
 import android.support.v7.content.res.AppCompatResources
+import android.view.WindowManager
 import android.widget.Toast
 import com.commonsense.android.kotlin.android.DangerousPermissionString
 import com.commonsense.android.kotlin.android.activities.InbuiltWebview
@@ -18,6 +20,7 @@ import com.commonsense.android.kotlin.android.logging.L
 import com.commonsense.kotlin.R
 import kotlinx.coroutines.experimental.android.UI
 import kotlinx.coroutines.experimental.launch
+
 
 /**
  * Created by Kasper Tvede on 06-12-2016.
@@ -85,3 +88,15 @@ fun Context.startUrl(url: String, forceHttps: Boolean = true, useInbuildBrowser:
 
 
 fun Context.getColorSafe(@ColorRes color: Int) = ContextCompat.getColor(this, color)
+
+
+fun Context.GetVirtualScreenSize(): Point? {
+    val windowManager = getSystemService(Context.WINDOW_SERVICE) as? WindowManager
+    val display = windowManager?.defaultDisplay
+    return display?.let {
+        val size = Point()
+        display.getSize(size)
+        return size
+    }
+}
+

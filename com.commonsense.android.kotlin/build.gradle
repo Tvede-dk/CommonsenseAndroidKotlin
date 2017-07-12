@@ -74,6 +74,7 @@ dependencies {
     //support libs
     implementation "com.android.support:appcompat-v7:$supportVersion"
     implementation "com.android.support:design:$supportVersion"
+    implementation "com.android.support:exifinterface:$supportVersion"
 
     //kotlin specific libs.
     kapt "com.android.databinding:compiler:3.0.0-alpha6"

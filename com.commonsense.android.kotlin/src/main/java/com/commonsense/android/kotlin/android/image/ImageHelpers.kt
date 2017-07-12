@@ -9,7 +9,6 @@ import android.net.Uri
 import android.support.annotation.IntRange
 import android.support.media.ExifInterface
 import com.commonsense.android.kotlin.android.extensions.GetVirtualScreenSize
-import com.commonsense.android.kotlin.android.logging.L
 import kotlinx.coroutines.experimental.CommonPool
 import kotlinx.coroutines.experimental.Deferred
 import kotlinx.coroutines.experimental.async
@@ -94,7 +93,6 @@ fun Context.calculateOptimalThumbnailSize(defaultSize: Int = 200, minSize: Int =
     val heightFraction = virtualSize.y / fraction
     val combined = widthFraction + heightFraction
     val resultSize = maxOf(combined / 2, minSize)
-    L.error("test", "result size is : $resultSize")
     return resultSize
 }
 
@@ -126,7 +124,6 @@ suspend fun Uri.loadBitmapRotatedCorrectly(contentResolver: ContentResolver, wid
     val exif = getExifForImage(contentResolver).await()
     val bitmap = loadBitmapScaled(contentResolver, width).await()
     val rotatedBitmap = bitmap?.rotate(exif)?.await()
-    bitmap?.recycle()
     return@async rotatedBitmap
 }
 

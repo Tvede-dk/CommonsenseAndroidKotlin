@@ -174,31 +174,43 @@ abstract class AbstractDataBindingRecyclerAdapter<T>(context: Context) :
     open fun add(newItem: T, atSection: Int) = updateData {
         stopScroll()
         dataCollection.add(newItem, atSection)
-        notifyItemInserted(dataCollection.size)
+        val index = dataCollection.calculateLocationForSection(atSection) ?: return@updateData
+        notifyItemInserted(index.start + dataCollection.size)
     }
 
     open fun addAll(items: Collection<T>, atSection: Int) = updateData {
-        val startPos = itemCount
+
         dataCollection.addAll(items, atSection)
+        val index = dataCollection.calculateLocationForSection(atSection) ?: return@updateData
+        val startPos = itemCount + index.start
         notifyItemRangeInserted(startPos, items.size)
     }
 
     open fun add(item: T, atRow: Int, atSection: Int) = updateData {
         dataCollection.add(item, atRow, atSection)
+        val index = dataCollection.calculateLocationForSection(atSection) ?: return@updateData
+        notifyItemInserted(index.start + atRow)
     }
 
     open fun addAll(items: Collection<T>, startPosition: Int, atSection: Int) = updateData {
         dataCollection.addAll(items, atSection, startPosition)
-        notifyItemRangeInserted(startPosition, items.size)
+        val index = dataCollection.calculateLocationForSection(atSection) ?: return@updateData
+        notifyItemRangeInserted(index.start + startPosition, items.size)
     }
 
     open fun addAll(vararg items: T, startPosition: Int, atSection: Int) = updateData {
         dataCollection.addAll(items.asList(), startPosition)
-        notifyItemRangeInserted(startPosition, items.size)
+        val index = dataCollection.calculateLocationForSection(atSection) ?: return@updateData
+        notifyItemRangeInserted(index.start + startPosition, items.size)
     }
 
-    open fun remove(newItem: T, atSection: Int) = updateData {
-        removeAt(dataCollection.indexOf(newItem, atSection), atSection) // ?????
+    open fun remove(newItem: T, atSection: Int): Int {
+        val index = dataCollection.indexOf(newItem, atSection)
+        updateData {
+            removeAt(index, atSection)
+        }
+        return index
+
     }
 
     open fun removeAt(row: Int, inSection: Int) = updateData {
@@ -254,7 +266,6 @@ abstract class AbstractDataBindingRecyclerAdapter<T>(context: Context) :
 
     open fun replace(newItem: T, position: Int, atSection: Int) = updateData {
         dataCollection.replace(newItem, position, atSection)
-
         notifyItemChanged(position)
     }
 

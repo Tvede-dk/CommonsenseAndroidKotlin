@@ -4,6 +4,9 @@ apply plugin: 'kotlin-kapt'
 
 
 android {
+
+    buildTypeMatching 'proguard', 'debug'
+
     compileSdkVersion 26
     buildToolsVersion "26.0.0"
     defaultConfig {
@@ -21,17 +24,29 @@ android {
     }
 
     buildTypes {
+
+        proguard {
+            initWith debug
+            minifyEnabled true
+            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
+
+        }
+
         release {
             testCoverageEnabled = true
-            minifyEnabled false
-            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+            minifyEnabled true
+            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
         }
         debug {
             testCoverageEnabled = true
         }
+
     }
 
 }
+
+
+
 def supportVersion = "26.0.+"
 def coroutinesVersion = "0.16"
 
@@ -54,7 +69,8 @@ dependencies {
 
     //commonSense
     implementation project(':com.commonsense.android.kotlin')
-//    implementation project(path: ':com.commonsense.android.kotlin', configuration: "debug")
+//    proguardImplementation project(':com.commonsense.android.kotlin')
+//    proguardImplementation project(path: ':com.commonsense.android.kotlin', configuration: "debug")
 
     //tests libs
     androidTestImplementation('com.android.support.test.espresso:espresso-core:2.2.2', {

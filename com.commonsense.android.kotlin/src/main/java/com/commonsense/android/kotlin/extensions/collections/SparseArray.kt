@@ -6,7 +6,7 @@ import android.util.SparseArray
 /**
  * Created by kasper on 05/07/2017.
  */
-data class SparseArrayEntry<T>(@IntRange(from = 0) val key: Int, val value: T)
+data class SparseArrayEntry<out T>(@IntRange(from = 0) val key: Int, val value: T)
 
 fun <T> SparseArray<T>.toList(@IntRange(from = 1) maxKeyValue: Int = this.size()): List<SparseArrayEntry<T>> {
     val list = mutableListOf<SparseArrayEntry<T>>()

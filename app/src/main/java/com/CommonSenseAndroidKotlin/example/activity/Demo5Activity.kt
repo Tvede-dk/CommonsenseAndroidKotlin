@@ -1,6 +1,5 @@
 package com.CommonSenseAndroidKotlin.example.activity
 
-import com.CommonSenseAndroidKotlin.example.fragments.EditDatabindingFragment
 import com.CommonSenseAndroidKotlin.example.fragments.SectionSwipeAdapterFragment
 import com.commonsense.android.kotlin.baseClasses.replaceFragment
 

@@ -16,7 +16,7 @@ data class User(
         val realName: String)
 
 
-class UserListItemRender<F : Any>(item: User) : BaseSearchRenderModel<User, UserViewBinding, F>(item, UserViewBinding::class.java) {
+class UserListItemRender<in F : Any>(item: User) : BaseSearchRenderModel<User, UserViewBinding, F>(item, UserViewBinding::class.java) {
     override fun renderFunction(view: UserViewBinding, model: User, viewHolder: BaseViewHolderItem<UserViewBinding>) {
     }
 

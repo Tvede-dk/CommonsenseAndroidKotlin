@@ -2,10 +2,7 @@ package com.commonsense.android.kotlin.collections
 
 import android.support.annotation.IntRange
 import android.util.SparseArray
-import com.commonsense.android.kotlin.extensions.collections.getSafe
-import com.commonsense.android.kotlin.extensions.collections.removeAll
-import com.commonsense.android.kotlin.extensions.collections.replace
-import com.commonsense.android.kotlin.extensions.collections.toList
+import com.commonsense.android.kotlin.extensions.collections.*
 import ifTrue
 import length
 
@@ -41,7 +38,12 @@ class TypeSectionLookupRepresentative<T : TypeHashCodeLookupRepresent<Rep>, out 
     private var cachedSize: Int = 0
 
     val size
+        @IntRange(from = 0)
         get() = cachedSize
+
+    val sectionCount
+        @IntRange(from = 0)
+        get () = data.size()
 
     fun add(item: T, @IntRange(from = 0) atSection: Int) = ensureSection(atSection) {
         data.get(atSection).collection.add(item)
@@ -72,7 +74,7 @@ class TypeSectionLookupRepresentative<T : TypeHashCodeLookupRepresent<Rep>, out 
     }
 
 
-    fun getItem(atRow: Int, @IntRange(from = 0) atSection: Int): T? {
+    fun getItem(@IntRange(from = 0) atRow: Int, @IntRange(from = 0) atSection: Int): T? {
         return data.get(atSection)?.collection?.getSafe(atRow)
     }
 
@@ -89,7 +91,7 @@ class TypeSectionLookupRepresentative<T : TypeHashCodeLookupRepresent<Rep>, out 
         function()
     }
 
-    private fun addSectionIfMissing(atSection: Int) {
+    private fun addSectionIfMissing(@IntRange(from = 0) atSection: Int) {
         if (data[atSection, null] == null) {
             data.put(atSection, TypeSection())
         }
@@ -99,7 +101,7 @@ class TypeSectionLookupRepresentative<T : TypeHashCodeLookupRepresent<Rep>, out 
         return lookup.getTypeRepresentativeFromTypeValue(type)
     }
 
-    fun add(item: T, atRow: Int, atSection: Int) = ensureSection(atSection) {
+    fun add(item: T, @IntRange(from = 0) atRow: Int, @IntRange(from = 0) atSection: Int) = ensureSection(atSection) {
         data[atSection].collection.add(atRow, item)
         lookup.add(item)
         cachedSize += 1
@@ -108,7 +110,7 @@ class TypeSectionLookupRepresentative<T : TypeHashCodeLookupRepresent<Rep>, out 
     /**
      * returns what have changed. (the diff).
      */
-    fun clearAndSetSection(items: List<T>, atSection: Int): SectionUpdate {
+    fun clearAndSetSection(items: List<T>, @IntRange(from = 0) atSection: Int): SectionUpdate {
         val removed = clearSection(atSection)
         addAll(items, atSection)
         if (removed == null) {
@@ -124,7 +126,8 @@ class TypeSectionLookupRepresentative<T : TypeHashCodeLookupRepresent<Rep>, out 
 
     }
 
-    fun replace(newItem: T, position: Int, inSection: Int) = ensureSection(inSection) {
+    fun replace(newItem: T, @IntRange(from = 0) position: Int, @IntRange(from = 0) inSection: Int)
+            = ensureSection(inSection) {
         data[inSection].collection.replace(newItem, position)
     }
 
@@ -134,13 +137,14 @@ class TypeSectionLookupRepresentative<T : TypeHashCodeLookupRepresent<Rep>, out 
         cachedSize = 0
     }
 
-    fun addAll(items: Collection<T>, startPosition: Int, atSection: Int) = ensureSection(atSection) {
+    fun addAll(items: Collection<T>, @IntRange(from = 0) startPosition: Int, @IntRange(from = 0) atSection: Int)
+            = ensureSection(atSection) {
         data[atSection].collection.addAll(startPosition, items)
         lookup.addAll(items)
         cachedSize += items.size
     }
 
-    fun indexToPath(position: Int): IndexPath? {
+    fun indexToPath(@IntRange(from = 0) position: Int): IndexPath? {
         //naive implementation
 
         var currentPosition = position
@@ -161,6 +165,7 @@ class TypeSectionLookupRepresentative<T : TypeHashCodeLookupRepresent<Rep>, out 
 
 
     fun calculateLocationForSection(@IntRange(from = 0) sectionIndex: Int): kotlin.ranges.IntRange? {
+        addSectionIfMissing(sectionIndex)
         val dataItems = data.toList(sectionIndex).filter { !it.value.isIgnored }
         if (dataItems.isEmpty()) {
             return null
@@ -170,11 +175,14 @@ class TypeSectionLookupRepresentative<T : TypeHashCodeLookupRepresent<Rep>, out 
         return start..end
     }
 
-    fun removeAt(row: Int, inSection: Int): Boolean {
+    fun removeAt(@IntRange(from = 0) row: Int, @IntRange(from = 0) inSection: Int): Boolean {
+        if (data[inSection]?.collection?.isIndexValid(row) != true) {
+            return false
+        }
         val item = data[inSection]?.collection?.removeAt(row)
         item?.let {
             lookup.remove(it)
-            cachedSize += 1
+            cachedSize -= 1
         }
         return item != null
     }
@@ -206,7 +214,7 @@ class TypeSectionLookupRepresentative<T : TypeHashCodeLookupRepresent<Rep>, out 
     /**
      * Inverse of ignore section.
      */
-    fun acceptSection(sectionIndex: Int): kotlin.ranges.IntRange? {
+    fun acceptSection(@IntRange(from = 0) sectionIndex: Int): kotlin.ranges.IntRange? {
         addSectionIfMissing(sectionIndex)
         if (!data[sectionIndex].isIgnored) {
             return null
@@ -216,12 +224,13 @@ class TypeSectionLookupRepresentative<T : TypeHashCodeLookupRepresent<Rep>, out 
         return calculateLocationForSection(sectionIndex)
     }
 
-    fun getSectionLocation(sectionIndex: Int): kotlin.ranges.IntRange? {
+    fun getSectionLocation(@IntRange(from = 0) sectionIndex: Int): kotlin.ranges.IntRange? {
         return calculateLocationForSection(sectionIndex)
     }
 
-    fun clearSection(atSection: Int): kotlin.ranges.IntRange? {
+    fun clearSection(@IntRange(from = 0) atSection: Int): kotlin.ranges.IntRange? {
         addSectionIfMissing(atSection)
+        @IntRange(from = 0)
         val location = calculateLocationForSection(atSection) ?: return null
         cachedSize -= data[atSection].collection.size
         data[atSection].collection.clear()
@@ -234,7 +243,7 @@ class TypeSectionLookupRepresentative<T : TypeHashCodeLookupRepresent<Rep>, out 
 
 }
 
-data class IndexPath(val row: Int, val section: Int)
+data class IndexPath(@IntRange(from = 0) val row: Int, @IntRange(from = 0) val section: Int)
 
 data class SectionUpdate(val changes: kotlin.ranges.IntRange?,
                          val optAdded: kotlin.ranges.IntRange?,

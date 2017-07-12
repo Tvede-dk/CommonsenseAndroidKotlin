@@ -11,6 +11,8 @@ import android.view.ViewGroup
 import com.commonsense.android.kotlin.android.logging.L
 import com.commonsense.android.kotlin.collections.TypeHashCodeLookupRepresent
 import com.commonsense.android.kotlin.collections.TypeSectionLookupRepresentative
+import com.commonsense.android.kotlin.extensions.isNullOrEqualTo
+import ifTrue
 import length
 import java.lang.ref.WeakReference
 
@@ -59,7 +61,7 @@ abstract class BaseRenderModel<
         if (holder.viewBindingTypeValue == vmTypeValue) {
             @Suppress("UNCHECKED_CAST")
             renderFunction(holder.item as Vm, item, holder as BaseViewHolderItem<Vm>)
-            //we are now "sure" that the binding class is the same as ours, thus casting "should" be "ok". (we basically introduced our own type system)
+            //we are now "sure" that the bi nding class is the same as ours, thus casting "should" be "ok". (we basically introduced our own type system)
         } else {
             L.debug("RenderModelItem", "unable to bind to view even though it should be correct type$vmTypeValue expected, got : ${holder.viewBindingTypeValue}")
         }
@@ -136,10 +138,22 @@ abstract class AbstractDataBindingRecyclerAdapter<T>(context: Context) :
         LayoutInflater.from(context)
     }
 
+    val sectionCount: Int
+        get() = dataCollection.size
+
 
     override fun onCreateViewHolder(parent: ViewGroup?, @IntRange(from = 0) viewType: Int): BaseViewHolderItem<*>? {
         val rep = dataCollection.getTypeRepresentativeFromTypeValue(viewType)
+        (rep == null).ifTrue { logContentData() }
         return rep?.invoke(inflater, parent, false)
+    }
+
+    //for debug only.
+    private fun logContentData() {
+        val cachedSize = dataCollection.size
+        val realSize = dataCollection.calculateLocationForSection(
+                dataCollection.sectionCount - 1)?.endInclusive ?: -1
+        L.error("Inconsistency", "precheck, real size : $realSize, cached size: $cachedSize ")
     }
 
     override fun getItemViewType(@IntRange(from = 0) position: Int): Int {
@@ -188,15 +202,17 @@ abstract class AbstractDataBindingRecyclerAdapter<T>(context: Context) :
     }
 
     open fun removeAt(row: Int, inSection: Int) = updateData {
-        if (dataCollection.removeAt(row, inSection)) {
-            notifyItemRemoved(row)
+        val sectionLocation = dataCollection.getSectionLocation(inSection)
+        if (sectionLocation != null && dataCollection.removeAt(row, inSection)) {
+            notifyItemRemoved(sectionLocation.start + row)
         }
     }
 
 
     open fun removeIn(range: kotlin.ranges.IntRange, atSection: Int) = updateData {
-        if (dataCollection.removeInRange(range, atSection)) {
-            notifyItemRangeRemoved(range.start, range.length)
+        val sectionLocation = dataCollection.getSectionLocation(atSection)
+        if (sectionLocation != null && dataCollection.removeInRange(range, atSection)) {
+            notifyItemRangeRemoved(sectionLocation.start + range.start, sectionLocation.start + range.length)
         }
     }
 
@@ -238,6 +254,7 @@ abstract class AbstractDataBindingRecyclerAdapter<T>(context: Context) :
 
     open fun replace(newItem: T, position: Int, atSection: Int) = updateData {
         dataCollection.replace(newItem, position, atSection)
+
         notifyItemChanged(position)
     }
 
@@ -263,11 +280,8 @@ abstract class AbstractDataBindingRecyclerAdapter<T>(context: Context) :
 
     override fun onDetachedFromRecyclerView(recyclerView: RecyclerView?) {
         super.onDetachedFromRecyclerView(recyclerView)
-        if (recyclerView != null) {
-            listeningRecyclers.removeAll {
-                val temp = it.get()
-                temp == null || temp == recyclerView
-            }
+        listeningRecyclers.removeAll {
+            it.get().isNullOrEqualTo(recyclerView)
         }
     }
 
@@ -299,8 +313,6 @@ abstract class AbstractDataBindingRecyclerAdapter<T>(context: Context) :
         notifyItemRangeInserted(sectionLocation.start, sectionLocation.endInclusive - sectionLocation.start)
     }
 
-    val sectionCount: Int
-        get() = dataCollection.size
 
     @AnyThread
     protected fun clearNoNotify() {

@@ -41,3 +41,8 @@ suspend fun tryAndLogSuspend(logTitle: String, action: suspend () -> Unit) {
         L.error(logTitle, "", exception)
     }
 }
+
+
+fun <T> T?.isNullOrEqualTo(other: T?): Boolean {
+    return this == null || this == other
+}

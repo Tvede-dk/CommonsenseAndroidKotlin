@@ -189,9 +189,9 @@ open class AbstractSearchableDataBindingRecyclerAdapter<
         allDataCollection.add(item, atRow, atSection)
     }
 
-    override fun clearAndSetSection(items: List<T>, atSection: Int) {
+    override fun setSection(items: List<T>, atSection: Int) {
         allDataCollection.clearAndSetSection(items, atSection)
-        super.clearAndSetSection(items, atSection)
+        super.setSection(items, atSection)
     }
 
 

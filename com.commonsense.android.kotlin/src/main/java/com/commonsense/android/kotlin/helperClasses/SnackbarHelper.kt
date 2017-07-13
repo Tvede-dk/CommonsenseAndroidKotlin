@@ -18,7 +18,8 @@ fun Fragment.showSnackbar(view: View,
                           @IntRange(from = 0)
                           durationInMs: Int,
                           onAction: () -> Unit,
-                          onDismiss: () -> Unit) {
+                          onTimeout: () -> Unit,
+                          onDismissOtherwise: () -> Unit) {
 
     val mySnackbar = Snackbar.make(view,
             text, Snackbar.LENGTH_SHORT)
@@ -29,8 +30,10 @@ fun Fragment.showSnackbar(view: View,
     mySnackbar.addCallback(object : BaseTransientBottomBar.BaseCallback<Snackbar?>() {
         override fun onDismissed(transientBottomBar: Snackbar?, event: Int) {
             super.onDismissed(transientBottomBar, event)
-            if (event != DISMISS_EVENT_ACTION) {
-                onDismiss()
+            if (event == DISMISS_EVENT_TIMEOUT) {
+                onTimeout()
+            } else if (event != DISMISS_EVENT_ACTION) {
+                onDismissOtherwise()
             }
         }
     })

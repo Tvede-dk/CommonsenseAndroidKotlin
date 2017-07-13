@@ -30,3 +30,7 @@ fun DialogFragment.dialogFillParentView() {
     dialog.window?.attributes = params as android.view.WindowManager.LayoutParams
     // Call super onResume after sizing
 }
+
+fun Fragment.onBackPressed() {
+    activity.onBackPressed()
+}

@@ -250,9 +250,10 @@ abstract class AbstractDataBindingRecyclerAdapter<T>(context: Context) :
         dataCollection.addAll(items, atSection)
     }
 
-    open fun clearAndSetSection(items: List<T>, atSection: Int) {
+    open fun setSection(items: List<T>, atSection: Int) {
         val (changes, added, removed) = dataCollection.clearAndSetSection(items, atSection)
-        changes?.let {
+        notifyDataSetChanged() //TODO make it work...
+        /*changes?.let {
             notifyItemRangeChanged(it.start, it.length)
         }
         added?.let {
@@ -260,7 +261,7 @@ abstract class AbstractDataBindingRecyclerAdapter<T>(context: Context) :
         }
         removed?.let {
             notifyItemRangeRemoved(it.start, it.length)
-        }
+        }*/
     }
 
     private fun clearSection(atSection: Int) {

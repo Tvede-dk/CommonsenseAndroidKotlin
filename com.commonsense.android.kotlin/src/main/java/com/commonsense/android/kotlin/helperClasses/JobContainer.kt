@@ -5,6 +5,7 @@ import kotlinx.coroutines.experimental.Job
 import kotlinx.coroutines.experimental.launch
 import kotlinx.coroutines.experimental.runBlocking
 import kotlinx.coroutines.experimental.sync.Mutex
+import kotlinx.coroutines.experimental.sync.withLock
 import java.lang.ref.WeakReference
 import kotlin.coroutines.experimental.CoroutineContext
 
@@ -40,6 +41,9 @@ class JobContainer {
 
     private fun handleCompletedCompletion(job: Job) {
         job.invokeOnCompletion {
+            if (groupJobMutex.isLocked || localJobMutex.isLocked) {
+                return@invokeOnCompletion
+            }
             removeDoneJobs()
         }
     }
@@ -124,11 +128,8 @@ class JobContainer {
 
     private inline fun changeGroupJob(crossinline action: HashMap<String, WeakReference<Job>>.() -> Unit)
             = runBlocking {
-        groupJobMutex.lock()
-        try {
+        groupJobMutex.withLock {
             action(groupedJobs)
-        } finally {
-            groupJobMutex.unlock()
         }
     }
     //</editor-fold>

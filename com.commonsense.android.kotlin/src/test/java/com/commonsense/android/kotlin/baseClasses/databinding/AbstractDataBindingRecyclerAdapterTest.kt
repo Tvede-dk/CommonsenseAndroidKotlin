@@ -5,7 +5,6 @@ import android.databinding.DataBindingComponent
 import android.databinding.ViewDataBinding
 import android.view.View
 import com.commonsense.android.kotlin.BaseRoboElectricTest
-import com.commonsense.android.kotlin.collections.TypeSectionLookupRepresentative
 import com.commonsense.android.kotlin.extensions.collections.repeateToSize
 import com.commonsense.android.kotlin.extensions.measureSecondTime
 import org.junit.Assert
@@ -18,10 +17,7 @@ import org.robolectric.RuntimeEnvironment
  */
 
 class openAbstractRecycler(context: Context) : AbstractDataBindingRecyclerAdapter<
-        RenderModelItem<*, *>>(context) {
-    fun getData(): TypeSectionLookupRepresentative<RenderModelItem<*, *>, InflatingFunction<*>> =
-            dataCollection
-}
+        RenderModelItem<*, *>>(context)
 
 open class EmptyViewBinding : ViewDataBinding(object : DataBindingComponent {}, View(RuntimeEnvironment.application), 0) {
     override fun onFieldChange(localFieldId: Int, `object`: Any?, fieldId: Int) = false

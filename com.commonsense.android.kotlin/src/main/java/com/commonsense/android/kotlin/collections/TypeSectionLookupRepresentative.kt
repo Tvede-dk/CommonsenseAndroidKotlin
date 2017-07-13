@@ -133,20 +133,29 @@ class TypeSectionLookupRepresentative<T : TypeHashCodeLookupRepresent<Rep>, out 
      */
     fun clearAndSetSection(items: List<T>, @IntRange(from = 0) atSection: Int): SectionUpdate {
         val removed = clearSection(atSection)
+        val location = calculateLocationForSection(atSection)
         addAll(items, atSection)
-        if (removed == null) {
-            return SectionUpdate(calculateLocationForSection(atSection), null, null)
+        if (removed == null || location == null) {
+            return SectionUpdate(location, null, null)
         }
-        val changedEnd = removed.start + minOf(removed.length, items.size) + 1
-        val changedRange = removed.start until changedEnd
-        L.warning("typeSection", "at section : $atSection, removed : ${(removed.length > items.size)}")
+        val changedEnd = location.start + (removed.start + minOf(removed.length, items.size))
+        val changedRange = (location.start + removed.start) until (+changedEnd)
+        L.warning("typeSection[$atSection]", "removed range: $removed; added count: ${items.size}")
+        L.error("section[$atSection]", "cached size : $cachedSize, true size is: ${calculateTrueSize()}")
         return if (removed.length > items.size) {
-            SectionUpdate(changedRange, null, changedEnd until removed.endInclusive + 1)
+            L.warning("typeSection[$atSection]", "delete with changes: $changedRange," +
+                    " and deletion: ${changedEnd until removed.endInclusive + 1} ")
+            SectionUpdate(changedRange, null, changedEnd until location.start + removed.endInclusive + 1)
         } else {
-            SectionUpdate(changedRange, changedEnd until items.size + 1, null)
+            L.warning("typeSection[$atSection]", "added with changes: $changedRange," +
+                    " and insertions: ${changedEnd until items.size + 1} ")
+            SectionUpdate(changedRange, changedEnd until changedEnd + items.size + 1, null)
         }
 
     }
+
+    //TODO remove this after debugging.
+    private fun calculateTrueSize(): Int = data.toList().sumBy { it.value.isIgnored.map(0, it.value.collection.size) }
 
     fun replace(newItem: T, @IntRange(from = 0) position: Int, @IntRange(from = 0) inSection: Int)
             = ensureSection(inSection) {
@@ -259,6 +268,9 @@ class TypeSectionLookupRepresentative<T : TypeHashCodeLookupRepresent<Rep>, out 
 
     fun clearSection(@IntRange(from = 0) atSection: Int): kotlin.ranges.IntRange? {
         addSectionIfMissing(atSection)
+        if (data[atSection].collection.isEmpty()) {
+            return null
+        }
         @IntRange(from = 0)
         val location = calculateLocationForSection(atSection) ?: return null
         updateCacheForSection(atSection) {

@@ -2,15 +2,17 @@ package com.CommonSenseAndroidKotlin.example.activity
 
 
 import android.content.Intent
-import android.view.LayoutInflater
 import com.CommonSenseAndroidKotlin.example.databinding.ActivityMainBinding
 import com.CommonSenseAndroidKotlin.example.fragments.EditDatabindingFragment
 import com.commonsense.android.kotlin.android.extensions.widets.setOnClick
 import com.commonsense.android.kotlin.android.extensions.widets.setOnclickAsync
 import com.commonsense.android.kotlin.baseClasses.databinding.BaseDatabindingActivity
+import com.commonsense.android.kotlin.baseClasses.databinding.InflaterFunctionSimple
 
 
 class MainActivity : BaseDatabindingActivity<ActivityMainBinding>() {
+    override fun createBinding(): InflaterFunctionSimple<ActivityMainBinding>
+            = ActivityMainBinding::inflate
 
     override fun useBinding() {
 
@@ -40,8 +42,6 @@ class MainActivity : BaseDatabindingActivity<ActivityMainBinding>() {
 
 
     }
-
-    override fun createBinding(inflater: LayoutInflater) = ActivityMainBinding.inflate(inflater)
 
 
 }

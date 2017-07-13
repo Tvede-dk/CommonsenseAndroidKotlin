@@ -10,6 +10,7 @@ import android.view.LayoutInflater
 import android.view.ViewGroup
 import com.commonsense.android.kotlin.android.logging.L
 import com.commonsense.android.kotlin.collections.TypeHashCodeLookupRepresent
+import com.commonsense.android.kotlin.collections.TypeSection
 import com.commonsense.android.kotlin.collections.TypeSectionLookupRepresentative
 import com.commonsense.android.kotlin.extensions.isNullOrEqualTo
 import ifTrue
@@ -125,11 +126,9 @@ open class RenderModelItem<
 abstract class AbstractDataBindingRecyclerAdapter<T>(context: Context) :
         RecyclerView.Adapter<BaseViewHolderItem<*>>() where T : IRenderModelItem<*, *> {
 
-    override fun getItemId(position: Int): Long {
-        return RecyclerView.NO_ID
-    }
+    override fun getItemId(position: Int): Long = RecyclerView.NO_ID
 
-    protected val dataCollection: TypeSectionLookupRepresentative<T, InflatingFunction<*>>
+    private val dataCollection: TypeSectionLookupRepresentative<T, InflatingFunction<*>>
             = TypeSectionLookupRepresentative()
 
     private val listeningRecyclers = mutableSetOf<WeakReference<RecyclerView>>()
@@ -139,7 +138,7 @@ abstract class AbstractDataBindingRecyclerAdapter<T>(context: Context) :
     }
 
     val sectionCount: Int
-        get() = dataCollection.size
+        get() = dataCollection.sectionCount
 
 
     override fun onCreateViewHolder(parent: ViewGroup?, @IntRange(from = 0) viewType: Int): BaseViewHolderItem<*>? {
@@ -196,6 +195,12 @@ abstract class AbstractDataBindingRecyclerAdapter<T>(context: Context) :
         dataCollection.addAll(items, atSection, startPosition)
         val index = dataCollection.calculateLocationForSection(atSection) ?: return@updateData
         notifyItemRangeInserted(index.start + startPosition, items.size)
+    }
+
+    open fun addAll(vararg items: T, atSection: Int) = updateData {
+        val index = dataCollection.calculateLocationForSection(atSection) ?: return@updateData
+        dataCollection.addAll(items.asList(), atSection)
+        notifyItemRangeInserted(index.endInclusive, items.size)
     }
 
     open fun addAll(vararg items: T, startPosition: Int, atSection: Int) = updateData {
@@ -255,7 +260,6 @@ abstract class AbstractDataBindingRecyclerAdapter<T>(context: Context) :
         }
         removed?.let {
             notifyItemRangeRemoved(it.start, it.length)
-
         }
     }
 
@@ -270,12 +274,20 @@ abstract class AbstractDataBindingRecyclerAdapter<T>(context: Context) :
     }
 
     @UiThread
-    protected fun clearAndSetItemsNoNotify(items: List<T>, atSection: Int) {
+    protected fun clearAndSetItemsNoNotify(items: List<T>, atSection: Int, isIgnored: Boolean) {
         stopScroll()
         dataCollection.clearAndSetSection(items, atSection)
+        isIgnored.ifTrue { dataCollection.ignoreSection(atSection) }
     }
 
-    protected fun stopScroll() {
+    @UiThread
+    protected fun setAllSections(sections: List<TypeSection<T>>) {
+        stopScroll()
+        dataCollection.setAllSections(sections)
+        super.notifyDataSetChanged()
+    }
+
+    private fun stopScroll() {
         listeningRecyclers.forEach { recyclerView ->
             recyclerView.get()?.stopScroll()
         }
@@ -305,23 +317,36 @@ abstract class AbstractDataBindingRecyclerAdapter<T>(context: Context) :
         action()
     }
 
-    fun getRepresentUsingType(viewHolderItem: BaseViewHolderItem<*>): InflatingFunction<*>? {
-        return dataCollection.getTypeRepresentativeFromTypeValue(viewHolderItem.viewBindingTypeValue)
-    }
+    open fun getRepresentUsingType(viewHolderItem: BaseViewHolderItem<*>): InflatingFunction<*>? =
+            dataCollection.getTypeRepresentativeFromTypeValue(viewHolderItem.viewBindingTypeValue)
 
-    fun getItemFromRawIndex(rawIndex: Int): T? {
+    open fun getItemFromRawIndex(rawIndex: Int): T? {
         val index = dataCollection.indexToPath(rawIndex) ?: return null
         return dataCollection[index]
     }
 
-    fun hideSection(sectionIndex: Int) {
+    open fun hideSection(sectionIndex: Int) {
         val sectionLocation = dataCollection.ignoreSection(sectionIndex) ?: return
         notifyItemRangeRemoved(sectionLocation.start, sectionLocation.endInclusive - sectionLocation.start)
     }
 
-    fun showSection(sectionIndex: Int) {
+    open fun showSection(sectionIndex: Int) {
         val sectionLocation = dataCollection.acceptSection(sectionIndex) ?: return
         notifyItemRangeInserted(sectionLocation.start, sectionLocation.endInclusive - sectionLocation.start)
+    }
+
+    open fun toggleSectionsVisibility(vararg sectionIndexes: Int) {
+        sectionIndexes.forEach(this::toggleSectionVisibility)
+    }
+
+    open fun toggleSectionVisibility(sectionIndex: Int) {
+        val sectionData = dataCollection.getSectionAt(sectionIndex) ?: return
+        if (sectionData.isIgnored) {
+            showSection(sectionIndex)
+        } else {
+            hideSection(sectionIndex)
+        }
+
     }
 
 

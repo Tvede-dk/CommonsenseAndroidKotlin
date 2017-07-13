@@ -7,10 +7,13 @@ import com.commonsense.android.kotlin.baseClasses.BaseActivity
 /**
  * created by Kasper Tvede on 29-09-2016.
  */
+
+typealias InflaterFunctionSimple<T> = (layoutInflater: LayoutInflater) -> T
+
 abstract class BaseDatabindingActivity<out T : android.databinding.ViewDataBinding> : BaseActivity() {
 
     val binding: T by lazy {
-        createBinding(layoutInflater)
+        createBinding().invoke(layoutInflater)
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -22,5 +25,5 @@ abstract class BaseDatabindingActivity<out T : android.databinding.ViewDataBindi
 
     abstract fun useBinding()
 
-    abstract fun createBinding(inflater: LayoutInflater): T
+    abstract fun createBinding(): InflaterFunctionSimple<T>
 }

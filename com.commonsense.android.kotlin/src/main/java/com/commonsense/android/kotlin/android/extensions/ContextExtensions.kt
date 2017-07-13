@@ -4,14 +4,17 @@ import android.content.ActivityNotFoundException
 import android.content.Context
 import android.content.Intent
 import android.content.pm.PackageManager
+import android.content.res.TypedArray
 import android.graphics.Point
 import android.graphics.drawable.Drawable
 import android.net.Uri
 import android.support.annotation.ColorRes
 import android.support.annotation.DrawableRes
 import android.support.annotation.StringRes
+import android.support.annotation.StyleableRes
 import android.support.v4.content.ContextCompat
 import android.support.v7.content.res.AppCompatResources
+import android.util.AttributeSet
 import android.view.WindowManager
 import android.widget.Toast
 import com.commonsense.android.kotlin.android.DangerousPermissionString
@@ -100,3 +103,9 @@ fun Context.GetVirtualScreenSize(): Point? {
     }
 }
 
+
+fun Context.getTypedArrayFor(attributeSet: AttributeSet,
+                             @StyleableRes style: IntArray,
+                             defStyleAttr: Int = 0,
+                             defStyleRes: Int = 0): TypedArray =
+        theme.obtainStyledAttributes(attributeSet, style, defStyleAttr, defStyleRes)

@@ -30,4 +30,5 @@ abstract class CustomDataBindingView<T : ViewDataBinding> : FrameLayout {
     abstract fun inflate(): InflaterFunction<T>
 
 
+
 }

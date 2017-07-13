@@ -11,13 +11,13 @@ typealias RawDataConveter<Raw, Logic> = (Raw) -> Logic
 typealias SplitDataConverter<Logic, SplitLogic> = (Logic) -> List<SplitLogic>
 typealias LogicProcessing<SplitLogic, ProcessedLogic> = (SplitLogic) -> ProcessedLogic
 typealias postProcessing<ProcessLogic, PostLogic> = (ProcessLogic) -> PostLogic
-typealias ComposeResult<PostLogic> = suspend (List<PostLogic>) -> Unit
+typealias ComposeResult<PostLogic> = suspend (PostLogic) -> Unit
 
 
 class DataComposer2<Raw, Logic, SplitterLogic, ProcessedLogic>(
         val fetchSteps: DataComposerFetcher<Raw>,
         val rawToLogic: RawDataConveter<Raw, Logic>,
-        val splitLogic: (Logic) -> List<SplitterLogic>,
+        val splitLogic: (Logic) -> SplitterLogic,
         val processLogic: LogicProcessing<SplitterLogic, ProcessedLogic>,
         val postResult: ComposeResult<ProcessedLogic>) {
 
@@ -28,9 +28,8 @@ class DataComposer2<Raw, Logic, SplitterLogic, ProcessedLogic>(
         val logicModel = rawToLogic(fetched)
         val splittet = splitLogic(logicModel)
         //start processing in parallel
-        val jobsPreProcessLogic = splittet.map { async(CommonPool) { processLogic(it) } }
-        val processedLogic = jobsPreProcessLogic.map { it.await() }
-        postResult(processedLogic)
+        val processLogic = processLogic(splittet)
+        postResult(processLogic)
     }
 
 

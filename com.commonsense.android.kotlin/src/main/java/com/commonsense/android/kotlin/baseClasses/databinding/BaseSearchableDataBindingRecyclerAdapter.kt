@@ -4,6 +4,7 @@ import android.content.Context
 import android.databinding.ViewDataBinding
 import android.support.v7.widget.RecyclerView
 import com.commonsense.android.kotlin.android.logging.L
+import com.commonsense.android.kotlin.collections.TypeSection
 import com.commonsense.android.kotlin.collections.TypeSectionLookupRepresentative
 import kotlinx.coroutines.experimental.CommonPool
 import kotlinx.coroutines.experimental.android.UI
@@ -23,8 +24,8 @@ interface IRenderModelSearchItem<T : Any, Vm : ViewDataBinding, in F> : IRenderM
 
 
 class RenderSearchableModelItem<T : Any, Vm : ViewDataBinding, in F : Any>(
-        val filterFunction: (F, T) -> Boolean,
-        val renderModel: IRenderModelItem<T, Vm>)
+        private val filterFunction: (F, T) -> Boolean,
+        private val renderModel: IRenderModelItem<T, Vm>)
     : IRenderModelItem<T, Vm> by renderModel, IRenderModelSearchItem<T, Vm, F> {
     override fun isAcceptedByFilter(value: F): Boolean = filterFunction(value, renderModel.getValue())
 }
@@ -34,13 +35,10 @@ abstract class BaseSearchRenderModel<T : Any, Vm : ViewDataBinding, in F : Any>(
 
 
 fun <T : Any, Vm : ViewDataBinding, F : Any> IRenderModelItem<T, Vm>.toSearchable(filterFunction: (F, T) -> Boolean):
-        RenderSearchableModelItem<T, Vm, F> {
-    return RenderSearchableModelItem(filterFunction, this)
-}
+        RenderSearchableModelItem<T, Vm, F> = RenderSearchableModelItem(filterFunction, this)
 
-fun <T : Any, Vm : ViewDataBinding, F : Any> IRenderModelItem<T, Vm>.toSearchableIgnore(): RenderSearchableModelItem<T, Vm, F> {
-    return RenderSearchableModelItem({ _: F, _: T -> false }, this)
-}
+fun <T : Any, Vm : ViewDataBinding, F : Any> IRenderModelItem<T, Vm>.toSearchableIgnore(): RenderSearchableModelItem<T, Vm, F> =
+        RenderSearchableModelItem({ _: F, _: T -> false }, this)
 
 typealias IGenericSearchRender<F> = IRenderModelSearchItem<*, *, F>
 
@@ -58,15 +56,17 @@ open class AbstractSearchableDataBindingRecyclerAdapter<
     private val filterActor: ConflatedActorHelper<F> = ConflatedActorHelper()
 
 
-    private suspend fun filterBySuspend(filter: F?): Unit {
+    private suspend fun filterBySuspend(filter: F?) {
         try {
             if (filter != filterValue) {
                 return
             }
+
             L.error("filter", "on " + allDataCollection.size)
-            val items = allDataCollection.map {
-                it.collection.filter { isAcceptedByFilter(it, filter) }
+            val items = allDataCollection.mapAll {
+                it.filter { isAcceptedByFilter(it, filter) }
             }
+
             L.error("filter", "resulted in " + items.size)
             updateVisibly(items)
         } catch (exception: Exception) {
@@ -115,6 +115,12 @@ open class AbstractSearchableDataBindingRecyclerAdapter<
         allDataCollection.addAll(asList, atSection, startPosition)
     }
 
+    override fun addAll(vararg items: T, atSection: Int) {
+        val asList = items.asList()
+        super.addAll(asList, atSection)
+        allDataCollection.addAll(asList, atSection)
+    }
+
     override fun replace(newItem: T, position: Int, atSection: Int) {
         super.replace(newItem, position, atSection)
         allDataCollection.replace(newItem, position, atSection)
@@ -122,7 +128,7 @@ open class AbstractSearchableDataBindingRecyclerAdapter<
 
     override fun removeIn(range: IntRange, atSection: Int) {
         super.removeIn(range, atSection)
-        dataCollection.removeInRange(range, atSection)
+        allDataCollection.removeInRange(range, atSection)
     }
 
 
@@ -152,13 +158,10 @@ open class AbstractSearchableDataBindingRecyclerAdapter<
         filterActor.offer(newFilter)
     }
 
-    private suspend fun updateVisibly(data: List<List<T>>) {
+    private suspend fun updateVisibly(data: List<TypeSection<T>>) {
         launch(UI) {
-            super.clearNoNotify()
-            data.forEachIndexed { index, list ->
-                super.clearAndSetItemsNoNotify(list, index)
-            }
-            super.notifyDataSetChanged()
+            super.setAllSections(data)
+
         }.join()
     }
 
@@ -189,6 +192,17 @@ open class AbstractSearchableDataBindingRecyclerAdapter<
     override fun clearAndSetSection(items: List<T>, atSection: Int) {
         allDataCollection.clearAndSetSection(items, atSection)
         super.clearAndSetSection(items, atSection)
+    }
+
+
+    override fun hideSection(sectionIndex: Int) {
+        allDataCollection.ignoreSection(sectionIndex)
+        super.hideSection(sectionIndex)
+    }
+
+    override fun showSection(sectionIndex: Int) {
+        allDataCollection.acceptSection(sectionIndex)
+        super.showSection(sectionIndex)
     }
 
 }

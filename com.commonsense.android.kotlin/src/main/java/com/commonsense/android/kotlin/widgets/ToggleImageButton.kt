@@ -22,15 +22,15 @@ open class ToggleImageButton : AppCompatImageView, ViewAttribute, View.OnClickLi
     private val noColor = 0
 
     constructor(context: Context) : super(context) {
-        prepareAttributes(this)
+        prepareAttributes()
     }
 
     constructor(context: Context, attrs: AttributeSet) : super(context, attrs) {
-        prepareAttributes(this, attrs)
+        prepareAttributes(attrs)
     }
 
     constructor(context: Context, attrs: AttributeSet, defStyleAttr: Int) : super(context, attrs, defStyleAttr) {
-        prepareAttributes(this, attrs, defStyleAttr)
+        prepareAttributes(attrs, defStyleAttr)
     }
 
     private var onCheckedChanged: ((Boolean) -> Unit)? = null

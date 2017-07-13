@@ -8,6 +8,7 @@ import android.support.annotation.UiThread
 import android.util.AttributeSet
 import android.view.View
 import android.view.ViewTreeObserver
+import com.commonsense.android.kotlin.android.extensions.getTypedArrayFor
 import com.commonsense.android.kotlin.extensions.tryAndLog
 import com.commonsense.android.kotlin.extensions.tryAndLogSuspend
 import kotlinx.coroutines.experimental.android.UI
@@ -72,9 +73,8 @@ fun View.setOnclickAsync(action: () -> Unit) {
 fun View.getTypedArrayFor(attributeSet: AttributeSet,
                           @StyleableRes style: IntArray,
                           defStyleAttr: Int = 0,
-                          defStyleRes: Int = 0): TypedArray {
-    return context.theme.obtainStyledAttributes(attributeSet, style, defStyleAttr, defStyleRes)
-}
+                          defStyleRes: Int = 0): TypedArray =
+        context.getTypedArrayFor(attributeSet, style, defStyleAttr, defStyleRes)
 
 
 /**

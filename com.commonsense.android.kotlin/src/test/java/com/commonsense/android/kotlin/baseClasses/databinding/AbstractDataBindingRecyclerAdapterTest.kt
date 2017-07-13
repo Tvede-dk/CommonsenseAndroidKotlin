@@ -19,9 +19,8 @@ import org.robolectric.RuntimeEnvironment
 
 class openAbstractRecycler(context: Context) : AbstractDataBindingRecyclerAdapter<
         RenderModelItem<*, *>>(context) {
-    fun getData(): TypeSectionLookupRepresentative<RenderModelItem<*, *>, InflatingFunction<*>> {
-        return dataCollection
-    }
+    fun getData(): TypeSectionLookupRepresentative<RenderModelItem<*, *>, InflatingFunction<*>> =
+            dataCollection
 }
 
 open class EmptyViewBinding : ViewDataBinding(object : DataBindingComponent {}, View(RuntimeEnvironment.application), 0) {

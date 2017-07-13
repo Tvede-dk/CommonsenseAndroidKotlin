@@ -13,15 +13,15 @@ class DataComposer2Test {
        /* val text = "8,8,98,456,123,456,7,4,5"
 
         var result = mutableListOf<Long>()
-        val composer = DataComposer2({ text }, this@DataComposer2Test::convertRaw, this@DataComposer2Test::splitLogic, this@DataComposer2Test::processlogic, {
-            result.addAll(it)
-        })
+//        val composer = DataComposer2({ text }, this@DataComposer2Test::convertRaw, this@DataComposer2Test::splitLogic, this@DataComposer2Test::processlogic, {
+//            result.addAll(it)
+//        })
 
-        composer.startProcess().await()
-
-        Assert.assertEquals(result.size, 9)
-        Assert.assertEquals(result.first(), 8L)
-        Assert.assertEquals(result.last(), 5L)*/
+//        composer.startProcess().await()
+//
+//        Assert.assertEquals(result.size, 9)
+//        Assert.assertEquals(result.first(), 8L)
+//        Assert.assertEquals(result.last(), 5L)*/
     }
 
 

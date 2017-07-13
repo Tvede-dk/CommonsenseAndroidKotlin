@@ -17,7 +17,8 @@ import org.robolectric.RuntimeEnvironment
  */
 
 class openAbstractRecycler(context: Context) : AbstractDataBindingRecyclerAdapter<
-        RenderModelItem<*, *>>(context)
+        RenderModelItem<*, *>>(context) {
+}
 
 open class EmptyViewBinding : ViewDataBinding(object : DataBindingComponent {}, View(RuntimeEnvironment.application), 0) {
     override fun onFieldChange(localFieldId: Int, `object`: Any?, fieldId: Int) = false

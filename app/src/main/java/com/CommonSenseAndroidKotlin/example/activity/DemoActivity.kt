@@ -1,9 +1,9 @@
 package com.CommonSenseAndroidKotlin.example.activity
 
-import android.view.LayoutInflater
 import com.CommonSenseAndroidKotlin.example.databinding.DemoActivityBinding
 import com.CommonSenseAndroidKotlin.example.fragments.SimpleRecyclerDemo
 import com.commonsense.android.kotlin.baseClasses.databinding.BaseDatabindingActivity
+import com.commonsense.android.kotlin.baseClasses.databinding.InflaterFunctionSimple
 import com.commonsense.android.kotlin.baseClasses.replaceFragment
 
 /**
@@ -12,7 +12,9 @@ import com.commonsense.android.kotlin.baseClasses.replaceFragment
 
 
 open class DemoActivity : BaseDatabindingActivity<DemoActivityBinding>() {
-    override fun createBinding(inflater: LayoutInflater): DemoActivityBinding = DemoActivityBinding.inflate(inflater)
+    override fun createBinding(): InflaterFunctionSimple<DemoActivityBinding>
+            = DemoActivityBinding::inflate
+
     override fun useBinding() {
         replaceFragment(binding.demoActivityContainer.id, SimpleRecyclerDemo())
     }

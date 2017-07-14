@@ -5,12 +5,14 @@ import android.content.pm.PackageManager
 import com.commonsense.android.kotlin.BaseRoboElectricTest
 import com.commonsense.android.kotlin.baseClasses.BaseActivity
 import org.junit.Assert
+import org.junit.Ignore
 import org.junit.Test
 import java.util.concurrent.Semaphore
 
 /**
  * Created by Kasper Tvede on 27-05-2017.
  */
+@Ignore
 class PermissionsHandlingTest : BaseRoboElectricTest() {
 
 
@@ -100,7 +102,6 @@ class PermissionsHandlingTest : BaseRoboElectricTest() {
 }
 
 class AlwaysPermissionActivity : BaseActivity() {
-
 
 
     override fun checkPermission(permission: String?, pid: Int, uid: Int): Int {

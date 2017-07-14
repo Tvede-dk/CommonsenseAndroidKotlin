@@ -9,6 +9,7 @@ import android.support.v7.widget.RecyclerView
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import com.commonsense.android.kotlin.android.logging.L
+import com.commonsense.android.kotlin.collections.IndexPath
 import com.commonsense.android.kotlin.collections.TypeHashCodeLookupRepresent
 import com.commonsense.android.kotlin.collections.TypeSection
 import com.commonsense.android.kotlin.collections.TypeSectionLookupRepresentative
@@ -355,6 +356,14 @@ abstract class AbstractDataBindingRecyclerAdapter<T>(context: Context) :
     protected fun clearNoNotify() {
         dataCollection.clear()
     }
+
+    fun getIndexFor(item: T, @IntRange(from = 0) inSection: Int): IndexPath? {
+        val innerIndex = dataCollection.getSectionAt(inSection)?.collection?.indexOf(item)
+                ?: return null
+        return IndexPath(innerIndex, inSection)
+    }
+
+    fun getSectionSize(sectionIndex: Int): Int? = dataCollection.getSectionAt(sectionIndex)?.size
 
 }
 

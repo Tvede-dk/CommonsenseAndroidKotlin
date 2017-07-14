@@ -11,6 +11,7 @@ import android.view.View
  * Created by kasper on 12/07/2017.
  */
 
+typealias EmptyMethodNullable = (() -> Unit)?
 
 fun Fragment.showSnackbar(view: View,
                           @StringRes text: Int,
@@ -18,8 +19,8 @@ fun Fragment.showSnackbar(view: View,
                           @IntRange(from = 0)
                           durationInMs: Int,
                           onAction: () -> Unit,
-                          onTimeout: () -> Unit,
-                          onDismissOtherwise: () -> Unit) {
+                          onTimeout: EmptyMethodNullable = null,
+                          onDismissOtherwise: EmptyMethodNullable = null) {
 
     val mySnackbar = Snackbar.make(view,
             text, Snackbar.LENGTH_SHORT)
@@ -30,10 +31,9 @@ fun Fragment.showSnackbar(view: View,
     mySnackbar.addCallback(object : BaseTransientBottomBar.BaseCallback<Snackbar?>() {
         override fun onDismissed(transientBottomBar: Snackbar?, event: Int) {
             super.onDismissed(transientBottomBar, event)
-            if (event == DISMISS_EVENT_TIMEOUT) {
-                onTimeout()
-            } else if (event != DISMISS_EVENT_ACTION) {
-                onDismissOtherwise()
+            when {
+                event == DISMISS_EVENT_TIMEOUT -> onTimeout?.invoke()
+                event != DISMISS_EVENT_ACTION -> onDismissOtherwise?.invoke()
             }
         }
     })

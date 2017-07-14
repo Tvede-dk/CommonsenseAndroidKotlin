@@ -118,11 +118,8 @@ class JobContainer {
 
     //<editor-fold desc="Inline mutex functions">
     private inline fun changeLocalJob(crossinline action: MutableList<WeakReference<Job>>.() -> Unit) = runBlocking {
-        localJobMutex.lock()
-        try {
+        localJobMutex.withLock {
             action(localJobs)
-        } finally {
-            localJobMutex.unlock()
         }
     }
 

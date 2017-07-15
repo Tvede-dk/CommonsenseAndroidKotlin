@@ -8,14 +8,9 @@ import android.util.SparseArray
  */
 data class SparseArrayEntry<out T>(@IntRange(from = 0) val key: Int, val value: T)
 
-fun <T> SparseArray<T>.toList(@IntRange(from = 1) maxKeyValue: Int = this.size()): List<SparseArrayEntry<T>> {
-    val list = mutableListOf<SparseArrayEntry<T>>()
-    for (index in 0 until size()) {
-        val key = keyAt(index)
-        if (key > maxKeyValue) {
-            break
-        }
-        get(key)?.let { list.add(SparseArrayEntry(key, it)) }
-    }
-    return list
+fun <T> SparseArray<T>.toList(@IntRange(from = 1) maxKeyValue: Int = Int.MAX_VALUE): List<SparseArrayEntry<T>> {
+    return (0 until size())
+            .map(this::keyAt)
+            .takeWhile { it <= maxKeyValue }
+            .mapNotNull { key -> get(key)?.let { SparseArrayEntry(key, it) } }
 }

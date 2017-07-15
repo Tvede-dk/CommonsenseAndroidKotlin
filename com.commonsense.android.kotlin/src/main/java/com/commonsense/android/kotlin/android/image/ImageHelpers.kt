@@ -6,6 +6,7 @@ import android.graphics.Bitmap
 import android.graphics.BitmapFactory
 import android.graphics.Matrix
 import android.net.Uri
+import android.support.annotation.FloatRange
 import android.support.annotation.IntRange
 import android.support.media.ExifInterface
 import com.commonsense.android.kotlin.android.extensions.GetVirtualScreenSize
@@ -112,7 +113,7 @@ suspend fun Bitmap.rotate(exifInterface: ExifInterface): Deferred<Bitmap> = asyn
 }
 
 
-suspend fun Bitmap.rotate(@IntRange(from = 0, to = 360) degrees: Float): Deferred<Bitmap> = async(CommonPool) {
+suspend fun Bitmap.rotate(@FloatRange(from = 0.0, to = 360.0) degrees: Float): Deferred<Bitmap> = async(CommonPool) {
     val matrix = Matrix()
     if (degrees != 0f) {
         matrix.preRotate(degrees)

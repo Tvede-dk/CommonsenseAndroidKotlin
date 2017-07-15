@@ -69,7 +69,6 @@ dependencies {
 
     //commonSense
     implementation project(':com.commonsense.android.kotlin')
-    testImplementation project(':com.commonsense.android.kotlin')
 //    proguardImplementation project(':com.commonsense.android.kotlin')
 //    proguardImplementation project(path: ':com.commonsense.android.kotlin', configuration: "debug")
 
@@ -97,4 +96,12 @@ kotlin {
     experimental {
         coroutines "enable"
     }
+}
+
+
+android.applicationVariants.all { variant ->
+    variant.variantData.variantConfiguration.javaCompileOptions.annotationProcessorOptions.includeCompileClasspath = true
+    variant.variantData.variantConfiguration.
+            javaCompileOptions.annotationProcessorOptions.className 'com.android.databinding.compiler'
+
 }

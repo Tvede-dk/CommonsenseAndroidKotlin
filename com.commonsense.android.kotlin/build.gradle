@@ -6,6 +6,7 @@ apply plugin: "jacoco"
 jacoco {
     toolVersion "0.7.9"
 }
+
 android {
     defaultPublishConfig "release"
     publishNonDefault true
@@ -54,6 +55,7 @@ android {
         xmlOutput = new File("lint-results.xml")
     }
     configurations {
+        kapt
         debug
         release
     }
@@ -111,6 +113,18 @@ repositories {
     maven {
         url "https://maven.google.com"
     }
+}
+// add annotation processing options to jack
+//android.libraryVariants.all { variant ->
+//    variant.variantData.variantConfiguration.javaCompileOptions.annotationProcessorPath = configurations.kapt
+//}
+
+// add annotation processing options to jack
+android.libraryVariants.all { variant ->
+    variant.variantData.variantConfiguration.javaCompileOptions.annotationProcessorOptions.includeCompileClasspath = true
+    variant.variantData.variantConfiguration.
+            javaCompileOptions.annotationProcessorOptions.className 'com.android.databinding.compiler'
+
 }
 
 apply from: "../resourcegroups.gradle"

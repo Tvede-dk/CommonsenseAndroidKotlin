@@ -58,6 +58,16 @@ android {
         release
     }
 
+    testOptions.unitTests.all {
+        testLogging {
+            events "failed", "skipped"
+            showStackTraces = true
+            exceptionFormat = "full"
+        }
+        maxParallelForks = 20
+        forkEvery = 1
+    }
+
 
 }
 

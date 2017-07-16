@@ -11,7 +11,7 @@ fun RecyclerView.setup(adapter: RecyclerView.Adapter<*>, layoutManager: Recycler
 }
 
 /*fun <T : IRenderModelItem<*, *>> AbstractDataBindingRecyclerAdapter<T>.isIndexValid(index: Int): Boolean {
-    return index in 0..(itemCount - 1)
+    return index in 0 until  itemCount
 }*/
 /*
 fun <T : IRenderModelItem<*, *>> AbstractDataBindingRecyclerAdapter<T>.getLastItem(): IRenderModelItem<*, *>? {

@@ -6,6 +6,8 @@ import android.support.v7.widget.RecyclerView
 import android.support.v7.widget.helper.ItemTouchHelper
 import android.view.View
 import com.commonsense.android.kotlin.android.extensions.widets.ViewHelper
+import com.commonsense.android.kotlin.android.extensions.widets.gone
+import com.commonsense.android.kotlin.android.extensions.widets.visible
 import com.commonsense.android.kotlin.baseClasses.databinding.AbstractDataBindingRecyclerAdapter
 import com.commonsense.android.kotlin.baseClasses.databinding.AbstractSearchableDataBindingRecyclerAdapter
 import com.commonsense.android.kotlin.baseClasses.databinding.BaseDataBindingRecyclerAdapter
@@ -22,15 +24,12 @@ enum class Direction {
     startToEnd, endToStart
 }
 
-fun Int.ToDirection(): Direction? {
-    return if (this == ItemTouchHelper.START) {
-        Direction.startToEnd
-    } else if (this == ItemTouchHelper.END) {
-        Direction.endToStart
-    } else {
-        null
-    }
-}
+fun Int.ToDirection(): Direction? =
+        when (this) {
+            ItemTouchHelper.START -> Direction.startToEnd
+            ItemTouchHelper.END -> Direction.endToStart
+            else -> null
+        }
 
 interface SwipeableItem {
     fun onSwiped(direction: Direction, viewModel: ViewDataBinding)
@@ -106,14 +105,16 @@ private class innerSwipeHelper(val recyclerAdapter: AbstractDataBindingRecyclerA
             return
         }
 
-        if (dX in (-0.1f..0.1f)) { //nothing is visible. just hide it
-            ViewHelper.goneViews(startView, endView)
-        } else if (dX > 0) { //else, what side.
-            ViewHelper.showGoneView(startView, endView)
-        } else {
-            ViewHelper.showGoneView(endView, startView)
-            startView?.visibility = View.GONE
-            endView?.visibility = View.VISIBLE
+        when {
+            dX in (-0.1f..0.1f) -> //nothing is visible. just hide it
+                ViewHelper.goneViews(startView, endView)
+            dX > 0 -> //else, what side.
+                ViewHelper.showGoneView(startView, endView)
+            else -> {
+                ViewHelper.showGoneView(endView, startView)
+                startView?.gone()
+                endView?.visible()
+            }
         }
     }
 
@@ -145,7 +146,7 @@ private class innerSwipeHelper(val recyclerAdapter: AbstractDataBindingRecyclerA
     }
 
 
-    fun getViews(swipeableItem: SwipeableItem, viewModel: ViewDataBinding): SwipeItemViews {
+    private fun getViews(swipeableItem: SwipeableItem, viewModel: ViewDataBinding): SwipeItemViews {
         val startView: View? = swipeableItem.startView(viewModel)
         val endView: View? = swipeableItem.endView(viewModel)
         val mainView: View = swipeableItem.floatingView(viewModel)
@@ -155,9 +156,7 @@ private class innerSwipeHelper(val recyclerAdapter: AbstractDataBindingRecyclerA
     //move is reordering. we only deal with swipe for simplicity.
     override fun onMove(recyclerView: RecyclerView?,
                         beforeViewHolder: RecyclerView.ViewHolder?,
-                        afterViewHolder: RecyclerView.ViewHolder?): Boolean {
-        return false
-    }
+                        afterViewHolder: RecyclerView.ViewHolder?): Boolean = false
 
     override fun onSwiped(viewHolder: RecyclerView.ViewHolder?, directionInt: Int) {
         val optInterface = getOptInterface(viewHolder)
@@ -168,19 +167,15 @@ private class innerSwipeHelper(val recyclerAdapter: AbstractDataBindingRecyclerA
         }
     }
 
-    override fun isLongPressDragEnabled(): Boolean {
-        return true
-    }
+    override fun isLongPressDragEnabled(): Boolean = true
 
-    override fun isItemViewSwipeEnabled(): Boolean {
-        return true
-    }
+    override fun isItemViewSwipeEnabled(): Boolean = true
 }
 
 private fun resetViews(mainView: View, startView: View?, endView: View?, rootView: View) {
-    startView?.visibility = View.GONE
-    endView?.visibility = View.GONE
-    mainView.visibility = View.VISIBLE
+    startView?.gone()
+    endView?.gone()
+    mainView.visible()
     mainView.translationX = 0f
     rootView.translationX = 0f
     endView?.translationX = 0f

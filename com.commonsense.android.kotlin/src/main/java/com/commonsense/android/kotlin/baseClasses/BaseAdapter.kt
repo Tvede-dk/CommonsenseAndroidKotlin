@@ -87,9 +87,7 @@ open class BaseAdapter<T>(context: Context) : ArrayAdapter<T>(context, 0) {
         }
     }
 
-    fun isIndexValid(index: Int): Boolean {
-        return index in 0..(count - 1)
-    }
+    fun isIndexValid(index: Int): Boolean = index in 0 until count
 
 
     fun addAll(map: List<T>) {

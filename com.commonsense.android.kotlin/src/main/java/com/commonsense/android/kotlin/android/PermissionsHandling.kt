@@ -146,7 +146,7 @@ fun BaseActivity.askAndUsePermission(permission: PermissionEnum, usePermission: 
 }
 
 /**
- * annotates all the dangerous permissions strings...
+ * annotates all the dangerous permissions strings
  */
 @Retention(AnnotationRetention.SOURCE)
 @StringDef(Manifest.permission.ACCESS_CHECKIN_PROPERTIES, Manifest.permission.ACCESS_COARSE_LOCATION, Manifest.permission.ACCESS_FINE_LOCATION

@@ -126,7 +126,7 @@ class TypeLookupCollectionRepresentiveTest : BaseRoboElectricTest() {
         val lastItem = TestClassTypeLookupHashcode("asd4", 4)
         collection.add(lastItem)
 
-        collection.removeIn(1..3) //remove asd{1..3} [4 elements, 1 and 3 are inclusive]
+        collection.removeIn(1 until 4) //remove asd{1 until 4} [4 elements, 1 and 3 are inclusive]
         Assert.assertEquals(collection.size, 2)
         Assert.assertEquals(collection[0], firstItem)
         Assert.assertEquals(collection[1], lastItem)

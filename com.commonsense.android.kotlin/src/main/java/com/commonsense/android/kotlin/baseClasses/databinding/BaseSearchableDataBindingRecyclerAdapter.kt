@@ -70,13 +70,13 @@ open class AbstractSearchableDataBindingRecyclerAdapter<
             L.error("filter", "resulted in " + items.size)
             updateVisibly(items)
         } catch (exception: Exception) {
-            L.error("fatal", "..", exception)
+            L.error("fatal", "", exception)
         }
     }
 
-    override fun add(newItem: T, atSection: Int) {
-        allDataCollection.add(newItem, atSection)
-        performActionIfIsValidFilter(newItem, { super.add(newItem, atSection) })
+    override fun add(newItem: T, inSection: Int) {
+        allDataCollection.add(newItem, inSection)
+        performActionIfIsValidFilter(newItem, { super.add(newItem, inSection) })
     }
 
     override fun addAll(items: Collection<T>, atSection: Int) {
@@ -93,9 +93,9 @@ open class AbstractSearchableDataBindingRecyclerAdapter<
         }
     }
 
-    override fun remove(newItem: T, atSection: Int): Int {
-        val index = super.remove(newItem, atSection)
-        allDataCollection.removeItem(newItem, atSection)
+    override fun remove(newItem: T, inSection: Int) {
+        val index = super.remove(newItem, inSection)
+        allDataCollection.removeItem(newItem, inSection)
         return index
     }
 
@@ -104,21 +104,21 @@ open class AbstractSearchableDataBindingRecyclerAdapter<
         allDataCollection.removeAt(row, inSection)
     }
 
-    override fun addAll(items: Collection<T>, startPosition: Int, atSection: Int) {
+    override fun insertAll(items: Collection<T>, startPosition: Int, atSection: Int) {
         super.addAll(items, startPosition)
-        allDataCollection.addAll(items, atSection, startPosition)
+        allDataCollection.insertAll(items, atSection, startPosition)
     }
 
-    override fun addAll(vararg items: T, startPosition: Int, atSection: Int) {
+    override fun insertAll(vararg items: T, startPosition: Int, inSection: Int) {
         val asList = items.asList()
         super.addAll(asList, startPosition)
-        allDataCollection.addAll(asList, atSection, startPosition)
+        allDataCollection.insertAll(asList, inSection, startPosition)
     }
 
-    override fun addAll(vararg items: T, atSection: Int) {
+    override fun addAll(vararg items: T, inSection: Int) {
         val asList = items.asList()
-        super.addAll(asList, atSection)
-        allDataCollection.addAll(asList, atSection)
+        super.addAll(asList, inSection)
+        allDataCollection.addAll(asList, inSection)
     }
 
     override fun replace(newItem: T, position: Int, atSection: Int) {
@@ -126,9 +126,9 @@ open class AbstractSearchableDataBindingRecyclerAdapter<
         allDataCollection.replace(newItem, position, atSection)
     }
 
-    override fun removeIn(range: IntRange, atSection: Int) {
-        super.removeIn(range, atSection)
-        allDataCollection.removeInRange(range, atSection)
+    override fun removeIn(range: IntRange, inSection: Int) {
+        super.removeIn(range, inSection)
+        allDataCollection.removeInRange(range, inSection)
     }
 
 
@@ -184,14 +184,14 @@ open class AbstractSearchableDataBindingRecyclerAdapter<
 
     fun getFilter(): F? = filterValue
 
-    override fun add(item: T, atRow: Int, atSection: Int) {
-        super.add(item, atRow, atSection)
-        allDataCollection.add(item, atRow, atSection)
+    override fun insert(item: T, atRow: Int, inSection: Int) {
+        super.insert(item, atRow, inSection)
+        allDataCollection.insert(item, atRow, inSection)
     }
 
-    override fun setSection(items: List<T>, atSection: Int) {
-        allDataCollection.clearAndSetSection(items, atSection)
-        super.setSection(items, atSection)
+    override fun setSection(items: List<T>, inSection: Int) {
+        allDataCollection.setSection(items, inSection)
+        super.setSection(items, inSection)
     }
 
 

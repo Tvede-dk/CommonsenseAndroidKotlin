@@ -65,7 +65,7 @@ class SearchableFastScrollRecyclerDemo : BaseDatabindingFragment<DemoRecyclerFas
 
     override fun useBinding() {
 
-        val items = (0..50000).map { SearchAbleSimpleListDateTime(DateTime.now().plusHours(it)) }
+        val items = (0 until 50000).map { SearchAbleSimpleListDateTime(DateTime.now().plusHours(it)) }
 
 //        val items = mutableListOf(
 //                SearchAbleSimpleListDateTime(DateTime.now()),

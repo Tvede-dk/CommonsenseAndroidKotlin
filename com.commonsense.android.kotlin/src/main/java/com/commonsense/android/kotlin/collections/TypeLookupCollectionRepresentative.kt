@@ -89,6 +89,9 @@ class TypeRepresentative<in T : TypeHashCodeLookupRepresent<Rep>, out Rep : Any>
     fun removeAll(vararg toRemove: T) {
         toRemove.forEach(this::remove)
     }
+    fun removeAll(items : Collection<T>){
+        items.forEach(this::remove)
+    }
 }
 
 
@@ -155,7 +158,7 @@ class TypeLookupCollectionRepresentative<T : TypeHashCodeLookupRepresent<Rep>, o
 
     operator fun get(position: Int): T? = getDataBy(position)
 
-    fun isIndexValid(index: Int): Boolean = index in 0..(size - 1)
+    fun isIndexValid(index: Int): Boolean = index in 0 until size
 
     fun indexOf(newItem: T): Int = data.indexOf(newItem)
 

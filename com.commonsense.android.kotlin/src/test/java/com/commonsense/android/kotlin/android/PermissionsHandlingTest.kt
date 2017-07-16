@@ -62,7 +62,7 @@ class PermissionsHandlingTest : BaseRoboElectricTest() {
         val act = createActivity<DenyPermissionActivity>()
 
         val listenerCount = 10
-        for (i in 0..listenerCount) {
+        for (i in 0 until listenerCount) {
             act.permissionHandler.performActionForPermission(Manifest.permission.CALL_PHONE, act, {
                 Assert.fail("should not be granted in tests")
             }, sem::release)
@@ -78,7 +78,7 @@ class PermissionsHandlingTest : BaseRoboElectricTest() {
         val act = createActivity<DenyPermissionActivity>()
 
         val listenerCount = 5
-        for (i in 0..listenerCount) {
+        for (i in 0 until listenerCount) {
             act.permissionHandler.performActionForPermission(Manifest.permission.CALL_PHONE, act, sem::release, {
                 Assert.fail("should not be granted in tests")
             })

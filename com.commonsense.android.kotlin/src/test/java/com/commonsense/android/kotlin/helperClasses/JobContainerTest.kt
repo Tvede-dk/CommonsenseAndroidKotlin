@@ -16,7 +16,7 @@ class JobContainerTest {
 
         val jobContainer = JobContainer()
         val jobs = mutableListOf<Job>()
-        for (i in 0..(1000 - 1)) {
+        for (i in 0 until 1000) {
             jobs += launch(CommonPool) {
                 jobContainer.performAction(CommonPool, action = { })
             }

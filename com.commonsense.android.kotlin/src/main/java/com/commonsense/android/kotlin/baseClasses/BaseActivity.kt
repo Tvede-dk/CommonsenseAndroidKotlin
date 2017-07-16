@@ -84,7 +84,7 @@ open class BaseActivity : AppCompatActivity() {
 
     fun addActivityResultListener(requestCode: Int, receiver: ActivityResultCallback) {
         if (activityResultListeners[requestCode] != null && activityResultListeners[requestCode] != receiver) {
-            //TODO should throw, warn, error ? fire missiles ??  this is a bad situation.. hmm
+            //TODO should throw, warn, error ? fire missiles ??  this is a bad situation  hmm
             logError("Overwriting an actual listener, for request code $requestCode")
             throw RuntimeException("Overwriting an actual listener, this is unsupported / not allowed behavior.")
         }

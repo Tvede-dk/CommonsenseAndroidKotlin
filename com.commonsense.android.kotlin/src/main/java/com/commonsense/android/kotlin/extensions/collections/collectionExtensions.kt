@@ -1,20 +1,18 @@
 package com.commonsense.android.kotlin.extensions.collections
 
 import android.support.annotation.Size
+import map
 import onTrue
 
 /**
  * Created by Kasper Tvede on 30-09-2016.
  */
-fun <T> Collection<T>.isIndexValid(index: Int) = index >= 0 && index < count()
+fun Collection<*>.isIndexValid(index: Int) = index >= 0 && index < count()
 
-fun <T> Collection<T>.getSafe(index: Int): T? {
-    return if (this.isIndexValid(index)) {
-        this.elementAt(index)
-    } else {
-        null
-    }
-}
+fun Collection<*>.isIndexValidForInsert(index: Int) = index >= 0 && index <= count()
+
+fun <T> Collection<T>.getSafe(index: Int): T?
+        = this.isIndexValid(index).map(elementAt(index), null)
 
 data class CategorizationResult<out T>(val categoryA: List<T>, val categoryB: List<T>)
 
@@ -45,7 +43,7 @@ fun <T> List<T>.categorize(categorizer: (T) -> String): Map<String, List<T>> {
 
 fun <T> List<T>.repeate(repeateBy: Int): List<T> {
     val resultList = this.toMutableList()
-    for (i in 0..repeateBy - 2) {
+    for (i in 0 until repeateBy) {
         resultList += this
     }
     return resultList
@@ -54,7 +52,7 @@ fun <T> List<T>.repeate(repeateBy: Int): List<T> {
 inline fun <reified T> List<T>.repeateToSize(size: Int): List<T> {
     val timesToRepeate = size / count()
     val missingItemsToCopy = size % count()
-    val resultList = this.repeate(timesToRepeate)
+    val resultList = this.repeate(timesToRepeate - 1)
     return resultList + this.subList(0, missingItemsToCopy)
 }
 
@@ -67,10 +65,15 @@ inline fun <T> Collection<T>.foreachUntil(action: (item: T) -> Boolean) {
 }
 
 
+fun Collection<*>.isRangeValid(intRange: IntRange): Boolean =
+        (intRange.start >= 0 && intRange.endInclusive < size)
+
+fun <T> List<T>.subList(intRange: IntRange): List<T> =
+        subList(intRange.start, intRange.endInclusive)
+
 /**
  * Returns a limited view of this list, by limiting the size of it (if the list is shorter than the limit,
  * then the result will be the lists' length).
  */
-fun <E> List<E>.limitToSize(size: Int): List<E> {
-    return subList(0, Math.min(size, this.size))
-}
+fun <E> List<E>.limitToSize(size: Int): List<E>
+        = subList(0, minOf(size, this.size))

@@ -144,17 +144,17 @@ abstract class AbstractDataBindingRecyclerAdapter<T>(context: Context) :
 
     override fun onCreateViewHolder(parent: ViewGroup?, @IntRange(from = 0) viewType: Int): BaseViewHolderItem<*>? {
         val rep = dataCollection.getTypeRepresentativeFromTypeValue(viewType)
-        (rep == null).ifTrue { logContentData() }
+//        (rep == null).ifTrue { logContentData() }
         return rep?.invoke(inflater, parent, false)
     }
 
     //for debug only.
-    private fun logContentData() {
-        val cachedSize = dataCollection.size
-        val realSize = dataCollection.calculateLocationForSection(
-                dataCollection.sectionCount - 1)?.endInclusive ?: -1
-        L.error("Inconsistency", "precheck, real size : $realSize, cached size: $cachedSize ")
-    }
+//    private fun logContentData() {
+//        val cachedSize = dataCollection.size
+//        val realSize = dataCollection.calculateLocationForSection(
+//                dataCollection.sectionCount - 1)?.endInclusive ?: -1
+//        L.error("Inconsistency", "precheck, real size : $realSize, cached size: $cachedSize ")
+//    }
 
     override fun getItemViewType(@IntRange(from = 0) position: Int): Int {
         val index = dataCollection.indexToPath(position) ?: return 0
@@ -171,71 +171,67 @@ abstract class AbstractDataBindingRecyclerAdapter<T>(context: Context) :
 
     override fun getItemCount(): Int = dataCollection.size
 
-    open fun add(newItem: T, atSection: Int) = updateData {
-        stopScroll()
-        dataCollection.add(newItem, atSection)
-        val index = dataCollection.calculateLocationForSection(atSection) ?: return@updateData
-        notifyItemInserted(index.start + dataCollection.size)
-    }
-
-    open fun addAll(items: Collection<T>, atSection: Int) = updateData {
-
-        dataCollection.addAll(items, atSection)
-        val index = dataCollection.calculateLocationForSection(atSection) ?: return@updateData
-        val startPos = itemCount + index.start
-        notifyItemRangeInserted(startPos, items.size)
-    }
-
-    open fun add(item: T, atRow: Int, atSection: Int) = updateData {
-        dataCollection.add(item, atRow, atSection)
-        val index = dataCollection.calculateLocationForSection(atSection) ?: return@updateData
-        notifyItemInserted(index.start + atRow)
-    }
-
-    open fun addAll(items: Collection<T>, startPosition: Int, atSection: Int) = updateData {
-        dataCollection.addAll(items, atSection, startPosition)
-        val index = dataCollection.calculateLocationForSection(atSection) ?: return@updateData
-        notifyItemRangeInserted(index.start + startPosition, items.size)
-    }
-
-    open fun addAll(vararg items: T, atSection: Int) = updateData {
-        val index = dataCollection.calculateLocationForSection(atSection) ?: return@updateData
-        dataCollection.addAll(items.asList(), atSection)
-        notifyItemRangeInserted(index.endInclusive, items.size)
-    }
-
-    open fun addAll(vararg items: T, startPosition: Int, atSection: Int) = updateData {
-        dataCollection.addAll(items.asList(), startPosition)
-        val index = dataCollection.calculateLocationForSection(atSection) ?: return@updateData
-        notifyItemRangeInserted(index.start + startPosition, items.size)
-    }
-
-    open fun remove(newItem: T, atSection: Int): Int {
-        val index = dataCollection.indexOf(newItem, atSection)
-        updateData {
-            removeAt(index, atSection)
+    open fun add(newItem: T, inSection: Int) = updateData {
+        dataCollection.add(newItem, inSection).rawRow.apply {
+            notifyItemInserted(this)
         }
-        return index
+    }
 
+    open fun addAll(items: Collection<T>, inSection: Int) = updateData {
+        dataCollection.addAll(items, inSection).inRaw.apply {
+            notifyItemRangeInserted(this.start, this.length)
+        }
+
+    }
+
+    open fun insert(item: T, atRow: Int, inSection: Int) = updateData {
+        dataCollection.insert(item, atRow, inSection)?.rawRow.apply {
+            this?.let { notifyItemInserted(it) }
+        }
+    }
+
+    open fun insertAll(items: Collection<T>, startPosition: Int, inSection: Int) = updateData {
+        dataCollection.insertAll(items, inSection, startPosition)?.inRaw.apply {
+            this?.let { notifyItemRangeInserted(it.start, it.length) }
+        }
+    }
+
+    open fun addAll(vararg items: T, inSection: Int) = updateData {
+        dataCollection.addAll(items.asList(), inSection).inRaw.apply {
+            notifyItemRangeInserted(this.start, this.length)
+        }
+
+    }
+
+    open fun insertAll(vararg items: T, startPosition: Int, inSection: Int) = updateData {
+        dataCollection.insertAll(items.asList(), startPosition, inSection)?.inRaw.apply {
+            this?.let { notifyItemRangeInserted(it.start, it.length) }
+        }
+    }
+
+    open fun remove(newItem: T, inSection: Int) = updateData {
+        dataCollection.removeItem(newItem, inSection)?.rawRow.apply {
+            this?.let { notifyItemRemoved(it) }
+        }
     }
 
     open fun removeAt(row: Int, inSection: Int) = updateData {
-        val sectionLocation = dataCollection.getSectionLocation(inSection)
-        if (sectionLocation != null && dataCollection.removeAt(row, inSection)) {
-            notifyItemRemoved(sectionLocation.start + row)
+        dataCollection.removeAt(row, inSection)?.rawRow.apply {
+            this?.let { notifyItemRemoved(it) }
         }
     }
 
 
-    open fun removeIn(range: kotlin.ranges.IntRange, atSection: Int) = updateData {
-        val sectionLocation = dataCollection.getSectionLocation(atSection)
-        if (sectionLocation != null && dataCollection.removeInRange(range, atSection)) {
-            notifyItemRangeRemoved(sectionLocation.start + range.start, sectionLocation.start + range.length)
+    open fun removeIn(range: kotlin.ranges.IntRange, inSection: Int) = updateData {
+        dataCollection.removeInRange(range, inSection)?.inRaw.apply {
+            this?.let {
+                notifyItemRangeRemoved(it.start + range.start, range.length)
+            }
         }
     }
 
 
-    open fun getItem(atRow: Int, atSection: Int): T? = dataCollection[atRow, atSection]
+    open fun getItem(atRow: Int, inSection: Int): T? = dataCollection[atRow, inSection]
 
     open fun clear() = updateData {
         dataCollection.clear()
@@ -243,43 +239,45 @@ abstract class AbstractDataBindingRecyclerAdapter<T>(context: Context) :
     }
 
 
-    protected fun addNoNotify(item: T, atSection: Int) = updateData {
-        dataCollection.add(item, atSection)
+    protected fun addNoNotify(item: T, inSection: Int) = updateData {
+        dataCollection.add(item, inSection).rawRow
     }
 
-    protected fun addNoNotify(items: List<T>, atSection: Int) = updateData {
-        dataCollection.addAll(items, atSection)
+    protected fun addNoNotify(items: List<T>, inSection: Int) = updateData {
+        dataCollection.addAll(items, inSection).inRaw
     }
 
-    open fun setSection(items: List<T>, atSection: Int) {
-        val (changes, added, removed) = dataCollection.clearAndSetSection(items, atSection)
-        notifyDataSetChanged() //TODO make it work...
-        /*changes?.let {
-            notifyItemRangeChanged(it.start, it.length)
+    open fun setSection(items: List<T>, inSection: Int) {
+        val (changes, added, removed) = dataCollection.setSection(items, inSection)
+        changes?.let {
+            notifyItemRangeChanged(it.inRaw.start, it.inRaw.length)
         }
         added?.let {
-            notifyItemRangeInserted(it.start, it.length)
+            notifyItemRangeInserted(it.inRaw.start, it.inRaw.length)
         }
         removed?.let {
-            notifyItemRangeRemoved(it.start, it.length)
-        }*/
-    }
-
-    private fun clearSection(atSection: Int) {
-        val location = dataCollection.clearSection(atSection) ?: return
-        notifyItemRangeRemoved(location.start, location.length)
-    }
-
-    open fun replace(newItem: T, position: Int, atSection: Int) = updateData {
-        dataCollection.replace(newItem, position, atSection)
-        notifyItemChanged(position)
+            notifyItemRangeRemoved(it.inRaw.start, it.inRaw.length)
+        }
     }
 
     @UiThread
-    protected fun clearAndSetItemsNoNotify(items: List<T>, atSection: Int, isIgnored: Boolean) {
+    private fun clearSection(inSection: Int) = updateData {
+        dataCollection.clearSection(inSection)?.inRaw.apply {
+            this?.let { notifyItemRangeRemoved(it.start, it.length) }
+        }
+    }
+
+    open fun replace(newItem: T, position: Int, inSection: Int) = updateData {
+        dataCollection.replace(newItem, position, inSection)?.rawRow.apply {
+            this?.let { notifyItemChanged(it) }
+        }
+    }
+
+    @UiThread
+    protected fun clearAndSetItemsNoNotify(items: List<T>, inSection: Int, isIgnored: Boolean) {
         stopScroll()
-        dataCollection.clearAndSetSection(items, atSection)
-        isIgnored.ifTrue { dataCollection.ignoreSection(atSection) }
+        dataCollection.setSection(items, inSection)
+        isIgnored.ifTrue { dataCollection.ignoreSection(inSection) }
     }
 
     @UiThread
@@ -314,9 +312,9 @@ abstract class AbstractDataBindingRecyclerAdapter<T>(context: Context) :
     /**
      * must be called from all things that manipulate the dataCollection.
      */
-    private fun updateData(action: () -> Unit) {
+    private inline fun updateData(crossinline action: () -> Unit) {
         stopScroll()
-        action()
+        return action()
     }
 
     open fun getRepresentUsingType(viewHolderItem: BaseViewHolderItem<*>): InflatingFunction<*>? =
@@ -328,12 +326,12 @@ abstract class AbstractDataBindingRecyclerAdapter<T>(context: Context) :
     }
 
     open fun hideSection(sectionIndex: Int) {
-        val sectionLocation = dataCollection.ignoreSection(sectionIndex) ?: return
+        val sectionLocation = dataCollection.ignoreSection(sectionIndex)?.inRaw ?: return
         notifyItemRangeRemoved(sectionLocation.start, sectionLocation.endInclusive - sectionLocation.start)
     }
 
     open fun showSection(sectionIndex: Int) {
-        val sectionLocation = dataCollection.acceptSection(sectionIndex) ?: return
+        val sectionLocation = dataCollection.acceptSection(sectionIndex)?.inRaw ?: return
         notifyItemRangeInserted(sectionLocation.start, sectionLocation.endInclusive - sectionLocation.start)
     }
 
@@ -342,7 +340,7 @@ abstract class AbstractDataBindingRecyclerAdapter<T>(context: Context) :
     }
 
     open fun toggleSectionVisibility(sectionIndex: Int) {
-        val sectionData = dataCollection.getSectionAt(sectionIndex) ?: return
+        val sectionData = dataCollection.sectionAt(sectionIndex) ?: return
         if (sectionData.isIgnored) {
             showSection(sectionIndex)
         } else {
@@ -358,12 +356,12 @@ abstract class AbstractDataBindingRecyclerAdapter<T>(context: Context) :
     }
 
     fun getIndexFor(item: T, @IntRange(from = 0) inSection: Int): IndexPath? {
-        val innerIndex = dataCollection.getSectionAt(inSection)?.collection?.indexOf(item)
+        val innerIndex = dataCollection.sectionAt(inSection)?.collection?.indexOf(item)
                 ?: return null
         return IndexPath(innerIndex, inSection)
     }
 
-    fun getSectionSize(sectionIndex: Int): Int? = dataCollection.getSectionAt(sectionIndex)?.size
+    fun getSectionSize(sectionIndex: Int): Int? = dataCollection.sectionAt(sectionIndex)?.size
 
 }
 

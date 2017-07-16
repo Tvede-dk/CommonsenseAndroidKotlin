@@ -2,7 +2,6 @@ package com.commonsense.android.kotlin.collections
 
 import android.support.annotation.IntRange
 import android.util.SparseArray
-import com.commonsense.android.kotlin.android.logging.L
 import com.commonsense.android.kotlin.extensions.collections.*
 import length
 import map
@@ -22,7 +21,7 @@ data class TypeSection<T>(
      * if this section is to be ignored. (in ui terms, hidden for example)
      */
 
-    val visibileCount: Int
+    val visibleCount: Int
         get() = isIgnored.map(0, size)
 //
 //    var header: T? = null
@@ -33,14 +32,16 @@ data class TypeSection<T>(
 
 class TypeSectionLookupRepresentative<T : TypeHashCodeLookupRepresent<Rep>, out Rep : Any> {
 
-
+    //<editor-fold desc="Internal data">
     private val lookup = TypeRepresentative<T, Rep>()
 
     private val data: SparseArray<TypeSection<T>> = SparseArray()
 
     @IntRange(from = 0)
     private var cachedSize: Int = 0
+    //</editor-fold>
 
+    //<editor-fold desc="Sizes">
     val size
         @IntRange(from = 0)
         get() = cachedSize
@@ -48,119 +49,151 @@ class TypeSectionLookupRepresentative<T : TypeHashCodeLookupRepresent<Rep>, out 
     val sectionCount
         @IntRange(from = 0)
         get () = data.size()
+    //</editor-fold>
 
-    private inline fun <T> updateCacheForSection(sectionIndex: Int, crossinline action: () -> T): T {
 
-        val before = getSectionAt(sectionIndex)?.isIgnored
-        val sizeBefore = getSectionAt(sectionIndex)?.visibileCount ?: 0
-
-        val actionResult = action()
-
-        val sizeAfter = getSectionAt(sectionIndex)?.visibileCount ?: 0
-        val after = getSectionAt(sectionIndex)?.isIgnored
-        cachedSize += (sizeAfter - sizeBefore)
-
-        L.error("Section [$sectionIndex]", "size updated with: ${(sizeAfter - sizeBefore)}; ignore : $before -> $after")
-        return actionResult
-    }
-
-    private inline fun ensureSection(@IntRange(from = 0) atSection: Int,
-                                     crossinline function: () -> Unit) {
-        addSectionIfMissing(atSection)
-        function()
-    }
-
-    private fun addSectionIfMissing(@IntRange(from = 0) atSection: Int) {
-        if (data[atSection, null] == null) {
-            data.put(atSection, TypeSection(atSection))
-        }
-    }
-
-    fun add(item: T, @IntRange(from = 0) atSection: Int) = ensureSection(atSection) {
-        updateCacheForSection(atSection) {
-            data.get(atSection).collection.add(item)
+    //<editor-fold desc="Add functions">
+    fun add(item: T, @IntRange(from = 0) inSection: Int): SectionLocation {
+        val sectionUpdate = addSectionIfMissing(inSection)
+        updateCacheForSection(inSection) {
+            data[inSection].collection.add(item)
             lookup.add(item)
         }
+        return SectionLocation(sectionUpdate.inRaw.endInclusive, sectionUpdate.inSection.endInclusive)
+    }
+
+    fun insert(item: T, @IntRange(from = 0) atRow: Int, @IntRange(from = 0) inSection: Int): SectionLocation? {
+        if (!sectionExists(inSection) || !data[inSection].collection.isIndexValidForInsert(atRow)) {
+            return null
+        }
+        val sectionUpdate = addSectionIfMissing(inSection)
+
+        updateCacheForSection(inSection) {
+            data[inSection].collection.add(atRow, item)
+            lookup.add(item)
+        }
+        return SectionLocation(sectionUpdate.inRaw.start + atRow, atRow)
     }
 
 
-    fun addAll(items: Collection<T>, @IntRange(from = 0) atSection: Int) = ensureSection(atSection) {
-        updateCacheForSection(atSection) {
-            data.get(atSection).collection.addAll(items)
+    fun addAll(items: Collection<T>, @IntRange(from = 0) inSection: Int): SectionUpdate {
+        val section = addSectionIfMissing(inSection)
+        updateCacheForSection(inSection) {
+            data.get(inSection).collection.addAll(items)
             lookup.addAll(items)
         }
+        return SectionUpdate(section.inRaw.endInclusive until section.inRaw.endInclusive + items.size,
+                section.inSection.endInclusive until section.inSection.endInclusive + items.size)
     }
 
-    fun removeItem(item: T, @IntRange(from = 0) atSection: Int) {
-        updateCacheForSection(atSection) {
-            val didRemove = data[atSection]?.collection?.remove(item) ?: false
-            if (didRemove) {
+    fun insertAll(items: Collection<T>, @IntRange(from = 0) startPosition: Int, @IntRange(from = 0) inSection: Int): SectionUpdate? {
+        if (!sectionExists(inSection) || !data[inSection].collection.isIndexValidForInsert(startPosition)) {
+            return null
+        }
+        val section = addSectionIfMissing(inSection)
+        updateCacheForSection(inSection) {
+            data[inSection].collection.addAll(startPosition, items)
+            lookup.addAll(items)
+        }
+        return SectionUpdate(section.inRaw.endInclusive + startPosition until section.inRaw.endInclusive + startPosition + items.size,
+                section.inSection.endInclusive + startPosition until section.inSection.endInclusive + startPosition + items.size)
+    }
+    //</editor-fold>
+
+    //<editor-fold desc="Remove functions">
+    fun removeItem(item: T, @IntRange(from = 0) inSection: Int): SectionLocation? {
+        val section = calculateSectionLocation(inSection) ?: return null
+        return updateCacheForSection(inSection) {
+            val indexOf = data[inSection].collection.indexOf(item)
+            return@updateCacheForSection if (indexOf == -1) {
+                null
+            } else {
+                data[inSection].collection.removeAt(indexOf)
                 lookup.remove(item)
+                SectionLocation(section.inRaw.start + indexOf, indexOf)
             }
         }
     }
 
-    fun removeItems(items: List<T>, @IntRange(from = 0) atSection: Int) {
-        items.forEach {
-            this.removeItem(it, atSection)
+    fun removeAt(@IntRange(from = 0) row: Int, @IntRange(from = 0) inSection: Int): SectionLocation? {
+        val sectionLocation = calculateSectionLocation(inSection)
+        if (sectionLocation == null || isIndexValidInSection(row, inSection) != true) {
+            return null
+        }
+        return updateCacheForSection(inSection) {
+            val item = data[inSection].collection.removeAt(row)
+            lookup.remove(item)
+            SectionLocation(sectionLocation.inRaw.start + row, row)
         }
     }
 
+    private fun isIndexValidInSection(row: Int, inSection: Int) =
+            data[inSection]?.collection?.isIndexValid(row)
 
-    fun getItem(@IntRange(from = 0) atRow: Int, @IntRange(from = 0) atSection: Int): T? =
-            data.get(atSection)?.collection?.getSafe(atRow)
 
-    private fun IndexPathIsValid(@IntRange(from = 0) atRow: Int, @IntRange(from = 0) atSection: Int): Boolean =
-            getItem(atRow, atSection) != null
+    fun removeItems(items: List<T>, @IntRange(from = 0) inSection: Int): List<SectionLocation> =
+            items.mapNotNull { removeItem(it, inSection) }
 
-    operator fun get(@IntRange(from = 0) atRow: Int, @IntRange(from = 0) atSection: Int): T? = getItem(atRow, atSection)
 
-    operator fun get(index: IndexPath): T? = getItem(index.row, index.section)
+    fun removeInRange(range: kotlin.ranges.IntRange, inSection: Int): SectionUpdate? {
+        val section = calculateSectionLocation(inSection)
+        if (section == null || !data[inSection].collection.isRangeValid(range)) {
+            return null
+        }
+        updateCacheForSection(inSection) {
+            lookup.removeAll(data[inSection].collection.subList(range))
+            data[inSection].collection.removeAll(range)
 
+        }
+        return SectionUpdate((section.inRaw.start + range.start) until
+                (section.inRaw.start + range.endInclusive + 1), range)
+    }
+    //</editor-fold>
+
+    fun replace(newItem: T, @IntRange(from = 0) atRow: Int, @IntRange(from = 0) inSection: Int): SectionLocation? {
+        val sectionLocation = addSectionIfMissing(inSection)
+        if (!data[inSection].collection.isIndexValid(atRow)) {
+            return null
+        }
+        data[inSection].collection.replace(newItem, atRow)
+        return SectionLocation(sectionLocation.inRaw.start + atRow, atRow)
+    }
 
     fun getTypeRepresentativeFromTypeValue(type: Int): Rep? =
             lookup.getTypeRepresentativeFromTypeValue(type)
 
-    fun add(item: T, @IntRange(from = 0) atRow: Int, @IntRange(from = 0) atSection: Int) = ensureSection(atSection) {
-        updateCacheForSection(atSection) {
-            data[atSection].collection.add(atRow, item)
-            lookup.add(item)
-        }
-    }
 
     /**
      * returns what have changed. (the diff).
      */
-    fun clearAndSetSection(items: List<T>, @IntRange(from = 0) atSection: Int): SectionUpdate {
-        val removed = clearSection(atSection)
-        val location = calculateLocationForSection(atSection)
-        addAll(items, atSection)
-        if (removed == null || location == null) {
-            return SectionUpdate(location, null, null)
+    fun setSection(items: List<T>, @IntRange(from = 0) inSection: Int): SectionUpdates {
+        val removed = clearSection(inSection)
+        val added = addAll(items, inSection)
+        if (removed == null) {
+            return SectionUpdates(null, added, removed)
         }
-        val changedEnd = location.start + (removed.start + minOf(removed.length, items.size))
-        val changedRange = (location.start + removed.start) until (+changedEnd)
-        L.warning("typeSection[$atSection]", "removed range: $removed; added count: ${items.size}")
-        L.error("section[$atSection]", "cached size : $cachedSize, true size is: ${calculateTrueSize()}")
-        return if (removed.length > items.size) {
-            L.warning("typeSection[$atSection]", "delete with changes: $changedRange," +
-                    " and deletion: ${changedEnd until removed.endInclusive + 1} ")
-            SectionUpdate(changedRange, null, changedEnd until location.start + removed.endInclusive + 1)
+
+
+        val inSectionChangedEnd = minOf(removed.inSection.length, added.inSection.length)
+
+        val startOffsetRaw = added.inRaw.start
+        val changedEndOffSetRaw = startOffsetRaw + inSectionChangedEnd
+        val changedRange = SectionUpdate(startOffsetRaw until changedEndOffSetRaw, 0 until inSectionChangedEnd)
+
+        return if (removed.inSection.length > items.size) {
+            val removedUpdate = SectionUpdate(
+                    changedEndOffSetRaw until changedEndOffSetRaw + removed.inSection.length,
+                    inSectionChangedEnd until removed.inSection.length)
+            SectionUpdates(changedRange, null, removedUpdate)
         } else {
-            L.warning("typeSection[$atSection]", "added with changes: $changedRange," +
-                    " and insertions: ${changedEnd until items.size + 1} ")
-            SectionUpdate(changedRange, changedEnd until changedEnd + items.size + 1, null)
+            val addedUpdate = SectionUpdate(
+                    changedEndOffSetRaw until changedEndOffSetRaw + added.inSection.length,
+                    inSectionChangedEnd until added.inSection.length
+            )
+            SectionUpdates(changedRange, addedUpdate, null)
         }
-
     }
 
-    //TODO remove this after debugging.
-    private fun calculateTrueSize(): Int = data.toList().sumBy { it.value.isIgnored.map(0, it.value.collection.size) }
-
-    fun replace(newItem: T, @IntRange(from = 0) position: Int, @IntRange(from = 0) inSection: Int)
-            = ensureSection(inSection) {
-        data[inSection].collection.replace(newItem, position)
-    }
 
     fun clear() {
         data.clear()
@@ -169,76 +202,45 @@ class TypeSectionLookupRepresentative<T : TypeHashCodeLookupRepresent<Rep>, out 
     }
 
 
-    fun addAll(items: Collection<T>, @IntRange(from = 0) startPosition: Int, @IntRange(from = 0) atSection: Int)
-            = ensureSection(atSection) {
-        updateCacheForSection(atSection) {
-            data[atSection].collection.addAll(startPosition, items)
-            lookup.addAll(items)
-        }
-    }
-
+    //this is btw O(Section) which is bad with many sections. can be optimized to O(log_2(sections)) then, even a million sections would be "good". (Log_2(10^6) ~ 20
+    //the idea; keep a sparseArray of "accumulated" sizes; then we can binary search that.
+    // the Accumulated calculation will be "O(section)" amortised but as the bright person have observed, that is the same speed as it is now...
+    //TODO hmm, convert this ?
     fun indexToPath(@IntRange(from = 0) position: Int): IndexPath? {
         //naive implementation
-
         var currentPosition = position
-        for (dataIndex in 0 until data.size()) {
-            val section = data.keyAt(dataIndex)
-            val item = data[section]
-            if (item.isIgnored) {
-                continue//skip ignored entries.
+        var result: IndexPath? = null
+        //TODO , mabye cache the list implementation. or something.
+        data.toList().filterNot { it.value.isIgnored }.foreachUntil {
+            if (currentPosition < it.value.size) {
+                result = IndexPath(currentPosition, it.value.sectionIndexValue)
+                true
+            } else {
+                currentPosition -= it.value.size
+                false
             }
-
-            if (currentPosition < item.size) {
-                return IndexPath(currentPosition, section)
-            }
-            currentPosition -= item.size
         }
-        return null
+        return result
     }
 
+    private fun IndexPathIsValid(@IntRange(from = 0) atRow: Int, @IntRange(from = 0) inSection: Int): Boolean =
+            getItem(atRow, inSection) != null
 
-    fun calculateLocationForSection(@IntRange(from = 0) sectionIndex: Int): kotlin.ranges.IntRange? {
-        addSectionIfMissing(sectionIndex)
-        val dataItems = data.toList(sectionIndex).filter { !it.value.isIgnored }
-        if (dataItems.isEmpty()) {
+    fun indexOf(newItem: T, inSection: Int): SectionLocation? {
+        val locationOfSection = calculateSectionLocation(inSection) ?: return null
+        val indexInSection = data[inSection].collection.indexOf(newItem)
+        if (indexInSection == -1) {
             return null
         }
-        val start = dataItems.dropLast(1).sumBy { it.value.size }
-        val end = dataItems.last().value.size + start
-        return start..end
+        return SectionLocation(locationOfSection.inRaw.start + indexInSection, indexInSection)
     }
 
-    fun removeAt(@IntRange(from = 0) row: Int, @IntRange(from = 0) inSection: Int): Boolean {
-        if (data[inSection]?.collection?.isIndexValid(row) != true) {
-            return false
-        }
-        val item = updateCacheForSection(inSection) {
-            return@updateCacheForSection data[inSection]?.collection?.removeAt(row)
-        }
-        item?.let(lookup::remove)
-        return item != null
-    }
-
-    fun removeInRange(range: kotlin.ranges.IntRange, atSection: Int): Boolean {
-        addSectionIfMissing(atSection)
-        val section = data[atSection]
-        return updateCacheForSection(atSection) {
-            val didRemove = section.collection.removeAll(range)
-            return@updateCacheForSection didRemove
-        }
-    }
-
-    fun indexOf(newItem: T, atSection: Int): Int {
-        addSectionIfMissing(atSection)
-        return data[atSection].collection.indexOf(newItem)
-    }
-
-    fun ignoreSection(sectionIndex: Int): kotlin.ranges.IntRange? {
-        addSectionIfMissing(sectionIndex)
-        val location = calculateLocationForSection(sectionIndex)
-        if (data[sectionIndex].isIgnored) {
+    //<editor-fold desc="Section igorance">
+    fun ignoreSection(@IntRange(from = 0) sectionIndex: Int): SectionUpdate? {
+        if (!sectionExists(sectionIndex) || data[sectionIndex].isIgnored) {
             return null
         }
+        val location = calculateSectionLocation(sectionIndex)
         updateCacheForSection(sectionIndex) {
             data[sectionIndex].isIgnored = true
         }
@@ -248,37 +250,106 @@ class TypeSectionLookupRepresentative<T : TypeHashCodeLookupRepresent<Rep>, out 
     /**
      * Inverse of ignore section.
      */
-    fun acceptSection(@IntRange(from = 0) sectionIndex: Int): kotlin.ranges.IntRange? {
-        addSectionIfMissing(sectionIndex)
-        if (!data[sectionIndex].isIgnored) {
+    fun acceptSection(@IntRange(from = 0) sectionIndex: Int): SectionUpdate? {
+        if (!sectionExists(sectionIndex) || !data[sectionIndex].isIgnored) {
             return null
         }
         updateCacheForSection(sectionIndex) {
             data[sectionIndex].isIgnored = false
         }
-        return calculateLocationForSection(sectionIndex)
+        return calculateSectionLocation(sectionIndex)
     }
 
-    fun toggleSectionVisibility(@IntRange(from = 0) sectionIndex: Int) = ensureSection(sectionIndex) {
-        data[sectionIndex].isIgnored = !data[sectionIndex].isIgnored
+    fun toggleSectionVisibility(@IntRange(from = 0) sectionIndex: Int): SectionUpdate? {
+        if (!sectionExists(sectionIndex)) {
+            return null
+        }
+
+        return if (data[sectionIndex].isIgnored) {
+            acceptSection(sectionIndex)
+        } else {
+            ignoreSection(sectionIndex)
+        }
+
     }
+    //</editor-fold>
 
-    fun getSectionLocation(@IntRange(from = 0) sectionIndex: Int): kotlin.ranges.IntRange? =
-            calculateLocationForSection(sectionIndex)
+    //<editor-fold desc="Section opertations">
+    fun getSectionLocation(@IntRange(from = 0) sectionIndex: Int): SectionUpdate? =
+            calculateSectionLocation(sectionIndex)
 
-    fun clearSection(@IntRange(from = 0) atSection: Int): kotlin.ranges.IntRange? {
-        addSectionIfMissing(atSection)
-        if (data[atSection].collection.isEmpty()) {
+    fun clearSection(@IntRange(from = 0) inSection: Int): SectionUpdate? {
+        if (data[inSection, null] == null) { //missing section => null.
             return null
         }
         @IntRange(from = 0)
-        val location = calculateLocationForSection(atSection) ?: return null
-        updateCacheForSection(atSection) {
-            data[atSection].collection.clear()
+        val location = calculateSectionLocation(inSection)
+        updateCacheForSection(inSection) {
+            data[inSection].collection.clear()
         }
         return location
     }
 
+
+    fun setAllSections(sections: List<TypeSection<T>>) {
+        cachedSize = sections.sumBy { it.visibleCount }
+        data.clear()
+        sections.forEach { data.put(it.sectionIndexValue, it) }
+        lookup.clear()
+        sections.forEach { it.collection.forEach(lookup::add) }
+    }
+
+    fun removeSection(sectionIndex: Int): SectionUpdate? {
+        if (data.get(sectionIndex, null) == null) {
+            return null
+        }
+        val section = data[sectionIndex]
+        val location = calculateSectionLocation(sectionIndex)
+        data.remove(sectionIndex)
+        cachedSize -= section.size
+        return location
+    }
+
+    //TODO private ?
+    fun sectionAt(sectionIndex: Int): TypeSection<T>? = data[sectionIndex]
+
+    private fun sectionExists(sectionIndex: Int): Boolean = data[sectionIndex, null] != null
+    //</editor-fold>
+
+
+    private fun getItem(@IntRange(from = 0) atRow: Int, @IntRange(from = 0) inSection: Int): T? =
+            data.get(inSection)?.collection?.getSafe(atRow)
+
+
+    //<editor-fold desc="Operators">
+
+    operator fun get(@IntRange(from = 0) atRow: Int, @IntRange(from = 0) inSection: Int): T? = getItem(atRow, inSection)
+
+    operator fun get(index: IndexPath): T? = getItem(index.row, index.section)
+    //</editor-fold>
+
+    //<editor-fold desc="cache handling">
+    private inline fun <T> updateCacheForSection(sectionIndex: Int, crossinline action: () -> T): T {
+
+//        val before = sectionAt(sectionIndex)?.isIgnored
+        val sizeBefore = sectionAt(sectionIndex)?.visibleCount ?: 0
+
+        val actionResult = action()
+
+        val sizeAfter = sectionAt(sectionIndex)?.visibleCount ?: 0
+//        val after = sectionAt(sectionIndex)?.isIgnored
+        cachedSize += (sizeAfter - sizeBefore)
+
+//        L.error("Section [$sectionIndex]", "size updated with: ${(sizeAfter - sizeBefore)}; ignore : $before -> $after")
+        if (sizeAfter == 0) {
+            data.remove(sectionIndex)
+//            L.error("section", "$sectionIndex removed from collection.")
+        }
+        return actionResult
+    }
+    //</editor-fold>
+
+    //<editor-fold desc="Map functions">
     fun <U> mapNoIgnored(converter: (List<T>) -> List<U>): List<TypeSection<U>> =
             mapAll(converter).filter { !it.isIgnored }
 
@@ -287,35 +358,50 @@ class TypeSectionLookupRepresentative<T : TypeHashCodeLookupRepresent<Rep>, out 
                 TypeSection(it.key, it.value.isIgnored, it.value.collection.let(converter)
                         .toMutableList())
             }
+    //</editor-fold>
 
+    //<editor-fold desc="location calculations">
 
-    fun getSectionAt(sectionIndex: Int): TypeSection<T>? = data[sectionIndex]
-
-    fun setAllSections(sections: List<TypeSection<T>>) {
-        cachedSize = sections.sumBy { it.visibileCount }
-        data.clear()
-        sections.forEach { data.put(it.sectionIndexValue, it) }
-        lookup.clear()
-        sections.forEach { it.collection.forEach(lookup::add) }
+    private fun addSectionIfMissing(@IntRange(from = 0) inSection: Int): SectionUpdate {
+        if (!sectionExists(inSection)) {
+            data.put(inSection, TypeSection(inSection))
+        }
+        return calculateSectionLocation(inSection) ?: SectionUpdate(0 until 1, 0 until 1)
     }
+
+    private fun calculateSectionLocation(sectionIndex: Int): SectionUpdate? {
+        if (!sectionExists(sectionIndex)) {
+            return null
+        }
+        val dataItems = data.toList(sectionIndex).filter { !it.value.isIgnored }
+        if (dataItems.isEmpty()) {
+            return null
+        }
+        val lastSize = dataItems.last().value.size
+        val end = dataItems.sumBy { it.value.size }
+        val start = end - lastSize
+
+        return SectionUpdate(start until maxOf(start + lastSize, start + 1), 0 until maxOf(lastSize, 1))
+    }
+    //</editor-fold>
+
 
 }
 
 data class IndexPath(@IntRange(from = 0) val row: Int, @IntRange(from = 0) val section: Int)
 
-data class SectionUpdate(val changes: kotlin.ranges.IntRange?,
-                         val optAdded: kotlin.ranges.IntRange?,
-                         val optRemoved: kotlin.ranges.IntRange?)
+data class SectionUpdate(val inRaw: kotlin.ranges.IntRange, val inSection: kotlin.ranges.IntRange)
+
+data class SectionLocation(val rawRow: Int, val inSection: Int)
+
+data class SectionUpdates(val changes: SectionUpdate?,
+                          val optAdded: SectionUpdate?,
+                          val optRemoved: SectionUpdate?)
 
 
 data class ListDiff<out T>(val intersect: List<T>, val outerSectA: List<T>, val outerSectB: List<T>, val isIndexConsidered: Boolean)
 
-class TypeSectionCodeLookupDiff<T>(val diff: SparseArray<ListDiff<T>>) {
-
-    fun prettyPrint() {
-
-    }
-}
+class TypeSectionCodeLookupDiff<T>(val diff: SparseArray<ListDiff<T>>)
 
 fun <T : TypeHashCodeLookupRepresent<Rep>, Rep : Any> TypeSectionLookupRepresentative<T, Rep>.differenceTo(other: TypeSectionLookupRepresentative<T, Rep>, considerIndexes: Boolean = false): TypeSectionCodeLookupDiff<T> {
     val result = SparseArray<ListDiff<T>>()

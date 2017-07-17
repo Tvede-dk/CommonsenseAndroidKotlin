@@ -59,23 +59,15 @@ open class BaseAdapter<T>(context: Context) : ArrayAdapter<T>(context, 0) {
         return list
     }
 
-    override fun clear() {
-        super.clear()
-    }
-
     override fun remove(obj: T) {
         if (obj != null) {
             super.remove(obj)
         }
     }
 
-    override fun getPosition(item: T): Int {
-        return super.getPosition(item)
-    }
+    override fun getPosition(item: T): Int = super.getPosition(item)
 
-    override fun getCount(): Int {
-        return super.getCount()
-    }
+    override fun getCount(): Int = super.getCount()
 
     override fun setDropDownViewTheme(theme: Resources.Theme?) {
         super.setDropDownViewTheme(theme)

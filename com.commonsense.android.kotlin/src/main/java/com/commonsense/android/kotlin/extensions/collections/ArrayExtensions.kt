@@ -6,3 +6,7 @@ package com.commonsense.android.kotlin.extensions.collections
 
 
 fun IntProgression.toIntArray(): IntArray = this.toList().toIntArray()
+
+val IntProgression.length
+    get() = ((last + step) - first) / step //+ step due to "inclusive".
+

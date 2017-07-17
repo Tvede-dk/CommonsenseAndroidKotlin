@@ -56,14 +56,6 @@ inline fun <reified T> List<T>.repeateToSize(size: Int): List<T> {
     return resultList + this.subList(0, missingItemsToCopy)
 }
 
-inline fun <T> Collection<T>.foreachUntil(action: (item: T) -> Boolean) {
-    forEach {
-        if (action(it)) {
-            return@forEach //break all iteration.
-        }
-    }
-}
-
 
 fun Collection<*>.isRangeValid(intRange: IntRange): Boolean =
         (intRange.start >= 0 && intRange.endInclusive < size)

@@ -1,6 +1,8 @@
 package com.commonsense.android.kotlin.collections
 
 import com.commonsense.android.kotlin.BaseRoboElectricTest
+import com.commonsense.android.kotlin.extensions.collections.length
+import com.commonsense.android.kotlin.extensions.collections.toIntArray
 import com.commonsense.android.kotlin.testHelpers.*
 import length
 import org.junit.Test
@@ -485,6 +487,94 @@ class TypeSectionLookupRepresentativeTest : BaseRoboElectricTest() {
             optRemoved.assertNull()
         }
         a.assertSizeAndSections(100, 3) //we just added 10 and changed 10
+
+    }
+
+
+    @Test
+    fun testIndexPath() {
+        val a = TypeSectionLookupRepresentative<TestData, String>()
+        a.indexToPath(0).assertNull() //cannot find a null item
+
+        a.add(TestData("a"), 0)
+        a.indexToPath(0).assertNotNullApply {
+            row.assert(0)
+            section.assert(0)
+        }
+        a.add(TestData("a"), 1)
+        a.indexToPath(1).assertNotNullApply {
+            row.assert(0)
+            section.assert(1)
+        }
+
+        a.add(TestData("b"), 0)
+        a.indexToPath(1).assertNotNullApply {
+            row.assert(1)
+            section.assert(0)
+        }
+        a.indexToPath(2).assertNotNullApply {
+            row.assert(0)
+            section.assert(1)
+        }
+
+        a.clear()
+        for (section in 0 until 10) {
+            for (i in 0 until 10) {
+                a.add(TestData(i.toString()), section)
+            }
+        }
+        a.indexToPath(0).assertNotNullApply {
+            row.assert(0)
+            section.assert(0)
+        }
+
+        a.indexToPath(99).assertNotNullApply {
+            row.assert(9)
+            section.assert(9)
+        }
+
+    }
+
+    @Test
+    fun testSectionVisibility() {
+        val a = TypeSectionLookupRepresentative<TestData, String>()
+        for (i in 0 until 20) {
+            a.addAll((0 until 50).map { TestData(it.toString()) }, i)
+        }
+        a.assertSizeAndSections(20 * 50, 20)
+        a.ignoreSection(0).assertNotNullApply {
+
+        }
+        a.assertSizeAndSections(19 * 50, 20)
+        a.acceptSection(0).assertNotNullApply {
+
+        }
+        a.assertSizeAndSections(20 * 50, 20)
+        a.ignoreSection(19).assertNotNullApply {
+
+        }
+        a.assertSizeAndSections(19 * 50, 20)
+        a.acceptSection(19).assertNotNullApply {
+
+        }
+        a.assertSizeAndSections(20 * 50, 20)
+
+        //ignore non existing sections.
+        a.ignoreSection(20).assertNull()
+        a.acceptSection(20).assertNull()
+
+        //try by hiding a lot and then showing them in the reverse order.
+        val rangeToIgnore = (0 until 20 step 3)
+        for (i in rangeToIgnore) {
+            a.ignoreSection(i)
+        }
+        rangeToIgnore.toIntArray()
+        a.assertSizeAndSections((20 - rangeToIgnore.length) * 50, 20)
+
+        for (i in 20 downTo 0) {
+            a.acceptSection(i)
+        }
+        a.assertSizeAndSections(20 * 50, 20)
 
     }
 

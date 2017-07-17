@@ -53,6 +53,7 @@ inline fun <reified T : kotlin.Enum<T>> enumFromOrNull(type: String?): T? =
         java.lang.Enum.valueOf(T::class.java, type) ?: null
 
 
+//TODO test regarding steps.
 val IntRange.length
     get() = (last - start) + 1 //+1 since start is inclusive.
 

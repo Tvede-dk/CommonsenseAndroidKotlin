@@ -221,7 +221,8 @@ class TypeSectionLookupRepresentative<T : TypeHashCodeLookupRepresent<Rep>, out 
         var currentPosition = position
         var result: IndexPath? = null
         //TODO , mabye cache the list implementation. or something.
-        data.toList().filterNot { it.value.isIgnored }.foreachUntil {
+        val toIterate = data.toList().filterNot { it.value.isIgnored }
+        toIterate.find {
             if (currentPosition < it.value.size) {
                 result = IndexPath(currentPosition, it.value.sectionIndexValue)
                 true
@@ -351,7 +352,7 @@ class TypeSectionLookupRepresentative<T : TypeHashCodeLookupRepresent<Rep>, out 
         cachedSize += (sizeAfter - sizeBefore)
 
 //        L.error("Section [$sectionIndex]", "size updated with: ${(sizeAfter - sizeBefore)}; ignore : $before -> $after")
-        if (sizeAfter == 0) {
+        if (sizeAfter == 0 && sectionAt(sectionIndex)?.isIgnored != true) {
             data.remove(sectionIndex)
 //            L.error("section", "$sectionIndex removed from collection.")
         }

@@ -90,9 +90,8 @@ open class RenderModelItem<
     override fun getInflaterFunction() = vmInflater
 
 
-    override fun createViewHolder(inflatedView: Vm): BaseViewHolderItem<Vm> {
-        return BaseViewHolderItem(inflatedView)
-    }
+    override fun createViewHolder(inflatedView: Vm): BaseViewHolderItem<Vm> =
+            BaseViewHolderItem(inflatedView)
 
     override fun getCreatorFunction(): InflatingFunction<Vm> {
         return { inflater: LayoutInflater, parent: ViewGroup?, attach: Boolean ->
@@ -327,12 +326,12 @@ abstract class AbstractDataBindingRecyclerAdapter<T>(context: Context) :
 
     open fun hideSection(sectionIndex: Int) {
         val sectionLocation = dataCollection.ignoreSection(sectionIndex)?.inRaw ?: return
-        notifyItemRangeRemoved(sectionLocation.start, sectionLocation.endInclusive - sectionLocation.start)
+        notifyItemRangeRemoved(sectionLocation.start, sectionLocation.length)
     }
 
     open fun showSection(sectionIndex: Int) {
         val sectionLocation = dataCollection.acceptSection(sectionIndex)?.inRaw ?: return
-        notifyItemRangeInserted(sectionLocation.start, sectionLocation.endInclusive - sectionLocation.start)
+        notifyItemRangeInserted(sectionLocation.start, sectionLocation.length)
     }
 
     open fun toggleSectionsVisibility(vararg sectionIndexes: Int) {

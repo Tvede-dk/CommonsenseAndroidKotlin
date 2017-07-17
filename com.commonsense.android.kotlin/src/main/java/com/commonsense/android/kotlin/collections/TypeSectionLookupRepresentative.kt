@@ -3,6 +3,7 @@ package com.commonsense.android.kotlin.collections
 import android.support.annotation.IntRange
 import android.util.SparseArray
 import com.commonsense.android.kotlin.extensions.collections.*
+import largest
 import length
 import map
 
@@ -59,7 +60,7 @@ class TypeSectionLookupRepresentative<T : TypeHashCodeLookupRepresent<Rep>, out 
             data[inSection].collection.add(item)
             lookup.add(item)
         }
-        return SectionLocation(sectionUpdate.inRaw.endInclusive, sectionUpdate.inSection.endInclusive)
+        return SectionLocation(sectionUpdate.inRaw.endInclusive + 1, sectionUpdate.inSection.endInclusive + 1)
     }
 
     fun insert(item: T, @IntRange(from = 0) atRow: Int, @IntRange(from = 0) inSection: Int): SectionLocation? {
@@ -82,8 +83,8 @@ class TypeSectionLookupRepresentative<T : TypeHashCodeLookupRepresent<Rep>, out 
             data.get(inSection).collection.addAll(items)
             lookup.addAll(items)
         }
-        return SectionUpdate(section.inRaw.endInclusive until section.inRaw.endInclusive + items.size,
-                section.inSection.endInclusive until section.inSection.endInclusive + items.size)
+        return SectionUpdate(section.inRaw.largest until section.inRaw.largest + items.size,
+                section.inSection.largest until section.inSection.largest + items.size)
     }
 
     fun insertAll(items: Collection<T>, @IntRange(from = 0) startPosition: Int, @IntRange(from = 0) inSection: Int): SectionUpdate? {
@@ -95,8 +96,8 @@ class TypeSectionLookupRepresentative<T : TypeHashCodeLookupRepresent<Rep>, out 
             data[inSection].collection.addAll(startPosition, items)
             lookup.addAll(items)
         }
-        return SectionUpdate(section.inRaw.endInclusive + startPosition until section.inRaw.endInclusive + startPosition + items.size,
-                section.inSection.endInclusive + startPosition until section.inSection.endInclusive + startPosition + items.size)
+        return SectionUpdate(section.inRaw.largest + startPosition until section.inRaw.largest + startPosition + items.size,
+                section.inSection.largest + startPosition until section.inSection.largest + startPosition + items.size)
     }
     //</editor-fold>
 
@@ -146,7 +147,7 @@ class TypeSectionLookupRepresentative<T : TypeHashCodeLookupRepresent<Rep>, out 
 
         }
         return SectionUpdate((section.inRaw.start + range.start) until
-                (section.inRaw.start + range.endInclusive + 1), range)
+                (section.inRaw.start + range.largest + 1), range)
     }
     //</editor-fold>
 
@@ -178,19 +179,28 @@ class TypeSectionLookupRepresentative<T : TypeHashCodeLookupRepresent<Rep>, out 
 
         val startOffsetRaw = added.inRaw.start
         val changedEndOffSetRaw = startOffsetRaw + inSectionChangedEnd
-        val changedRange = SectionUpdate(startOffsetRaw until changedEndOffSetRaw, 0 until inSectionChangedEnd)
+        //if the list is empty, then no change can occur => null.
+        val changedRange = items.isEmpty().map(null,
+                SectionUpdate(startOffsetRaw until changedEndOffSetRaw, 0 until inSectionChangedEnd))
 
-        return if (removed.inSection.length > items.size) {
-            val removedUpdate = SectionUpdate(
-                    changedEndOffSetRaw until changedEndOffSetRaw + removed.inSection.length,
-                    inSectionChangedEnd until removed.inSection.length)
-            SectionUpdates(changedRange, null, removedUpdate)
-        } else {
-            val addedUpdate = SectionUpdate(
-                    changedEndOffSetRaw until changedEndOffSetRaw + added.inSection.length,
-                    inSectionChangedEnd until added.inSection.length
-            )
-            SectionUpdates(changedRange, addedUpdate, null)
+        val removedLength = removed.inSection.length
+        val addedLength = added.inSection.length
+
+        return when {
+            removedLength > addedLength -> {
+                val removedUpdate = SectionUpdate(
+                        changedEndOffSetRaw until startOffsetRaw + removedLength,
+                        inSectionChangedEnd until removedLength)
+                SectionUpdates(changedRange, null, removedUpdate)
+            }
+            addedLength > removedLength -> {
+                val addedUpdate = SectionUpdate(
+                        changedEndOffSetRaw until startOffsetRaw + addedLength,
+                        inSectionChangedEnd until addedLength
+                )
+                SectionUpdates(changedRange, addedUpdate, null)
+            }
+            else -> SectionUpdates(changedRange, null, null)
         }
     }
 
@@ -366,23 +376,20 @@ class TypeSectionLookupRepresentative<T : TypeHashCodeLookupRepresent<Rep>, out 
         if (!sectionExists(inSection)) {
             data.put(inSection, TypeSection(inSection))
         }
-        return calculateSectionLocation(inSection) ?: SectionUpdate(0 until 1, 0 until 1)
+        return calculateSectionLocation(inSection) ?: SectionUpdate(0 until 0, 0 until 0)
     }
 
     private fun calculateSectionLocation(sectionIndex: Int): SectionUpdate? {
         if (!sectionExists(sectionIndex)) {
             return null
         }
-        val dataItems = data.toList(sectionIndex).filter { !it.value.isIgnored }
-        if (dataItems.isEmpty()) {
-            return null
-        }
-        val lastSize = dataItems.last().value.size
-        val end = dataItems.sumBy { it.value.size }
-        val start = end - lastSize
-
-        return SectionUpdate(start until maxOf(start + lastSize, start + 1), 0 until maxOf(lastSize, 1))
+        val dataItems = data.toList(sectionIndex - 1).filter { !it.value.isIgnored }
+        val collectionSize = data[sectionIndex].collection.size
+        val start = dataItems.sumBy { it.value.size }
+        val end = start + collectionSize
+        return SectionUpdate(start until end, 0 until collectionSize)
     }
+
     //</editor-fold>
 
 

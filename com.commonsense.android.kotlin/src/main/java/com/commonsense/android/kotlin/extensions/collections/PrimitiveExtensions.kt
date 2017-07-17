@@ -14,10 +14,10 @@ inline fun Boolean.onTrue(crossinline action: () -> Unit): Boolean {
 
 
 fun <T> Boolean.map(ifTrue: T, ifFalse: T): T {
-    if (this) {
-        return ifTrue
+    return if (this) {
+        ifTrue
     } else {
-        return ifFalse
+        ifFalse
     }
 }
 
@@ -43,18 +43,18 @@ inline fun Boolean.onFalse(crossinline action: () -> Unit): Boolean {
  */
 inline fun Boolean.ifFalse(crossinline action: () -> Unit): Boolean = onFalse(action)
 
-inline fun <reified T : kotlin.Enum<T>> valueOfOrUnsafe(type: String?, orValue: T?): T? {
-    return java.lang.Enum.valueOf(T::class.java, type) ?: orValue
-}
+inline fun <reified T : kotlin.Enum<T>> valueOfOrUnsafe(type: String?, orValue: T?): T? =
+        java.lang.Enum.valueOf(T::class.java, type) ?: orValue
 
-inline fun <reified T : kotlin.Enum<T>> enumFromOr(type: String?, orValue: T): T {
-    return java.lang.Enum.valueOf(T::class.java, type) ?: orValue
-}
+inline fun <reified T : kotlin.Enum<T>> enumFromOr(type: String?, orValue: T): T =
+        java.lang.Enum.valueOf(T::class.java, type) ?: orValue
 
-inline fun <reified T : kotlin.Enum<T>> enumFromOrNull(type: String?): T? {
-    return java.lang.Enum.valueOf(T::class.java, type) ?: null
-}
+inline fun <reified T : kotlin.Enum<T>> enumFromOrNull(type: String?): T? =
+        java.lang.Enum.valueOf(T::class.java, type) ?: null
 
 
 val IntRange.length
     get() = (last - start) + 1 //+1 since start is inclusive.
+
+val IntRange.largest
+    get() = maxOf(last, start)

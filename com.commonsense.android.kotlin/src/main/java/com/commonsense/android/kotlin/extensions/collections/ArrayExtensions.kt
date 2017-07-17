@@ -5,6 +5,4 @@ package com.commonsense.android.kotlin.extensions.collections
  */
 
 
-fun IntProgression.toIntArray(): IntArray {
-    return this.toList().toIntArray()
-}
+fun IntProgression.toIntArray(): IntArray = this.toList().toIntArray()

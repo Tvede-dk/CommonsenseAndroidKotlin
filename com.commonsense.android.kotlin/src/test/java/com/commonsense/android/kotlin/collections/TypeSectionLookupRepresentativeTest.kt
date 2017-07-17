@@ -383,22 +383,34 @@ class TypeSectionLookupRepresentativeTest : BaseRoboElectricTest() {
         }
         a.assertSizeAndSections(160, 3)
 
-
-
-
         a.setSection(listOf(), 5).assertNotNullApply {
-
+            optAdded.assertNull()
+            optRemoved.assertNotNullApply {
+                inSection.assert(0 until 50)
+                inRaw.assert(100 until 100 + 50)
+            }
+            changes?.assertNull()
         }
 
         a.assertSizeAndSections(110, 2, "clearing a section should remove it.")
 
         a.setSection(listOf(), 10).assertNotNullApply {
-
+            optAdded.assertNull()
+            optRemoved.assertNotNullApply {
+                inSection.assert(0 until 10)
+                inRaw.assert(100 until 100 + 10)
+            }
+            changes?.assertNull()
         }
         a.assertSizeAndSections(100, 1, "clearing a section should remove it.")
 
         a.setSection(listOf(), 0).assertNotNullApply {
-
+            optAdded.assertNull()
+            optRemoved.assertNotNullApply {
+                inSection.assert(0 until 100)
+                inRaw.assert(0 until 100)
+            }
+            changes?.assertNull()
         }
         a.assertSizeAndSections(0, 0, "clearing a section should remove it.")
 
@@ -415,34 +427,64 @@ class TypeSectionLookupRepresentativeTest : BaseRoboElectricTest() {
         }
         a.assertSizeAndSections(50, 1)
         a.setSection((0 until 100).map { TestData(it.toString()) }, 0).assertNotNullApply {
-
+            changes.assertNull()
+            optRemoved.assertNull()
+            optAdded.assertNotNullApply {
+                inRaw.assert(0 until 100)
+                inSection.assert(0 until 100)
+            }
         }
         a.assertSizeAndSections(150, 2)
         a.setSection((0 until 10).map { TestData(it.toString()) }, 10).assertNotNullApply {
-
+            changes.assertNull()
+            optRemoved.assertNull()
+            optAdded.assertNotNullApply {
+                inRaw.assert(150 until 150 + 10)
+                inSection.assert(0 until 10)
+            }
         }
         a.assertSizeAndSections(160, 3)
 
 
         // full change
         a.setSection((50 until 100).map { TestData(it.toString()) }, 5).assertNotNullApply {
-
+            changes.assertNotNullApply {
+                inRaw.assert(100 until 150)
+                inSection.assert(0 until 50)
+            }
+            optRemoved.assertNull()
+            optAdded.assertNull()
         }
         a.assertSizeAndSections(160, 3)
 
 
         //change and remove
         a.setSection((20 until 50).map { TestData(it.toString()) }, 0).assertNotNullApply {
-
+            changes.assertNotNullApply {
+                inSection.assert(0 until 30)
+                inRaw.assert(0 until 30)
+            }
+            optRemoved.assertNotNullApply {
+                inSection.assert(30 until 100)
+                inRaw.assert(30 until 100)
+            }
+            optAdded.assertNull()
         }
         a.assertSizeAndSections(90, 3) //we just removed 70 and changed 30
 
         //change and insert
         a.setSection((100 until 120).map { TestData(it.toString()) }, 10).assertNotNullApply {
-
+            changes.assertNotNullApply {
+                inSection.assert(0 until 10)
+                inRaw.assert(80 until 90)
+            }
+            optAdded.assertNotNullApply {
+                inSection.assert(10 until 20)
+                inRaw.assert(90 until 100)
+            }
+            optRemoved.assertNull()
         }
         a.assertSizeAndSections(100, 3) //we just added 10 and changed 10
-
 
     }
 

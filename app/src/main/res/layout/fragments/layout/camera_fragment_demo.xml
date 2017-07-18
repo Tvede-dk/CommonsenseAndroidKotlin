@@ -24,7 +24,7 @@
             android:layout_height="wrap_content"
             android:text="clear" />
 
-        <com.commonsense.android.kotlin.widgets.SwipeRefreshRecyclerView
+        <com.commonsense.android.kotlin.views.widgets.SwipeRefreshRecyclerView
             android:id="@+id/camera_fragment_images_list"
             android:layout_width="match_parent"
             android:layout_height="match_parent" />

@@ -1,8 +1,8 @@
 package com.commonsense.android.kotlin.baseDataClasses
 
 import android.support.annotation.AnyThread
-import com.commonsense.android.kotlin.patterns.ObserverPattern
-import com.commonsense.android.kotlin.patterns.callback
+import com.commonsense.android.kotlin.base.patterns.ObserverPattern
+import com.commonsense.android.kotlin.base.patterns.callback
 import kotlinx.coroutines.experimental.CommonPool
 import kotlinx.coroutines.experimental.android.UI
 import kotlinx.coroutines.experimental.launch

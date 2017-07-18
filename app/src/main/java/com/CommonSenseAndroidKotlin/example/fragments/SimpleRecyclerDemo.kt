@@ -25,7 +25,7 @@ open class SimpleRecyclerDemo : BaseDatabindingFragment<DemoRecyclerSimpleViewBi
 
     override fun useBinding() {
         adapter.clear()
-        for (section in 0 until 10 step 5) {
+        for (section in 0 until 10) {
             for (i in 0 until 10) {
                 adapter.add(SimpleListItemRender("First text is good text", section, { adapter.hideSection(section) }), section)
                 adapter.add(SimpleListImageItemRender(Color.BLUE, section), section)

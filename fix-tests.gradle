@@ -1,8 +1,11 @@
 class NoUpToDateTests implements Plugin<Project> {
     @Override
     void apply(Project mainProject) {
+        boolean isCi = false //TODO implement this.
         mainProject.gradle.projectsEvaluated {
-            mainProject.allprojects { handleProject it }
+            if (isCi) {
+                mainProject.allprojects { handleProject it }
+            }
         }
     }
 
@@ -13,6 +16,7 @@ class NoUpToDateTests implements Plugin<Project> {
             it.outputs.upToDateWhen { false }
         }
     }
+
 }
 
 

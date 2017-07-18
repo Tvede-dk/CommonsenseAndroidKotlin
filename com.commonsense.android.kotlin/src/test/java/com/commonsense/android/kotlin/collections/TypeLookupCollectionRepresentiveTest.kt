@@ -1,8 +1,7 @@
 package com.commonsense.android.kotlin.collections
 
 import com.commonsense.android.kotlin.BaseRoboElectricTest
-import com.commonsense.android.kotlin.extensions.collections.repeate
-import com.commonsense.android.kotlin.extensions.collections.repeateToSize
+import com.commonsense.android.kotlin.base.extensions.collections.repeateToSize
 import org.junit.Assert
 import org.junit.Ignore
 import org.junit.Test
@@ -13,9 +12,7 @@ import kotlin.system.measureNanoTime
  */
 
 class TestClassTypeLookupHashcode<out T>(val someData: T, val viewType: Int) : TypeHashCodeLookupRepresent<String> {
-    override fun getCreatorFunction(): String {
-        return ""
-    }
+    override fun getCreatorFunction(): String = ""
 
     override fun getTypeValue(): Int = viewType
 }
@@ -26,7 +23,7 @@ class TypeLookupCollectionRepresentiveTest : BaseRoboElectricTest() {
     fun testRemove() {
         val collection = TypeLookupCollectionRepresentative<TestClassTypeLookupHashcode<*>, String>()
         val firstClass = TestClassTypeLookupHashcode("asd", 1)
-        collection.addAll(listOf(firstClass).repeate(10))
+        collection.addAll(listOf(firstClass).repeateToSize(10))
         Assert.assertEquals(collection.size, 10)
         collection.remove(collection[5]!!)
         collection.remove(collection[7]!!)
@@ -56,7 +53,7 @@ class TypeLookupCollectionRepresentiveTest : BaseRoboElectricTest() {
     fun clear() {
         val collection = TypeLookupCollectionRepresentative<TestClassTypeLookupHashcode<*>, String>()
         val firstClass = TestClassTypeLookupHashcode("asd", 1)
-        collection.addAll(listOf(firstClass).repeate(10))
+        collection.addAll(listOf(firstClass).repeateToSize(10))
         Assert.assertEquals(collection.size, 10)
         collection.clear()
         Assert.assertEquals(collection.size, 0)

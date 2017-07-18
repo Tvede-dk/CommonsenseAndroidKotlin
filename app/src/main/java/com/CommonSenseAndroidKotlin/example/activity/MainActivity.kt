@@ -42,7 +42,5 @@ class MainActivity : BaseDatabindingActivity<ActivityMainBinding>() {
 
 
     }
-
-
 }
 

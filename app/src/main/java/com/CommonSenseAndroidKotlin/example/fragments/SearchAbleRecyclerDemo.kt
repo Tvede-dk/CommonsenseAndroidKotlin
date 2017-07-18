@@ -6,9 +6,8 @@ import android.text.Editable
 import android.text.TextWatcher
 import com.CommonSenseAndroidKotlin.example.databinding.DemoRecyclerSearchableBinding
 import com.CommonSenseAndroidKotlin.example.databinding.SimpleListItemBinding
-import com.commonsense.android.kotlin.android.extensions.widets.setup
 import com.commonsense.android.kotlin.baseClasses.databinding.*
-import com.commonsense.android.kotlin.extensions.collections.repeateToSize
+import com.commonsense.android.kotlin.base.extensions.collections.repeateToSize
 
 /**
  * Created by kasper on 01/06/2017.
@@ -28,7 +27,7 @@ class SearchAbleRecyclerDemo : BaseDatabindingFragment<DemoRecyclerSearchableBin
 
     override fun useBinding() {
         val items = mutableListOf<IRenderModelSearchItem<*, *, String>>(
-                SearchAbleSimpleListItemRender("First "),
+                SearchAbleSimpleListItemRender("First []"),
                 SimpleListImageItemRender(Color.BLUE, 0).toSearchable { _, _ -> false },
                 SearchAbleSimpleListItemRender("Whats up "),
                 SimpleListImageItemRender(Color.RED, 0).toSearchable { _, _ -> false }

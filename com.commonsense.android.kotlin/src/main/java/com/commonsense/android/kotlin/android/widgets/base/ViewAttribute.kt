@@ -4,8 +4,6 @@ import android.content.Context
 import android.content.res.TypedArray
 import android.support.annotation.StyleableRes
 import android.util.AttributeSet
-import com.commonsense.android.kotlin.android.extensions.getTypedArrayFor
-import com.commonsense.android.kotlin.android.logging.L
 
 /**
  * Created by Kasper Tvede on 13-06-2017.

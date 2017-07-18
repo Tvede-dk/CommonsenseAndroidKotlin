@@ -82,37 +82,36 @@ def leakCanaryVersion = "1.5.1"
 
 dependencies {
     //------------ Main libs --------------------
-
     //support libs
     implementation "com.android.support:appcompat-v7:$supportVersion"
     implementation "com.android.support:design:$supportVersion"
     implementation "com.android.support:exifinterface:$supportVersion"
-
     //kotlin specific libs.
-    kapt "com.android.databinding:compiler:3.0.0-alpha6"
+    kapt "com.android.databinding:compiler:3.0.0-alpha7"
     api "org.jetbrains.kotlin:kotlin-stdlib:$kotlin_version"
-
     //coroutines libs
     implementation "org.jetbrains.kotlinx:kotlinx-coroutines-core:$coroutinesVersion"
     implementation "org.jetbrains.kotlinx:kotlinx-coroutines-android:$coroutinesVersion"
-
     //leak canary libs
     debugImplementation "com.squareup.leakcanary:leakcanary-android:$leakCanaryVersion"
     releaseImplementation "com.squareup.leakcanary:leakcanary-android-no-op:$leakCanaryVersion"
     testImplementation "com.squareup.leakcanary:leakcanary-android-no-op:$leakCanaryVersion"
-
     //------------ Test libs --------------------
     androidTestImplementation('com.android.support.test.espresso:espresso-core:2.2.2', {
         exclude group: 'com.android.support', module: 'support-annotations'
     })
     testImplementation 'junit:junit:4.12'
-    testImplementation "org.robolectric:robolectric:3.3.2"
+//        testImplementation "org.robolectric:robolectric:3.3.2"
+    testImplementation 'org.robolectric:robolectric:3.4-SNAPSHOT'
+    testImplementation project(":com.commonsense.android.kotlin-test")
+
+    implementation project(":com.commonsense.android.kotlin-base")
+
 }
 
 repositories {
-    maven {
-        url "https://maven.google.com"
-    }
+    maven { url "https://oss.sonatype.org/content/repositories/snapshots" }
+    maven { url "https://maven.google.com" }
 }
 
 

@@ -5,15 +5,12 @@ import android.net.Uri
 import android.support.v7.widget.LinearLayoutManager
 import com.CommonSenseAndroidKotlin.example.databinding.CameraFragmentDemoBinding
 import com.CommonSenseAndroidKotlin.example.databinding.SimpleImageListItemBinding
-import com.commonsense.android.kotlin.android.extensions.safeToast
-import com.commonsense.android.kotlin.android.extensions.widets.setOnclickAsync
 import com.commonsense.android.kotlin.android.image.PictureRetriver
-import com.commonsense.android.kotlin.android.image.calculateOptimalThumbnailSize
 import com.commonsense.android.kotlin.android.image.loadBitmapPreviews
 import com.commonsense.android.kotlin.baseClasses.BaseActivity
 import com.commonsense.android.kotlin.baseClasses.databinding.*
-import com.commonsense.android.kotlin.extensions.collections.toIntArray
-import com.commonsense.android.kotlin.extensions.tryAndLogSuspend
+import com.commonsense.android.kotlin.base.extensions.collections.toIntArray
+import com.commonsense.android.kotlin.base.extensions.tryAndLogSuspend
 import kotlinx.coroutines.experimental.android.UI
 import kotlinx.coroutines.experimental.launch
 import kotlin.system.measureTimeMillis

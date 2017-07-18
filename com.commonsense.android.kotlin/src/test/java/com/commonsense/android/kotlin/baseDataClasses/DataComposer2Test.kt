@@ -14,7 +14,7 @@ class DataComposer2Test {
 
         var result = mutableListOf<Long>()
 //        val composer = DataComposer2({ text }, this@DataComposer2Test::convertRaw, this@DataComposer2Test::splitLogic, this@DataComposer2Test::processlogic, {
-//            result.addAll(it)
+//            result.insertAll(it)
 //        })
 
 //        composer.startProcess().await()

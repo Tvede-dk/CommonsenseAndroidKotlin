@@ -5,8 +5,8 @@ import android.databinding.DataBindingComponent
 import android.databinding.ViewDataBinding
 import android.view.View
 import com.commonsense.android.kotlin.BaseRoboElectricTest
-import com.commonsense.android.kotlin.extensions.collections.repeateToSize
-import com.commonsense.android.kotlin.extensions.measureSecondTime
+import com.commonsense.android.kotlin.base.extensions.collections.repeateToSize
+import com.commonsense.android.kotlin.base.extensions.measureSecondTime
 import org.junit.Assert
 import org.junit.Ignore
 import org.junit.Test

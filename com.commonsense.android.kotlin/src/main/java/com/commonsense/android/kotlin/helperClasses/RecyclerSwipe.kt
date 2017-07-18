@@ -12,7 +12,7 @@ import com.commonsense.android.kotlin.baseClasses.databinding.AbstractDataBindin
 import com.commonsense.android.kotlin.baseClasses.databinding.AbstractSearchableDataBindingRecyclerAdapter
 import com.commonsense.android.kotlin.baseClasses.databinding.BaseDataBindingRecyclerAdapter
 import com.commonsense.android.kotlin.baseClasses.databinding.BaseViewHolderItem
-import map
+import com.commonsense.android.kotlin.base.extensions.collections.map
 
 /**
  * Created by Kasper Tvede on 22-06-2017.

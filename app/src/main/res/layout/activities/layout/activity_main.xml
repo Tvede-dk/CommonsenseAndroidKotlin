@@ -67,7 +67,7 @@
                 android:layout_height="wrap_content"
                 android:text="Camera fun" />
 
-            <com.commonsense.android.kotlin.widgets.ToggleImageButton
+            <com.commonsense.android.kotlin.views.widgets.ToggleImageButton
                 android:layout_width="200dp"
                 android:layout_height="200dp"
                 android:layout_gravity="center"

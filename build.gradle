@@ -8,14 +8,18 @@ buildscript {
 //        maven { url "https://dl.bintray.com/kotlin/kotlin-eap-1.1/" }
     }
     dependencies {
-        classpath 'com.android.tools.build:gradle:3.0.0-alpha6'
+        classpath 'com.android.tools.build:gradle:3.0.0-alpha7'
         classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlin_version"
     }
 }
 
 
+
+
 allprojects {
     repositories {
+
+
         jcenter()
 //        maven { url "https://dl.bintray.com/kotlin/kotlin-eap-1.1/" }
     }
@@ -24,5 +28,7 @@ allprojects {
 task clean(type: Delete) {
     delete rootProject.buildDir
 }
+
+
 
 apply from: "fix-tests.gradle"

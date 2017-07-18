@@ -1,5 +1,6 @@
 package com.commonsense.android.kotlin.helperClasses
 
+import com.commonsense.android.kotlin.test.assert
 import kotlinx.coroutines.experimental.*
 import org.junit.Assert
 import org.junit.Test
@@ -32,7 +33,7 @@ class JobContainerTest {
         jobContainer.performAction(CommonPool, action = { })
         jobContainer.removeDoneJobs()
         delay(100)
-        Assert.assertEquals(jobContainer.getRemainingJobs(), 0)
+        jobContainer.getRemainingJobs().assert(0)
 
     }
 

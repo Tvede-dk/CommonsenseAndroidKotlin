@@ -3,8 +3,7 @@ package com.commonsense.android.kotlin.prebuilt.baseClasses
 import android.app.Application
 import android.os.StrictMode
 import android.support.v7.app.AppCompatDelegate
-import com.commonsense.android.kotlin.android.extensions.isApiLowerThan
-import com.commonsense.android.kotlin.android.logging.logDebug
+import com.commonsense.android.kotlin.system.extensions.isApiLowerThan
 import com.commonsense.android.kotlin.system.logging.logDebug
 import com.squareup.leakcanary.LeakCanary
 

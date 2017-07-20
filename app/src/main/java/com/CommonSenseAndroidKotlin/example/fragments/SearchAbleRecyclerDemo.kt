@@ -6,8 +6,13 @@ import android.text.Editable
 import android.text.TextWatcher
 import com.CommonSenseAndroidKotlin.example.databinding.DemoRecyclerSearchableBinding
 import com.CommonSenseAndroidKotlin.example.databinding.SimpleListItemBinding
-import com.commonsense.android.kotlin.baseClasses.databinding.*
 import com.commonsense.android.kotlin.base.extensions.collections.repeateToSize
+import com.commonsense.android.kotlin.views.databinding.adapters.BaseSearchableDataBindingRecyclerAdapter
+import com.commonsense.android.kotlin.views.databinding.adapters.IRenderModelSearchItem
+import com.commonsense.android.kotlin.views.databinding.adapters.toSearchable
+import com.commonsense.android.kotlin.views.databinding.fragments.BaseDatabindingFragment
+import com.commonsense.android.kotlin.views.databinding.fragments.InflateBinding
+import com.commonsense.android.kotlin.views.extensions.setup
 
 /**
  * Created by kasper on 01/06/2017.
@@ -42,7 +47,7 @@ class SearchAbleRecyclerDemo : BaseDatabindingFragment<DemoRecyclerSearchableBin
 
     fun performFilter(s: Editable) {
         val temp = s.toString()
-        if (temp.isNullOrEmpty()) {
+        if (temp.isEmpty()) {
             adapter.removeFilter()
         } else {
             temp.let(adapter::filterBy)

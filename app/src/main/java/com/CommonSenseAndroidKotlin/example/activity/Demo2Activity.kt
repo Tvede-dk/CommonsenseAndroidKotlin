@@ -1,7 +1,7 @@
 package com.CommonSenseAndroidKotlin.example.activity
 
 import com.CommonSenseAndroidKotlin.example.fragments.SearchAbleRecyclerDemo
-import com.commonsense.android.kotlin.baseClasses.replaceFragment
+import com.commonsense.android.kotlin.system.base.replaceFragment
 
 /**
  * Created by kasper on 01/06/2017.

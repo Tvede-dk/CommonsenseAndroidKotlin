@@ -24,13 +24,11 @@ android {
 }
 
 dependencies {
-    androidTestImplementation('com.android.support.test.espresso:espresso-core:2.2.2', {
+    androidTestImplementation("com.android.support.test.espresso:espresso-core:$espressoVersion", {
         exclude group: 'com.android.support', module: 'support-annotations'
     })
-    implementation 'junit:junit:4.12'
+    implementation "junit:junit:$junitVersion"
     implementation "org.jetbrains.kotlin:kotlin-stdlib:$kotlin_version"
+    implementation "org.robolectric:robolectric:$roboElectricVersion"
+}
 
-}
-repositories {
-    mavenCentral()
-}

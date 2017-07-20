@@ -3,9 +3,9 @@ package com.CommonSenseAndroidKotlin.example.fragments
 import com.CommonSenseAndroidKotlin.example.databinding.UserExampleViewBinding
 import com.CommonSenseAndroidKotlin.example.models.User
 import com.CommonSenseAndroidKotlin.example.models.UserViewModel
-import com.commonsense.android.kotlin.android.extensions.widets.setOnclickAsync
-import com.commonsense.android.kotlin.baseClasses.databinding.BaseDatabindingFragment
-import com.commonsense.android.kotlin.baseClasses.databinding.InflateBinding
+import com.commonsense.android.kotlin.views.databinding.fragments.BaseDatabindingFragment
+import com.commonsense.android.kotlin.views.databinding.fragments.InflateBinding
+import com.commonsense.android.kotlin.views.extensions.setOnclickAsync
 
 /**
  * Created by Kasper Tvede on 11-06-2017.

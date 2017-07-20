@@ -8,9 +8,14 @@ import android.view.View
 import com.CommonSenseAndroidKotlin.example.databinding.DemoRecyclerSimpleViewBinding
 import com.CommonSenseAndroidKotlin.example.databinding.SimpleListImageItemBinding
 import com.CommonSenseAndroidKotlin.example.databinding.SimpleListItemBinding
-import com.commonsense.android.kotlin.android.extensions.widets.setOnclickAsync
-import com.commonsense.android.kotlin.android.extensions.widets.setup
-import com.commonsense.android.kotlin.baseClasses.databinding.*
+import com.commonsense.android.kotlin.views.databinding.adapters.BaseDataBindingRecyclerAdapter
+import com.commonsense.android.kotlin.views.databinding.adapters.BaseRenderModel
+import com.commonsense.android.kotlin.views.databinding.adapters.BaseViewHolderItem
+import com.commonsense.android.kotlin.views.databinding.adapters.ViewInflatingFunction
+import com.commonsense.android.kotlin.views.databinding.fragments.BaseDatabindingFragment
+import com.commonsense.android.kotlin.views.databinding.fragments.InflateBinding
+import com.commonsense.android.kotlin.views.extensions.setOnclickAsync
+import com.commonsense.android.kotlin.views.extensions.setup
 
 /**
  * Created by Kasper Tvede on 31-05-2017.

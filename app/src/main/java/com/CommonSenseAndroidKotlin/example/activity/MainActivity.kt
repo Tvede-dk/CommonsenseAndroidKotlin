@@ -4,10 +4,10 @@ package com.CommonSenseAndroidKotlin.example.activity
 import android.content.Intent
 import com.CommonSenseAndroidKotlin.example.databinding.ActivityMainBinding
 import com.CommonSenseAndroidKotlin.example.fragments.EditDatabindingFragment
-import com.commonsense.android.kotlin.android.extensions.widets.setOnClick
-import com.commonsense.android.kotlin.android.extensions.widets.setOnclickAsync
-import com.commonsense.android.kotlin.baseClasses.databinding.BaseDatabindingActivity
-import com.commonsense.android.kotlin.baseClasses.databinding.InflaterFunctionSimple
+import com.commonsense.android.kotlin.views.databinding.activities.BaseDatabindingActivity
+import com.commonsense.android.kotlin.views.databinding.activities.InflaterFunctionSimple
+import com.commonsense.android.kotlin.views.extensions.setOnClick
+import com.commonsense.android.kotlin.views.extensions.setOnclickAsync
 
 
 class MainActivity : BaseDatabindingActivity<ActivityMainBinding>() {

@@ -9,7 +9,7 @@ jacoco {
 
 android {
     defaultPublishConfig "release"
-    publishNonDefault true
+
 
     compileSdkVersion 26
     buildToolsVersion "26.0.0"
@@ -49,26 +49,26 @@ android {
         }
     }
 
-
-    lintOptions {
-        xmlReport true
-        xmlOutput = new File("lint-results.xml")
-    }
+//
+//    lintOptions {
+//        xmlReport true
+//        xmlOutput = new File("lint-results.xml")
+//    }
     configurations {
         kapt
         debug
         release
     }
 
-    testOptions.unitTests.all {
-        testLogging {
-            events "failed", "skipped"
-            showStackTraces = true
-            exceptionFormat = "full"
-        }
-        maxParallelForks = 20
-        forkEvery = 1
-    }
+//    testOptions.unitTests.all {
+//        testLogging {
+//            events "failed", "skipped"
+//            showStackTraces = true
+//            exceptionFormat = "full"
+//        }
+//        maxParallelForks = 20
+//        forkEvery = 1
+//    }
 
 
 }
@@ -78,7 +78,6 @@ kotlin { experimental { coroutines "enable" } }
 
 def supportVersion = "26.0.+"
 def coroutinesVersion = "0.16"
-def leakCanaryVersion = "1.5.1"
 
 dependencies {
     //------------ Main libs --------------------
@@ -92,10 +91,7 @@ dependencies {
     //coroutines libs
     implementation "org.jetbrains.kotlinx:kotlinx-coroutines-core:$coroutinesVersion"
     implementation "org.jetbrains.kotlinx:kotlinx-coroutines-android:$coroutinesVersion"
-    //leak canary libs
-    debugImplementation "com.squareup.leakcanary:leakcanary-android:$leakCanaryVersion"
-    releaseImplementation "com.squareup.leakcanary:leakcanary-android-no-op:$leakCanaryVersion"
-    testImplementation "com.squareup.leakcanary:leakcanary-android-no-op:$leakCanaryVersion"
+
     //------------ Test libs --------------------
     androidTestImplementation('com.android.support.test.espresso:espresso-core:2.2.2', {
         exclude group: 'com.android.support', module: 'support-annotations'

@@ -22,12 +22,10 @@ android {
         }
     }
 }
-def supportVersion = "26.+"
-def coroutinesVersion = "0.16"
 
 
 dependencies {
-    androidTestImplementation('com.android.support.test.espresso:espresso-core:2.2.2', {
+    androidTestImplementation("com.android.support.test.espresso:espresso-core:$espressoVersion", {
         exclude group: 'com.android.support', module: 'support-annotations'
     })
     implementation "com.android.support:exifinterface:$supportVersion"
@@ -39,7 +37,7 @@ dependencies {
     implementation project(":com.commonsense.android.kotlin-base")
 
     implementation "com.android.support:appcompat-v7:$supportVersion"
-    implementation 'junit:junit:4.12'
+    implementation "junit:junit:$junitVersion"
     implementation "org.jetbrains.kotlin:kotlin-stdlib:$kotlin_version"
 
 }

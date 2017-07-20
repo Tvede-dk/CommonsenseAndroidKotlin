@@ -2,7 +2,7 @@ package com.commonsense.android.kotlin.prebuilt.extensions
 
 import android.app.Activity
 import android.app.ProgressDialog
-import com.commonsense.android.kotlin.system.R
+import com.commonsense.android.kotlin.prebuilt.R
 
 /**
  * Created by Kasper Tvede on 19-07-2017.

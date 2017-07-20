@@ -2,9 +2,9 @@ package com.CommonSenseAndroidKotlin.example.activity
 
 import com.CommonSenseAndroidKotlin.example.databinding.DemoActivityBinding
 import com.CommonSenseAndroidKotlin.example.fragments.SimpleRecyclerDemo
-import com.commonsense.android.kotlin.baseClasses.databinding.BaseDatabindingActivity
-import com.commonsense.android.kotlin.baseClasses.databinding.InflaterFunctionSimple
-import com.commonsense.android.kotlin.baseClasses.replaceFragment
+import com.commonsense.android.kotlin.system.base.replaceFragment
+import com.commonsense.android.kotlin.views.databinding.activities.BaseDatabindingActivity
+import com.commonsense.android.kotlin.views.databinding.activities.InflaterFunctionSimple
 
 /**
  * Created by Kasper Tvede on 31-05-2017.

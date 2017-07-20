@@ -1,5 +1,6 @@
 apply plugin: 'com.android.library'
 apply plugin: 'kotlin-android'
+apply plugin: 'kotlin-kapt'
 
 android {
     compileSdkVersion 26
@@ -23,28 +24,25 @@ android {
     }
 }
 
-def leakCanaryVersion = "1.5.1"
-
 
 dependencies {
-    androidTestImplementation('com.android.support.test.espresso:espresso-core:2.2.2', {
+    androidTestImplementation("com.android.support.test.espresso:espresso-core:$espressoVersion", {
         exclude group: 'com.android.support', module: 'support-annotations'
     })
 
-    implementation project(':com.commonsense.android.kotlin-system')
-    implementation project(':com.commonsense.android.kotlin-databinding')
-    implementation project(':com.commonsense.android.kotlin-views')
-    implementation project(':com.commonsense.android.kotlin-base')
-    testImplementation project(':com.commonsense.android.kotlin-test')
+    api project(':com.commonsense.android.kotlin-system')
+    api project(':com.commonsense.android.kotlin-views')
+    api project(':com.commonsense.android.kotlin-base')
+    testApi project(':com.commonsense.android.kotlin-test')
 
     //leak canary libs
     debugImplementation "com.squareup.leakcanary:leakcanary-android:$leakCanaryVersion"
     releaseImplementation "com.squareup.leakcanary:leakcanary-android-no-op:$leakCanaryVersion"
     testImplementation "com.squareup.leakcanary:leakcanary-android-no-op:$leakCanaryVersion"
 
-    implementation 'com.android.support:appcompat-v7:26.+'
-
-    implementation 'junit:junit:4.12'
+    implementation "com.android.support:appcompat-v7:$supportVersion"
+    kapt "com.android.databinding:compiler:$androidGradleVersion"
+    implementation "junit:junit:$junitVersion"
     implementation "org.jetbrains.kotlin:kotlin-stdlib:$kotlin_version"
 
 }

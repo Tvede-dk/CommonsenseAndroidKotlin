@@ -7,12 +7,10 @@ import android.support.v4.graphics.drawable.DrawableCompat
 import android.support.v7.widget.AppCompatImageView
 import android.util.AttributeSet
 import android.view.View
-import com.commonsense.android.kotlin.android.extensions.getColorSafe
-import com.commonsense.android.kotlin.android.extensions.getDrawableSafe
-import com.commonsense.android.kotlin.android.widgets.base.ViewAttribute
-import com.commonsense.android.kotlin.android.widgets.base.prepareAttributes
-import com.commonsense.android.kotlin.collections.UpdateVariable
-import com.commonsense.kotlin.R
+import com.commonsense.android.kotlin.system.extensions.getColorSafe
+import com.commonsense.android.kotlin.system.extensions.getDrawableSafe
+import com.commonsense.android.kotlin.views.R
+import com.commonsense.android.kotlin.views.datastructures.UpdateVariable
 
 /**
  * Created by Kasper Tvede on 13-06-2017.

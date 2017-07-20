@@ -1,11 +1,15 @@
 apply plugin: 'com.android.application'
 apply plugin: 'kotlin-android'
 apply plugin: 'kotlin-kapt'
+apply plugin: "jacoco"
 
+jacoco {
+    toolVersion "0.7.9"
+}
 
 android {
-
     buildTypeMatching 'proguard', 'debug'
+    buildTypeMatching '', 'debug'
 
     compileSdkVersion 26
     buildToolsVersion "26.0.0"
@@ -17,6 +21,9 @@ android {
         vectorDrawables.useSupportLibrary = true
         versionName "1.0"
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
+        multiDexEnabled true
+        flavorSelection 'sdkRequirements', 'fastDev'
+
     }
 
     dataBinding {
@@ -25,32 +32,59 @@ android {
 
     buildTypes {
 
-//        proguard {
-//            initWith debug
-////            minifyEnabled true
-//            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
-//
-//        }
+        proguard {
+            initWith debug
+            useProguard true
+            minifyEnabled true
+            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
+
+        }
 
         release {
             testCoverageEnabled = true
-//            minifyEnabled true
+            shrinkResources true
+            minifyEnabled true
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
         }
         debug {
-            testCoverageEnabled = true
+//            testCoverageEnabled = true
+//            minifyEnabled   true
+
+            useProguard false
+            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
         }
 
     }
 
+    flavorDimensions "sdkRequirements"
+
+    productFlavors {
+        regular {
+            minSdkVersion 16
+            dimension "sdkRequirements"
+        }
+        fastDev {
+            minSdkVersion 23
+            dimension "sdkRequirements"
+        }
+    }
+    dexOptions {
+        threadCount 20
+        jumboMode true
+        javaMaxHeapSize "4g"
+    }
 }
 
-
-
-def supportVersion = "26.0.+"
-def coroutinesVersion = "0.16"
-
 dependencies {
+
+    //UI libs
+    implementation 'com.futuremind.recyclerfastscroll:fastscroll:0.2.5'
+    //time libs
+    implementation 'joda-time:joda-time:2.9.9'
+
+    regularImplementation 'com.android.support:multidex:1.0.2'
+
+
     //coroutines
     implementation "org.jetbrains.kotlinx:kotlinx-coroutines-core:$coroutinesVersion"
     implementation "org.jetbrains.kotlinx:kotlinx-coroutines-android:$coroutinesVersion"
@@ -58,22 +92,17 @@ dependencies {
     implementation "com.android.support:appcompat-v7:$supportVersion"
     implementation "com.android.support:design:$supportVersion"
     implementation "com.android.support:cardview-v7:$supportVersion"
-    //UI libs
-    implementation 'com.futuremind.recyclerfastscroll:fastscroll:0.2.5'
-    //time libs
-    implementation 'joda-time:joda-time:2.9.9'
-    //commonSense
-    implementation project(':com.commonsense.android.kotlin')
-    //    proguardImplementation project(':com.commonsense.android.kotlin')
-    //    proguardImplementation project(path: ':com.commonsense.android.kotlin', configuration: "debug")
+
     //tests libs
-    androidTestImplementation('com.android.support.test.espresso:espresso-core:2.2.2', {
+    androidTestImplementation("com.android.support.test.espresso:espresso-core:$espressoVersion", {
         exclude group: 'com.android.support', module: 'support-annotations'
     })
-    testImplementation 'junit:junit:4.12'
+    testImplementation "junit:junit:$junitVersion"
     //kotlin specific
     implementation "org.jetbrains.kotlin:kotlin-stdlib:$kotlin_version"
-    kapt "com.android.databinding:compiler:3.0.0-alpha7"
+    implementation project(path: ':com.commonsense.android.kotlin-prebuilt')
+
+    kapt "com.android.databinding:compiler:$androidGradleVersion"
 }
 
 repositories {
@@ -89,12 +118,4 @@ kotlin {
     experimental {
         coroutines "enable"
     }
-}
-
-
-android.applicationVariants.all { variant ->
-    variant.variantData.variantConfiguration.javaCompileOptions.annotationProcessorOptions.includeCompileClasspath = true
-    variant.variantData.variantConfiguration.
-            javaCompileOptions.annotationProcessorOptions.className 'com.android.databinding.compiler'
-
 }

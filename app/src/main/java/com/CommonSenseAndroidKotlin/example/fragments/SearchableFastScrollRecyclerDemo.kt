@@ -4,8 +4,13 @@ import android.content.Context
 import android.support.v7.widget.LinearLayoutManager
 import com.CommonSenseAndroidKotlin.example.databinding.DemoRecyclerFastscrollSearchableBinding
 import com.CommonSenseAndroidKotlin.example.databinding.SimpleListItemBinding
-import com.commonsense.android.kotlin.android.extensions.widets.setup
-import com.commonsense.android.kotlin.baseClasses.databinding.*
+import com.commonsense.android.kotlin.views.databinding.adapters.AbstractSearchableDataBindingRecyclerAdapter
+import com.commonsense.android.kotlin.views.databinding.adapters.BaseSearchRenderModel
+import com.commonsense.android.kotlin.views.databinding.adapters.BaseViewHolderItem
+import com.commonsense.android.kotlin.views.databinding.adapters.ViewInflatingFunction
+import com.commonsense.android.kotlin.views.databinding.fragments.BaseDatabindingFragment
+import com.commonsense.android.kotlin.views.databinding.fragments.InflateBinding
+import com.commonsense.android.kotlin.views.extensions.setup
 import com.futuremind.recyclerviewfastscroll.SectionTitleProvider
 import org.joda.time.DateTime
 

@@ -5,8 +5,8 @@ import android.content.Context
 import android.content.Intent
 import android.net.Uri
 import android.widget.Toast
+import com.commonsense.android.kotlin.prebuilt.R
 import com.commonsense.android.kotlin.prebuilt.activities.InbuiltWebview
-import com.commonsense.android.kotlin.system.R
 import com.commonsense.android.kotlin.system.extensions.safeToast
 import com.commonsense.android.kotlin.system.logging.L
 

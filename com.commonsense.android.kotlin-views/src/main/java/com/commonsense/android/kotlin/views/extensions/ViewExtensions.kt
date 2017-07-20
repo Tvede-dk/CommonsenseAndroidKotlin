@@ -8,9 +8,9 @@ import android.support.annotation.UiThread
 import android.util.AttributeSet
 import android.view.View
 import android.view.ViewTreeObserver
-import com.commonsense.android.kotlin.android.extensions.getTypedArrayFor
-import com.commonsense.android.kotlin.base.extensions.tryAndLog
-import com.commonsense.android.kotlin.base.extensions.tryAndLogSuspend
+import com.commonsense.android.kotlin.system.extensions.getTypedArrayFor
+import com.commonsense.android.kotlin.system.logging.tryAndLog
+import com.commonsense.android.kotlin.system.logging.tryAndLogSuspend
 import kotlinx.coroutines.experimental.android.UI
 import kotlinx.coroutines.experimental.channels.Channel
 import kotlinx.coroutines.experimental.channels.actor

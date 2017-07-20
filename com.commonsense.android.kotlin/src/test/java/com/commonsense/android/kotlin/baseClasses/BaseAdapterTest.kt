@@ -1,5 +1,6 @@
 package com.commonsense.android.kotlin.baseClasses
 
+import android.widget.BaseAdapter
 import com.commonsense.android.kotlin.BaseRoboElectricTest
 import org.junit.Assert
 import org.junit.Test

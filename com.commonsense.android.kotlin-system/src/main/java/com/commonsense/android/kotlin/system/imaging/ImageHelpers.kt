@@ -9,11 +9,11 @@ import android.net.Uri
 import android.support.annotation.FloatRange
 import android.support.annotation.IntRange
 import android.support.media.ExifInterface
+import com.commonsense.android.kotlin.base.extensions.collections.map
+import com.commonsense.android.kotlin.system.extensions.getVirtualScreenSize
 import kotlinx.coroutines.experimental.CommonPool
 import kotlinx.coroutines.experimental.Deferred
 import kotlinx.coroutines.experimental.async
-import com.commonsense.android.kotlin.base.extensions.collections.map
-import com.commonsense.android.kotlin.system.extensions.GetVirtualScreenSize
 import java.io.ByteArrayInputStream
 import java.io.ByteArrayOutputStream
 
@@ -21,17 +21,20 @@ import java.io.ByteArrayOutputStream
 /**
  * Created by Kasper Tvede on 11-07-2017.
  */
+data class ImageSize(val width: Int, val height: Int)
 
-
-suspend fun Uri.loadBitmapWithsampleSize(contentResolver: ContentResolver, ratio: Double): Deferred<Bitmap?> = async(CommonPool) {
+suspend fun Uri.loadBitmapWithSampleSize(contentResolver: ContentResolver, ratio: Double, containsTransparency: Boolean = true): Deferred<Bitmap?> = async(CommonPool) {
+    val bitmapConfig = containsTransparency.map(Bitmap.Config.ARGB_8888, Bitmap.Config.RGB_565)
     val bitmapOptions = BitmapFactory.Options().apply {
         @IntRange(from = 1)
         inSampleSize = getPowerOfTwoForSampleRatio(ratio)
-        inPreferredConfig = Bitmap.Config.ARGB_8888//
-
+        inPreferredConfig = bitmapConfig//
+        /*     inDensity = srcWidth //TODO do this later, as this will result in perfecter scaling.
+             inScaled = true
+             inTargetDensity = dstWidt * inSampleSize*/
     }
 
-    contentResolver.openInputStream(this@loadBitmapWithsampleSize).use { inputToDecode ->
+    contentResolver.openInputStream(this@loadBitmapWithSampleSize).use { inputToDecode ->
         return@async BitmapFactory.decodeStream(inputToDecode, null, bitmapOptions)
     }
 }
@@ -39,10 +42,10 @@ suspend fun Uri.loadBitmapWithsampleSize(contentResolver: ContentResolver, ratio
 /**
  * Size of a bitmap
  */
-suspend fun Uri.loadBitmapSize(contentResolver: ContentResolver) = async(CommonPool) {
+suspend fun Uri.loadBitmapSize(contentResolver: ContentResolver, bitmapConfig: Bitmap.Config = Bitmap.Config.ARGB_8888): Deferred<BitmapFactory.Options?> = async(CommonPool) {
     val onlyBoundsOptions = BitmapFactory.Options().apply {
         inJustDecodeBounds = true
-        inPreferredConfig = Bitmap.Config.ARGB_8888//optional
+        inPreferredConfig = bitmapConfig//optional
     }
     contentResolver.openInputStream(this@loadBitmapSize).use { input ->
         BitmapFactory.decodeStream(input, null, onlyBoundsOptions)
@@ -84,12 +87,17 @@ private fun getPowerOfTwoForSampleRatio(ratio: Double): Int {
     return maxOf(k, 1)
 }
 
+suspend fun Bitmap.scaleToWidth(@IntRange(from = 0) width: Int, respectAspectRatio: Boolean): Deferred<Bitmap> = async(CommonPool) {
+    val size = getImgeSize().scaleWidth(width)
+    Bitmap.createScaledBitmap(this@scaleToWidth, size.width, size.height, true)
+}
+
 /**
  * Assuming a thumbnail is square
  *
  */
 fun Context.calculateOptimalThumbnailSize(defaultSize: Int = 200, minSize: Int = 50, fraction: Int = 8): Int {
-    val virtualSize = GetVirtualScreenSize() ?: return defaultSize
+    val virtualSize = getVirtualScreenSize() ?: return defaultSize
     val widthFraction = virtualSize.x / fraction
     val heightFraction = virtualSize.y / fraction
     val combined = widthFraction + heightFraction
@@ -135,6 +143,7 @@ suspend fun Uri.getExifForImage(contentResolver: ContentResolver) = async(Common
     }
 }
 
+
 /**
  * want to be able to load a "scaled bitmap"
  */
@@ -144,5 +153,23 @@ suspend fun Uri.loadBitmapScaled(contentResolver: ContentResolver, width: Int): 
     val originalSize = (onlyBoundsOptions.outHeight > onlyBoundsOptions.outWidth)
             .map(onlyBoundsOptions.outHeight, onlyBoundsOptions.outWidth)
     val ratio = (originalSize > width).map(originalSize / width.toDouble(), 1.0)
-    return@async loadBitmapWithsampleSize(contentResolver, ratio).await()
+    return@async loadBitmapWithSampleSize(contentResolver, ratio).await()
 }
+
+
+val ImageSize.largest: Int
+    get() = maxOf(width, height)
+
+
+//eg i have 200 height, and 500 width, and want to ratio that to 50 x ?
+fun ImageSize.scaleWidth(destWidth: Int): ImageSize {
+    val destFloat = destWidth.toFloat()
+    val srcFloat = width.toFloat()
+    val ratio = maxOf(destFloat, srcFloat) / minOf(destFloat, srcFloat)
+    return applyRatio(ratio)
+}
+
+fun ImageSize.applyRatio(ratio: Float): ImageSize =
+        ImageSize((width * ratio).toInt(), (height * ratio).toInt())
+
+fun Bitmap.getImgeSize(): ImageSize = ImageSize(width, height)

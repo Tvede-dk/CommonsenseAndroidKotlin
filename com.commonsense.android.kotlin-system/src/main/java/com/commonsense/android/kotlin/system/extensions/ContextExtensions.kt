@@ -64,7 +64,7 @@ fun Context.safeToast(message: String, length: Int = Toast.LENGTH_SHORT) {
 fun Context.getColorSafe(@ColorRes color: Int) = ContextCompat.getColor(this, color)
 
 
-fun Context.GetVirtualScreenSize(): Point? {
+fun Context.getVirtualScreenSize(): Point? {
     val windowManager = getSystemService(Context.WINDOW_SERVICE) as? WindowManager
     val display = windowManager?.defaultDisplay
     return display?.let {

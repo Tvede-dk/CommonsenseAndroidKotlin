@@ -20,7 +20,7 @@ fun Fragment.showSnackbar(view: View,
                           durationInMs: Int,
                           onAction: () -> Unit,
                           onTimeout: EmptyMethodNullable = null,
-                          onDismissOtherwise: EmptyMethodNullable = null) {
+                          onDismissOtherwise: EmptyMethodNullable = null): Snackbar {
 
     val mySnackbar = Snackbar.make(view,
             text, Snackbar.LENGTH_SHORT)
@@ -38,4 +38,5 @@ fun Fragment.showSnackbar(view: View,
         }
     })
     mySnackbar.show()
+    return mySnackbar
 }

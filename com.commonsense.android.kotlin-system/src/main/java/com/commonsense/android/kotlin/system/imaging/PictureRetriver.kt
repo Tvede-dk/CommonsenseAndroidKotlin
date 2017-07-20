@@ -7,7 +7,6 @@ import android.net.Uri
 import android.provider.MediaStore
 import com.commonsense.android.kotlin.system.PermissionEnum
 import com.commonsense.android.kotlin.system.askAndUsePermission
-import com.commonsense.android.kotlin.system.base.ActivityResultCallbackOk
 import com.commonsense.android.kotlin.system.base.BaseActivity
 
 
@@ -17,10 +16,10 @@ import com.commonsense.android.kotlin.system.base.BaseActivity
 //TODO better name:
 //-picture - taker, image retriver, image fetcher, cameraGalleryImageHandler ?
 // -- hmm somewhat along those
-class PictureRetriver(private val activity: BaseActivity, private val callback: (Uri) -> Unit, private val requestCode: Int = 18877) : ActivityResultCallbackOk {
+class PictureRetriver(private val activity: BaseActivity, private val callback: (Uri) -> Unit, private val requestCode: Int = 18877) {
 
     init {
-        activity.addActivityResultListenerOnlyOk(requestCode, this)
+        activity.addActivityResultListenerOnlyOk(requestCode, this::onActivityResult)
     }
 
 
@@ -48,7 +47,7 @@ class PictureRetriver(private val activity: BaseActivity, private val callback: 
         activity.startActivityForResult(pickIntent, requestCode)
     }
 
-    override fun onActivityResult(data: Intent?) {
+    fun onActivityResult(data: Intent?) {
         data?.data?.let {
             pictureUri = it
         }

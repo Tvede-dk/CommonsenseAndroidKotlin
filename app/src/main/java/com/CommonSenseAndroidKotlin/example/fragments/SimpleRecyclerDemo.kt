@@ -5,6 +5,7 @@ import android.graphics.PorterDuff
 import android.graphics.PorterDuffColorFilter
 import android.support.v7.widget.LinearLayoutManager
 import android.view.View
+import com.CommonSenseAndroidKotlin.example.R
 import com.CommonSenseAndroidKotlin.example.databinding.DemoRecyclerSimpleViewBinding
 import com.CommonSenseAndroidKotlin.example.databinding.SimpleListImageItemBinding
 import com.CommonSenseAndroidKotlin.example.databinding.SimpleListItemBinding
@@ -16,6 +17,8 @@ import com.commonsense.android.kotlin.views.databinding.fragments.BaseDatabindin
 import com.commonsense.android.kotlin.views.databinding.fragments.InflateBinding
 import com.commonsense.android.kotlin.views.extensions.setOnclickAsync
 import com.commonsense.android.kotlin.views.extensions.setup
+import com.commonsense.android.kotlin.views.features.SectionRecyclerTransaction
+import com.commonsense.android.kotlin.views.features.showSnackbar
 
 /**
  * Created by Kasper Tvede on 31-05-2017.
@@ -32,7 +35,19 @@ open class SimpleRecyclerDemo : BaseDatabindingFragment<DemoRecyclerSimpleViewBi
         adapter.clear()
         for (section in 0 until 10) {
             for (i in 0 until 10) {
-                adapter.add(SimpleListItemRender("First text is good text", section, { adapter.hideSection(section) }), section)
+                adapter.add(SimpleListItemRender("First text is good text", section, {
+                    val transaction = SectionRecyclerTransaction.Builder(adapter).apply {
+                        hideSection(section)
+                        hideSection(section + 1)
+                        hideSection(section + 2)
+                    }.build()
+                    transaction.applyTransaction()
+                    showSnackbar(binding.root, R.string.app_name, R.string.app_name, 5000, {
+                        transaction.resetTransaction()
+                    })
+//                    adapter.hideSection(section)
+
+                }), section)
                 adapter.add(SimpleListImageItemRender(Color.BLUE, section), section)
                 adapter.add(SimpleListItemRender("Whats up test ?", section, {}), section)
                 adapter.add(SimpleListImageItemRender(Color.RED, section), section)
@@ -54,7 +69,8 @@ fun setColorUsingBackground(view: View, section: Int) {
 }
 
 
-open class SimpleListItemRender(text: String, private val section: Int, private val callback: () -> Unit) : BaseRenderModel<String, SimpleListItemBinding>(text, SimpleListItemBinding::class.java) {
+open class SimpleListItemRender(text: String, private val section: Int, private val callback: () -> Unit)
+    : BaseRenderModel<String, SimpleListItemBinding>(text, SimpleListItemBinding::class.java) {
     override fun renderFunction(view: SimpleListItemBinding, model: String, viewHolder: BaseViewHolderItem<SimpleListItemBinding>) {
         view.simpleListText.text = model + " section - " + section
         view.root.setOnclickAsync { callback() }

@@ -29,6 +29,6 @@ dependencies {
     })
     implementation "junit:junit:$junitVersion"
     implementation "org.jetbrains.kotlin:kotlin-stdlib:$kotlin_version"
-    implementation "org.robolectric:robolectric:$roboElectricVersion"
+    api "org.robolectric:robolectric:$roboElectricVersion"
 }
 

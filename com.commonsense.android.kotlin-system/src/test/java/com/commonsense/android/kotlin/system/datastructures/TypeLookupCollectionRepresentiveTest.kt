@@ -1,5 +1,11 @@
 package com.commonsense.android.kotlin.system.datastructures
 
+import com.commonsense.android.kotlin.base.extensions.collections.repeateToSize
+import com.commonsense.android.kotlin.test.*
+import org.junit.Ignore
+import org.junit.Test
+import kotlin.system.measureNanoTime
+
 /**
  * Created by Kasper Tvede on 20-07-2017.
  */
@@ -21,11 +27,11 @@ class TypeLookupCollectionRepresentiveTest : BaseRoboElectricTest() {
         val collection = TypeLookupCollectionRepresentative<TestClassTypeLookupHashcode<*>, String>()
         val firstClass = TestClassTypeLookupHashcode("asd", 1)
         collection.addAll(listOf(firstClass).repeateToSize(10))
-        Assert.assertEquals(collection.size, 10)
+        collection.size.assert(10)
         collection.remove(collection[5]!!)
         collection.remove(collection[7]!!)
         collection.remove(collection[1]!!)
-        Assert.assertEquals(collection.size, 7)
+        collection.size.assert(7)
     }
 
     @Test
@@ -36,13 +42,13 @@ class TypeLookupCollectionRepresentiveTest : BaseRoboElectricTest() {
         val thirdClass = TestClassTypeLookupHashcode("asd", 3)
         val firstSecClass = TestClassTypeLookupHashcode("asd2", 1)
         collection.addAll(firstClass, secondClass, thirdClass, firstSecClass)
-        Assert.assertEquals(collection.size, 4)
-
+        collection.size.assert(4)
         collection.removeAll(firstClass, firstSecClass, thirdClass)
-        Assert.assertEquals(collection.size, 1)
-        Assert.assertEquals(collection.getTypeRepresentativeFromTypeValue(1), null)
-        Assert.assertEquals(collection.getTypeRepresentativeFromTypeValue(2), secondClass.getCreatorFunction())
-        Assert.assertEquals(collection.getTypeRepresentativeFromTypeValue(3), null)
+
+        collection.size.assert(1)
+        collection.getTypeRepresentativeFromTypeValue(1).assertNull()
+        collection.getTypeRepresentativeFromTypeValue(2).assertNotNullApply { this.assert(secondClass.getCreatorFunction()) }
+        collection.getTypeRepresentativeFromTypeValue(3).assertNull()
     }
 
 
@@ -51,10 +57,10 @@ class TypeLookupCollectionRepresentiveTest : BaseRoboElectricTest() {
         val collection = TypeLookupCollectionRepresentative<TestClassTypeLookupHashcode<*>, String>()
         val firstClass = TestClassTypeLookupHashcode("asd", 1)
         collection.addAll(listOf(firstClass).repeateToSize(10))
-        Assert.assertEquals(collection.size, 10)
+        collection.size.assert(10)
         collection.clear()
-        Assert.assertEquals(collection.size, 0)
-        Assert.assertEquals(collection.getTypeRepresentativeFromTypeValue(1), null)
+        collection.size.assert(0)
+        collection.getTypeRepresentativeFromTypeValue(1).assertNull()
 
     }
 
@@ -63,16 +69,15 @@ class TypeLookupCollectionRepresentiveTest : BaseRoboElectricTest() {
         val collection = TypeLookupCollectionRepresentative<TestClassTypeLookupHashcode<*>, String>()
         val onlyClass = TestClassTypeLookupHashcode("asd", 1)
         collection.add(onlyClass)
-        Assert.assertEquals(collection.size, 1)
-        Assert.assertEquals(collection[0], onlyClass)
-        Assert.assertEquals(collection.getTypeRepresentativeFromTypeValue(1), onlyClass.getCreatorFunction())
+        collection.size.assert(1)
+        collection[0].assertNotNullAndEquals(onlyClass)
+        collection.getTypeRepresentativeFromTypeValue(1).assertNotNullAndEquals(onlyClass.getCreatorFunction())
 
         val otherClass = TestClassTypeLookupHashcode("qwe", 2)
         collection.add(otherClass)
-        Assert.assertEquals(collection.size, 2)
-        Assert.assertEquals(collection[1], otherClass)
-        Assert.assertEquals(collection.getTypeRepresentativeFromTypeValue(2), otherClass.getCreatorFunction())
-
+        collection.size.assert(2)
+        collection[1].assertNotNullAndEquals(otherClass)
+        collection.getTypeRepresentativeFromTypeValue(2).assertNotNullAndEquals(otherClass.getCreatorFunction())
 
     }
 
@@ -84,12 +89,12 @@ class TypeLookupCollectionRepresentiveTest : BaseRoboElectricTest() {
         val thirdClass = TestClassTypeLookupHashcode("asd", 3)
         val firstSecClass = TestClassTypeLookupHashcode("asd2", 1)
         collection.addAll(firstClass, secondClass, thirdClass, firstSecClass)
-        Assert.assertEquals(collection.size, 4)
-        Assert.assertEquals(collection.getTypeRepresentativeFromTypeValue(1), firstClass.getCreatorFunction())
-        Assert.assertEquals(collection.getTypeRepresentativeFromTypeValue(2), secondClass.getCreatorFunction())
-        Assert.assertEquals(collection.getTypeRepresentativeFromTypeValue(3), thirdClass.getCreatorFunction())
+        collection.size.assert(4)
+        collection.getTypeRepresentativeFromTypeValue(1).assertNotNullAndEquals(firstClass.getCreatorFunction())
+        collection.getTypeRepresentativeFromTypeValue(2).assertNotNullAndEquals(secondClass.getCreatorFunction())
+        collection.getTypeRepresentativeFromTypeValue(3).assertNotNullAndEquals(thirdClass.getCreatorFunction())
         //the firstSecClass should be there, its just not the first type (1) that gets inserted.
-        Assert.assertEquals(collection[3], firstSecClass)
+        collection[3].assertNotNullAndEquals(firstSecClass)
     }
 
     @Ignore
@@ -101,12 +106,13 @@ class TypeLookupCollectionRepresentiveTest : BaseRoboElectricTest() {
         val thirdClass = TestClassTypeLookupHashcode("asd", 3)
         val firstSecClass = TestClassTypeLookupHashcode("asd2", 1)
         collection.addAll(firstClass, secondClass, thirdClass, firstSecClass)
-        Assert.assertEquals(collection.size, 4)
-        Assert.assertEquals(collection.getTypeRepresentativeFromTypeValue(1), firstClass.getCreatorFunction())
+        collection.size.assert(4)
+        collection.getTypeRepresentativeFromTypeValue(1).assertNotNullAndEquals(firstClass.getCreatorFunction())
         collection.removeAt(0)
-        Assert.assertEquals(collection.getTypeRepresentativeFromTypeValue(1), firstSecClass.getCreatorFunction())
+        collection.getTypeRepresentativeFromTypeValue(1).assertNotNullAndEquals(firstClass.getCreatorFunction())
         collection.remove(firstSecClass)
-        Assert.assertEquals(collection.getTypeRepresentativeFromTypeValue(1), null)
+        collection.getTypeRepresentativeFromTypeValue(1).assertNull()
+
     }
 
     @Test
@@ -121,11 +127,10 @@ class TypeLookupCollectionRepresentiveTest : BaseRoboElectricTest() {
         collection.add(lastItem)
 
         collection.removeIn(1 until 4) //remove asd{1 until 4} [4 elements, 1 and 3 are inclusive]
-        Assert.assertEquals(collection.size, 2)
-        Assert.assertEquals(collection[0], firstItem)
-        Assert.assertEquals(collection[1], lastItem)
+        collection.size.assert(2)
+        (collection[0] == firstItem).assert(true)
 
-
+        (collection[1] == lastItem).assert(true)
     }
 
     @Ignore
@@ -146,7 +151,7 @@ class TypeLookupCollectionRepresentiveTest : BaseRoboElectricTest() {
             collection.removeAt(0) //worst case , since the representative is after 500_000 elements.
             // a forloop would be extremly slow
         }
-        Assert.assertTrue(worstCase < baseLine * 10) //allow a margin of double the baseline.
+        (worstCase < baseLine * 10).assert(true) //allow a margin of double the baseline.
         // this would still dictate a O(1) since O(1) * 10 = O(1)
 
     }

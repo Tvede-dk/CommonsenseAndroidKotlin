@@ -1,4 +1,4 @@
-include ':app', ':com.commonsense.android.kotlin',
+include ':app',
         ':com.commonsense.android.kotlin-test',
         ':com.commonsense.android.kotlin-base',
         ':com.commonsense.android.kotlin-views',

@@ -1,6 +1,7 @@
 package com.commonsense.android.kotlin.base.extensions
 
 import android.text.Editable
+import java.lang.ref.WeakReference
 import kotlin.system.measureNanoTime
 
 /**
@@ -26,3 +27,7 @@ val Any?.isNotNull
 
 
 fun <T> T?.isNullOrEqualTo(other: T?): Boolean = this == null || this == other
+
+
+fun <T> T?.weakReference() = this?.let{ WeakReference(it) }
+

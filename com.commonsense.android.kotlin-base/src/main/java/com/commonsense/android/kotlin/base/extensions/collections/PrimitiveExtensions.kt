@@ -1,5 +1,8 @@
 package com.commonsense.android.kotlin.base.extensions.collections
 
+import com.commonsense.android.kotlin.base.extensions.isNotNull
+import com.commonsense.android.kotlin.base.extensions.isNull
+
 /**
  * Created by Kasper Tvede on 06-12-2016.
  */
@@ -23,6 +26,14 @@ fun <T> Boolean.map(ifTrue: T, ifFalse: T): T {
     }
 }
 
+
+inline fun Any?.ifNull(crossinline action: () -> Unit) {
+    this.isNull.ifTrue(action)
+}
+
+inline fun Any?.ifNotNull(crossinline action: () -> Unit) {
+    this.isNotNull.ifTrue(action)
+}
 
 /**
  * Makes a more "elegant" sentence for some expressions, same as "com.commonsense.android.kotlin.base.extensions.collections.onTrue"

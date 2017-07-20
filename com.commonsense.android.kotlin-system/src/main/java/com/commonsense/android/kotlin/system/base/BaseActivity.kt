@@ -4,17 +4,17 @@ import android.app.Activity
 import android.content.Intent
 import android.support.annotation.AnyThread
 import android.support.annotation.IdRes
+import android.support.annotation.IntRange
 import android.support.annotation.UiThread
 import android.support.v4.app.Fragment
 import android.support.v4.app.FragmentActivity
 import android.support.v7.app.AppCompatActivity
-import android.util.SparseArray
 import com.commonsense.android.kotlin.base.scheduling.JobContainer
 import com.commonsense.android.kotlin.system.PermissionsHandling
+import com.commonsense.android.kotlin.system.base.helpers.*
 import com.commonsense.android.kotlin.system.extensions.transactionCommit
 import com.commonsense.android.kotlin.system.extensions.transactionCommitNow
-import com.commonsense.android.kotlin.system.logging.logError
-
+import com.commonsense.android.kotlin.system.logging.logWarning
 import kotlinx.coroutines.experimental.CommonPool
 import kotlinx.coroutines.experimental.android.UI
 
@@ -22,32 +22,19 @@ import kotlinx.coroutines.experimental.android.UI
  * created by Kasper Tvede on 29-09-2016.
  */
 
-interface ActivityResultCallback {
-    fun onActivityResult(resultCode: Int, data: Intent?): Boolean
-}
 
-interface ActivityResultCallbackOk {
-    fun onActivityResult(data: Intent?)
-}
-
-open class BaseActivity : AppCompatActivity() {
+open class BaseActivity : AppCompatActivity(), ActivityResultHelperContainer {
 
     val permissionHandler by lazy {
         PermissionsHandling()
-    }
-
-    private val activityResultListeners by lazy {
-        SparseArray<ActivityResultCallback>()
     }
 
     private val localJobs by lazy {
         JobContainer()
     }
 
-
-    override fun onRequestPermissionsResult(requestCode: Int, permissions: Array<out String>, grantResults: IntArray) {
-        super.onRequestPermissionsResult(requestCode, permissions, grantResults)
-        permissionHandler.onRequestPermissionResult(requestCode, permissions, grantResults)
+    private val activityResultHelper by lazy {
+        ActivityResultHelper({ logWarning(it) })
     }
 
 
@@ -61,47 +48,51 @@ open class BaseActivity : AppCompatActivity() {
     }
 
 
+    override fun onRequestPermissionsResult(requestCode: Int, permissions: Array<out String>, grantResults: IntArray) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults)
+        permissionHandler.onRequestPermissionResult(requestCode, permissions, grantResults)
+    }
+
     override fun onDestroy() {
         localJobs.cleanJobs()
-        activityResultListeners.clear()
+        activityResultHelper.clear()
         super.onDestroy()
     }
 
+
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
-        activityResultListeners[requestCode]?.onActivityResult(resultCode, data)
+        activityResultHelper.handle(requestCode, resultCode, data)
     }
 
-    fun addActivityResultListenerOnlyOk(requestCode: Int, receiver: ActivityResultCallbackOk) {
-        addActivityResultListener(requestCode, object : ActivityResultCallback {
-            override fun onActivityResult(resultCode: Int, data: Intent?): Boolean {
-                if (resultCode == Activity.RESULT_OK) {
-                    receiver.onActivityResult(data)
-                }
-                return true
-            }
-        })
+    //<editor-fold desc="Add activity result listener">
+    override fun addActivityResultListenerOnlyOk(requestCode: Int, receiver: ActivityResultCallbackOk) {
+        activityResultHelper.addForOnlyOk(requestCode, receiver)
     }
 
-    fun addActivityResultListener(requestCode: Int, receiver: ActivityResultCallback) {
-        if (activityResultListeners[requestCode] != null && activityResultListeners[requestCode] != receiver) {
-            //TODO should throw, warn, error ? fire missiles ??  this is a bad situation  hmm
-            logError("Overwriting an actual listener, for request code $requestCode")
-            throw RuntimeException("Overwriting an actual listener, this is unsupported / not allowed behavior.")
-        }
-        activityResultListeners.put(requestCode, receiver)
+    override fun addActivityResultListener(requestCode: Int, receiver: ActivityResultCallback) {
+        activityResultHelper.addForAllResults(requestCode, receiver)
     }
 
-    fun removeActivityResultListener(requestCode: Int) {
-        activityResultListeners.remove(requestCode)
+    override fun addActivityResultListenerOnlyOkAsync(requestCode: Int, receiver: AsyncActivityResultCallbackOk) {
+        activityResultHelper.addForOnlyOkAsync(requestCode, receiver)
     }
 
+    override fun addActivityResultListenerAsync(requestCode: Int, receiver: AsyncActivityResultCallback) {
+        activityResultHelper.addForAllResultsAsync(requestCode, receiver)
+    }
+
+    override fun removeActivityResultListener(@IntRange(from = 0) requestCode: Int) {
+        activityResultHelper.remove(requestCode)
+    }
+    //</editor-fold>
 }
 
 @AnyThread
 fun Activity.safeFinish() = runOnUiThread(this::finish)
 
 
+//<editor-fold desc="push / replace fragment">
 @UiThread
 fun FragmentActivity.replaceFragment(@IdRes container: Int, fragment: Fragment) {
     supportFragmentManager.transactionCommitNow {
@@ -116,4 +107,5 @@ fun FragmentActivity.pushNewFragmentTo(@IdRes container: Int, fragment: Fragment
         addToBackStack(fragment.id.toString())
     }
 }
+//</editor-fold>
 

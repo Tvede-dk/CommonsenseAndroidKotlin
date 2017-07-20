@@ -52,6 +52,11 @@ fun <T> T?.assertNotNullApply(message: String = "", action: T.() -> Unit) {
     this?.let(action)
 }
 
+fun <T> T?.assertNotNullAndEquals(other: T?, message: String = "") {
+    this.assertNull(message)
+    Assert.assertEquals(message, other, this)
+}
+
 
 fun IntRange.assert(otherRange: IntRange, message: String = "") {
     Assert.assertEquals(message, otherRange, this)

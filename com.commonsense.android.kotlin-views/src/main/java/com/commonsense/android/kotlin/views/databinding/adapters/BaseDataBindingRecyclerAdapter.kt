@@ -199,7 +199,6 @@ abstract class AbstractDataBindingRecyclerAdapter<T>(context: Context) :
         dataCollection.addAll(items.asList(), inSection).inRaw.apply {
             notifyItemRangeInserted(this.start, this.length)
         }
-
     }
 
     open fun insertAll(vararg items: T, startPosition: Int, inSection: Int) = updateData {

@@ -14,7 +14,6 @@ import android.support.v7.widget.Toolbar
  */
 
 
-
 fun AppCompatActivity.setupToolbarAppDrawer(drawer: DrawerLayout, toolbar: Toolbar, @StringRes openTitle: Int, @StringRes closeTitle: Int): ActionBarDrawerToggle {
     setSupportActionBar(toolbar)
     val toggle = ActionBarDrawerToggle(this, drawer, toolbar, openTitle, closeTitle)

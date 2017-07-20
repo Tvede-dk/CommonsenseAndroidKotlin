@@ -1,5 +1,0 @@
-<resources>
-    <string name="app_name">CommonSense Android Kotlin</string>
-    <string name="please_wait">Please wait</string>
-    <string name="missing_browser">Cannot perform the action due to missing browser application</string>
-</resources>

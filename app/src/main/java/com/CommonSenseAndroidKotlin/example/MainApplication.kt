@@ -1,7 +1,6 @@
 package com.CommonSenseAndroidKotlin.example
 
 import com.commonsense.android.kotlin.prebuilt.baseClasses.BaseApplication
-import com.commonsense.android.kotlin.system.logging.logError
 
 
 /**
@@ -12,7 +11,7 @@ class MainApplication : BaseApplication() {
     override fun isDebugMode(): Boolean = BuildConfig.DEBUG
 
     override fun afterOnCreate() {
-        logError("")
+
     }
 
 }

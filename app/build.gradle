@@ -68,11 +68,7 @@ android {
             dimension "sdkRequirements"
         }
     }
-    dexOptions {
-        threadCount 20
-        jumboMode true
-        javaMaxHeapSize "4g"
-    }
+
 }
 
 dependencies {
@@ -83,7 +79,6 @@ dependencies {
     implementation 'joda-time:joda-time:2.9.9'
 
     regularImplementation 'com.android.support:multidex:1.0.2'
-
 
     //coroutines
     implementation "org.jetbrains.kotlinx:kotlinx-coroutines-core:$coroutinesVersion"

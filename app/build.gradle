@@ -31,13 +31,13 @@ android {
 
     buildTypes {
 
-        proguard {
-            initWith debug
-            useProguard true
-            minifyEnabled true
-            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
-
-        }
+//        proguard {
+//            initWith debug
+//            useProguard true
+//            minifyEnabled true
+//            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
+//
+//        }
 
         release {
             testCoverageEnabled = true

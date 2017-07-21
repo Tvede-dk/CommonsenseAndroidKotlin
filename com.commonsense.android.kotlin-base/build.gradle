@@ -28,18 +28,18 @@ android {
 
 
 dependencies {
-    androidTestImplementation("com.android.support.test.espresso:espresso-core:$espressoVersion", {
+    androidTestCompile("com.android.support.test.espresso:espresso-core:$espressoVersion", {
         exclude group: 'com.android.support', module: 'support-annotations'
     })
 
     //coroutines libs
-    implementation "org.jetbrains.kotlinx:kotlinx-coroutines-core:$coroutinesVersion"
-    implementation "org.jetbrains.kotlinx:kotlinx-coroutines-android:$coroutinesVersion"
+    compile "org.jetbrains.kotlinx:kotlinx-coroutines-core:$coroutinesVersion"
+    compile "org.jetbrains.kotlinx:kotlinx-coroutines-android:$coroutinesVersion"
 
-    implementation "com.android.support:appcompat-v7:$supportVersion"
-    implementation "junit:junit:$junitVersion"
-    testImplementation project(':com.commonsense.android.kotlin-test')
-    implementation "org.jetbrains.kotlin:kotlin-stdlib:$kotlin_version"
+    compile "com.android.support:appcompat-v7:$supportVersion"
+    compile "junit:junit:$junitVersion"
+    testCompile project(':com.commonsense.android.kotlin-test')
+    compile "org.jetbrains.kotlin:kotlin-stdlib:$kotlin_version"
 
 }
 repositories {

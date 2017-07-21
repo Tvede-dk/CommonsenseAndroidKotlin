@@ -8,7 +8,7 @@ jacoco {
 }
 
 android {
-    buildTypeMatching 'proguard', 'debug'
+//    buildTypeMatching 'proguard', 'debug'
 
     compileSdkVersion 26
     buildToolsVersion "26.0.0"
@@ -21,7 +21,7 @@ android {
         versionName "1.0"
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
         multiDexEnabled true
-        flavorSelection 'sdkRequirements', 'fastDev'
+        //flavorSelection 'sdkRequirements', 'fastDev'
 
     }
 
@@ -41,15 +41,15 @@ android {
 
         release {
             testCoverageEnabled = true
-            shrinkResources true
-            minifyEnabled true
+            //shrinkResources true
+            //minifyEnabled true
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
         }
         debug {
 //            testCoverageEnabled = true
 //            minifyEnabled   true
 
-            useProguard false
+            //useProguard false
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
         }
 
@@ -76,28 +76,28 @@ android {
 dependencies {
 
     //UI libs
-    implementation 'com.futuremind.recyclerfastscroll:fastscroll:0.2.5'
+    compile 'com.futuremind.recyclerfastscroll:fastscroll:0.2.5'
     //time libs
-    implementation 'joda-time:joda-time:2.9.9'
+    compile 'joda-time:joda-time:2.9.9'
 
-    regularImplementation 'com.android.support:multidex:1.0.2'
+    //regularCompile 'com.android.support:multidex:1.0.2'
 
     //coroutines
-    implementation "org.jetbrains.kotlinx:kotlinx-coroutines-core:$coroutinesVersion"
-    implementation "org.jetbrains.kotlinx:kotlinx-coroutines-android:$coroutinesVersion"
+    compile "org.jetbrains.kotlinx:kotlinx-coroutines-core:$coroutinesVersion"
+    compile "org.jetbrains.kotlinx:kotlinx-coroutines-android:$coroutinesVersion"
     //support libs
-    implementation "com.android.support:appcompat-v7:$supportVersion"
-    implementation "com.android.support:design:$supportVersion"
-    implementation "com.android.support:cardview-v7:$supportVersion"
+    compile "com.android.support:appcompat-v7:$supportVersion"
+    compile "com.android.support:design:$supportVersion"
+    compile "com.android.support:cardview-v7:$supportVersion"
 
     //tests libs
-    androidTestImplementation("com.android.support.test.espresso:espresso-core:$espressoVersion", {
+    androidTestCompile("com.android.support.test.espresso:espresso-core:$espressoVersion", {
         exclude group: 'com.android.support', module: 'support-annotations'
     })
-    testImplementation "junit:junit:$junitVersion"
+    testCompile "junit:junit:$junitVersion"
     //kotlin specific
-    implementation "org.jetbrains.kotlin:kotlin-stdlib:$kotlin_version"
-    implementation project(path: ':com.commonsense.android.kotlin-prebuilt')
+    compile "org.jetbrains.kotlin:kotlin-stdlib:$kotlin_version"
+    compile project(path: ':com.commonsense.android.kotlin-prebuilt')
 
     kapt "com.android.databinding:compiler:$androidGradleVersion"
 }

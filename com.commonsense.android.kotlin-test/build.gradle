@@ -27,11 +27,11 @@ android {
 }
 
 dependencies {
-    androidTestImplementation("com.android.support.test.espresso:espresso-core:$espressoVersion", {
+    androidTestCompile("com.android.support.test.espresso:espresso-core:$espressoVersion", {
         exclude group: 'com.android.support', module: 'support-annotations'
     })
-    implementation "junit:junit:$junitVersion"
-    implementation "org.jetbrains.kotlin:kotlin-stdlib:$kotlin_version"
-    api "org.robolectric:robolectric:$roboElectricVersion"
+    compile "junit:junit:$junitVersion"
+    compile "org.jetbrains.kotlin:kotlin-stdlib:$kotlin_version"
+    compile "org.robolectric:robolectric:$roboElectricVersion"
 }
 

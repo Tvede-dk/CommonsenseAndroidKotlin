@@ -1,6 +1,7 @@
 package com.commonsense.android.kotlin.base.extensions.collections
 
 import android.support.annotation.Size
+import com.commonsense.android.kotlin.base.FunctionUnit
 
 /**
  * Created by Kasper Tvede on 30-09-2016.
@@ -67,3 +68,7 @@ fun <T> List<T>.subList(intRange: IntRange): List<T> =
  */
 fun <E> List<E>.limitToSize(size: Int): List<E>
         = subList(0, minOf(size, this.size))
+
+fun <E> List<FunctionUnit<E>>.invokeEachWith(element: E) {
+    forEach { it(element) }
+}

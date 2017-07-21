@@ -1,5 +1,8 @@
 package com.commonsense.android.kotlin.views.features
 
+import com.commonsense.android.kotlin.base.EmptyFunction
+import com.commonsense.android.kotlin.base.extensions.collections.invokeEachWith
+import com.commonsense.android.kotlin.base.patterns.ToggleBoolean
 import com.commonsense.android.kotlin.views.databinding.adapters.AbstractDataBindingRecyclerAdapter
 import com.commonsense.android.kotlin.views.databinding.adapters.IRenderModelItem
 
@@ -14,43 +17,72 @@ private class SectionTransactionCommando<T : IRenderModelItem<*, *>>(
 
 class SectionRecyclerTransaction<T : IRenderModelItem<*, *>> {
 
-    private val operations: List<SectionTransactionCommando<T>>
+    private val applyTransactions: List<SectionOperation<T>>
+
+    private val resetTransactions: List<SectionOperation<T>>
 
     private val adapter: AbstractDataBindingRecyclerAdapter<T>
 
-    private var isApplied = false
+    private val isApplied = ToggleBoolean(false)
 
-    private constructor(operations: List<SectionTransactionCommando<T>>,
-                        adapter: AbstractDataBindingRecyclerAdapter<T>) {
-        this.operations = operations
+    private var oldSize = 0
+
+    private val allowExternalModifications: Boolean
+
+    private constructor(applyTransactions: List<SectionOperation<T>>,
+                        resetTransactions: List<SectionOperation<T>>,
+                        adapter: AbstractDataBindingRecyclerAdapter<T>,
+                        allowExternalModifications: Boolean) {
+
         this.adapter = adapter
+        oldSize = adapter.itemCount
+        this.allowExternalModifications = allowExternalModifications
+        this.applyTransactions = applyTransactions
+        this.resetTransactions = resetTransactions
     }
 
-    fun applyTransaction() {
-        if (isApplied) {
-            //TODO should throw or log ??
-            return
-        }
-        isApplied = true
-        operations.forEach {
-            it.applyOperation.invoke(adapter)
+    fun apply() = isApplied.ifFalse {
+        performTransactions(applyTransactions)
+    }
+
+    fun applySafe(ifNotSafe: EmptyFunction? = null) {
+        if (canPerformTransaction()) {
+            apply()
+        } else {
+            ifNotSafe?.invoke()
         }
     }
 
-    fun resetTransaction() {
-        if (!isApplied) {
-            //TODO should throw or log ??
-            return
+    fun resetSafe(ifNotSafe: EmptyFunction? = null) {
+        if (canPerformTransaction()) {
+            reset()
+        } else {
+            ifNotSafe?.invoke()
         }
-        isApplied = false
-        operations.reversed().forEach {
-            it.resetOperation.invoke(adapter)
+    }
+
+    fun reset() = isApplied.ifTrue {
+        performTransactions(resetTransactions)
+    }
+
+    fun canPerformTransaction(): Boolean =
+            adapter.itemCount == oldSize || allowExternalModifications
+
+    private fun performTransactions(opertaions: List<SectionOperation<T>>) {
+        if (!canPerformTransaction()) {
+            throw RuntimeException("External changes are not permitted on the adapter for this transaction;\r\n" +
+                    "if this is expected, set allow external modifications to true.")
+            //WARNING this is super dangerous, we are potentially unable to do our transaction.
         }
+        opertaions.invokeEachWith(adapter)
+        oldSize = adapter.itemCount
     }
 
     class Builder<T : IRenderModelItem<*, *>>(val adapter: AbstractDataBindingRecyclerAdapter<T>) {
 
         private val operations = mutableListOf<SectionTransactionCommando<T>>()
+
+        var allowExternalModifications = false
 
         private fun addOperation(applyOperation: SectionOperation<T>, resetOperation: SectionOperation<T>) {
             operations.add(SectionTransactionCommando(applyOperation, resetOperation))
@@ -90,7 +122,11 @@ class SectionRecyclerTransaction<T : IRenderModelItem<*, *>> {
 
 
         fun build(): SectionRecyclerTransaction<T>
-                = SectionRecyclerTransaction(operations, adapter)
+                = SectionRecyclerTransaction(
+                operations.map { it.applyOperation },
+                operations.reversed().map { it.resetOperation },
+                adapter,
+                allowExternalModifications)
     }
 
 

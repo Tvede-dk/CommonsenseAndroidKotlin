@@ -9,6 +9,7 @@ import com.CommonSenseAndroidKotlin.example.R
 import com.CommonSenseAndroidKotlin.example.databinding.DemoRecyclerSimpleViewBinding
 import com.CommonSenseAndroidKotlin.example.databinding.SimpleListImageItemBinding
 import com.CommonSenseAndroidKotlin.example.databinding.SimpleListItemBinding
+import com.commonsense.android.kotlin.system.logging.logWarning
 import com.commonsense.android.kotlin.views.databinding.adapters.BaseDataBindingRecyclerAdapter
 import com.commonsense.android.kotlin.views.databinding.adapters.BaseRenderModel
 import com.commonsense.android.kotlin.views.databinding.adapters.BaseViewHolderItem
@@ -41,12 +42,10 @@ open class SimpleRecyclerDemo : BaseDatabindingFragment<DemoRecyclerSimpleViewBi
                         hideSection(section + 1)
                         hideSection(section + 2)
                     }.build()
-                    transaction.applyTransaction()
+                    transaction.applySafe()
                     showSnackbar(binding.root, R.string.app_name, R.string.app_name, 5000, {
-                        transaction.resetTransaction()
+                        transaction.resetSafe({ logWarning("omg failure! list changed outside of modification") })
                     })
-//                    adapter.hideSection(section)
-
                 }), section)
                 adapter.add(SimpleListImageItemRender(Color.BLUE, section), section)
                 adapter.add(SimpleListItemRender("Whats up test ?", section, {}), section)

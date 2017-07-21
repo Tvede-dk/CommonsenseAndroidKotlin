@@ -53,7 +53,7 @@ fun <T> T?.assertNotNullApply(message: String = "", action: T.() -> Unit) {
 }
 
 fun <T> T?.assertNotNullAndEquals(other: T?, message: String = "") {
-    this.assertNull(message)
+    this.assertNotNull(message)
     Assert.assertEquals(message, other, this)
 }
 

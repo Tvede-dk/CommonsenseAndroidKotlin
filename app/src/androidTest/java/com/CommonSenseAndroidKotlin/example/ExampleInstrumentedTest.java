@@ -21,6 +21,6 @@ public class ExampleInstrumentedTest {
         // Context of the app under test.
         Context appContext = InstrumentationRegistry.getTargetContext();
 
-        assertEquals("com.tvede.CommonSenseAndroidKotlin.example", appContext.getPackageName());
+        assertEquals("com.commonSenseAndroidKotlin.example", appContext.getPackageName());
     }
 }

@@ -58,17 +58,25 @@ android {
     flavorDimensions "sdkRequirements"
 
     productFlavors {
+
         regular {
             minSdkVersion 16
             dimension "sdkRequirements"
         }
+
         fastDev {
-            minSdkVersion 23
+            minSdkVersion 25
             dimension "sdkRequirements"
+            resConfigs("en", "xxhdpi")
         }
     }
+
     lintOptions {
         abortOnError false
+    }
+
+    dexOptions{
+        maxProcessCount 20
     }
 
 }

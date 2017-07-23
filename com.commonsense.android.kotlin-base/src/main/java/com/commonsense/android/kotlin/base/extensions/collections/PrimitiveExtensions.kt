@@ -1,6 +1,8 @@
 package com.commonsense.android.kotlin.base.extensions.collections
 
-import com.commonsense.android.kotlin.base.extensions.isNotNull
+import com.commonsense.android.kotlin.base.AsyncEmptyFunction
+import com.commonsense.android.kotlin.base.EmptyFunction
+import com.commonsense.android.kotlin.base.FunctionUnit
 import com.commonsense.android.kotlin.base.extensions.isNull
 
 /**
@@ -10,7 +12,7 @@ import com.commonsense.android.kotlin.base.extensions.isNull
 /**
  * performs the action if the boolean is true.
  */
-inline fun Boolean.onTrue(crossinline action: () -> Unit): Boolean {
+inline fun Boolean.onTrue(crossinline action: EmptyFunction): Boolean {
     if (this) {
         action()
     }
@@ -18,32 +20,39 @@ inline fun Boolean.onTrue(crossinline action: () -> Unit): Boolean {
 }
 
 
-fun <T> Boolean.map(ifTrue: T, ifFalse: T): T {
-    return if (this) {
-        ifTrue
-    } else {
-        ifFalse
-    }
+/**
+ * Maps a boolean into a value.
+ */
+fun <T> Boolean.map(ifTrue: T, ifFalse: T): T = if (this) {
+    ifTrue
+} else {
+    ifFalse
 }
 
 
-inline fun Any?.ifNull(crossinline action: () -> Unit) {
+/**
+ * performs the given action if we are null
+ */
+inline fun Any?.ifNull(crossinline action: EmptyFunction) {
     this.isNull.ifTrue(action)
 }
 
-inline fun Any?.ifNotNull(crossinline action: () -> Unit) {
-    this.isNotNull.ifTrue(action)
+/**
+ * performs the given action, if we are not null
+ */
+inline fun <T> T?.ifNotNull(crossinline action: FunctionUnit<T>) {
+    this?.let { action(it) }
 }
 
 /**
  * Makes a more "elegant" sentence for some expressions, same as "com.commonsense.android.kotlin.base.extensions.collections.onTrue"
  */
-inline fun Boolean.ifTrue(crossinline action: () -> Unit): Boolean = onTrue(action)
+inline fun Boolean.ifTrue(crossinline action: EmptyFunction): Boolean = onTrue(action)
 
 /**
  * performs the action if the boolean is false.
  */
-inline fun Boolean.onFalse(crossinline action: () -> Unit): Boolean {
+inline fun Boolean.onFalse(crossinline action: EmptyFunction): Boolean {
     if (!this) {
         action()
     }
@@ -54,7 +63,7 @@ inline fun Boolean.onFalse(crossinline action: () -> Unit): Boolean {
 /**
  * Makes a more "elegant" sentence for some expressions, same as "com.commonsense.android.kotlin.base.extensions.collections.onTrue"
  */
-inline fun Boolean.ifFalse(crossinline action: () -> Unit): Boolean = onFalse(action)
+inline fun Boolean.ifFalse(crossinline action: EmptyFunction): Boolean = onFalse(action)
 
 inline fun <reified T : kotlin.Enum<T>> valueOfOrUnsafe(type: String?, orValue: T?): T? =
         java.lang.Enum.valueOf(T::class.java, type) ?: orValue
@@ -66,7 +75,6 @@ inline fun <reified T : kotlin.Enum<T>> enumFromOrNull(type: String?): T? =
         java.lang.Enum.valueOf(T::class.java, type) ?: null
 
 
-//TODO test regarding steps.
 val IntRange.length
     get() = (last - start) + 1 //+1 since start is inclusive.
 

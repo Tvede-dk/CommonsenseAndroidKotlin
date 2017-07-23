@@ -12,6 +12,7 @@ import android.support.v7.app.AppCompatActivity
 import com.commonsense.android.kotlin.base.scheduling.JobContainer
 import com.commonsense.android.kotlin.system.PermissionsHandling
 import com.commonsense.android.kotlin.system.base.helpers.*
+import com.commonsense.android.kotlin.system.dataFlow.ReferenceCountingMap
 import com.commonsense.android.kotlin.system.extensions.transactionCommit
 import com.commonsense.android.kotlin.system.extensions.transactionCommitNow
 import com.commonsense.android.kotlin.system.logging.logWarning
@@ -86,6 +87,31 @@ open class BaseActivity : AppCompatActivity(), ActivityResultHelperContainer {
         activityResultHelper.remove(requestCode)
     }
     //</editor-fold>
+
+
+    fun <Input : Any, T : ActivityWithData<Input>>
+            startActivityWithData(activity: Class<T>,
+                                  data: Input,
+                                  requestCode: Int,
+                                  optOnResult: AsyncActivityResultCallback?) {
+        val intent = Intent(this, activity)
+        val index = dataReferenceMap.count.toString()
+        dataReferenceMap.addItem(data, index)
+        intent.putExtra(dataIntentIndex, index)
+        startActivityForResultAsync(intent, null, requestCode, { resultCode, resultIntent ->
+            dataReferenceMap.decrementCounter(index)
+            optOnResult?.invoke(resultCode, resultIntent)
+        })
+    }
+
+    /**
+     * Protected such that the ActivityWithData can get these.
+     */
+    internal companion object {
+        internal val dataIntentIndex = "baseActivity-data-index"
+        internal val dataReferenceMap = ReferenceCountingMap()
+    }
+
 }
 
 @AnyThread

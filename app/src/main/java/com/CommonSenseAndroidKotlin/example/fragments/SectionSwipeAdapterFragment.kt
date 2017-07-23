@@ -5,10 +5,10 @@ import android.support.v7.widget.LinearLayoutManager
 import android.view.View
 import com.CommonSenseAndroidKotlin.example.databinding.DemoRecyclerSectionSwipeBinding
 import com.CommonSenseAndroidKotlin.example.databinding.SimpleSwipeItemBinding
+import com.commonsense.android.kotlin.views.ViewInflatingFunction
 import com.commonsense.android.kotlin.views.databinding.adapters.BaseSearchRenderModel
 import com.commonsense.android.kotlin.views.databinding.adapters.BaseSearchableDataBindingRecyclerAdapter
 import com.commonsense.android.kotlin.views.databinding.adapters.BaseViewHolderItem
-import com.commonsense.android.kotlin.views.databinding.adapters.ViewInflatingFunction
 import com.commonsense.android.kotlin.views.databinding.fragments.BaseDatabindingFragment
 import com.commonsense.android.kotlin.views.databinding.fragments.InflateBinding
 import com.commonsense.android.kotlin.views.features.Direction

@@ -7,7 +7,7 @@ import android.util.SparseIntArray
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import com.commonsense.android.kotlin.base.extensions.collections.clearAndSet
+import com.commonsense.android.kotlin.base.extensions.collections.set
 import com.commonsense.android.kotlin.views.baseClasses.BaseAdapter
 
 /**
@@ -44,7 +44,7 @@ open class BaseDataBindingAdapter(context: Context) : BaseAdapter<BaseAdapterIte
     fun calculateViewTypes(): Int {
         val classes = getItems().map { it::class.java }.distinct()
         val mappings = classes.map { it::class.java.hashCode() }.zip(IntRange(0, classes.size))
-        viewTypes.clearAndSet(mappings)
+        viewTypes.set(mappings)
         return viewTypeCount
     }
 

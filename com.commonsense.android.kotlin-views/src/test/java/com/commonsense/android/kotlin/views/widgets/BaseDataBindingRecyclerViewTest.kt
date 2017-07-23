@@ -9,11 +9,12 @@ import com.commonsense.android.kotlin.views.databinding.adapters.BaseDataBinding
 import com.commonsense.android.kotlin.views.databinding.adapters.RenderModelItem
 import org.junit.Assert
 import org.junit.Test
+import org.robolectric.annotation.Config
 
 /**
  * Created by Kasper Tvede on 27-05-2017.
  */
-
+@Config(manifest = Config.NONE)
 class BaseDataBindingRecyclerViewTest : BaseRoboElectricTest() {
 
 

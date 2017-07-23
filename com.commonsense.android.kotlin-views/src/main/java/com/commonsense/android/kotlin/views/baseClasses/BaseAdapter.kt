@@ -16,24 +16,12 @@ open class BaseAdapter<T>(context: Context) : ArrayAdapter<T>(context, 0) {
         }
     }
 
-    fun addF(obj: T): BaseAdapter<T> {
-        add(obj)
-        return this
-    }
-
-    fun addF(vararg objs: T): BaseAdapter<T> {
-        objs.forEach { add(it) }
-        return this
-    }
-
-
     override fun sort(comparator: Comparator<in T>) {
         super.sort(comparator)
     }
 
-    fun addAllF(collection: Collection<T>): BaseAdapter<T> {
-        addAll(collection)
-        return this
+    fun addAll(map: List<T>) {
+        map.forEach { add(it) }
     }
 
     override fun addAll(collection: Collection<T>) {
@@ -80,12 +68,6 @@ open class BaseAdapter<T>(context: Context) : ArrayAdapter<T>(context, 0) {
     }
 
     fun isIndexValid(index: Int): Boolean = index in 0 until count
-
-
-    fun addAll(map: List<T>) {
-        map.forEach { add(it) }
-    }
-
 }
 
 

@@ -4,10 +4,10 @@ import android.content.Context
 import android.support.v7.widget.LinearLayoutManager
 import com.CommonSenseAndroidKotlin.example.databinding.DemoRecyclerFastscrollSearchableBinding
 import com.CommonSenseAndroidKotlin.example.databinding.SimpleListItemBinding
+import com.commonsense.android.kotlin.views.ViewInflatingFunction
 import com.commonsense.android.kotlin.views.databinding.adapters.AbstractSearchableDataBindingRecyclerAdapter
 import com.commonsense.android.kotlin.views.databinding.adapters.BaseSearchRenderModel
 import com.commonsense.android.kotlin.views.databinding.adapters.BaseViewHolderItem
-import com.commonsense.android.kotlin.views.databinding.adapters.ViewInflatingFunction
 import com.commonsense.android.kotlin.views.databinding.fragments.BaseDatabindingFragment
 import com.commonsense.android.kotlin.views.databinding.fragments.InflateBinding
 import com.commonsense.android.kotlin.views.extensions.setup
@@ -43,9 +43,8 @@ class SearchAbleSimpleListDateTime(item: DateTime) : BaseSearchRenderModel<DateT
         return false
     }
 
-    override fun getInflaterFunction(): ViewInflatingFunction<SimpleListItemBinding> {
-        return SimpleListItemBinding::inflate
-    }
+    override fun getInflaterFunction(): ViewInflatingFunction<SimpleListItemBinding> =
+            SimpleListItemBinding::inflate
 
 
 }

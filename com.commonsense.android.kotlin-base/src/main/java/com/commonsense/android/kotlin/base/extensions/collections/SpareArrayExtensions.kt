@@ -7,13 +7,19 @@ import android.util.SparseIntArray
  */
 
 
-//SPARSE ARRAY
-fun SparseIntArray.clearAndSet(input: List<Pair<Int, Int>>) {
+/**
+ * sets the content to the given list of pairs (unwraps the pair into (first  -> second)
+ */
+fun SparseIntArray.set(input: List<Pair<Int, Int>>) {
     clear()
     input.forEach { put(it.first, it.second) }
 }
 
-fun SparseIntArray.clearAndSet(input: Map<Int, Int>) {
+/**
+ * sets the content to the given map (unwraps the map into (first  -> second)
+ */
+fun SparseIntArray.set(input: Map<Int, Int>) {
     clear()
     input.forEach { put(it.key, it.value) }
 }
+

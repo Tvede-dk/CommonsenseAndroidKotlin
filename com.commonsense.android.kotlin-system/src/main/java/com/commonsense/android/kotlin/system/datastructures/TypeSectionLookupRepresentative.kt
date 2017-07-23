@@ -272,13 +272,19 @@ class TypeSectionLookupRepresentative<T : TypeHashCodeLookupRepresent<Rep>, out 
         if (!sectionExists(sectionIndex)) {
             return null
         }
-
         return if (data[sectionIndex].isIgnored) {
             acceptSection(sectionIndex)
         } else {
             ignoreSection(sectionIndex)
         }
+    }
 
+    fun setSectionVisibility(@IntRange(from = 0) sectionIndex: Int, visible: Boolean): SectionUpdate? {
+        return if (visible) {
+            acceptSection(sectionIndex)
+        } else {
+            ignoreSection(sectionIndex)
+        }
     }
     //</editor-fold>
 

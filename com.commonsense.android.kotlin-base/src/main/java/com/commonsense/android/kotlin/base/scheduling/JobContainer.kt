@@ -1,6 +1,8 @@
 package com.commonsense.android.kotlin.base.scheduling
 
-import kotlinx.coroutines.experimental.CoroutineScope
+import com.commonsense.android.kotlin.base.AsyncCoroutineFunction
+import com.commonsense.android.kotlin.base.AsyncEmptyFunction
+import com.commonsense.android.kotlin.base.extensions.weakReference
 import kotlinx.coroutines.experimental.Job
 import kotlinx.coroutines.experimental.launch
 import kotlinx.coroutines.experimental.runBlocking
@@ -12,7 +14,7 @@ import kotlin.coroutines.experimental.CoroutineContext
 /**
  * Created by Kasper Tvede on 22-06-2017.
  */
-
+private typealias WeakJob = WeakReference<Job>
 
 class JobContainer {
 
@@ -20,20 +22,20 @@ class JobContainer {
 
     private val groupJobMutex = Mutex()
 
-    private val localJobs = mutableListOf<WeakReference<Job>>()
+    private val localJobs = mutableListOf<WeakJob>()
 
-    private val groupedJobs = HashMap<String, WeakReference<Job>>()
+    private val groupedJobs = HashMap<String, WeakJob>()
 
     //<editor-fold desc="Add job ">
     private fun addJobToLocal(job: Job) {
-        changeLocalJob { localJobs.add(WeakReference(job)) }
+        changeLocalJob { localJobs.add(job.weakReference()) }
         handleCompletedCompletion(job)
     }
 
     private fun addJobToGroup(job: Job, group: String) {
         changeGroupJob {
             this[group]?.get()?.cancel()
-            this[group] = WeakReference(job)
+            this[group] = job.weakReference()
         }
         handleCompletedCompletion(job)
     }
@@ -50,7 +52,7 @@ class JobContainer {
 
     //<editor-fold desc="Description">
     fun removeDoneJobs() {
-        changeLocalJob { removeAll { it.get()?.isCompleted ?: true } }
+        changeLocalJob { removeAll { it.get()?.isCompleted != false } }
         changeGroupJob {
             this.filter { it.value.get() == null }
                     .forEach { remove(it.key) }
@@ -66,17 +68,15 @@ class JobContainer {
 
 
     //<editor-fold desc="regular non grouped Actions">
-    fun addJob(job: Job) {
-        addJobToLocal(job)
-    }
+    fun addJob(job: Job) = addJobToLocal(job)
 
-    fun performAction(context: CoroutineContext, action: suspend () -> Unit): Job {
+    fun performAction(context: CoroutineContext, action: AsyncEmptyFunction): Job {
         val job = launch(context) { action() }
         addJobToLocal(job)
         return job
     }
 
-    fun performAction(context: CoroutineContext, scopedAction: suspend CoroutineScope.() -> Unit): Job {
+    fun performAction(context: CoroutineContext, scopedAction: AsyncCoroutineFunction): Job {
         val job = launch(context, block = scopedAction)
         addJobToLocal(job)
         return job
@@ -97,19 +97,17 @@ class JobContainer {
 
     //<editor-fold desc="group action">
 
-    fun addJob(job: Job, group: String) {
-        addJobToGroup(job, group)
-    }
+    fun addJob(job: Job, group: String) = addJobToGroup(job, group)
 
     fun performAction(context: CoroutineContext,
-                      scopedAction: suspend CoroutineScope.() -> Unit,
+                      scopedAction: AsyncCoroutineFunction,
                       forGroup: String): Job {
         val job = launch(context, block = scopedAction)
         addJobToGroup(job, forGroup)
         return job
     }
 
-    fun performAction(context: CoroutineContext, action: suspend () -> Unit, forGroup: String): Job {
+    fun performAction(context: CoroutineContext, action: AsyncEmptyFunction, forGroup: String): Job {
         val job = launch(context) { action() }
         addJobToGroup(job, forGroup)
         return job
@@ -117,14 +115,13 @@ class JobContainer {
     //</editor-fold>
 
     //<editor-fold desc="Inline mutex functions">
-    private inline fun changeLocalJob(crossinline action: MutableList<WeakReference<Job>>.() -> Unit) = runBlocking {
+    private inline fun changeLocalJob(crossinline action: MutableList<WeakJob>.() -> Unit) = runBlocking {
         localJobMutex.withLock {
             action(localJobs)
         }
     }
 
-    private inline fun changeGroupJob(crossinline action: HashMap<String, WeakReference<Job>>.() -> Unit)
-            = runBlocking {
+    private inline fun changeGroupJob(crossinline action: HashMap<String, WeakJob>.() -> Unit) = runBlocking {
         groupJobMutex.withLock {
             action(groupedJobs)
         }

@@ -3,6 +3,7 @@ package com.commonsense.android.kotlin.prebuilt.baseClasses
 import android.app.Application
 import android.os.StrictMode
 import android.support.v7.app.AppCompatDelegate
+import com.commonsense.android.kotlin.base.extensions.collections.ifTrue
 import com.commonsense.android.kotlin.system.extensions.isApiLowerThan
 import com.commonsense.android.kotlin.system.logging.logDebug
 import com.squareup.leakcanary.LeakCanary
@@ -14,12 +15,6 @@ import com.squareup.leakcanary.LeakCanary
 abstract class BaseApplication : Application() {
 
 
-    fun setupDebugTools() {
-        logDebug("Setting up debugging tools")
-        enableLeakCanary()
-        enableStrictMode()
-    }
-
     override fun onCreate() {
         super.onCreate()
         if (LeakCanary.isInAnalyzerProcess(this)) {
@@ -28,17 +23,23 @@ abstract class BaseApplication : Application() {
             // You should not init your app in this process.
             return
         }
-        isDebugMode().let { setupDebugTools() }
+        isDebugMode().ifTrue { setupDebugTools() }
         setupVectorDrawableOldAndroid()
         afterOnCreate()
     }
 
+    /**
+     * fixes vector drawables on older andorid's.
+     */
     private fun setupVectorDrawableOldAndroid() {
         if (isApiLowerThan(21)) {
             AppCompatDelegate.setCompatVectorFromResourcesEnabled(true)
         }
     }
 
+    /**
+     * if returns true, then we are in debug mode / enables all debugging setup.
+     */
     abstract fun isDebugMode(): Boolean
 
     /**
@@ -46,12 +47,19 @@ abstract class BaseApplication : Application() {
      */
     abstract fun afterOnCreate()
 
-    fun enableLeakCanary() {
+    //<editor-fold desc="Debug tools">
+    private fun setupDebugTools() {
+        logDebug("Setting up debugging tools")
+        enableLeakCanary()
+        enableStrictMode()
+    }
+
+    private fun enableLeakCanary() {
         logDebug("Setting up leak canary")
         LeakCanary.install(this)
     }
 
-    fun enableStrictMode() {
+    private fun enableStrictMode() {
         logDebug("Setting up strictMode")
         StrictMode.setThreadPolicy(
                 StrictMode.ThreadPolicy.Builder().
@@ -63,6 +71,7 @@ abstract class BaseApplication : Application() {
         StrictMode.setVmPolicy(StrictMode.VmPolicy.Builder().detectAll()
                 .penaltyLog().penaltyDeath().build())
     }
+    //</editor-fold>
 
 
 }

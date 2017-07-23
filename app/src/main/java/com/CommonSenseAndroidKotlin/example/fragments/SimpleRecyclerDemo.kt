@@ -10,10 +10,10 @@ import com.CommonSenseAndroidKotlin.example.databinding.DemoRecyclerSimpleViewBi
 import com.CommonSenseAndroidKotlin.example.databinding.SimpleListImageItemBinding
 import com.CommonSenseAndroidKotlin.example.databinding.SimpleListItemBinding
 import com.commonsense.android.kotlin.system.logging.logWarning
+import com.commonsense.android.kotlin.views.ViewInflatingFunction
 import com.commonsense.android.kotlin.views.databinding.adapters.BaseDataBindingRecyclerAdapter
 import com.commonsense.android.kotlin.views.databinding.adapters.BaseRenderModel
 import com.commonsense.android.kotlin.views.databinding.adapters.BaseViewHolderItem
-import com.commonsense.android.kotlin.views.databinding.adapters.ViewInflatingFunction
 import com.commonsense.android.kotlin.views.databinding.fragments.BaseDatabindingFragment
 import com.commonsense.android.kotlin.views.databinding.fragments.InflateBinding
 import com.commonsense.android.kotlin.views.extensions.setOnclickAsync

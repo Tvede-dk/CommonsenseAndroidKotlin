@@ -16,6 +16,7 @@ import com.commonsense.android.kotlin.system.datastructures.TypeHashCodeLookupRe
 import com.commonsense.android.kotlin.system.datastructures.TypeSection
 import com.commonsense.android.kotlin.system.datastructures.TypeSectionLookupRepresentative
 import com.commonsense.android.kotlin.system.logging.L
+import com.commonsense.android.kotlin.views.ViewInflatingFunction
 import java.lang.ref.WeakReference
 
 /**
@@ -24,7 +25,6 @@ import java.lang.ref.WeakReference
 
 typealias BindingFunction = (BaseViewHolderItem<*>) -> Unit
 
-typealias ViewInflatingFunction<Vm> = (inflater: LayoutInflater, parent: ViewGroup?, attach: Boolean) -> Vm
 
 typealias InflatingFunction<Vm> = (inflater: LayoutInflater, parent: ViewGroup?, attach: Boolean) -> BaseViewHolderItem<Vm>
 
@@ -69,9 +69,8 @@ abstract class BaseRenderModel<
         }
     }
 
-    override fun createViewHolder(inflatedView: Vm): BaseViewHolderItem<Vm> {
-        return BaseViewHolderItem(inflatedView)
-    }
+    override fun createViewHolder(inflatedView: Vm): BaseViewHolderItem<Vm> =
+            BaseViewHolderItem(inflatedView)
 
     override fun getCreatorFunction(): InflatingFunction<Vm> {
         return { inflater: LayoutInflater, parent: ViewGroup?, attach: Boolean ->
@@ -143,17 +142,8 @@ abstract class AbstractDataBindingRecyclerAdapter<T>(context: Context) :
 
     override fun onCreateViewHolder(parent: ViewGroup?, @IntRange(from = 0) viewType: Int): BaseViewHolderItem<*>? {
         val rep = dataCollection.getTypeRepresentativeFromTypeValue(viewType)
-//        (rep == null).com.commonsense.android.kotlin.base.extensions.collections.ifTrue { logContentData() }
         return rep?.invoke(inflater, parent, false)
     }
-
-    //for debug only.
-//    private fun logContentData() {
-//        val cachedSize = dataCollection.size
-//        val realSize = dataCollection.calculateLocationForSection(
-//                dataCollection.sectionCount - 1)?.endInclusive ?: -1
-//        L.error("Inconsistency", "precheck, real size : $realSize, cached size: $cachedSize ")
-//    }
 
     override fun getItemViewType(@IntRange(from = 0) position: Int): Int {
         val index = dataCollection.indexToPath(position) ?: return 0
@@ -344,9 +334,7 @@ abstract class AbstractDataBindingRecyclerAdapter<T>(context: Context) :
         } else {
             hideSection(sectionIndex)
         }
-
     }
-
 
     @AnyThread
     protected fun clearNoNotify() {

@@ -4,6 +4,7 @@ import com.commonsense.android.kotlin.base.extensions.collections.length
 import com.commonsense.android.kotlin.base.extensions.collections.toIntArray
 import com.commonsense.android.kotlin.test.*
 import org.junit.Test
+import org.robolectric.annotation.Config
 
 /**
  * Created by Kasper Tvede on 15-07-2017.
@@ -15,6 +16,7 @@ data class TestData(val str: String) : TypeHashCodeLookupRepresent<String> {
 
 }
 
+@Config(manifest = Config.NONE)
 class TypeSectionLookupRepresentativeTest : BaseRoboElectricTest() {
 
 

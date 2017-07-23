@@ -2,9 +2,8 @@ package com.commonsense.android.kotlin.system.datastructures
 
 import com.commonsense.android.kotlin.base.extensions.collections.repeateToSize
 import com.commonsense.android.kotlin.test.*
-import org.junit.Ignore
 import org.junit.Test
-import kotlin.system.measureNanoTime
+import org.robolectric.annotation.Config
 
 /**
  * Created by Kasper Tvede on 20-07-2017.
@@ -20,7 +19,7 @@ class TestClassTypeLookupHashcode<out T>(val someData: T, val viewType: Int) : T
     override fun getTypeValue(): Int = viewType
 }
 
-
+@Config(manifest = Config.NONE)
 class TypeLookupCollectionRepresentiveTest : BaseRoboElectricTest() {
     @Test
     fun testRemove() {
@@ -97,7 +96,6 @@ class TypeLookupCollectionRepresentiveTest : BaseRoboElectricTest() {
         collection[3].assertNotNullAndEquals(firstSecClass)
     }
 
-    @Ignore
     @Test
     fun testGetAnItemFromTypeRemoveal() {
         val collection = TypeLookupCollectionRepresentative<TestClassTypeLookupHashcode<*>, String>()
@@ -132,29 +130,5 @@ class TypeLookupCollectionRepresentiveTest : BaseRoboElectricTest() {
 
         (collection[1] == lastItem).assert(true)
     }
-
-    @Ignore
-    @Test
-    fun testPerformanceWorstCaseRemoval() {
-        val collection = TypeLookupCollectionRepresentative<TestClassTypeLookupHashcode<*>, String>()
-        collection.add(TestClassTypeLookupHashcode("asd", 1))
-        collection.add(TestClassTypeLookupHashcode("asd", 1))
-        collection.addAll(listOf(TestClassTypeLookupHashcode("2", 2)).repeateToSize(500_000))
-        collection.add(TestClassTypeLookupHashcode("asd", 1))
-
-        collection.removeAt(0) //warm up system.
-        val baseLine = measureNanoTime {
-            collection.removeAt(0) //good case , since the representative is just the next item. so even a regular traversal would work.
-        }
-
-        val worstCase = measureNanoTime {
-            collection.removeAt(0) //worst case , since the representative is after 500_000 elements.
-            // a forloop would be extremly slow
-        }
-        (worstCase < baseLine * 10).assert(true) //allow a margin of double the baseline.
-        // this would still dictate a O(1) since O(1) * 10 = O(1)
-
-    }
-
 
 }

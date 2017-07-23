@@ -5,6 +5,10 @@ package com.commonsense.android.kotlin.base.extensions.collections
  */
 
 
+/**
+ *
+ */
+//TODO seems kinda hacky..
 fun IntProgression.toIntArray(): IntArray = this.toList().toIntArray()
 
 val IntProgression.length

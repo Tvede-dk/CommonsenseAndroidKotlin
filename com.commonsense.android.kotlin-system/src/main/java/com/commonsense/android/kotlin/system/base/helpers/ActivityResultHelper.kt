@@ -5,7 +5,10 @@ import android.content.Intent
 import android.os.Bundle
 import android.support.annotation.IntRange
 import android.util.SparseArray
+import com.commonsense.android.kotlin.base.FunctionUnit
 import com.commonsense.android.kotlin.base.extensions.collections.ifNull
+import com.commonsense.android.kotlin.base.extensions.collections.ifTrue
+import com.commonsense.android.kotlin.base.extensions.use
 import com.commonsense.android.kotlin.base.extensions.weakReference
 import com.commonsense.android.kotlin.system.base.BaseActivity
 import com.commonsense.android.kotlin.system.base.BaseFragment
@@ -16,16 +19,28 @@ import kotlinx.coroutines.experimental.launch
  * Created by Kasper Tvede on 20-07-2017.
  */
 
+/**
+ *
+ */
 typealias ActivityResultCallback = (resultCode: Int, data: Intent?) -> Unit
+/**
+ *
+ */
 typealias ActivityResultCallbackOk = (data: Intent?) -> Unit
-
+/**
+ *
+ */
 typealias AsyncActivityResultCallback = suspend (resultCode: Int, data: Intent?) -> Unit
+/**
+ *
+ */
 typealias AsyncActivityResultCallbackOk = suspend (data: Intent?) -> Unit
 
 
-
-class ActivityResultHelper(warningLogger: ((message: String) -> Unit)? = null) {
-
+/**
+ *
+ */
+class ActivityResultHelper(warningLogger: FunctionUnit<String>? = null) {
 
     private val weakLogger = warningLogger.weakReference()
 
@@ -33,18 +48,27 @@ class ActivityResultHelper(warningLogger: ((message: String) -> Unit)? = null) {
         SparseArray<ActivityResultCallbackInterface>()
     }
 
+    /**
+     * Removes all listeners.
+     */
     fun clear() {
         activityResultListeners.clear()
     }
 
+    /**
+     * calls the appropriated listener, iff there is one; if not logs the incident to the logger.
+     */
     fun handle(requestCode: Int, resultCode: Int, data: Intent?) {
         val listener = activityResultListeners[requestCode]
         listener?.onActivityResult(resultCode, data)
         listener.ifNull {
-            weakLogger?.get()?.invoke("Actual listener not found for request code $requestCode")
+            weakLogger.use("Actual listener not found for request code $requestCode")
         }
     }
 
+    /**
+     * removes a listener based on request code.
+     */
     fun remove(@IntRange(from = 0) requestCode: Int) {
         activityResultListeners.remove(requestCode)
     }
@@ -57,9 +81,7 @@ class ActivityResultHelper(warningLogger: ((message: String) -> Unit)? = null) {
 
     fun addForOnlyOk(@IntRange(from = 0) requestCode: Int, receiver: ActivityResultCallbackOk) {
         addForAllResults(requestCode, { resultCode: Int, data: Intent? ->
-            if (resultCode.isOkResult()) {
-                receiver(data)
-            }
+            resultCode.isOkResult().ifTrue { receiver(data) }
         })
     }
 
@@ -98,10 +120,29 @@ interface ActivityResultCallbackInterface {
 
 
 interface ActivityResultHelperContainer {
+    /**
+     *
+     */
     fun addActivityResultListenerOnlyOk(requestCode: Int, receiver: ActivityResultCallbackOk)
+
+    /**
+     *
+     */
     fun addActivityResultListener(requestCode: Int, receiver: ActivityResultCallback)
+
+    /**
+     *
+     */
     fun addActivityResultListenerOnlyOkAsync(requestCode: Int, receiver: AsyncActivityResultCallbackOk)
+
+    /**
+     *
+     */
     fun addActivityResultListenerAsync(requestCode: Int, receiver: AsyncActivityResultCallback)
+
+    /**
+     *
+     */
     fun removeActivityResultListener(@IntRange(from = 0) requestCode: Int)
 }
 //</editor-fold>
@@ -158,10 +199,10 @@ fun BaseActivity.startActivityForResultAsync(intent: Intent,
     startActivityForResult(intent, requestCode, options)
 }
 
-fun BaseActivity.startActivityForResult(intent: Intent,
-                                        options: Bundle?,
-                                        requestCode: Int,
-                                        activityResultCallback: AsyncActivityResultCallback) {
+fun BaseActivity.startActivityForResultAsync(intent: Intent,
+                                             options: Bundle?,
+                                             requestCode: Int,
+                                             activityResultCallback: AsyncActivityResultCallback) {
     addActivityResultListenerAsync(requestCode, activityResultCallback)
     startActivityForResult(intent, requestCode, options)
 }

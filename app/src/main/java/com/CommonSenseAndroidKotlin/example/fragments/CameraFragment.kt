@@ -12,10 +12,10 @@ import com.commonsense.android.kotlin.system.imaging.PictureRetriver
 import com.commonsense.android.kotlin.system.imaging.calculateOptimalThumbnailSize
 import com.commonsense.android.kotlin.system.imaging.loadBitmapPreviews
 import com.commonsense.android.kotlin.system.logging.tryAndLogSuspend
+import com.commonsense.android.kotlin.views.ViewInflatingFunction
 import com.commonsense.android.kotlin.views.databinding.adapters.BaseDataBindingRecyclerAdapter
 import com.commonsense.android.kotlin.views.databinding.adapters.BaseRenderModel
 import com.commonsense.android.kotlin.views.databinding.adapters.BaseViewHolderItem
-import com.commonsense.android.kotlin.views.databinding.adapters.ViewInflatingFunction
 import com.commonsense.android.kotlin.views.databinding.fragments.BaseDatabindingFragment
 import com.commonsense.android.kotlin.views.databinding.fragments.InflateBinding
 import com.commonsense.android.kotlin.views.extensions.setOnclickAsync
@@ -31,7 +31,7 @@ class CameraFragment : BaseDatabindingFragment<CameraFragmentDemoBinding>() {
             = CameraFragmentDemoBinding::inflate
 
     private val imageHelper by lazy {
-        PictureRetriver(activity as BaseActivity, {path, fromCamera ->  onImageSelected(path) })
+        PictureRetriver(activity as BaseActivity, { path, fromCamera -> onImageSelected(path) })
     }
 
     private val imageAdapter by lazy {

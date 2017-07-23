@@ -6,13 +6,13 @@ import android.support.v4.widget.SwipeRefreshLayout
 import android.support.v7.widget.LinearLayoutManager
 import android.support.v7.widget.RecyclerView
 import android.util.AttributeSet
+import com.commonsense.android.kotlin.base.extensions.launchOnCompleted
 import com.commonsense.android.kotlin.views.databinding.CustomDataBindingView
 import com.commonsense.android.kotlin.views.databinding.InflaterFunction
 import com.commonsense.android.kotlin.views.databinding.SwipeRefreshRecylerViewBinding
 import com.commonsense.android.kotlin.views.extensions.setup
 import kotlinx.coroutines.experimental.Job
 import kotlinx.coroutines.experimental.android.UI
-import kotlinx.coroutines.experimental.launch
 
 
 /**
@@ -67,8 +67,8 @@ class SwipeRefreshRecyclerView : CustomDataBindingView<SwipeRefreshRecylerViewBi
     fun setupAsync(newAdapter: RecyclerView.Adapter<*>, newLayoutManager: LinearLayoutManager, refreshCallback: () -> Job) {
         recyclerView.setup(newAdapter, newLayoutManager)
         onRefreshListener = {
-            refreshCallback().invokeOnCompletion {
-                launch(UI) { stopRefreshing() }
+            refreshCallback().launchOnCompleted(UI) {
+                stopRefreshing()
             }
         }
     }

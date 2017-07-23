@@ -1,8 +1,8 @@
 package com.commonsense.android.kotlin.prebuilt.data
 
 import android.support.annotation.AnyThread
+import com.commonsense.android.kotlin.base.FunctionUnit
 import com.commonsense.android.kotlin.base.patterns.ObserverPattern
-import com.commonsense.android.kotlin.base.patterns.callback
 import kotlinx.coroutines.experimental.CommonPool
 import kotlinx.coroutines.experimental.android.UI
 import kotlinx.coroutines.experimental.launch
@@ -10,9 +10,9 @@ import kotlinx.coroutines.experimental.launch
 /**
  * Created by Kasper Tvede on 30-05-2017.
  */
+//TODO make this make sense
 
-
-class DataComposer<T, U> : callback<T> {
+class DataComposer<T, U> : FunctionUnit<T> {
 
 
     private val startRetriveData: suspend () -> T

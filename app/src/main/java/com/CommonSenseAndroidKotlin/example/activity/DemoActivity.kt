@@ -17,7 +17,6 @@ open class DemoActivity : BaseDatabindingActivity<DemoActivityBinding>() {
 
     override fun useBinding() {
         replaceFragment(binding.demoActivityContainer.id, SimpleRecyclerDemo())
+
     }
-
-
 }

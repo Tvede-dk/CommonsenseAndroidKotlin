@@ -2,17 +2,22 @@ package com.commonsense.android.kotlin.system
 
 import android.Manifest
 import android.content.pm.PackageManager
+import android.os.Bundle
 import com.commonsense.android.kotlin.system.base.BaseActivity
 import com.commonsense.android.kotlin.test.BaseRoboElectricTest
 import org.junit.Assert
-import org.junit.Ignore
 import org.junit.Test
+import org.junit.runner.RunWith
+import org.robolectric.RobolectricTestRunner
+import org.robolectric.annotation.Config
 import java.util.concurrent.Semaphore
 
 /**
  * Created by Kasper Tvede on 27-05-2017.
  */
-@Ignore
+
+@RunWith(RobolectricTestRunner::class)
+@Config(manifest = Config.NONE)
 class PermissionsHandlingTest : BaseRoboElectricTest() {
 
 
@@ -32,9 +37,9 @@ class PermissionsHandlingTest : BaseRoboElectricTest() {
         val sem = Semaphore(0)
         val act = createActivity<DenyPermissionActivity>()
 
-        act.permissionHandler.performActionForPermission(Manifest.permission.CALL_PHONE, act, sem::release, {
+        act.permissionHandler.performActionForPermission(Manifest.permission.CALL_PHONE, act, {
             Assert.fail("should be granted in tests")
-        })
+        }, sem::release)
 
         callHandlerWith(act.permissionHandler, Manifest.permission.CALL_PHONE, true)
         //simulate response from user
@@ -79,9 +84,9 @@ class PermissionsHandlingTest : BaseRoboElectricTest() {
 
         val listenerCount = 5
         for (i in 0 until listenerCount) {
-            act.permissionHandler.performActionForPermission(Manifest.permission.CALL_PHONE, act, sem::release, {
+            act.permissionHandler.performActionForPermission(Manifest.permission.CALL_PHONE, act, {
                 Assert.fail("should not be granted in tests")
-            })
+            }, sem::release)
         }
         callHandlerWith(act.permissionHandler, Manifest.permission.CALL_PHONE, true)
         Assert.assertTrue(sem.tryAcquire(listenerCount))
@@ -104,13 +109,19 @@ class PermissionsHandlingTest : BaseRoboElectricTest() {
 class AlwaysPermissionActivity : BaseActivity() {
 
 
-    override fun checkPermission(permission: String?, pid: Int, uid: Int): Int {
-        return PackageManager.PERMISSION_GRANTED
+    override fun checkPermission(permission: String?, pid: Int, uid: Int): Int =
+            PackageManager.PERMISSION_GRANTED
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+
     }
 }
 
 class DenyPermissionActivity : BaseActivity() {
-    override fun checkPermission(permission: String?, pid: Int, uid: Int): Int {
-        return PackageManager.PERMISSION_DENIED
+    override fun checkPermission(permission: String?, pid: Int, uid: Int): Int =
+            PackageManager.PERMISSION_DENIED
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+
     }
 }

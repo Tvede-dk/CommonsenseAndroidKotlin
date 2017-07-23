@@ -32,11 +32,8 @@ class UpdateVariableTest {
         Assert.assertEquals(updatedVal, 1)//nothing changed, so no update
         toTest.value = "qwe2"
         Assert.assertEquals(updatedVal, 2)//changed, so update
-
         toTest.setWithNoUpdate("qwe3")
         Assert.assertEquals(updatedVal, 2)//we told do not call update, so it should not happen
-
-
     }
 
 

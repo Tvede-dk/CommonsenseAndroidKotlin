@@ -1,5 +1,6 @@
 package com.commonsense.android.kotlin.views.extensions
 
+import android.net.Uri
 import android.webkit.WebView
 
 /**
@@ -19,4 +20,11 @@ fun WebView.loadHtmlWithBaseURL(baseUrl: String?, htmlCode: String) {
     } else {
         loadHtml(htmlCode)
     }
+}
+
+/**
+ * Loads the web page at the given uri
+ */
+fun WebView.loadUri(uri: Uri) {
+    loadUrl(uri.toString())
 }

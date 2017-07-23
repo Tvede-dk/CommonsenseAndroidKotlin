@@ -2,9 +2,9 @@ package com.CommonSenseAndroidKotlin.example.models
 
 import android.databinding.ObservableField
 import com.CommonSenseAndroidKotlin.example.databinding.UserViewBinding
+import com.commonsense.android.kotlin.views.ViewInflatingFunction
 import com.commonsense.android.kotlin.views.databinding.adapters.BaseSearchRenderModel
 import com.commonsense.android.kotlin.views.databinding.adapters.BaseViewHolderItem
-import com.commonsense.android.kotlin.views.databinding.adapters.ViewInflatingFunction
 
 /**
  * Created by Kasper Tvede on 11-06-2017.

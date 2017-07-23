@@ -11,7 +11,7 @@ import javax.net.ssl.X509TrustManager
 object TrustManagerFactory {
     fun getDefaultX509Trust(): X509TrustManager? = with(TrustManagerFactory.getInstance(TrustManagerFactory.getDefaultAlgorithm())) {
         init(null as KeyStore?)
-        return trustManagers?.firstOrNull() as X509TrustManager
+        return trustManagers?.firstOrNull() as? X509TrustManager
     }
 }
 

@@ -22,3 +22,4 @@ class OnTextChangedWatcher(val onChanged: (sequence: CharSequence) -> Unit) : Te
     }
 
 }
+

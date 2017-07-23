@@ -67,6 +67,12 @@
                 android:layout_height="wrap_content"
                 android:text="Camera fun" />
 
+            <Button
+                android:id="@+id/activity_main_data_flow"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="break android's parcel idea with a working one ;)" />
+
             <com.commonsense.android.kotlin.views.widgets.ToggleImageButton
                 android:layout_width="200dp"
                 android:layout_height="200dp"

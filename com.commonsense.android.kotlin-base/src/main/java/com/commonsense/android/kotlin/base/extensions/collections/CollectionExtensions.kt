@@ -6,14 +6,16 @@ import com.commonsense.android.kotlin.base.FunctionUnit
 /**
  * Created by Kasper Tvede on 30-09-2016.
  */
+
 fun Collection<*>.isIndexValid(index: Int) = index >= 0 && index < count()
 
 fun Collection<*>.isIndexValidForInsert(index: Int) = index >= 0 && index <= count()
 
-fun <T> Collection<T>.getSafe(index: Int): T?
-        = this.isIndexValid(index).map(elementAt(index), null)
-
-data class CategorizationResult<out T>(val categoryA: List<T>, val categoryB: List<T>)
+fun <T> Collection<T>.getSafe(index: Int): T? = if (this.isIndexValid(index)) {
+    elementAt(index)
+} else {
+    null
+}
 
 @Size(min = 0)
 fun <T> List<T>.categorizeInto(vararg filters: (T) -> Boolean): List<List<T>> {
@@ -69,6 +71,12 @@ fun <T> List<T>.subList(intRange: IntRange): List<T> =
 fun <E> List<E>.limitToSize(size: Int): List<E>
         = subList(0, minOf(size, this.size))
 
-fun <E> List<FunctionUnit<E>>.invokeEachWith(element: E) {
-    forEach { it(element) }
+/**
+ * Invokes each function with the given argument
+ */
+fun <E> Iterable<FunctionUnit<E>>.invokeEachWith(element: E) = forEach { it(element) }
+
+
+fun <E> Iterable<E?>.forEachNotNull(action: FunctionUnit<E>) {
+    forEach { it?.let(action) }
 }

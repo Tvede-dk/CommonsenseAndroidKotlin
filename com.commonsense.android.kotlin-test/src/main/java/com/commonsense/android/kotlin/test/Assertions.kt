@@ -1,5 +1,6 @@
 package com.commonsense.android.kotlin.test
 
+import android.net.Uri
 import org.junit.Assert
 
 /**
@@ -12,39 +13,48 @@ import org.junit.Assert
 
 
 fun Boolean.assert(value: Boolean, message: String = "") {
-    org.junit.Assert.assertEquals(message, value, this)
+    Assert.assertEquals(message, value, this)
 }
 
 fun Int.assert(value: Int, message: String = "") {
-    org.junit.Assert.assertEquals(message, value, this)
+    Assert.assertEquals(message, value, this)
 }
 
 fun String.assert(value: String, message: String = "") {
-    org.junit.Assert.assertEquals(message, value, this)
+    Assert.assertEquals(message, value, this)
 }
 
 fun Double.assert(value: Double, message: String = "") {
-    org.junit.Assert.assertEquals(message, value, this)
+    Assert.assertEquals(message, value, this)
 }
 
 fun Float.assert(value: Float, message: String = "") {
-    org.junit.Assert.assertEquals(message, value, this)
+    Assert.assertEquals(message, value, this)
 }
+
+fun Uri.assert(value: Uri, message: String = "") {
+    Assert.assertEquals(message, value, this)
+}
+
+fun Uri.assert(value: String, message: String = "") {
+    Assert.assertEquals(message, value, this.toString())
+}
+
 
 fun List<*>.assertEmpty(message: String = "") {
     assertSize(0, message)
 }
 
 fun List<*>.assertSize(size: Int, message: String = "") {
-    org.junit.Assert.assertEquals(message, this.size, size)
+    Assert.assertEquals(message, this.size, size)
 }
 
 fun Any?.assertNotNull(message: String = "") {
-    org.junit.Assert.assertNotNull(message, this)
+    Assert.assertNotNull(message, this)
 }
 
 fun Any?.assertNull(message: String = "") {
-    org.junit.Assert.assertNull(message, this)
+    Assert.assertNull(message, this)
 }
 
 fun <T> T?.assertNotNullApply(message: String = "", action: T.() -> Unit) {
@@ -62,3 +72,11 @@ fun IntRange.assert(otherRange: IntRange, message: String = "") {
     Assert.assertEquals(message, otherRange, this)
 }
 
+inline fun assertThrows(message: String = "should throw", crossinline action: () -> Unit) {
+    try {
+        action()
+        Assert.fail(message)
+    } catch (exception: Exception) {
+        //all is good.
+    }
+}

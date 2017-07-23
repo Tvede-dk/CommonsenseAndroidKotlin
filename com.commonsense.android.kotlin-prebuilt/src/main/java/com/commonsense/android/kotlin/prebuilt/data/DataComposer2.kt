@@ -6,6 +6,10 @@ import kotlinx.coroutines.experimental.async
 /**
  * Created by Kasper Tvede on 12-07-2017.
  */
+
+
+//TODO make this make sense
+
 typealias DataComposerFetcher<Raw> = suspend () -> Raw
 typealias RawDataConveter<Raw, Logic> = (Raw) -> Logic
 typealias SplitDataConverter<Logic, SplitLogic> = (Logic) -> List<SplitLogic>

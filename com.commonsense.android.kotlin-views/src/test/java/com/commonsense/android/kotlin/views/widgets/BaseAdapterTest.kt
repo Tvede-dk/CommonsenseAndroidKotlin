@@ -4,10 +4,13 @@ import com.commonsense.android.kotlin.test.BaseRoboElectricTest
 import com.commonsense.android.kotlin.views.baseClasses.BaseAdapter
 import org.junit.Assert
 import org.junit.Test
+import org.robolectric.annotation.Config
 
 /**
  * Created by Kasper Tvede on 27-05-2017.
  */
+
+@Config(manifest = Config.NONE)
 class BaseAdapterTest : BaseRoboElectricTest() {
 
     @Test
@@ -49,16 +52,16 @@ class BaseAdapterTest : BaseRoboElectricTest() {
     @Test
     fun testFluentFunctions() {
         val adapter = BaseAdapter<String>(context)
-        adapter.addF("2").addF("1")
+        adapter.addAll("2", "1")
         Assert.assertEquals(adapter.getItem(0), "2")
         Assert.assertEquals(adapter.getItem(1), "1")
 
 
-        adapter.addF("3", "4")
+        adapter.addAll("3", "4")
         Assert.assertEquals(adapter.getItem(2), "3")
         Assert.assertEquals(adapter.getItem(3), "4")
 
-        adapter.addAllF(listOf("5", "7", "6"))
+        adapter.addAll(listOf("5", "7", "6"))
         Assert.assertEquals(adapter.getItem(4), "5")
         Assert.assertEquals(adapter.getItem(5), "7")
         Assert.assertEquals(adapter.getItem(6), "6")

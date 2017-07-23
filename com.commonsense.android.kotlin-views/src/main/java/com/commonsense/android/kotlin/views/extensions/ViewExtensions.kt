@@ -1,5 +1,6 @@
 package com.commonsense.android.kotlin.views.extensions
 
+import android.annotation.SuppressLint
 import android.annotation.TargetApi
 import android.content.res.TypedArray
 import android.os.Build
@@ -8,7 +9,13 @@ import android.support.annotation.UiThread
 import android.util.AttributeSet
 import android.view.View
 import android.view.ViewTreeObserver
+import com.commonsense.android.kotlin.base.AsyncEmptyFunction
+import com.commonsense.android.kotlin.base.EmptyFunction
+import com.commonsense.android.kotlin.base.extensions.collections.forEachNotNull
+import com.commonsense.android.kotlin.base.extensions.collections.ifFalse
+import com.commonsense.android.kotlin.base.extensions.collections.ifTrue
 import com.commonsense.android.kotlin.system.extensions.getTypedArrayFor
+import com.commonsense.android.kotlin.system.extensions.isApiOverOrEqualTo
 import com.commonsense.android.kotlin.system.logging.tryAndLog
 import com.commonsense.android.kotlin.system.logging.tryAndLogSuspend
 import kotlinx.coroutines.experimental.android.UI
@@ -25,12 +32,6 @@ import kotlinx.coroutines.experimental.channels.consumeEach
 inline fun View.setOnClick(crossinline listener: () -> Unit) {
     setOnClickListener { listener() }
 }
-
-@UiThread
-inline fun View.setOnClickView(crossinline listener: (View) -> Unit) {
-    setOnClickListener { listener(it) }
-}
-
 
 @UiThread
 inline fun View.measureSize(crossinline afterMeasureAction: (with: Int, height: Int) -> Unit) {
@@ -52,7 +53,7 @@ fun ViewTreeObserver.removeOnGlobalLayoutListenerCompact(listener: ViewTreeObser
 }
 
 @UiThread
-fun View.setOnclickAsyncSuspend(action: suspend () -> Unit) {
+fun View.setOnclickAsyncSuspend(action: AsyncEmptyFunction) {
     val eventActor = actor<Unit>(UI, capacity = Channel.CONFLATED) {
         channel.consumeEach { tryAndLogSuspend("onclickAsyncSuspend", action) }
     }
@@ -60,7 +61,7 @@ fun View.setOnclickAsyncSuspend(action: suspend () -> Unit) {
 }
 
 @UiThread
-fun View.setOnclickAsync(action: () -> Unit) {
+fun View.setOnclickAsync(action: EmptyFunction) {
     val eventActor = actor<Unit>(UI, capacity = Channel.CONFLATED) {
         channel.consumeEach {
             tryAndLog("onclickAsync", action)
@@ -78,41 +79,43 @@ fun View.getTypedArrayFor(attributeSet: AttributeSet,
 
 
 /**
+ * resets all transformations on a view (x, y, z)
+ */
+fun View.resetTransformations() {
+    translationX = 0f
+    @SuppressLint("NewApi")
+    if (isApiOverOrEqualTo(21)) {
+        translationZ = 0f
+    }
+    translationY = 0f
+}
+
+
+/**
  * Toggles between visible and gone.
  */
 fun View.toggleVisibilityGone() {
-    if (isVisible) {
-        gone()
-    } else {
-        visible()
-    }
+    isVisible.ifTrue(this::gone).ifFalse(this::visible)
 }
 
+/**
+ * Returns true iff its visible, false otherwise.
+ */
 val View.isVisible: Boolean
     get() = visibility == View.VISIBLE
 
+/**
+ * returns true iff its gone otherwise false
+ */
 val View.isGone: Boolean
     get() = visibility == View.GONE
 
+/**
+ * returns true iff its invisible, otherwise false
+ */
 val View.isInvisible: Boolean
     get() = visibility == View.INVISIBLE
 
-
-object ViewHelper {
-
-    fun goneViews(vararg views: View?) {
-        views.forEach { it?.gone() }
-    }
-
-    fun goneViews(views: Iterable<View?>) {
-        views.forEach { it?.gone() }
-    }
-
-    fun showGoneView(toShow: View?, toGone: View?) {
-        toShow?.visible()
-        goneViews(listOf(toGone))
-    }
-}
 
 fun View.gone() {
     this.visibility = View.GONE
@@ -133,4 +136,29 @@ fun Array<View?>.goneViews() {
 
 fun List<View?>.goneViews() {
     ViewHelper.goneViews(this)
+}
+
+fun List<View?>.visibleViews() {
+    ViewHelper.showViews(this)
+}
+
+
+object ViewHelper {
+
+    fun goneViews(vararg views: View?) {
+        views.forEach { it?.gone() }
+    }
+
+    fun goneViews(views: Iterable<View?>) {
+        views.forEachNotNull(View::gone)
+    }
+
+    fun showGoneView(toShow: View?, toGone: View?) {
+        toShow?.visible()
+        toGone?.gone()
+    }
+
+    fun showViews(views: Iterable<View?>) {
+        views.forEachNotNull(View::visible)
+    }
 }

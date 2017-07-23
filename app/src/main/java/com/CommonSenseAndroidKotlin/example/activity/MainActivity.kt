@@ -40,6 +40,21 @@ class MainActivity : BaseDatabindingActivity<ActivityMainBinding>() {
             startActivity(Intent(applicationContext, CameraActivity::class.java))
         }
 
+        binding.activityMainDataFlow.setOnclickAsync {
+            LaunchInBackground("data") {
+                val largeData = LargeDataActivity.generateExtremeLargeData(50)
+                LaunchInUi("data2") {
+                    startActivityWithData(LargeDataActivity::class.java,
+                            largeData,
+                            200,
+                            null)
+                }
+            }
+
+            //if you do not believe this is required,
+            // try putting 50 MB in a bundle and start an activity with that.
+        }
+
 
     }
 }

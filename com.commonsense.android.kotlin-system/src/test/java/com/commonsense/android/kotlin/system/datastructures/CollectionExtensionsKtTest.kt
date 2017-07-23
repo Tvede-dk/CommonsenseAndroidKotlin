@@ -7,18 +7,20 @@ import org.junit.Assert
 import org.junit.Test
 import org.junit.runner.RunWith
 import org.robolectric.RobolectricTestRunner
+import org.robolectric.annotation.Config
 
 /**
  * Created by Kasper Tvede on 27-05-2017.
  */
 @RunWith(RobolectricTestRunner::class)
+@Config(manifest = Config.NONE)
 class CollectionExtensionsKtTest : BaseRoboElectricTest() {
     @Test
     fun clearAndSet() {
         val array = SparseIntArray()
         array.put(20, 20)
         Assert.assertEquals(array.size(), 1)
-        array.clearAndSet(listOf(Pair(10, 10), Pair(30, 30)))
+        array.set(listOf(Pair(10, 10), Pair(30, 30)))
         Assert.assertEquals(array.size(), 2)
         Assert.assertEquals(array.get(10), 10)
         Assert.assertEquals(array.get(30), 30)
@@ -32,7 +34,7 @@ class CollectionExtensionsKtTest : BaseRoboElectricTest() {
         val map = HashMap<Int, Int>()
         map.put(10, 10)
         map.put(30, 30)
-        array.clearAndSet(map)
+        array.set(map)
         Assert.assertEquals(array.size(), 2)
         Assert.assertEquals(array[10], 10)
         Assert.assertEquals(array[30], 30)

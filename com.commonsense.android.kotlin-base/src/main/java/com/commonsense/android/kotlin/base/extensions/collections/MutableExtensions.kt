@@ -1,18 +1,19 @@
 package com.commonsense.android.kotlin.base.extensions.collections
 
 import android.support.annotation.IntRange
+import com.commonsense.android.kotlin.base.FunctionBoolean
 
 /**
  * Created by Kasper Tvede on 09-07-2017.
  */
 
-inline fun <T> MutableList<T>.findAndRemove(crossinline foundAction: (T) -> Boolean) {
+inline fun <T> MutableList<T>.findAndRemove(crossinline foundAction: FunctionBoolean<T>) {
     val index = this.indexOfFirst(foundAction)
     isIndexValid(index).onTrue { removeAt(index) }
 }
 
 
-inline fun <T> MutableList<T>.findAndRemoveAll(crossinline findAction: (T) -> Boolean): List<T> {
+inline fun <T> MutableList<T>.findAndRemoveAll(crossinline findAction: FunctionBoolean<T>): List<T> {
     val collection = this.filter(findAction)
     removeAll(collection)
     return collection
@@ -27,7 +28,7 @@ fun <T> MutableList<T>.replace(item: T, @IntRange(from = 0) position: Int) {
 }
 
 
-fun <E> MutableCollection<E>.clearAndAddAll(collection: Collection<E>) {
+fun <E> MutableCollection<E>.set(collection: Collection<E>) {
     clear()
     addAll(collection)
 }
@@ -42,13 +43,10 @@ fun <T> MutableList<T>.removeAll(intRange: kotlin.ranges.IntRange): Boolean {
     intRange.forEach { this.removeAt(intRange.start) }
     return true
 }
-//MUTABLE LIST
 
 
-fun <T> MutableList<T>.removeAtOr(index: Int, default: T?): T? {
-    return if (isIndexValid(index)) {
-        removeAt(index)
-    } else {
-        default
-    }
+fun <T> MutableList<T>.removeAtOr(index: Int, default: T?): T? = if (isIndexValid(index)) {
+    removeAt(index)
+} else {
+    default
 }

@@ -5,13 +5,14 @@ import android.graphics.Canvas
 import android.support.v7.widget.RecyclerView
 import android.support.v7.widget.helper.ItemTouchHelper
 import android.view.View
+import com.commonsense.android.kotlin.base.extensions.collections.forEachNotNull
 import com.commonsense.android.kotlin.base.extensions.collections.map
 import com.commonsense.android.kotlin.views.databinding.adapters.AbstractDataBindingRecyclerAdapter
 import com.commonsense.android.kotlin.views.databinding.adapters.AbstractSearchableDataBindingRecyclerAdapter
 import com.commonsense.android.kotlin.views.databinding.adapters.BaseDataBindingRecyclerAdapter
 import com.commonsense.android.kotlin.views.databinding.adapters.BaseViewHolderItem
 import com.commonsense.android.kotlin.views.extensions.ViewHelper
-import com.commonsense.android.kotlin.views.extensions.gone
+import com.commonsense.android.kotlin.views.extensions.resetTransformations
 import com.commonsense.android.kotlin.views.extensions.visible
 
 /**
@@ -33,12 +34,12 @@ fun Int.ToDirection(): Direction? =
 
 interface SwipeableItem {
     fun onSwiped(direction: Direction, viewModel: ViewDataBinding)
-    //to consider.
+
     fun startView(binding: ViewDataBinding): View?
 
     fun endView(binding: ViewDataBinding): View?
-    fun floatingView(binding: ViewDataBinding): View
 
+    fun floatingView(binding: ViewDataBinding): View
 
 }
 
@@ -92,6 +93,9 @@ private class innerSwipeHelper(val recyclerAdapter: AbstractDataBindingRecyclerA
                              actionState: Int,
                              isCurrentlyActive: Boolean) {
         super.onChildDraw(canvas, recyclerView, viewHolder, dX, dY, actionState, isCurrentlyActive)
+        if (viewHolder?.adapterPosition ?: -1 < 0) {
+            return
+        }
         val swipeItem = getOptInterface(viewHolder) ?: return
         val baseViewBinding = viewHolder as? BaseViewHolderItem<*> ?: return
         val (startView, endView, mainView) = getViews(swipeItem, baseViewBinding.item)
@@ -112,8 +116,6 @@ private class innerSwipeHelper(val recyclerAdapter: AbstractDataBindingRecyclerA
                 ViewHelper.showGoneView(startView, endView)
             else -> {
                 ViewHelper.showGoneView(endView, startView)
-                startView?.gone()
-                endView?.visible()
             }
         }
     }
@@ -167,19 +169,16 @@ private class innerSwipeHelper(val recyclerAdapter: AbstractDataBindingRecyclerA
         }
     }
 
-    override fun isLongPressDragEnabled(): Boolean = true
+    override fun isLongPressDragEnabled(): Boolean = false
 
     override fun isItemViewSwipeEnabled(): Boolean = true
 }
 
 private fun resetViews(mainView: View, startView: View?, endView: View?, rootView: View) {
-    startView?.gone()
-    endView?.gone()
+    ViewHelper.goneViews(startView, endView)
     mainView.visible()
-    mainView.translationX = 0f
-    rootView.translationX = 0f
-    endView?.translationX = 0f
-    startView?.translationX = 0f
+    //remove transformations from all views.
+    listOf(mainView, rootView, endView, startView).forEachNotNull(View::resetTransformations)
 }
 
 

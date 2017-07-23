@@ -6,12 +6,14 @@ import org.junit.runner.RunWith
 import org.robolectric.Robolectric
 import org.robolectric.RobolectricTestRunner
 import org.robolectric.RuntimeEnvironment
+import org.robolectric.annotation.Config
 
 /**
  * Created by Kasper Tvede on 20-07-2017.
  */
 
 @RunWith(RobolectricTestRunner::class)
+@Config(manifest = Config.NONE)
 abstract class BaseRoboElectricTest {
     val context: Context by lazy {
         RuntimeEnvironment.application

@@ -93,7 +93,7 @@ open class AbstractSearchableDataBindingRecyclerAdapter<
         }
     }
 
-    override fun remove(newItem: T, inSection: Int) {
+    override fun remove(newItem: T, inSection: Int): Int? {
         val index = super.remove(newItem, inSection)
         allDataCollection.removeItem(newItem, inSection)
         return index

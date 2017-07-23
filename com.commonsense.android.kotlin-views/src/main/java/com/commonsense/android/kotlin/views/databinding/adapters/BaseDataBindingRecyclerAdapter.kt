@@ -160,57 +160,57 @@ abstract class AbstractDataBindingRecyclerAdapter<T>(context: Context) :
 
     override fun getItemCount(): Int = dataCollection.size
 
-    open fun add(newItem: T, inSection: Int) = updateData {
+    open fun add(newItem: T, inSection: Int): Unit = updateData {
         dataCollection.add(newItem, inSection).rawRow.apply {
             notifyItemInserted(this)
         }
     }
 
-    open fun addAll(items: Collection<T>, inSection: Int) = updateData {
+    open fun addAll(items: Collection<T>, inSection: Int): Unit = updateData {
         dataCollection.addAll(items, inSection).inRaw.apply {
             notifyItemRangeInserted(this.start, this.length)
         }
 
     }
 
-    open fun insert(item: T, atRow: Int, inSection: Int) = updateData {
+    open fun insert(item: T, atRow: Int, inSection: Int): Unit = updateData {
         dataCollection.insert(item, atRow, inSection)?.rawRow.apply {
             this?.let { notifyItemInserted(it) }
         }
     }
 
-    open fun insertAll(items: Collection<T>, startPosition: Int, inSection: Int) = updateData {
+    open fun insertAll(items: Collection<T>, startPosition: Int, inSection: Int): Unit = updateData {
         dataCollection.insertAll(items, inSection, startPosition)?.inRaw.apply {
             this?.let { notifyItemRangeInserted(it.start, it.length) }
         }
     }
 
-    open fun addAll(vararg items: T, inSection: Int) = updateData {
+    open fun addAll(vararg items: T, inSection: Int): Unit = updateData {
         dataCollection.addAll(items.asList(), inSection).inRaw.apply {
             notifyItemRangeInserted(this.start, this.length)
         }
     }
 
-    open fun insertAll(vararg items: T, startPosition: Int, inSection: Int) = updateData {
+    open fun insertAll(vararg items: T, startPosition: Int, inSection: Int): Unit = updateData {
         dataCollection.insertAll(items.asList(), startPosition, inSection)?.inRaw.apply {
             this?.let { notifyItemRangeInserted(it.start, it.length) }
         }
     }
 
-    open fun remove(newItem: T, inSection: Int) = updateData {
-        dataCollection.removeItem(newItem, inSection)?.rawRow.apply {
-            this?.let { notifyItemRemoved(it) }
-        }
+    open fun remove(newItem: T, inSection: Int): Int? = updateData {
+        return@updateData dataCollection.removeItem(newItem, inSection)?.apply {
+            notifyItemRemoved(rawRow)
+        }?.rawRow
     }
 
-    open fun removeAt(row: Int, inSection: Int) = updateData {
+    open fun removeAt(row: Int, inSection: Int): Unit = updateData {
         dataCollection.removeAt(row, inSection)?.rawRow.apply {
             this?.let { notifyItemRemoved(it) }
         }
     }
 
 
-    open fun removeIn(range: kotlin.ranges.IntRange, inSection: Int) = updateData {
+    open fun removeIn(range: kotlin.ranges.IntRange, inSection: Int): Unit = updateData {
         dataCollection.removeInRange(range, inSection)?.inRaw.apply {
             this?.let {
                 notifyItemRangeRemoved(it.start + range.start, range.length)
@@ -221,17 +221,17 @@ abstract class AbstractDataBindingRecyclerAdapter<T>(context: Context) :
 
     open fun getItem(atRow: Int, inSection: Int): T? = dataCollection[atRow, inSection]
 
-    open fun clear() = updateData {
+    open fun clear(): Unit = updateData {
         dataCollection.clear()
         notifyDataSetChanged()
     }
 
 
-    protected fun addNoNotify(item: T, inSection: Int) = updateData {
+    protected fun addNoNotify(item: T, inSection: Int): Unit = updateData {
         dataCollection.add(item, inSection).rawRow
     }
 
-    protected fun addNoNotify(items: List<T>, inSection: Int) = updateData {
+    protected fun addNoNotify(items: List<T>, inSection: Int): Unit = updateData {
         dataCollection.addAll(items, inSection).inRaw
     }
 
@@ -249,27 +249,27 @@ abstract class AbstractDataBindingRecyclerAdapter<T>(context: Context) :
     }
 
     @UiThread
-    private fun clearSection(inSection: Int) = updateData {
+    private fun clearSection(inSection: Int): Unit = updateData {
         dataCollection.clearSection(inSection)?.inRaw.apply {
             this?.let { notifyItemRangeRemoved(it.start, it.length) }
         }
     }
 
-    open fun replace(newItem: T, position: Int, inSection: Int) = updateData {
+    open fun replace(newItem: T, position: Int, inSection: Int): Unit = updateData {
         dataCollection.replace(newItem, position, inSection)?.rawRow.apply {
             this?.let { notifyItemChanged(it) }
         }
     }
 
     @UiThread
-    protected fun clearAndSetItemsNoNotify(items: List<T>, inSection: Int, isIgnored: Boolean) {
+    protected fun clearAndSetItemsNoNotify(items: List<T>, inSection: Int, isIgnored: Boolean): Unit {
         stopScroll()
         dataCollection.setSection(items, inSection)
         isIgnored.ifTrue { dataCollection.ignoreSection(inSection) }
     }
 
     @UiThread
-    protected fun setAllSections(sections: List<TypeSection<T>>) {
+    protected fun setAllSections(sections: List<TypeSection<T>>): Unit {
         stopScroll()
         dataCollection.setAllSections(sections)
         super.notifyDataSetChanged()
@@ -300,7 +300,7 @@ abstract class AbstractDataBindingRecyclerAdapter<T>(context: Context) :
     /**
      * must be called from all things that manipulate the dataCollection.
      */
-    private inline fun updateData(crossinline action: () -> Unit) {
+    private inline fun <T> updateData(crossinline action: () -> T): T {
         stopScroll()
         return action()
     }

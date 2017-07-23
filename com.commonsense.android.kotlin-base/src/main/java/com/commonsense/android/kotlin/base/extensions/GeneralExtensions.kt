@@ -51,7 +51,11 @@ fun <T> T.weakReference(): WeakReference<T> = WeakReference(this)
 /**
  * Will use the value if the weak reference is not pointing to null
  */
-fun <T> WeakReference<T?>.use(action: T.() -> Unit) {
+fun <T> WeakReference<T?>.useOpt(action: T.() -> Unit) {
+    get()?.let(action)
+}
+
+fun <T> WeakReference<T>.use(action: T.() -> Unit) {
     get()?.let(action)
 }
 
@@ -61,6 +65,7 @@ fun <T> WeakReference<T?>.use(action: T.() -> Unit) {
 fun <T> WeakReference<FunctionUnit<T>?>.use(input: T) {
     get()?.let { it(input) }
 }
+
 
 /**
  * Creates a weak reference, if this is not null. otherwise returns null.

@@ -8,7 +8,6 @@ import com.commonsense.android.kotlin.base.EmptyFunction
 import com.commonsense.android.kotlin.base.extensions.weakReference
 import com.commonsense.android.kotlin.system.extensions.getDrawableSafe
 import com.commonsense.android.kotlin.system.extensions.getTextSafe
-import com.commonsense.android.kotlin.views.R
 import java.lang.ref.WeakReference
 import kotlin.reflect.KProperty
 
@@ -26,47 +25,67 @@ abstract class ViewVariable<T>(initialValue: T, @StyleableRes val styleIndex: In
         toAttachTo.add(this.weakReference())
     }
 
-    fun setNoUpdate(newValue: T) {
+    open fun setNoUpdate(newValue: T) {
         innerValue.setWithNoUpdate(newValue)
     }
 
-    fun parse(typedArray: TypedArray, context: Context) {
+    open fun parse(typedArray: TypedArray, context: Context) {
         parseFrom(typedArray, context)?.let(this::setNoUpdate)
     }
 
     protected abstract fun parseFrom(typedArray: TypedArray, context: Context): T?
 
-    operator fun getValue(thisRef: Any?, property: KProperty<*>): T = innerValue.value
+    open operator fun getValue(thisRef: Any?, property: KProperty<*>): T = innerValue.value
 
-    operator fun setValue(thisRef: R, property: KProperty<*>, value: T) {
+    open operator fun setValue(thisRef: Any?, property: KProperty<*>, value: T) {
         innerValue.value = value
     }
 
+
+    open val value
+        get() = innerValue.value
+
 }
 
-class CharSequenceViewVariable(styleIndex: Int, toAttachTo: ViewAttributeList, onUpdate: EmptyFunction)
+open class TextViewVariable(styleIndex: Int, toAttachTo: ViewAttributeList, onUpdate: EmptyFunction)
     : ViewVariable<CharSequence?>(null, styleIndex, toAttachTo, onUpdate) {
     override fun parseFrom(typedArray: TypedArray, context: Context): CharSequence? =
             typedArray.getTextSafe(styleIndex)
 }
 
-class ColorValueViewVariable(defaultValue: Int, styleIndex: Int, toAttachTo: ViewAttributeList, onUpdate: EmptyFunction)
+open class ColorValueViewVariable(defaultValue: Int, styleIndex: Int, toAttachTo: ViewAttributeList, onUpdate: EmptyFunction)
     : ViewVariable<Int>(defaultValue, styleIndex, toAttachTo, onUpdate) {
     override fun parseFrom(typedArray: TypedArray, context: Context): Int? =
             typedArray.getColor(styleIndex, 0)
 }
 
-class BooleanViewVariable(defaultValue: Boolean, styleIndex: Int, toAttachTo: ViewAttributeList, onUpdate: EmptyFunction)
+open class BooleanViewVariable(defaultValue: Boolean, styleIndex: Int, toAttachTo: ViewAttributeList, onUpdate: EmptyFunction)
     : ViewVariable<Boolean>(defaultValue, styleIndex, toAttachTo, onUpdate) {
 
     override fun parseFrom(typedArray: TypedArray, context: Context): Boolean? =
             typedArray.getBoolean(styleIndex, false)
 }
 
-class DrawableViewVariable(styleIndex: Int, toAttachTo: ViewAttributeList, onUpdate: EmptyFunction)
+open class DrawableViewVariable(styleIndex: Int, toAttachTo: ViewAttributeList, onUpdate: EmptyFunction)
     : ViewVariable<Drawable?>(null, styleIndex, toAttachTo, onUpdate) {
 
     override fun parseFrom(typedArray: TypedArray, context: Context): Drawable? =
             typedArray.getDrawableSafe(styleIndex, context)
 
+}
+
+
+class BooleanCallbackViewVariable(defaultValue: Boolean, styleIndex: Int, toAttachTo: ViewAttributeList, onUpdate: EmptyFunction)
+    : BooleanViewVariable(defaultValue, styleIndex, toAttachTo, onUpdate) {
+
+    var onChanged: EmptyFunction? = null
+
+
+    override fun setValue(thisRef: Any?, property: KProperty<*>, value: Boolean) {
+        val before = value
+        super.setValue(thisRef, property, value)
+        if (before != value) {
+            onChanged?.invoke()
+        }
+    }
 }

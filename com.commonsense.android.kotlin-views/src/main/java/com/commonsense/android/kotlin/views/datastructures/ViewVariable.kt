@@ -54,14 +54,14 @@ open class TextViewVariable(styleIndex: Int, toAttachTo: ViewAttributeList, onUp
 open class ColorValueViewVariable(defaultValue: Int, styleIndex: Int, toAttachTo: ViewAttributeList, onUpdate: EmptyFunction)
     : ViewVariable<Int>(defaultValue, styleIndex, toAttachTo, onUpdate) {
     override fun parseFrom(typedArray: TypedArray, context: Context): Int? =
-            typedArray.getColor(styleIndex, 0)
+            typedArray.getColor(styleIndex, getInnerValue())
 }
 
 open class BooleanViewVariable(defaultValue: Boolean, styleIndex: Int, toAttachTo: ViewAttributeList, onUpdate: EmptyFunction)
     : ViewVariable<Boolean>(defaultValue, styleIndex, toAttachTo, onUpdate) {
 
     override fun parseFrom(typedArray: TypedArray, context: Context): Boolean? =
-            typedArray.getBoolean(styleIndex, false)
+            typedArray.getBoolean(styleIndex, getInnerValue())
 }
 
 open class DrawableViewVariable(styleIndex: Int, toAttachTo: ViewAttributeList, onUpdate: EmptyFunction)

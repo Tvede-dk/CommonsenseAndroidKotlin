@@ -16,7 +16,7 @@ import kotlinx.coroutines.experimental.Deferred
 import kotlinx.coroutines.experimental.async
 import java.io.ByteArrayInputStream
 import java.io.ByteArrayOutputStream
-import java.nio.ByteBuffer
+import java.io.OutputStream
 
 
 /**
@@ -139,16 +139,24 @@ suspend fun Uri.loadBitmapRotatedCorrectly(contentResolver: ContentResolver, wid
 
 suspend fun Uri.getExifForImage(contentResolver: ContentResolver) = async(CommonPool) {
     contentResolver.openInputStream(this@getExifForImage).use { input ->
-        val exif = ExifInterface(input)
-        return@async exif
+        return@async ExifInterface(input)
     }
 }
 
 
-suspend fun Bitmap.toByteArray(): Deferred<ByteArray> = async(CommonPool) {
-    val buffer = ByteBuffer.allocate(byteCount)
-    copyPixelsToBuffer(buffer)
-    return@async buffer.array()
+fun Bitmap.outputTo(outputStream: OutputStream, @IntRange(from = 0, to = 100) quality: Int, format: Bitmap.CompressFormat) {
+    compress(format, quality, outputStream)
+}
+
+/**
+ * Allows to save a bitmap to the given location, using the supplied arguements for controlling the quality / format.
+ *
+ */
+fun Bitmap.saveTo(path: Uri, contentResolver: ContentResolver, @IntRange(from = 0, to = 100) quality: Int,
+                  format: Bitmap.CompressFormat) = async(CommonPool) {
+    contentResolver.openOutputStream(path).use {
+        this@saveTo.outputTo(it, quality, format)
+    }
 }
 
 /**
@@ -178,5 +186,6 @@ fun ImageSize.scaleWidth(destWidth: Int): ImageSize {
 
 fun ImageSize.applyRatio(ratio: Float): ImageSize =
         ImageSize((width * ratio).toInt(), (height * ratio).toInt())
+
 
 fun Bitmap.getImgeSize(): ImageSize = ImageSize(width, height)

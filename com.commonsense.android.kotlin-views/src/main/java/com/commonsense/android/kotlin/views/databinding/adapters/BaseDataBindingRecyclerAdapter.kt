@@ -355,6 +355,17 @@ abstract class AbstractDataBindingRecyclerAdapter<T>(context: Context) :
 
     fun getSectionSize(sectionIndex: Int): Int? = dataCollection.sectionAt(sectionIndex)?.size
 
+    fun isSectionVisible(inSection: Int): Boolean =
+            dataCollection.sectionAt(inSection)?.isIgnored?.not() ?: false
+
+    fun setSectionVisibility(section: Int, isVisible: Boolean) {
+        dataCollection.sectionAt(section)?.let {
+            if (it.isIgnored != !isVisible) {
+                toggleSectionVisibility(section)
+            }
+        }
+    }
+
 }
 
 open class BaseDataBindingRecyclerAdapter(context: Context) :

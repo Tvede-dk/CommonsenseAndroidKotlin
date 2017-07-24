@@ -80,7 +80,7 @@ class SectionRecyclerTransaction<T : IRenderModelItem<*, *>> {
         oldSize = adapter.itemCount
     }
 
-    class Builder<T : IRenderModelItem<*, *>>(val adapter: AbstractDataBindingRecyclerAdapter<T>) {
+    class Builder<T : IRenderModelItem<*, *>>(private val adapter: AbstractDataBindingRecyclerAdapter<T>) {
 
         private val operations = mutableListOf<SectionTransactionCommando<T>>()
 
@@ -111,25 +111,27 @@ class SectionRecyclerTransaction<T : IRenderModelItem<*, *>> {
         }
 
         /**
-         * only call this if the section is visible but should turn invisible given the condition
+         * should turn invisible given the condition
          */
         fun hideSectionIf(condition: FunctionAdapterBoolean<T>, inSection: Int) {
+            val visibilityBefore = adapter.isSectionVisible(inSection)
             addOperation({
                 if (condition(this)) {
                     this.hideSection(inSection)
                 }
-            }, { this.showSection(inSection) }) //double showing a section cannot go wrong.
+            }, { this.setSectionVisibility(inSection, visibilityBefore) }) //double showing a section cannot go wrong.
         }
 
         /**
-         * only call this if the section is invisible but should turn visible given the condition
+         * should turn visible given the condition
          */
         fun showSectionIf(condition: FunctionAdapterBoolean<T>, inSection: Int) {
+            val visibilityBefore = adapter.isSectionVisible(inSection)
             addOperation({
                 if (condition(this)) {
                     this.showSection(inSection)
                 }
-            }, { this.hideSection(inSection) }) //double hiding a section cannot go wrong.
+            }, { this.setSectionVisibility(inSection, visibilityBefore) }) //double hiding a section cannot go wrong.
         }
 
         fun removeItem(item: T, inSection: Int) {

@@ -80,3 +80,7 @@ inline fun assertThrows(message: String = "should throw", crossinline action: ()
         //all is good.
     }
 }
+
+fun <T> Any.assertAs(otherValue: T) {
+    Assert.assertEquals(this as? T, otherValue)
+}

@@ -42,6 +42,8 @@ fun <T : Any, Vm : ViewDataBinding, F : Any> IRenderModelItem<T, Vm>.toSearchabl
 
 typealias IGenericSearchRender<F> = IRenderModelSearchItem<*, *, F>
 
+
+//TODO performActionIfIsValidFilter for all modifiers ??????
 open class AbstractSearchableDataBindingRecyclerAdapter<
         T : IGenericSearchRender<F>,
         F>(context: Context)
@@ -75,16 +77,15 @@ open class AbstractSearchableDataBindingRecyclerAdapter<
     }
 
     override fun add(newItem: T, inSection: Int) {
-        allDataCollection.add(newItem, inSection)
         performActionIfIsValidFilter(newItem, { super.add(newItem, inSection) })
+        allDataCollection.add(newItem, inSection)
     }
 
-    override fun addAll(items: Collection<T>, atSection: Int) {
-        allDataCollection.addAll(items, atSection)
+    override fun addAll(items: Collection<T>, inSection: Int) {
         items.forEach {
-            performActionIfIsValidFilter(it, { super.add(it, atSection) })
+            performActionIfIsValidFilter(it, { super.add(it, inSection) })
         }
-
+        allDataCollection.addAll(items, inSection)
     }
 
     private inline fun performActionIfIsValidFilter(newItem: T, crossinline action: (T) -> Unit) {
@@ -133,8 +134,8 @@ open class AbstractSearchableDataBindingRecyclerAdapter<
 
 
     override fun clear() {
-        allDataCollection.clear()
         super.clear()
+        allDataCollection.clear()
     }
 
     private fun isAcceptedByFilter(newItem: T?, value: F?): Boolean {
@@ -189,28 +190,26 @@ open class AbstractSearchableDataBindingRecyclerAdapter<
     }
 
     override fun setSection(items: List<T>, inSection: Int) {
-        allDataCollection.setSection(items, inSection)
         super.setSection(items, inSection)
+        allDataCollection.setSection(items, inSection)
     }
 
 
     override fun hideSection(sectionIndex: Int) {
-        allDataCollection.ignoreSection(sectionIndex)
         super.hideSection(sectionIndex)
+        allDataCollection.ignoreSection(sectionIndex)
     }
 
     override fun showSection(sectionIndex: Int) {
-        allDataCollection.acceptSection(sectionIndex)
         super.showSection(sectionIndex)
+        allDataCollection.acceptSection(sectionIndex)
     }
 
+    override fun removeAll(items: List<T>, inSection: Int) {
+        super.removeAll(items, inSection)
+        allDataCollection.removeItems(items, inSection)
+    }
 }
-
-open class BaseSearchableDataBindingRecyclerAdapter<Filter>(context: Context)
-    : AbstractSearchableDataBindingRecyclerAdapter<
-        IRenderModelSearchItem<*, *, Filter>,
-        Filter>(context)
-
 
 private class ConflatedActorHelper<F> {
 
@@ -234,6 +233,13 @@ private class ConflatedActorHelper<F> {
     }
 
 }
+
+
+open class BaseSearchableDataBindingRecyclerAdapter<Filter>(context: Context)
+    : AbstractSearchableDataBindingRecyclerAdapter<
+        IRenderModelSearchItem<*, *, Filter>,
+        Filter>(context)
+
 
 open class DefaultSearchableDatabindingRecyclerAdapter<
         T : IGenericSearchRender<F>,

@@ -209,6 +209,12 @@ abstract class AbstractDataBindingRecyclerAdapter<T>(context: Context) :
         }
     }
 
+    open fun removeAll(items: List<T>, inSection: Int): Unit = updateData {
+        items.forEach {
+            remove(it, inSection)
+        }
+    }
+
 
     open fun removeIn(range: kotlin.ranges.IntRange, inSection: Int): Unit = updateData {
         dataCollection.removeInRange(range, inSection)?.inRaw.apply {

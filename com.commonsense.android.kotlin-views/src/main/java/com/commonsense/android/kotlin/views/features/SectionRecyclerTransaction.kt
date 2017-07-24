@@ -11,6 +11,8 @@ import com.commonsense.android.kotlin.views.databinding.adapters.IRenderModelIte
  */
 typealias SectionOperation<T> = AbstractDataBindingRecyclerAdapter<T>.() -> Unit
 
+typealias FunctionAdapterBoolean<T> = (AbstractDataBindingRecyclerAdapter<T>) -> Boolean
+
 private class SectionTransactionCommando<T : IRenderModelItem<*, *>>(
         val applyOperation: SectionOperation<T>,
         val resetOperation: SectionOperation<T>)
@@ -65,7 +67,7 @@ class SectionRecyclerTransaction<T : IRenderModelItem<*, *>> {
         performTransactions(resetTransactions)
     }
 
-    fun canPerformTransaction(): Boolean =
+    private fun canPerformTransaction(): Boolean =
             adapter.itemCount == oldSize || allowExternalModifications
 
     private fun performTransactions(opertaions: List<SectionOperation<T>>) {
@@ -97,19 +99,43 @@ class SectionRecyclerTransaction<T : IRenderModelItem<*, *>> {
         }
 
         fun addItems(items: List<T>, inSection: Int) {
-            TODO("missing impl")//addOperation({ this.addAll(items, inSection) }, { this.removeItems(items, inSection) })
+            addOperation({ this.addAll(items, inSection) }, { this.removeAll(items, inSection) })
         }
 
         fun removeItems(items: List<T>, inSection: Int) {
-            TODO("missing impl.") // addOperation({ this.removeItems(items, inSection) }, { addAll(items, inSection) })
+            addOperation({ this.removeAll(items, inSection) }, { addAll(items, inSection) })
         }
 
         fun addItem(item: T, inSection: Int) {
             addOperation({ this.add(item, inSection) }, { this.remove(item, inSection) })
         }
 
+        /**
+         * only call this if the section is visible but should turn invisible given the condition
+         */
+        fun hideSectionIf(condition: FunctionAdapterBoolean<T>, inSection: Int) {
+            addOperation({
+                if (condition(this)) {
+                    this.hideSection(inSection)
+                }
+            }, { this.showSection(inSection) }) //double showing a section cannot go wrong.
+        }
+
+        /**
+         * only call this if the section is invisible but should turn visible given the condition
+         */
+        fun showSectionIf(condition: FunctionAdapterBoolean<T>, inSection: Int) {
+            addOperation({
+                if (condition(this)) {
+                    this.showSection(inSection)
+                }
+            }, { this.hideSection(inSection) }) //double hiding a section cannot go wrong.
+        }
+
         fun removeItem(item: T, inSection: Int) {
-            addOperation({ this.remove(item, inSection) }, { this.add(item, inSection) })
+            adapter.getIndexFor(item, inSection)?.let {
+                this.removeItemAt(item, it.row, it.section)
+            }
         }
 
         fun insert(item: T, row: Int, inSection: Int) {

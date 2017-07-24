@@ -6,12 +6,12 @@ import android.graphics.drawable.Drawable
 import android.support.v7.widget.AppCompatImageView
 import android.util.AttributeSet
 import android.view.View
-import com.commonsense.android.kotlin.base.FunctionUnit
+import com.commonsense.android.kotlin.base.EmptyFunction
 import com.commonsense.android.kotlin.base.extensions.collections.map
 import com.commonsense.android.kotlin.system.extensions.getDrawableSafe
 import com.commonsense.android.kotlin.system.imaging.withTintColor
 import com.commonsense.android.kotlin.views.R
-import com.commonsense.android.kotlin.views.datastructures.BooleanViewVariable
+import com.commonsense.android.kotlin.views.datastructures.BooleanCallbackViewVariable
 import com.commonsense.android.kotlin.views.datastructures.ColorValueViewVariable
 import com.commonsense.android.kotlin.views.datastructures.DrawableViewVariable
 import com.commonsense.android.kotlin.views.datastructures.ViewVariable
@@ -52,11 +52,16 @@ open class ToggleImageButton : AppCompatImageView, ViewAttribute, View.OnClickLi
     var selectedColor: Int by internalSelectedColor
     //</editor-fold>
 
-    private var onCheckedChanged: FunctionUnit<Boolean>? = null
 
     //<editor-fold desc="isChecked">
+    private var onCheckedChanged: EmptyFunction?
+        get() = internalChecked.onChanged
+        set(value) {
+            internalChecked.onChanged = value
+        }
+
     private val internalChecked by lazy {
-        BooleanViewVariable(false, R.styleable.ToggleImageButton_checked,
+        BooleanCallbackViewVariable(false, R.styleable.ToggleImageButton_checked,
                 listOfCustomProperties, this::updateView)
     }
     var isChecked by internalChecked
@@ -129,11 +134,11 @@ open class ToggleImageButton : AppCompatImageView, ViewAttribute, View.OnClickLi
 
 
     fun setOnCheckedChangedListener(onCheckedChanged: (Boolean) -> Unit) {
-        this.onCheckedChanged = onCheckedChanged
+        this.onCheckedChanged = { onCheckedChanged(this.isChecked) }
     }
 
     var checkedNoNotify: Boolean
-        get() = internalChecked.value
+        get() = internalChecked.getInnerValue()
         set(value) = internalChecked.setNoUpdate(value)
 
 }

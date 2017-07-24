@@ -104,15 +104,15 @@ open class AbstractSearchableDataBindingRecyclerAdapter<
         allDataCollection.removeAt(row, inSection)
     }
 
-    override fun insertAll(items: Collection<T>, startPosition: Int, atSection: Int) {
-        super.addAll(items, startPosition)
-        allDataCollection.insertAll(items, atSection, startPosition)
+    override fun insertAll(items: Collection<T>, startPosition: Int, inSection: Int) {
+        super.insertAll(items, startPosition, inSection)
+        allDataCollection.insertAll(items, startPosition, inSection)
     }
 
     override fun insertAll(vararg items: T, startPosition: Int, inSection: Int) {
         val asList = items.asList()
-        super.addAll(asList, startPosition)
-        allDataCollection.insertAll(asList, inSection, startPosition)
+        super.insertAll(asList, startPosition, inSection)
+        allDataCollection.insertAll(asList, startPosition, inSection)
     }
 
     override fun addAll(vararg items: T, inSection: Int) {
@@ -161,7 +161,6 @@ open class AbstractSearchableDataBindingRecyclerAdapter<
     private suspend fun updateVisibly(data: List<TypeSection<T>>) {
         launch(UI) {
             super.setAllSections(data)
-
         }.join()
     }
 

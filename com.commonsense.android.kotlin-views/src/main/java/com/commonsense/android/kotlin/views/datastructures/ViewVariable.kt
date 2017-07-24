@@ -41,9 +41,7 @@ abstract class ViewVariable<T>(initialValue: T, @StyleableRes val styleIndex: In
         innerValue.value = value
     }
 
-
-    open val value
-        get() = innerValue.value
+    fun getInnerValue(): T = innerValue.value
 
 }
 
@@ -82,7 +80,7 @@ class BooleanCallbackViewVariable(defaultValue: Boolean, styleIndex: Int, toAtta
 
 
     override fun setValue(thisRef: Any?, property: KProperty<*>, value: Boolean) {
-        val before = value
+        val before = this.getInnerValue()
         super.setValue(thisRef, property, value)
         if (before != value) {
             onChanged?.invoke()

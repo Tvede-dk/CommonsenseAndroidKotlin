@@ -89,35 +89,35 @@ class SectionRecyclerTransaction<T : IRenderModelItem<*, *>> {
         }
 
         fun hideSection(sectionIndex: Int) {
-            addOperation({ hideSection(sectionIndex) }, { showSection(sectionIndex) })
+            addOperation({ this.hideSection(sectionIndex) }, { this.showSection(sectionIndex) })
         }
 
         fun showSection(sectionIndex: Int) {
-            addOperation({ showSection(sectionIndex) }, { hideSection(sectionIndex) })
+            addOperation({ this.showSection(sectionIndex) }, { this.hideSection(sectionIndex) })
         }
 
         fun addItems(items: List<T>, inSection: Int) {
-            addOperation({ addAll(items, inSection) }, { removeItems(items, inSection) })
+            TODO("missing impl")//addOperation({ this.addAll(items, inSection) }, { this.removeItems(items, inSection) })
         }
 
         fun removeItems(items: List<T>, inSection: Int) {
-            addOperation({ removeItems(items, inSection) }, { addAll(items, inSection) })
+            TODO("missing impl.") // addOperation({ this.removeItems(items, inSection) }, { addAll(items, inSection) })
         }
 
         fun addItem(item: T, inSection: Int) {
-            addOperation({ add(item, inSection) }, { removeItem(item, inSection) })
+            addOperation({ this.add(item, inSection) }, { this.remove(item, inSection) })
         }
 
         fun removeItem(item: T, inSection: Int) {
-            addOperation({ removeItem(item, inSection) }, { add(item, inSection) })
+            addOperation({ this.remove(item, inSection) }, { this.add(item, inSection) })
         }
 
-        fun addItemAt(item: T, row: Int, inSection: Int) {
-            addOperation({ insert(item, row, inSection) }, { this.removeAt(row, inSection) })
+        fun insert(item: T, row: Int, inSection: Int) {
+            addOperation({ this.insert(item, row, inSection) }, { this.removeAt(row, inSection) })
         }
 
         fun removeItemAt(item: T, row: Int, inSection: Int) {
-            addOperation({ removeAt(row, inSection) }, { insert(item, row, inSection) })
+            addOperation({ this.removeAt(row, inSection) }, { this.insert(item, row, inSection) })
         }
 
 

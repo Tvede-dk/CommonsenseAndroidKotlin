@@ -16,6 +16,7 @@ import kotlinx.coroutines.experimental.Deferred
 import kotlinx.coroutines.experimental.async
 import java.io.ByteArrayInputStream
 import java.io.ByteArrayOutputStream
+import java.nio.ByteBuffer
 
 
 /**
@@ -143,6 +144,12 @@ suspend fun Uri.getExifForImage(contentResolver: ContentResolver) = async(Common
     }
 }
 
+
+suspend fun Bitmap.toByteArray(): Deferred<ByteArray> = async(CommonPool) {
+    val buffer = ByteBuffer.allocate(byteCount)
+    copyPixelsToBuffer(buffer)
+    return@async buffer.array()
+}
 
 /**
  * want to be able to load a "scaled bitmap"

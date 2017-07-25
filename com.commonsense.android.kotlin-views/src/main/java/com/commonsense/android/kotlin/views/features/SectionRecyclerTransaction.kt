@@ -91,11 +91,13 @@ class SectionRecyclerTransaction<T : IRenderModelItem<*, *>> {
         }
 
         fun hideSection(sectionIndex: Int) {
-            addOperation({ this.hideSection(sectionIndex) }, { this.showSection(sectionIndex) })
+            val visibilityBefore = adapter.isSectionVisible(sectionIndex)
+            addOperation({ this.hideSection(sectionIndex) }, { this.setSectionVisibility(sectionIndex, visibilityBefore) })
         }
 
         fun showSection(sectionIndex: Int) {
-            addOperation({ this.showSection(sectionIndex) }, { this.hideSection(sectionIndex) })
+            val visibilityBefore = adapter.isSectionVisible(sectionIndex)
+            addOperation({ this.showSection(sectionIndex) }, { this.setSectionVisibility(sectionIndex, visibilityBefore) })
         }
 
         fun addItems(items: List<T>, inSection: Int) {

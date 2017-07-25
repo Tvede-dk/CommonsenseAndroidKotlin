@@ -11,6 +11,7 @@ import android.support.annotation.IntRange
 import android.support.media.ExifInterface
 import com.commonsense.android.kotlin.base.extensions.collections.map
 import com.commonsense.android.kotlin.system.extensions.getVirtualScreenSize
+import com.commonsense.android.kotlin.system.logging.tryAndLogSuspend
 import kotlinx.coroutines.experimental.CommonPool
 import kotlinx.coroutines.experimental.Deferred
 import kotlinx.coroutines.experimental.async
@@ -102,8 +103,7 @@ fun Context.calculateOptimalThumbnailSize(defaultSize: Int = 200, minSize: Int =
     val widthFraction = virtualSize.x / fraction
     val heightFraction = virtualSize.y / fraction
     val combined = widthFraction + heightFraction
-    val resultSize = maxOf(combined / 2, minSize)
-    return resultSize
+    return maxOf(combined / 2, minSize)
 }
 
 
@@ -131,10 +131,11 @@ suspend fun Bitmap.rotate(@FloatRange(from = 0.0, to = 360.0) degrees: Float): D
 }
 
 suspend fun Uri.loadBitmapRotatedCorrectly(contentResolver: ContentResolver, width: Int): Deferred<Bitmap?> = async(CommonPool) {
-    val exif = getExifForImage(contentResolver).await()
-    val bitmap = loadBitmapScaled(contentResolver, width).await()
-    val rotatedBitmap = bitmap?.rotate(exif)?.await()
-    return@async rotatedBitmap
+    tryAndLogSuspend("loadImage") {
+        val exif = getExifForImage(contentResolver).await()
+        val bitmap = loadBitmapScaled(contentResolver, width).await()
+        return@tryAndLogSuspend bitmap?.rotate(exif)?.await()
+    }
 }
 
 suspend fun Uri.getExifForImage(contentResolver: ContentResolver) = async(CommonPool) {

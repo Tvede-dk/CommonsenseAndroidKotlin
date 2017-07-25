@@ -136,6 +136,20 @@ class SectionRecyclerTransaction<T : IRenderModelItem<*, *>> {
             }, { this.setSectionVisibility(inSection, visibilityBefore) }) //double hiding a section cannot go wrong.
         }
 
+        /**
+         *
+         */
+        fun setSectionsVisibility(sectionToShow: Int, SectionToHide: Int) {
+            addOperation({
+                this.showSection(sectionToShow)
+                this.hideSection(SectionToHide)
+            }, {
+                this.hideSection(sectionToShow)
+                this.showSection(SectionToHide)
+            })
+        }
+
+
         fun removeItem(item: T, inSection: Int) {
             adapter.getIndexFor(item, inSection)?.let {
                 this.removeItemAt(item, it.row, it.section)
@@ -151,12 +165,31 @@ class SectionRecyclerTransaction<T : IRenderModelItem<*, *>> {
         }
 
 
-        fun build(): SectionRecyclerTransaction<T>
-                = SectionRecyclerTransaction(
+        fun saveSectionsVisibilies(vararg sections: Int) {
+            val states = sections.map { Pair(it, adapter.isSectionVisible(it)) }
+            saveVisibilityForSectionsAction(states)
+        }
+
+        //TODO requies further api expansion (query the section indexes somehow)
+        /*     fun saveAllSectionsVisibilities() {
+                 val states = adapter.section .map { adapter.isSectionVisible(it) }
+                 saveVisibilityForSectionsAction(states)
+             }*/
+
+        private fun saveVisibilityForSectionsAction(sectionToVisibility: List<Pair<Int, Boolean>>) {
+            addOperation({}, {
+                sectionToVisibility.forEach {
+                    adapter.setSectionVisibility(it.first, it.second)
+                }
+            })
+        }
+
+
+        fun build(): SectionRecyclerTransaction<T> = SectionRecyclerTransaction(
                 operations.map { it.applyOperation },
                 operations.reversed().map { it.resetOperation },
-                adapter,
-                allowExternalModifications)
+                adapter, allowExternalModifications
+        )
     }
 
 

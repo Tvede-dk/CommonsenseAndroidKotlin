@@ -8,6 +8,7 @@ import android.provider.MediaStore
 import com.commonsense.android.kotlin.system.PermissionEnum
 import com.commonsense.android.kotlin.system.askAndUsePermission
 import com.commonsense.android.kotlin.system.base.BaseActivity
+import com.commonsense.android.kotlin.system.base.helpers.startActivityForResult
 
 
 /**
@@ -16,11 +17,9 @@ import com.commonsense.android.kotlin.system.base.BaseActivity
 //TODO better name:
 //-picture - taker, image retriver, image fetcher, cameraGalleryImageHandler ?
 // -- hmm somewhat along those
-class PictureRetriver(private val activity: BaseActivity, private val callback: (path: Uri, fromCamera: Boolean) -> Unit, private val requestCode: Int = 18877) {
-
-    init {
-        activity.addActivityResultListenerOnlyOk(requestCode, this::onActivityResult)
-    }
+class PictureRetriver(private val activity: BaseActivity,
+                      private val callback: (path: Uri, fromCamera: Boolean) -> Unit,
+                      private val requestCode: Int = 18877) {
 
     var thumbnail: Bitmap? = null
 
@@ -36,14 +35,14 @@ class PictureRetriver(private val activity: BaseActivity, private val callback: 
                 .insert(MediaStore.Images.Media.EXTERNAL_CONTENT_URI, values)
         takePictureIntent.putExtra(MediaStore.EXTRA_OUTPUT, pictureUri)
         if (takePictureIntent.resolveActivity(activity.packageManager) != null) {
-            activity.startActivityForResult(takePictureIntent, requestCode)//For testing.
+            activity.startActivityForResult(takePictureIntent, null, requestCode, this::onActivityResult)
         }
     }
 
     fun useGallery() {
         val pickIntent = Intent(Intent.ACTION_PICK, android.provider.MediaStore.Images.Media.EXTERNAL_CONTENT_URI)
         pickIntent.type = "image/*"
-        activity.startActivityForResult(pickIntent, requestCode)
+        activity.startActivityForResult(pickIntent, null, requestCode, this::onActivityResult)
     }
 
     fun onActivityResult(data: Intent?) {
@@ -59,10 +58,7 @@ class PictureRetriver(private val activity: BaseActivity, private val callback: 
             thumbnail = it
         }
         //TODO , might wanna create a thumbnail in background before this point.
-
-        activity.LaunchInUi(this::class.java.simpleName, {
-            pictureUri?.let { callback(it, isCamera) }
-        })
+        pictureUri?.let { callback(it, isCamera) }
     }
 
     fun getImage(fromCamera: Boolean) {

@@ -129,6 +129,13 @@ fun View.invisible() {
     this.visibility = View.INVISIBLE
 }
 
+fun View.visibleOrGone(condition: Boolean) {
+    if (condition) {
+        visible()
+    } else {
+        gone()
+    }
+}
 
 fun Array<View?>.goneViews() {
     ViewHelper.goneViews(*this)

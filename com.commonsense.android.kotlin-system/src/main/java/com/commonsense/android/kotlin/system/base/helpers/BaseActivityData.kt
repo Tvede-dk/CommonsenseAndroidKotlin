@@ -2,7 +2,6 @@ package com.commonsense.android.kotlin.system.base.helpers
 
 import android.app.Activity
 import android.os.Bundle
-import com.commonsense.android.kotlin.system.base.ActivityWithData
 import com.commonsense.android.kotlin.system.base.BaseActivity
 
 /**
@@ -16,7 +15,7 @@ import com.commonsense.android.kotlin.system.base.BaseActivity
  * of data.
  *
  */
-open class BaseActivityData<InputType : Any> : BaseActivity(), ActivityWithData<InputType> {
+open class BaseActivityData<out InputType : Any> : BaseActivity() {
 
     /**
      * Unfortunately we are unable to Type safe bypass the map though this. not in this generic manner

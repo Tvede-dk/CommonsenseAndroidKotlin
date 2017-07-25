@@ -89,7 +89,7 @@ open class BaseActivity : AppCompatActivity(), ActivityResultHelperContainer {
     //</editor-fold>
 
 
-    fun <Input : Any, T : ActivityWithData<Input>>
+    fun <Input : Any, T : BaseActivityData<Input>>
             startActivityWithData(activity: Class<T>,
                                   data: Input,
                                   requestCode: Int,

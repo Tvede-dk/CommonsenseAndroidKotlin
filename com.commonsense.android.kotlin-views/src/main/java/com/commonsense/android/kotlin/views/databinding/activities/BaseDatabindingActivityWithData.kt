@@ -2,18 +2,15 @@ package com.commonsense.android.kotlin.views.databinding.activities
 
 import android.databinding.ViewDataBinding
 import android.os.Bundle
-import android.view.LayoutInflater
-import com.commonsense.android.kotlin.system.base.BaseActivity
+import com.commonsense.android.kotlin.system.base.helpers.BaseActivityData
 
 /**
- * created by Kasper Tvede on 29-09-2016.
+ * Created by kasper on 25/07/2017.
  */
+abstract class BaseDatabindingActivityWithData<out view : ViewDataBinding, out Input : Any>
+    : BaseActivityData<Input>(), Databindable<view> {
 
-typealias InflaterFunctionSimple<T> = (layoutInflater: LayoutInflater) -> T
-
-abstract class BaseDatabindingActivity<out T : ViewDataBinding> : BaseActivity(), Databindable<T> {
-
-    override val binding: T by lazy {
+    override val binding: view by lazy {
         createBinding().invoke(layoutInflater)
     }
 
@@ -23,4 +20,6 @@ abstract class BaseDatabindingActivity<out T : ViewDataBinding> : BaseActivity()
         binding.executePendingBindings()
         useBinding()
     }
+
+
 }

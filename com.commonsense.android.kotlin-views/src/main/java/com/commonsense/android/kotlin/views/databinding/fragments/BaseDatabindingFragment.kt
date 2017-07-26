@@ -59,7 +59,7 @@ abstract class BaseDatabindingFragment<out T : ViewDataBinding> : BaseFragment()
     }
 
     //adds a new fragment after the current fragment
-    inline fun Fragment.pushThisFragment(otherFragment: () -> Fragment) {
+    inline fun Fragment.pushThisFragment(crossinline otherFragment: () -> Fragment) {
         getParrentContainerId()?.let { activity.pushNewFragmentTo(it, otherFragment()) }
     }
 

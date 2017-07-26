@@ -23,7 +23,9 @@ import java.io.OutputStream
 /**
  * Created by Kasper Tvede on 11-07-2017.
  */
-data class ImageSize(val width: Int, val height: Int)
+data class ImageSize(val width: Int, val height: Int) {
+    override fun toString(): String = "$width-$height"
+}
 
 suspend fun Uri.loadBitmapWithSampleSize(contentResolver: ContentResolver, ratio: Double, containsTransparency: Boolean = true): Deferred<Bitmap?> = async(CommonPool) {
     val bitmapConfig = containsTransparency.map(Bitmap.Config.ARGB_8888, Bitmap.Config.RGB_565)

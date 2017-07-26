@@ -69,6 +69,12 @@ open class DrawableViewVariable(styleIndex: Int, toAttachTo: ViewAttributeList, 
 
     override fun parseFrom(typedArray: TypedArray, context: Context): Drawable? =
             typedArray.getDrawableSafe(styleIndex, context)
+}
+
+open class IntViewVariable(defaultValue: Int, styleIndex: Int, toAttachTo: ViewAttributeList, onUpdate: EmptyFunction)
+    : ViewVariable<Int>(defaultValue, styleIndex, toAttachTo, onUpdate) {
+    override fun parseFrom(typedArray: TypedArray, context: Context): Int? =
+            typedArray.getInteger(styleIndex, getInnerValue())
 
 }
 

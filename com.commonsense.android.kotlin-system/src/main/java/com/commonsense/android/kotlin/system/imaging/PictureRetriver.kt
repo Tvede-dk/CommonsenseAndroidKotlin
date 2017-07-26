@@ -1,10 +1,12 @@
 package com.commonsense.android.kotlin.system.imaging
 
+import android.app.Activity
 import android.content.ContentValues
 import android.content.Intent
 import android.graphics.Bitmap
 import android.net.Uri
 import android.provider.MediaStore
+import com.commonsense.android.kotlin.base.EmptyFunction
 import com.commonsense.android.kotlin.system.PermissionEnum
 import com.commonsense.android.kotlin.system.askAndUsePermission
 import com.commonsense.android.kotlin.system.base.BaseActivity
@@ -19,6 +21,7 @@ import com.commonsense.android.kotlin.system.base.helpers.startActivityForResult
 // -- hmm somewhat along those
 class PictureRetriver(private val activity: BaseActivity,
                       private val callback: (path: Uri, fromCamera: Boolean) -> Unit,
+                      private val optionalCancelCallback: EmptyFunction?,
                       private val requestCode: Int = 18877) {
 
     var thumbnail: Bitmap? = null
@@ -45,7 +48,11 @@ class PictureRetriver(private val activity: BaseActivity,
         activity.startActivityForResult(pickIntent, null, requestCode, this::onActivityResult)
     }
 
-    fun onActivityResult(data: Intent?) {
+    fun onActivityResult(resultCode: Int, data: Intent?) {
+        if (resultCode != Activity.RESULT_OK) {
+            optionalCancelCallback?.invoke()
+            return
+        }
         var isCamera = true
         data?.data?.let {
             //gallery
@@ -58,7 +65,13 @@ class PictureRetriver(private val activity: BaseActivity,
             thumbnail = it
         }
         //TODO , might wanna create a thumbnail in background before this point.
-        pictureUri?.let { callback(it, isCamera) }
+        val safePictureUri = pictureUri
+        if (safePictureUri != null) {
+            callback(safePictureUri, isCamera)
+        } else {
+            optionalCancelCallback?.invoke()
+        }
+        pictureUri = null
     }
 
     fun getImage(fromCamera: Boolean) {

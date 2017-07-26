@@ -84,8 +84,21 @@ class BooleanCallbackViewVariable(defaultValue: Boolean, styleIndex: Int, toAtta
 
     var onChanged: EmptyFunction? = null
 
-
     override fun setValue(thisRef: Any?, property: KProperty<*>, value: Boolean) {
+        val before = this.getInnerValue()
+        super.setValue(thisRef, property, value)
+        if (before != value) {
+            onChanged?.invoke()
+        }
+    }
+}
+
+class DrawableCallbackViewVariable(styleIndex: Int, toAttachTo: ViewAttributeList, onUpdate: EmptyFunction) :
+        DrawableViewVariable(styleIndex, toAttachTo, onUpdate) {
+
+    var onChanged: EmptyFunction? = null
+    
+    override fun setValue(thisRef: Any?, property: KProperty<*>, value: Drawable?) {
         val before = this.getInnerValue()
         super.setValue(thisRef, property, value)
         if (before != value) {

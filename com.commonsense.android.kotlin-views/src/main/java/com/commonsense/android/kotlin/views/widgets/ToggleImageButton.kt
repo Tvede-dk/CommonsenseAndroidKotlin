@@ -139,6 +139,9 @@ open class ToggleImageButton : AppCompatImageView, ViewAttribute, View.OnClickLi
 
     var checkedNoNotify: Boolean
         get() = internalChecked.getInnerValue()
-        set(value) = internalChecked.setNoUpdate(value)
+        set(value) {
+            internalChecked.setNoUpdate(value)
+            updateView()
+        }
 
 }

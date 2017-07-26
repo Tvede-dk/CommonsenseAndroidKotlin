@@ -9,10 +9,10 @@ import java.util.concurrent.atomic.AtomicInteger
 data class ReferenceItem<out T>(val item: T, var counter: AtomicInteger)
 
 class ReferenceCountingMap {
-    private val map: HashMap<String, ReferenceItem<Any>> = hashMapOf()
+    private val map: HashMap<String, ReferenceItem<*>> = hashMapOf()
 
 
-    fun addItem(item: Any, forKey: String) {
+    fun <T> addItem(item: T, forKey: String) {
         if (hasItem(forKey)) {
             throw RuntimeException("Disallowed to add an element to an already existing index;" +
                     " did you mean increment ?")

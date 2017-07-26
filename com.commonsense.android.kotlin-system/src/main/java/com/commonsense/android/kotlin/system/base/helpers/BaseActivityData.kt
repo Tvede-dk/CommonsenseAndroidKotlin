@@ -15,11 +15,10 @@ import com.commonsense.android.kotlin.system.base.BaseActivity
  * of data.
  *
  */
-open class BaseActivityData<out InputType : Any> : BaseActivity() {
+open class BaseActivityData<out InputType> : BaseActivity() {
 
     /**
      * Unfortunately we are unable to Type safe bypass the map though this. not in this generic manner
-     * < g
      */
     @Suppress("UNCHECKED_CAST")
     val data by lazy {

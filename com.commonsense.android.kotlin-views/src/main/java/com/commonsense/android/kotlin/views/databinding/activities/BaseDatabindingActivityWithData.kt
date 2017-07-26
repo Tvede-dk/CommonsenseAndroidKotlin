@@ -7,7 +7,7 @@ import com.commonsense.android.kotlin.system.base.helpers.BaseActivityData
 /**
  * Created by kasper on 25/07/2017.
  */
-abstract class BaseDatabindingActivityWithData<out view : ViewDataBinding, out Input : Any>
+abstract class BaseDatabindingActivityWithData<out view : ViewDataBinding, out Input>
     : BaseActivityData<Input>(), Databindable<view> {
 
     override val binding: view by lazy {

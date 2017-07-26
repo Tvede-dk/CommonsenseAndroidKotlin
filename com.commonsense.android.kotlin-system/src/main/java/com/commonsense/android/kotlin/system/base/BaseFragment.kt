@@ -16,6 +16,9 @@ import kotlinx.coroutines.experimental.android.UI
 
 open class BaseFragment : DialogFragment(), ActivityResultHelperContainer {
 
+    protected val activityAsBase
+        get() = activity as BaseActivity
+
 
     private val localJobs by lazy {
         JobContainer()

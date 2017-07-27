@@ -21,7 +21,7 @@ import com.commonsense.android.kotlin.system.base.helpers.startActivityForResult
 // -- hmm somewhat along those
 class PictureRetriver(private val activity: BaseActivity,
                       private val callback: (path: Uri, fromCamera: Boolean) -> Unit,
-                      private val optionalCancelCallback: EmptyFunction?,
+                      private val optionalCancelCallback: EmptyFunction? = null,
                       private val requestCode: Int = 18877) {
 
     var thumbnail: Bitmap? = null

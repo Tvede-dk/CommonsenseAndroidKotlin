@@ -7,6 +7,7 @@ buildscript {
     ext.androidGradleVersion = "3.0.0-alpha7"
     ext.roboElectricVersion = "3.4-rc5"
     ext.espressoVersion = "2.2.2"
+    ext.espressoVersion = "3.0.0"
 
     repositories {
         jcenter()

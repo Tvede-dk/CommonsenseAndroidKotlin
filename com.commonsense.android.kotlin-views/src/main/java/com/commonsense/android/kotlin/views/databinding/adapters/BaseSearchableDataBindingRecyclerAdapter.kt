@@ -42,12 +42,14 @@ fun <T : Any, Vm : ViewDataBinding, F : Any> IRenderModelItem<T, Vm>.toSearchabl
 
 typealias IGenericSearchRender<F> = IRenderModelSearchItem<*, *, F>
 
-
 //TODO performActionIfIsValidFilter for all modifiers ??????
+/**
+ *
+ */
 open class AbstractSearchableDataBindingRecyclerAdapter<
         T : IGenericSearchRender<F>,
         F>(context: Context)
-    : AbstractDataBindingRecyclerAdapter<T>(context.applicationContext) {
+    : DataBindingRecyclerAdapter<T>(context.applicationContext) {
 
     private val allDataCollection: TypeSectionLookupRepresentative<T, InflatingFunction<*>>
             = TypeSectionLookupRepresentative()
@@ -63,7 +65,6 @@ open class AbstractSearchableDataBindingRecyclerAdapter<
             if (filter != filterValue) {
                 return
             }
-
             L.error("filter", "on " + allDataCollection.size)
             val items = allDataCollection.mapAll {
                 it.filter { isAcceptedByFilter(it, filter) }
@@ -77,15 +78,15 @@ open class AbstractSearchableDataBindingRecyclerAdapter<
     }
 
     override fun add(newItem: T, inSection: Int) {
-        performActionIfIsValidFilter(newItem, { super.add(newItem, inSection) })
         allDataCollection.add(newItem, inSection)
+        performActionIfIsValidFilter(newItem, { super.add(newItem, inSection) })
     }
 
     override fun addAll(items: Collection<T>, inSection: Int) {
+        allDataCollection.addAll(items, inSection)
         items.forEach {
             performActionIfIsValidFilter(it, { super.add(it, inSection) })
         }
-        allDataCollection.addAll(items, inSection)
     }
 
     private inline fun performActionIfIsValidFilter(newItem: T, crossinline action: (T) -> Unit) {
@@ -95,47 +96,46 @@ open class AbstractSearchableDataBindingRecyclerAdapter<
     }
 
     override fun remove(newItem: T, inSection: Int): Int? {
-        val index = super.remove(newItem, inSection)
         allDataCollection.removeItem(newItem, inSection)
-        return index
+        return super.remove(newItem, inSection)
     }
 
     override fun removeAt(row: Int, inSection: Int) {
-        super.removeAt(row, inSection)
         allDataCollection.removeAt(row, inSection)
+        super.removeAt(row, inSection)
     }
 
     override fun insertAll(items: Collection<T>, startPosition: Int, inSection: Int) {
-        super.insertAll(items, startPosition, inSection)
         allDataCollection.insertAll(items, startPosition, inSection)
+        super.insertAll(items, startPosition, inSection)
     }
 
     override fun insertAll(vararg items: T, startPosition: Int, inSection: Int) {
         val asList = items.asList()
-        super.insertAll(asList, startPosition, inSection)
         allDataCollection.insertAll(asList, startPosition, inSection)
+        super.insertAll(asList, startPosition, inSection)
     }
 
     override fun addAll(vararg items: T, inSection: Int) {
         val asList = items.asList()
-        super.addAll(asList, inSection)
         allDataCollection.addAll(asList, inSection)
+        super.addAll(asList, inSection)
     }
 
     override fun replace(newItem: T, position: Int, inSection: Int) {
-        super.replace(newItem, position, inSection)
         allDataCollection.replace(newItem, position, inSection)
+        super.replace(newItem, position, inSection)
     }
 
     override fun removeIn(range: IntRange, inSection: Int) {
-        super.removeIn(range, inSection)
         allDataCollection.removeInRange(range, inSection)
+        super.removeIn(range, inSection)
     }
 
 
     override fun clear() {
-        super.clear()
         allDataCollection.clear()
+        super.clear()
     }
 
     private fun isAcceptedByFilter(newItem: T?, value: F?): Boolean {
@@ -171,43 +171,43 @@ open class AbstractSearchableDataBindingRecyclerAdapter<
     }
 
     override fun onAttachedToRecyclerView(recyclerView: RecyclerView?) {
-        super.onAttachedToRecyclerView(recyclerView)
         filterActor.setup {
             filterBySuspend(it)
         }
+        super.onAttachedToRecyclerView(recyclerView)
     }
 
     override fun onDetachedFromRecyclerView(recyclerView: RecyclerView?) {
-        super.onDetachedFromRecyclerView(recyclerView)
         filterActor.clear()
+        super.onDetachedFromRecyclerView(recyclerView)
     }
 
     fun getFilter(): F? = filterValue
 
     override fun insert(item: T, atRow: Int, inSection: Int) {
-        super.insert(item, atRow, inSection)
         allDataCollection.insert(item, atRow, inSection)
+        super.insert(item, atRow, inSection)
     }
 
     override fun setSection(items: List<T>, inSection: Int) {
-        super.setSection(items, inSection)
         allDataCollection.setSection(items, inSection)
+        super.setSection(items, inSection)
     }
 
 
     override fun hideSection(sectionIndex: Int) {
-        super.hideSection(sectionIndex)
         allDataCollection.ignoreSection(sectionIndex)
+        super.hideSection(sectionIndex)
     }
 
     override fun showSection(sectionIndex: Int) {
-        super.showSection(sectionIndex)
         allDataCollection.acceptSection(sectionIndex)
+        super.showSection(sectionIndex)
     }
 
     override fun removeAll(items: List<T>, inSection: Int) {
-        super.removeAll(items, inSection)
         allDataCollection.removeItems(items, inSection)
+        super.removeAll(items, inSection)
     }
 }
 

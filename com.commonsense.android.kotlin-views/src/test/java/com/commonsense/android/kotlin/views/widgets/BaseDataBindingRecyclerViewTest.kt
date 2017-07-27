@@ -6,7 +6,7 @@ import android.databinding.ViewDataBinding
 import android.view.View
 import com.commonsense.android.kotlin.test.BaseRoboElectricTest
 import com.commonsense.android.kotlin.views.databinding.adapters.BaseDataBindingRecyclerAdapter
-import com.commonsense.android.kotlin.views.databinding.adapters.RenderModelItem
+import com.commonsense.android.kotlin.views.databinding.adapters.RenderModel
 import org.junit.Assert
 import org.junit.Test
 import org.robolectric.annotation.Config
@@ -51,14 +51,14 @@ class BaseDataBindingRecyclerViewTest : BaseRoboElectricTest() {
     }
 
 
-    private fun createVm2RenderModel(): RenderModelItem<String, TestVm2> {
-        return RenderModelItem("",
+    private fun createVm2RenderModel(): RenderModel<String, TestVm2> {
+        return RenderModel("",
                 { _, _, _ -> TestVm2(context) },
                 TestVm2::class.java, { _, _, _ -> })
     }
 
-    private fun createVm1RenderModel(): RenderModelItem<String, TestVm1> {
-        return RenderModelItem("",
+    private fun createVm1RenderModel(): RenderModel<String, TestVm1> {
+        return RenderModel("",
                 { _, _, _ -> TestVm1(context) },
                 TestVm1::class.java, { _, _, _ -> })
     }

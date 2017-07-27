@@ -3,15 +3,15 @@ package com.commonsense.android.kotlin.views.features
 import com.commonsense.android.kotlin.base.EmptyFunction
 import com.commonsense.android.kotlin.base.extensions.collections.invokeEachWith
 import com.commonsense.android.kotlin.base.patterns.ToggleBoolean
-import com.commonsense.android.kotlin.views.databinding.adapters.AbstractDataBindingRecyclerAdapter
+import com.commonsense.android.kotlin.views.databinding.adapters.DataBindingRecyclerAdapter
 import com.commonsense.android.kotlin.views.databinding.adapters.IRenderModelItem
 
 /**
  * Created by Kasper Tvede on 21-07-2017.
  */
-typealias SectionOperation<T> = AbstractDataBindingRecyclerAdapter<T>.() -> Unit
+typealias SectionOperation<T> = DataBindingRecyclerAdapter<T>.() -> Unit
 
-typealias FunctionAdapterBoolean<T> = (AbstractDataBindingRecyclerAdapter<T>) -> Boolean
+typealias FunctionAdapterBoolean<T> = (DataBindingRecyclerAdapter<T>) -> Boolean
 
 private class SectionTransactionCommando<T : IRenderModelItem<*, *>>(
         val applyOperation: SectionOperation<T>,
@@ -23,7 +23,7 @@ class SectionRecyclerTransaction<T : IRenderModelItem<*, *>> {
 
     private val resetTransactions: List<SectionOperation<T>>
 
-    private val adapter: AbstractDataBindingRecyclerAdapter<T>
+    private val adapter: DataBindingRecyclerAdapter<T>
 
     private val isApplied = ToggleBoolean(false)
 
@@ -33,7 +33,7 @@ class SectionRecyclerTransaction<T : IRenderModelItem<*, *>> {
 
     private constructor(applyTransactions: List<SectionOperation<T>>,
                         resetTransactions: List<SectionOperation<T>>,
-                        adapter: AbstractDataBindingRecyclerAdapter<T>,
+                        adapter: DataBindingRecyclerAdapter<T>,
                         allowExternalModifications: Boolean) {
 
         this.adapter = adapter
@@ -80,7 +80,7 @@ class SectionRecyclerTransaction<T : IRenderModelItem<*, *>> {
         oldSize = adapter.itemCount
     }
 
-    class Builder<T : IRenderModelItem<*, *>>(private val adapter: AbstractDataBindingRecyclerAdapter<T>) {
+    class Builder<T : IRenderModelItem<*, *>>(private val adapter: DataBindingRecyclerAdapter<T>) {
 
         private val operations = mutableListOf<SectionTransactionCommando<T>>()
 

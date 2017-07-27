@@ -51,14 +51,20 @@ class TypeSectionLookupRepresentative<T : TypeHashCodeLookupRepresent<Rep>, out 
 
 
     //<editor-fold desc="Add functions">
-    fun add(item: T, @IntRange(from = 0) inSection: Int): SectionLocation {
+    fun add(item: T, @IntRange(from = 0) inSection: Int): SectionLocation? {
         val sectionUpdate = addSectionIfMissing(inSection)
         updateCacheForSection(inSection) {
             data[inSection].collection.add(item)
             lookup.add(item)
         }
+        if (isSectionIgnored(inSection)) {
+            return null
+        }
         return SectionLocation(sectionUpdate.inRaw.endInclusive + 1, sectionUpdate.inSection.endInclusive + 1)
     }
+
+    private fun isSectionIgnored(inSection: Int): Boolean =
+            data.get(inSection, null)?.isIgnored ?: false
 
     fun insert(item: T, @IntRange(from = 0) atRow: Int, @IntRange(from = 0) inSection: Int): SectionLocation? {
         if (!sectionExists(inSection) || !data[inSection].collection.isIndexValidForInsert(atRow)) {
@@ -70,15 +76,21 @@ class TypeSectionLookupRepresentative<T : TypeHashCodeLookupRepresent<Rep>, out 
             data[inSection].collection.add(atRow, item)
             lookup.add(item)
         }
+        if (isSectionIgnored(inSection)) {
+            return null
+        }
         return SectionLocation(sectionUpdate.inRaw.start + atRow, atRow)
     }
 
 
-    fun addAll(items: Collection<T>, @IntRange(from = 0) inSection: Int): SectionUpdate {
+    fun addAll(items: Collection<T>, @IntRange(from = 0) inSection: Int): SectionUpdate? {
         val section = addSectionIfMissing(inSection)
         updateCacheForSection(inSection) {
             data.get(inSection).collection.addAll(items)
             lookup.addAll(items)
+        }
+        if (isSectionIgnored(inSection)) {
+            return null
         }
         return SectionUpdate(section.inRaw.largest until section.inRaw.largest + items.size,
                 section.inSection.largest until section.inSection.largest + items.size)
@@ -92,6 +104,9 @@ class TypeSectionLookupRepresentative<T : TypeHashCodeLookupRepresent<Rep>, out 
         updateCacheForSection(inSection) {
             data[inSection].collection.addAll(startPosition, items)
             lookup.addAll(items)
+        }
+        if (isSectionIgnored(inSection)) {
+            return null
         }
         return SectionUpdate(section.inRaw.largest + startPosition until section.inRaw.largest + startPosition + items.size,
                 section.inSection.largest + startPosition until section.inSection.largest + startPosition + items.size)
@@ -108,7 +123,8 @@ class TypeSectionLookupRepresentative<T : TypeHashCodeLookupRepresent<Rep>, out 
             } else {
                 data[inSection].collection.removeAt(indexOf)
                 lookup.remove(item)
-                SectionLocation(section.inRaw.start + indexOf, indexOf)
+                isSectionIgnored(inSection).map(null,
+                        SectionLocation(section.inRaw.start + indexOf, indexOf))
             }
         }
     }
@@ -121,7 +137,8 @@ class TypeSectionLookupRepresentative<T : TypeHashCodeLookupRepresent<Rep>, out 
         return updateCacheForSection(inSection) {
             val item = data[inSection].collection.removeAt(row)
             lookup.remove(item)
-            SectionLocation(sectionLocation.inRaw.start + row, row)
+            isSectionIgnored(inSection).map(null,
+                    SectionLocation(sectionLocation.inRaw.start + row, row))
         }
     }
 
@@ -141,7 +158,9 @@ class TypeSectionLookupRepresentative<T : TypeHashCodeLookupRepresent<Rep>, out 
         updateCacheForSection(inSection) {
             lookup.removeAll(data[inSection].collection.subList(range))
             data[inSection].collection.removeAll(range)
-
+        }
+        if (isSectionIgnored(inSection)) {
+            return null
         }
         return SectionUpdate((section.inRaw.start + range.start) until
                 (section.inRaw.start + range.largest + 1), range)
@@ -154,6 +173,9 @@ class TypeSectionLookupRepresentative<T : TypeHashCodeLookupRepresent<Rep>, out 
             return null
         }
         data[inSection].collection.replace(newItem, atRow)
+        if (isSectionIgnored(inSection)) {
+            return null
+        }
         return SectionLocation(sectionLocation.inRaw.start + atRow, atRow)
     }
 
@@ -164,17 +186,18 @@ class TypeSectionLookupRepresentative<T : TypeHashCodeLookupRepresent<Rep>, out 
     /**
      * returns what have changed. (the diff).
      */
-    fun setSection(items: List<T>, @IntRange(from = 0) inSection: Int): SectionUpdates {
+    fun setSection(items: List<T>, @IntRange(from = 0) inSection: Int): SectionUpdates? {
         val removed = clearSection(inSection)
         val added = addAll(items, inSection)
         if (removed == null) {
             return SectionUpdates(null, added, removed)
         }
 
+        val addedSafe = added ?: return null
 
-        val inSectionChangedEnd = minOf(removed.inSection.length, added.inSection.length)
+        val inSectionChangedEnd = minOf(removed.inSection.length, addedSafe.inSection.length)
 
-        val startOffsetRaw = added.inRaw.start
+        val startOffsetRaw = addedSafe.inRaw.start
         val changedEndOffSetRaw = startOffsetRaw + inSectionChangedEnd
         //if the list is empty, then no change can occur => null.
         val changedRange = items.isEmpty().map(null,
@@ -182,6 +205,10 @@ class TypeSectionLookupRepresentative<T : TypeHashCodeLookupRepresent<Rep>, out 
 
         val removedLength = removed.inSection.length
         val addedLength = added.inSection.length
+
+        if (isSectionIgnored(inSection)) {
+            return null
+        }
 
         return when {
             removedLength > addedLength -> {
@@ -301,6 +328,9 @@ class TypeSectionLookupRepresentative<T : TypeHashCodeLookupRepresent<Rep>, out 
         updateCacheForSection(inSection) {
             data[inSection].collection.clear()
         }
+        if (isSectionIgnored(inSection)) {
+            return null
+        }
         return location
     }
 
@@ -321,6 +351,7 @@ class TypeSectionLookupRepresentative<T : TypeHashCodeLookupRepresent<Rep>, out 
         val location = calculateSectionLocation(sectionIndex)
         data.remove(sectionIndex)
         cachedSize -= section.size
+
         return location
     }
 

@@ -23,15 +23,25 @@ import java.lang.ref.WeakReference
  * Created by kasper on 17/05/2017.
  */
 
-typealias BindingFunction = (BaseViewHolderItem<*>) -> Unit
-
-
+/**
+ *
+ */
 typealias InflatingFunction<Vm> = (inflater: LayoutInflater, parent: ViewGroup?, attach: Boolean) -> BaseViewHolderItem<Vm>
 
+
+/**
+ * Defines the required information for a data binding recycler adapter.
+ */
 open class BaseViewHolderItem<out T : ViewDataBinding>(val item: T) : RecyclerView.ViewHolder(item.root) {
+    /**
+     * The view's "type", which is the type of the class (which is unique, by jvm specification).
+     */
     val viewBindingTypeValue = item.javaClass.hashCode()
 }
 
+/**
+ *
+ */
 interface IRenderModelItem<T : Any, Vm : ViewDataBinding> :
         TypeHashCodeLookupRepresent<InflatingFunction<Vm>> {
 
@@ -46,6 +56,9 @@ interface IRenderModelItem<T : Any, Vm : ViewDataBinding> :
     fun getInflaterFunction(): ViewInflatingFunction<Vm>
 }
 
+/**
+ *  The Root of databinding render models (factors the most common stuff out)
+ */
 abstract class BaseRenderModel<
         T : Any,
         Vm : ViewDataBinding>(val item: T, classType: Class<Vm>)
@@ -79,7 +92,10 @@ abstract class BaseRenderModel<
     }
 }
 
-open class RenderModelItem<
+/**
+ * A simple renderable model containing all information required for a databinding recycler adapter
+ */
+open class RenderModel<
         T : Any,
         Vm : ViewDataBinding>(private val item: T,
                               private val vmInflater: ViewInflatingFunction<Vm>,
@@ -121,8 +137,10 @@ open class RenderModelItem<
     }
 }
 
-//Base class for data binding recycler adapters.
-abstract class AbstractDataBindingRecyclerAdapter<T>(context: Context) :
+/**
+ *Base class for data binding recycler adapters.
+ */
+abstract class DataBindingRecyclerAdapter<T>(context: Context) :
         RecyclerView.Adapter<BaseViewHolderItem<*>>() where T : IRenderModelItem<*, *> {
 
     override fun getItemId(position: Int): Long = RecyclerView.NO_ID
@@ -161,39 +179,39 @@ abstract class AbstractDataBindingRecyclerAdapter<T>(context: Context) :
     override fun getItemCount(): Int = dataCollection.size
 
     open fun add(newItem: T, inSection: Int): Unit = updateData {
-        dataCollection.add(newItem, inSection).rawRow.apply {
+        dataCollection.add(newItem, inSection)?.rawRow?.apply {
             notifyItemInserted(this)
         }
     }
 
     open fun addAll(items: Collection<T>, inSection: Int): Unit = updateData {
-        dataCollection.addAll(items, inSection).inRaw.apply {
+        dataCollection.addAll(items, inSection)?.inRaw?.apply {
             notifyItemRangeInserted(this.start, this.length)
         }
 
     }
 
     open fun insert(item: T, atRow: Int, inSection: Int): Unit = updateData {
-        dataCollection.insert(item, atRow, inSection)?.rawRow.apply {
-            this?.let { notifyItemInserted(it) }
+        dataCollection.insert(item, atRow, inSection)?.rawRow?.apply {
+            notifyItemInserted(this)
         }
     }
 
     open fun insertAll(items: Collection<T>, startPosition: Int, inSection: Int): Unit = updateData {
-        dataCollection.insertAll(items, inSection, startPosition)?.inRaw.apply {
-            this?.let { notifyItemRangeInserted(it.start, it.length) }
+        dataCollection.insertAll(items, inSection, startPosition)?.inRaw?.apply {
+            notifyItemRangeInserted(start, length)
         }
     }
 
     open fun addAll(vararg items: T, inSection: Int): Unit = updateData {
-        dataCollection.addAll(items.asList(), inSection).inRaw.apply {
-            notifyItemRangeInserted(this.start, this.length)
+        dataCollection.addAll(items.asList(), inSection)?.inRaw?.apply {
+            notifyItemRangeInserted(start, length)
         }
     }
 
     open fun insertAll(vararg items: T, startPosition: Int, inSection: Int): Unit = updateData {
-        dataCollection.insertAll(items.asList(), startPosition, inSection)?.inRaw.apply {
-            this?.let { notifyItemRangeInserted(it.start, it.length) }
+        dataCollection.insertAll(items.asList(), startPosition, inSection)?.inRaw?.apply {
+            notifyItemRangeInserted(start, length)
         }
     }
 
@@ -204,8 +222,8 @@ abstract class AbstractDataBindingRecyclerAdapter<T>(context: Context) :
     }
 
     open fun removeAt(row: Int, inSection: Int): Unit = updateData {
-        dataCollection.removeAt(row, inSection)?.rawRow.apply {
-            this?.let { notifyItemRemoved(it) }
+        dataCollection.removeAt(row, inSection)?.rawRow?.apply {
+            notifyItemRemoved(this)
         }
     }
 
@@ -217,10 +235,8 @@ abstract class AbstractDataBindingRecyclerAdapter<T>(context: Context) :
 
 
     open fun removeIn(range: kotlin.ranges.IntRange, inSection: Int): Unit = updateData {
-        dataCollection.removeInRange(range, inSection)?.inRaw.apply {
-            this?.let {
-                notifyItemRangeRemoved(it.start + range.start, range.length)
-            }
+        dataCollection.removeInRange(range, inSection)?.inRaw?.apply {
+            notifyItemRangeRemoved(start + range.start, range.length)
         }
     }
 
@@ -234,15 +250,15 @@ abstract class AbstractDataBindingRecyclerAdapter<T>(context: Context) :
 
 
     protected fun addNoNotify(item: T, inSection: Int): Unit = updateData {
-        dataCollection.add(item, inSection).rawRow
+        dataCollection.add(item, inSection)?.rawRow
     }
 
     protected fun addNoNotify(items: List<T>, inSection: Int): Unit = updateData {
-        dataCollection.addAll(items, inSection).inRaw
+        dataCollection.addAll(items, inSection)?.inRaw
     }
 
     open fun setSection(items: List<T>, inSection: Int) {
-        val (changes, added, removed) = dataCollection.setSection(items, inSection)
+        val (changes, added, removed) = dataCollection.setSection(items, inSection) ?: return
         changes?.let {
             notifyItemRangeChanged(it.inRaw.start, it.inRaw.length)
         }
@@ -368,8 +384,9 @@ abstract class AbstractDataBindingRecyclerAdapter<T>(context: Context) :
 
 }
 
+/**  */
 open class BaseDataBindingRecyclerAdapter(context: Context) :
-        AbstractDataBindingRecyclerAdapter<IRenderModelItem<*, *>>(context)
+        DataBindingRecyclerAdapter<IRenderModelItem<*, *>>(context)
 
 
 class DefaultDataBindingRecyclerAdapter(context: Context) : BaseDataBindingRecyclerAdapter(context)

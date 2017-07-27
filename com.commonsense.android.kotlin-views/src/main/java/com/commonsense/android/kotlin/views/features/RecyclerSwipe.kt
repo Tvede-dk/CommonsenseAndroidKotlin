@@ -7,7 +7,7 @@ import android.support.v7.widget.helper.ItemTouchHelper
 import android.view.View
 import com.commonsense.android.kotlin.base.extensions.collections.forEachNotNull
 import com.commonsense.android.kotlin.base.extensions.collections.map
-import com.commonsense.android.kotlin.views.databinding.adapters.AbstractDataBindingRecyclerAdapter
+import com.commonsense.android.kotlin.views.databinding.adapters.DataBindingRecyclerAdapter
 import com.commonsense.android.kotlin.views.databinding.adapters.AbstractSearchableDataBindingRecyclerAdapter
 import com.commonsense.android.kotlin.views.databinding.adapters.BaseDataBindingRecyclerAdapter
 import com.commonsense.android.kotlin.views.databinding.adapters.BaseViewHolderItem
@@ -59,12 +59,12 @@ fun AbstractSearchableDataBindingRecyclerAdapter<*, *>.attachSwipeFeature(
 /**
  *
  */
-class RecyclerSwipe(recyclerAdapter: AbstractDataBindingRecyclerAdapter<*>)
+class RecyclerSwipe(recyclerAdapter: DataBindingRecyclerAdapter<*>)
     : ItemTouchHelper(innerSwipeHelper(recyclerAdapter))
 
 private data class SwipeItemViews(val startView: View?, val endView: View?, val mainView: View)
 
-private class innerSwipeHelper(val recyclerAdapter: AbstractDataBindingRecyclerAdapter<*>)
+private class innerSwipeHelper(val recyclerAdapter: DataBindingRecyclerAdapter<*>)
     : ItemTouchHelper.Callback() {
 
     override fun getMovementFlags(recyclerView: RecyclerView?, viewHolder: RecyclerView.ViewHolder?): Int {

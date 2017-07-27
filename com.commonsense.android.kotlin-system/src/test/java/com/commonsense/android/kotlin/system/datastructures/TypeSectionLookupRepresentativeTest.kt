@@ -16,6 +16,7 @@ data class TestData(val str: String) : TypeHashCodeLookupRepresent<String> {
 
 }
 
+/**  */
 @Config(manifest = Config.NONE)
 class TypeSectionLookupRepresentativeTest : BaseRoboElectricTest() {
 
@@ -27,9 +28,9 @@ class TypeSectionLookupRepresentativeTest : BaseRoboElectricTest() {
         val diff = a.differenceTo(b).diff
         diff.size().assert(0, "no diff on empty")
 
-        a.add(TestData("a"), 0).apply {
-            inSection.assert(0)
-            rawRow.assert(0)
+        a.add(TestData("a"), 0).assertNotNullApply {
+            inSection.assertNotNullAndEquals(0)
+            rawRow.assertNotNullAndEquals(0)
         }
         a.differenceTo(b).diff.apply {
             size().assert(1)
@@ -38,7 +39,7 @@ class TypeSectionLookupRepresentativeTest : BaseRoboElectricTest() {
             get(0).outerSectB.assertEmpty()
         }
 
-        b.add(TestData("a"), 0).apply {
+        b.add(TestData("a"), 0).assertNotNullApply {
             inSection.assert(0)
             rawRow.assert(0)
         }
@@ -49,11 +50,11 @@ class TypeSectionLookupRepresentativeTest : BaseRoboElectricTest() {
             get(0).outerSectB.assertEmpty()
         }
 
-        b.add(TestData("b"), 50).apply {
+        b.add(TestData("b"), 50).assertNotNullApply {
             inSection.assert(0)
             rawRow.assert(1)
         }
-        a.add(TestData("c"), 20).apply {
+        a.add(TestData("c"), 20).assertNotNullApply {
             inSection.assert(0)
             rawRow.assert(1)
         }
@@ -365,23 +366,29 @@ class TypeSectionLookupRepresentativeTest : BaseRoboElectricTest() {
         val a = TypeSectionLookupRepresentative<TestData, String>()
 
         a.assertSizeAndSections(0, 0)
-        a.setSection((0 until 50).map { TestData(it.toString()) }, 5).optAdded.assertNotNullApply {
-            inSection.length.assert(50, "should have added 50 elements")
-            inSection.start.assert(0, "should start at 0")
-            inSection.endInclusive.assert(49, "end should be expected 49 (inclusive), as the com.commonsense.android.kotlin.base.extensions.getLength")
+        a.setSection((0 until 50).map { TestData(it.toString()) }, 5).assertNotNullApply {
+            optAdded.assertNotNullApply {
+                inSection.length.assert(50, "should have added 50 elements")
+                inSection.start.assert(0, "should start at 0")
+                inSection.endInclusive.assert(49, "end should be expected 49 (inclusive), as the com.commonsense.android.kotlin.base.extensions.getLength")
+            }
         }
         a.assertSizeAndSections(50, 1)
-        a.setSection((0 until 100).map { TestData(it.toString()) }, 0).optAdded.assertNotNullApply {
-            inSection.length.assert(100, "should have added 100 elements")
-            inSection.start.assert(0, "should start at 0")
-            inSection.endInclusive.assert(99, "end should be expected 99 (inclusive), as the com.commonsense.android.kotlin.base.extensions.getLength -1 ")
+        a.setSection((0 until 100).map { TestData(it.toString()) }, 0).assertNotNullApply {
+            optAdded.assertNotNullApply {
+                inSection.length.assert(100, "should have added 100 elements")
+                inSection.start.assert(0, "should start at 0")
+                inSection.endInclusive.assert(99, "end should be expected 99 (inclusive), as the com.commonsense.android.kotlin.base.extensions.getLength -1 ")
+            }
         }
         a.assertSizeAndSections(150, 2)
 
-        a.setSection((0 until 10).map { TestData(it.toString()) }, 10).optAdded.assertNotNullApply {
-            inSection.length.assert(10, "should have added 10 elements")
-            inSection.start.assert(0, "should start at 0")
-            inSection.endInclusive.assert(9, "end should be expected 9 (inclusive), as the com.commonsense.android.kotlin.base.extensions.getLength -1 ")
+        a.setSection((0 until 10).map { TestData(it.toString()) }, 10).assertNotNullApply {
+            optAdded.assertNotNullApply {
+                inSection.length.assert(10, "should have added 10 elements")
+                inSection.start.assert(0, "should start at 0")
+                inSection.endInclusive.assert(9, "end should be expected 9 (inclusive), as the com.commonsense.android.kotlin.base.extensions.getLength -1 ")
+            }
         }
         a.assertSizeAndSections(160, 3)
 
@@ -487,7 +494,6 @@ class TypeSectionLookupRepresentativeTest : BaseRoboElectricTest() {
             optRemoved.assertNull()
         }
         a.assertSizeAndSections(100, 3) //we just added 10 and changed 10
-
     }
 
 
@@ -533,52 +539,52 @@ class TypeSectionLookupRepresentativeTest : BaseRoboElectricTest() {
             section.assert(9)
         }
 
+
+
+        @Test
+        fun testSectionVisibility() {
+            val a = TypeSectionLookupRepresentative<TestData, String>()
+            for (i in 0 until 20) {
+                a.addAll((0 until 50).map { TestData(it.toString()) }, i)
+            }
+            a.assertSizeAndSections(20 * 50, 20)
+            a.ignoreSection(0).assertNotNullApply {
+
+            }
+            a.assertSizeAndSections(19 * 50, 20)
+            a.acceptSection(0).assertNotNullApply {
+
+            }
+            a.assertSizeAndSections(20 * 50, 20)
+            a.ignoreSection(19).assertNotNullApply {
+
+            }
+            a.assertSizeAndSections(19 * 50, 20)
+            a.acceptSection(19).assertNotNullApply {
+
+            }
+            a.assertSizeAndSections(20 * 50, 20)
+
+            //ignore non existing sections.
+            a.ignoreSection(20).assertNull()
+            a.acceptSection(20).assertNull()
+
+            //try by hiding a lot and then showing them in the reverse order.
+            val rangeToIgnore = (0 until 20 step 3)
+            for (i in rangeToIgnore) {
+                a.ignoreSection(i)
+            }
+            rangeToIgnore.toIntArray()
+            a.assertSizeAndSections((20 - rangeToIgnore.length) * 50, 20)
+
+            for (i in 20 downTo 0) {
+                a.acceptSection(i)
+            }
+            a.assertSizeAndSections(20 * 50, 20)
+        }
     }
-
-    @Test
-    fun testSectionVisibility() {
-        val a = TypeSectionLookupRepresentative<TestData, String>()
-        for (i in 0 until 20) {
-            a.addAll((0 until 50).map { TestData(it.toString()) }, i)
-        }
-        a.assertSizeAndSections(20 * 50, 20)
-        a.ignoreSection(0).assertNotNullApply {
-
-        }
-        a.assertSizeAndSections(19 * 50, 20)
-        a.acceptSection(0).assertNotNullApply {
-
-        }
-        a.assertSizeAndSections(20 * 50, 20)
-        a.ignoreSection(19).assertNotNullApply {
-
-        }
-        a.assertSizeAndSections(19 * 50, 20)
-        a.acceptSection(19).assertNotNullApply {
-
-        }
-        a.assertSizeAndSections(20 * 50, 20)
-
-        //ignore non existing sections.
-        a.ignoreSection(20).assertNull()
-        a.acceptSection(20).assertNull()
-
-        //try by hiding a lot and then showing them in the reverse order.
-        val rangeToIgnore = (0 until 20 step 3)
-        for (i in rangeToIgnore) {
-            a.ignoreSection(i)
-        }
-        rangeToIgnore.toIntArray()
-        a.assertSizeAndSections((20 - rangeToIgnore.length) * 50, 20)
-
-        for (i in 20 downTo 0) {
-            a.acceptSection(i)
-        }
-        a.assertSizeAndSections(20 * 50, 20)
-
-    }
-
 }
+
 
 fun TypeSectionLookupRepresentative<*, *>.assertSizeAndSections(totalSize: Int, sections: Int, message: String = "") {
     size.assert(totalSize, message)

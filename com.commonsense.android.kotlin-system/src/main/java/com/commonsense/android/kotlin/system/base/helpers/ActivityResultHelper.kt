@@ -101,7 +101,7 @@ class ActivityResultHelper(warningLogger: FunctionUnit<String>? = null) {
 
     private fun addReceiver(receiver: ActivityResultCallbackInterface) {
         if (activityResultListeners[receiver.requestCode] != null) {
-            weakLogger?.get()?.invoke("Overwriting an actual listener, for request code ${receiver.requestCode}")
+            weakLogger.get()?.invoke("Overwriting an actual listener, for request code ${receiver.requestCode}")
             throw RuntimeException("Overwriting an actual listener, this is unsupported / not allowed behavior.")
         }
         activityResultListeners.put(receiver.requestCode, receiver)

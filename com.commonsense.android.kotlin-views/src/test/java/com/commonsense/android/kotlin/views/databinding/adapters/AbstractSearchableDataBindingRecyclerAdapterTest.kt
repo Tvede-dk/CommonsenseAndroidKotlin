@@ -2,6 +2,7 @@ package com.commonsense.android.kotlin.views.databinding.adapters
 
 import android.databinding.ViewDataBinding
 import com.commonsense.android.kotlin.test.*
+import org.junit.Ignore
 import org.junit.Test
 import org.robolectric.annotation.Config
 
@@ -292,16 +293,103 @@ class AbstractSearchableDataBindingRecyclerAdapterTest : BaseRoboElectricTest() 
         adapter.showSection(0)
         adapter.itemCount.assert(4, "all should be as before hiding the section.")
 
-        
-    }
-
-    @Test
-    fun testFilterAcrossSections() {
 
     }
 
     @Test
-    fun testFilter() {
+    @Ignore
+    fun testFilterAsync() {
+
+        //TODO
+        //this requiers a dataobserver that "unlocks" us (thus we are to make "changes" )
+
+    }
+
+
+    @Test
+    fun testSectionVisibility() {
+        val adapter = createAdapter()
+        addItems(adapter, 50, 4)
+
+        adapter.itemCount.assert(50)
+
+        adapter.hideSection(4)
+        adapter.isSectionVisible(4).assert(false)
+        adapter.itemCount.assert(0)
+
+        adapter.showSection(3)
+        adapter.isSectionVisible(4).assert(false)
+        adapter.itemCount.assert(0)
+
+
+
+        adapter.showSection(4)
+        adapter.isSectionVisible(4).assert(true)
+        adapter.itemCount.assert(50)
+
+
+        adapter.toggleSectionVisibility(4)
+        adapter.isSectionVisible(4).assert(false)
+        adapter.itemCount.assert(0)
+
+
+        adapter.toggleSectionVisibility(4)
+        adapter.isSectionVisible(4).assert(true)
+        adapter.itemCount.assert(50)
+
+
+        adapter.setSectionVisibility(4, true)
+        adapter.isSectionVisible(4).assert(true)
+        adapter.itemCount.assert(50)
+
+
+        adapter.setSectionVisibility(4, false)
+        adapter.isSectionVisible(4).assert(false)
+        adapter.itemCount.assert(0)
+
+
+
+        adapter.setSectionVisibility(0, false)
+        adapter.itemCount.assert(0)
+
+        addItems(adapter, 20, 0)
+        adapter.itemCount.assert(20)
+
+        adapter.setSectionVisibility(0, false)
+        adapter.itemCount.assert(0)
+
+        adapter.setSectionVisibility(0, true)
+        adapter.itemCount.assert(20)
+
+        adapter.setSection(listOf(), 0)
+        adapter.itemCount.assert(0)
+
+        adapter.setSection(createItems(1), 4)
+        adapter.itemCount.assert(0)
+
+        adapter.showSection(4)
+        adapter.itemCount.assert(1)
+
+        adapter.toggleSectionVisibility(4)
+        adapter.itemCount.assert(0)
+
+        addItems(adapter, 5, 1)
+        addItems(adapter, 7, 10)
+        adapter.itemCount.assert(12)
+
+        adapter.toggleSectionsVisibility(1, 10, 4)
+        adapter.setSectionVisibility(0, true)
+        adapter.setSectionVisibility(1, false)
+        adapter.setSectionVisibility(10, false)
+        adapter.itemCount.assert(1)
+
+
+        adapter.toggleSectionsVisibility(1, 10, 4)
+        adapter.setSectionVisibility(0, false)
+        adapter.setSectionVisibility(1, true)
+        adapter.setSectionVisibility(10, true)
+        adapter.itemCount.assert(12)
+
 
     }
 

@@ -538,52 +538,52 @@ class TypeSectionLookupRepresentativeTest : BaseRoboElectricTest() {
             row.assert(9)
             section.assert(9)
         }
+    }
 
 
-
-        @Test
-        fun testSectionVisibility() {
-            val a = TypeSectionLookupRepresentative<TestData, String>()
-            for (i in 0 until 20) {
-                a.addAll((0 until 50).map { TestData(it.toString()) }, i)
-            }
-            a.assertSizeAndSections(20 * 50, 20)
-            a.ignoreSection(0).assertNotNullApply {
-
-            }
-            a.assertSizeAndSections(19 * 50, 20)
-            a.acceptSection(0).assertNotNullApply {
-
-            }
-            a.assertSizeAndSections(20 * 50, 20)
-            a.ignoreSection(19).assertNotNullApply {
-
-            }
-            a.assertSizeAndSections(19 * 50, 20)
-            a.acceptSection(19).assertNotNullApply {
-
-            }
-            a.assertSizeAndSections(20 * 50, 20)
-
-            //ignore non existing sections.
-            a.ignoreSection(20).assertNull()
-            a.acceptSection(20).assertNull()
-
-            //try by hiding a lot and then showing them in the reverse order.
-            val rangeToIgnore = (0 until 20 step 3)
-            for (i in rangeToIgnore) {
-                a.ignoreSection(i)
-            }
-            rangeToIgnore.toIntArray()
-            a.assertSizeAndSections((20 - rangeToIgnore.length) * 50, 20)
-
-            for (i in 20 downTo 0) {
-                a.acceptSection(i)
-            }
-            a.assertSizeAndSections(20 * 50, 20)
+    @Test
+    fun testSectionVisibility() {
+        val a = TypeSectionLookupRepresentative<TestData, String>()
+        for (i in 0 until 20) {
+            a.addAll((0 until 50).map { TestData(it.toString()) }, i)
         }
+        a.assertSizeAndSections(20 * 50, 20)
+        a.ignoreSection(0).assertNotNullApply {
+
+        }
+        a.assertSizeAndSections(19 * 50, 20)
+        a.acceptSection(0).assertNotNullApply {
+
+        }
+        a.assertSizeAndSections(20 * 50, 20)
+        a.ignoreSection(19).assertNotNullApply {
+
+        }
+        a.assertSizeAndSections(19 * 50, 20)
+        a.acceptSection(19).assertNotNullApply {
+
+        }
+        a.assertSizeAndSections(20 * 50, 20)
+
+        //ignore non existing sections.
+        a.ignoreSection(20).assertNull()
+        a.acceptSection(20).assertNull()
+
+        //try by hiding a lot and then showing them in the reverse order.
+        val rangeToIgnore = (0 until 20 step 3)
+        for (i in rangeToIgnore) {
+            a.ignoreSection(i)
+        }
+        rangeToIgnore.toIntArray()
+        a.assertSizeAndSections((20 - rangeToIgnore.length) * 50, 20)
+
+        for (i in 20 downTo 0) {
+            a.acceptSection(i)
+        }
+        a.assertSizeAndSections(20 * 50, 20)
     }
 }
+
 
 
 fun TypeSectionLookupRepresentative<*, *>.assertSizeAndSections(totalSize: Int, sections: Int, message: String = "") {

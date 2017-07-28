@@ -257,8 +257,8 @@ abstract class DataBindingRecyclerAdapter<T>(context: Context) :
         dataCollection.addAll(items, inSection)?.inRaw
     }
 
-    open fun setSection(items: List<T>, inSection: Int) {
-        val (changes, added, removed) = dataCollection.setSection(items, inSection) ?: return
+    open fun setSection(items: List<T>, inSection: Int) = updateData {
+        val (changes, added, removed) = dataCollection.setSection(items, inSection) ?: return@updateData
         changes?.let {
             notifyItemRangeChanged(it.inRaw.start, it.inRaw.length)
         }
@@ -284,15 +284,13 @@ abstract class DataBindingRecyclerAdapter<T>(context: Context) :
     }
 
     @UiThread
-    protected fun clearAndSetItemsNoNotify(items: List<T>, inSection: Int, isIgnored: Boolean): Unit {
-        stopScroll()
+    protected fun clearAndSetItemsNoNotify(items: List<T>, inSection: Int, isIgnored: Boolean) = updateData {
         dataCollection.setSection(items, inSection)
         isIgnored.ifTrue { dataCollection.ignoreSection(inSection) }
     }
 
     @UiThread
-    protected fun setAllSections(sections: List<TypeSection<T>>): Unit {
-        stopScroll()
+    protected fun setAllSections(sections: List<TypeSection<T>>) = updateData {
         dataCollection.setAllSections(sections)
         super.notifyDataSetChanged()
     }
@@ -335,13 +333,13 @@ abstract class DataBindingRecyclerAdapter<T>(context: Context) :
         return dataCollection[index]
     }
 
-    open fun hideSection(sectionIndex: Int) {
-        val sectionLocation = dataCollection.ignoreSection(sectionIndex)?.inRaw ?: return
+    open fun hideSection(sectionIndex: Int) = updateData {
+        val sectionLocation = dataCollection.ignoreSection(sectionIndex)?.inRaw ?: return@updateData
         notifyItemRangeRemoved(sectionLocation.start, sectionLocation.length)
     }
 
-    open fun showSection(sectionIndex: Int) {
-        val sectionLocation = dataCollection.acceptSection(sectionIndex)?.inRaw ?: return
+    open fun showSection(sectionIndex: Int) = updateData {
+        val sectionLocation = dataCollection.acceptSection(sectionIndex)?.inRaw ?: return@updateData
         notifyItemRangeInserted(sectionLocation.start, sectionLocation.length)
     }
 

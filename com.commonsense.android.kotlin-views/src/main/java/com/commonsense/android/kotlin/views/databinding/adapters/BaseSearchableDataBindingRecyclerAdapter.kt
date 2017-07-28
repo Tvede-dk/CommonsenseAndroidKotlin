@@ -43,7 +43,6 @@ fun <T : Any, Vm : ViewDataBinding, F : Any> IRenderModelItem<T, Vm>.toSearchabl
 
 typealias IGenericSearchRender<F> = IRenderModelSearchItem<*, *, F>
 
-//TODO performActionIfIsValidFilter for all modifiers ??????
 /**
  *
  */

@@ -22,7 +22,7 @@ class AbstractSearchableDataBindingRecyclerAdapterTest : BaseRoboElectricTest() 
 
     @Test
     fun testAddData() {
-        val adapter = BaseSearchableDataBindingRecyclerAdapter<String>(context)
+        val adapter = createAdapter()
         adapter.addAll(listOf(), 0)
         adapter.addAll(listOf(), 10)
         adapter.addAll(listOf(), 5)

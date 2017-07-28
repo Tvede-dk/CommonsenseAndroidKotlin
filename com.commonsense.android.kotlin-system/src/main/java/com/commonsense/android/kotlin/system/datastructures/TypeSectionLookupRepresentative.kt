@@ -1,6 +1,7 @@
 package com.commonsense.android.kotlin.system.datastructures
 
 import android.support.annotation.IntRange
+import android.support.annotation.VisibleForTesting
 import android.util.SparseArray
 import com.commonsense.android.kotlin.base.extensions.collections.*
 
@@ -350,7 +351,8 @@ class TypeSectionLookupRepresentative<T : TypeHashCodeLookupRepresent<Rep>, out 
         return location
     }
 
-    //TODO private ?
+    /**  */
+    @VisibleForTesting(otherwise = VisibleForTesting.PRIVATE)
     fun sectionAt(sectionIndex: Int): TypeSection<T>? = data[sectionIndex]
 
     private fun sectionExists(sectionIndex: Int): Boolean = data[sectionIndex, null] != null

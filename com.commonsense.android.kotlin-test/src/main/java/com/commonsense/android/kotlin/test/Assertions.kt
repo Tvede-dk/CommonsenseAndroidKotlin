@@ -81,6 +81,6 @@ inline fun assertThrows(message: String = "should throw", crossinline action: ()
     }
 }
 
-fun <T> Any.assertAs(otherValue: T) {
-    Assert.assertEquals(this as? T, otherValue)
+fun <T> Any.assertAs(otherValue: T, message: String = "") {
+    Assert.assertEquals(message, this as? T, otherValue)
 }

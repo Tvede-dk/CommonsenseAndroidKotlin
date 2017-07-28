@@ -187,8 +187,10 @@ class TypeSectionLookupRepresentative<T : TypeHashCodeLookupRepresent<Rep>, out 
      * returns what have changed. (the diff).
      */
     fun setSection(items: List<T>, @IntRange(from = 0) inSection: Int): SectionUpdates? {
+        val wasVisible = !isSectionIgnored(inSection)
         val removed = clearSection(inSection)
         val added = addAll(items, inSection)
+        setSectionVisibility(inSection, wasVisible)
         if (removed == null) {
             return SectionUpdates(null, added, removed)
         }
@@ -296,14 +298,7 @@ class TypeSectionLookupRepresentative<T : TypeHashCodeLookupRepresent<Rep>, out 
     }
 
     fun toggleSectionVisibility(@IntRange(from = 0) sectionIndex: Int): SectionUpdate? {
-        if (!sectionExists(sectionIndex)) {
-            return null
-        }
-        return if (data[sectionIndex].isIgnored) {
-            acceptSection(sectionIndex)
-        } else {
-            ignoreSection(sectionIndex)
-        }
+        return setSectionVisibility(sectionIndex, !isSectionIgnored(sectionIndex))
     }
 
     fun setSectionVisibility(@IntRange(from = 0) sectionIndex: Int, visible: Boolean): SectionUpdate? {
@@ -326,7 +321,7 @@ class TypeSectionLookupRepresentative<T : TypeHashCodeLookupRepresent<Rep>, out 
         @IntRange(from = 0)
         val location = calculateSectionLocation(inSection)
         updateCacheForSection(inSection) {
-            data[inSection].collection.clear()
+            data.remove(inSection)
         }
         if (isSectionIgnored(inSection)) {
             return null
@@ -368,27 +363,21 @@ class TypeSectionLookupRepresentative<T : TypeHashCodeLookupRepresent<Rep>, out 
 
     //<editor-fold desc="Operators">
 
+    /**  */
     operator fun get(@IntRange(from = 0) atRow: Int, @IntRange(from = 0) inSection: Int): T? = getItem(atRow, inSection)
 
+    /**  */
     operator fun get(index: IndexPath): T? = getItem(index.row, index.section)
     //</editor-fold>
 
     //<editor-fold desc="cache handling">
     private inline fun <T> updateCacheForSection(sectionIndex: Int, crossinline action: () -> T): T {
-
-//        val before = sectionAt(sectionIndex)?.isIgnored
         val sizeBefore = sectionAt(sectionIndex)?.visibleCount ?: 0
-
         val actionResult = action()
-
         val sizeAfter = sectionAt(sectionIndex)?.visibleCount ?: 0
-//        val after = sectionAt(sectionIndex)?.isIgnored
         cachedSize += (sizeAfter - sizeBefore)
-
-//        L.error("Section [$sectionIndex]", "size updated with: ${(sizeAfter - sizeBefore)}; ignore : $before -> $after")
         if (sizeAfter == 0 && sectionAt(sectionIndex)?.isIgnored != true) {
             data.remove(sectionIndex)
-//            L.error("section", "$sectionIndex removed from collection.")
         }
         return actionResult
     }

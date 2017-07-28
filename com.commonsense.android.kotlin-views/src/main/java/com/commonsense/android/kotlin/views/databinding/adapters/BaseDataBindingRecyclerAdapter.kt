@@ -382,6 +382,11 @@ abstract class DataBindingRecyclerAdapter<T>(context: Context) :
         }
     }
 
+    /**
+     * Removes the section by index, iff it exists.
+     */
+    open fun removeSection(@IntRange(from = 0) sectionIndex: Int) = clearSection(sectionIndex)
+
 }
 
 /**  */

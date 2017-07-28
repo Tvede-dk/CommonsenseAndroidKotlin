@@ -227,6 +227,14 @@ open class AbstractSearchableDataBindingRecyclerAdapter<
         super.setSection(items.filterByOurFilter(), inSection)
     }
 
+    /**
+     *
+     */
+    override fun removeSection(sectionIndex: Int) {
+        allDataCollection.removeSection(sectionIndex)
+        super.removeSection(sectionIndex)
+    }
+
 
     override fun hideSection(sectionIndex: Int) {
         allDataCollection.ignoreSection(sectionIndex)

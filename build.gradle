@@ -4,9 +4,6 @@ buildscript {
     ext.coroutinesVersion = '0.17'
     ext.leakCanaryVersion = "1.5.1"
     ext.junitVersion = "4.12"
-    ext.androidGradleVersion = "3.0.0-alpha7"
-    ext.roboElectricVersion = "3.4-rc5"
-    ext.espressoVersion = "2.2.2"
     ext.androidGradleVersion = "3.0.0-alpha8"
     ext.roboElectricVersion = "3.4"
     ext.espressoVersion = "3.0.0"
@@ -19,7 +16,7 @@ buildscript {
 //        maven { url "https://dl.bintray.com/kotlin/kotlin-eap-1.1/" }
     }
     dependencies {
-        classpath "com.android.tools.build:gradle:2.3.3"
+        classpath "com.android.tools.build:gradle:$androidGradleVersion"
         classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlin_version"
     }
 }

@@ -30,8 +30,8 @@ dependencies {
     androidTestCompile("com.android.support.test.espresso:espresso-core:$espressoVersion", {
         exclude group: 'com.android.support', module: 'support-annotations'
     })
-    compile "junit:junit:$junitVersion"
-    compile "org.jetbrains.kotlin:kotlin-stdlib:$kotlin_version"
-    compile "org.robolectric:robolectric:$roboElectricVersion"
+    implementation "junit:junit:$junitVersion"
+    implementation "org.jetbrains.kotlin:kotlin-stdlib:$kotlin_version"
+    implementation "org.robolectric:robolectric:$roboElectricVersion"
 }
 

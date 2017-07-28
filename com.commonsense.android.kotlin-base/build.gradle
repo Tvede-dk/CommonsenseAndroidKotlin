@@ -33,13 +33,14 @@ dependencies {
     })
 
     //coroutines libs
-    compile "org.jetbrains.kotlinx:kotlinx-coroutines-core:$coroutinesVersion"
-    compile "org.jetbrains.kotlinx:kotlinx-coroutines-android:$coroutinesVersion"
+    implementation"org.jetbrains.kotlinx:kotlinx-coroutines-core:$coroutinesVersion"
+    implementation"org.jetbrains.kotlinx:kotlinx-coroutines-android:$coroutinesVersion"
 
-    compile "com.android.support:appcompat-v7:$supportVersion"
-    compile "junit:junit:$junitVersion"
-    testCompile project(':com.commonsense.android.kotlin-test')
-    compile "org.jetbrains.kotlin:kotlin-stdlib:$kotlin_version"
+    testImplementation "org.robolectric:robolectric:$roboElectricVersion"
+    implementation"com.android.support:appcompat-v7:$supportVersion"
+    implementation"junit:junit:$junitVersion"
+    testImplementation project(':com.commonsense.android.kotlin-test')
+    implementation"org.jetbrains.kotlin:kotlin-stdlib:$kotlin_version"
 
 }
 repositories {

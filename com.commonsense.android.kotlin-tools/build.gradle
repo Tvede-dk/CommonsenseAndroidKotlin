@@ -31,11 +31,11 @@ dependencies {
         exclude group: 'com.android.support', module: 'support-annotations'
     })
     //support libs
-    compile "com.android.support:appcompat-v7:$supportVersion"
-    compile "com.android.support:design:$supportVersion"
-    compile "com.android.support:exifinterface:$supportVersion"
-    compile "junit:junit:$junitVersion"
-    compile "org.jetbrains.kotlin:kotlin-stdlib:$kotlin_version"
+    implementation "com.android.support:appcompat-v7:$supportVersion"
+    implementation "com.android.support:design:$supportVersion"
+    implementation "com.android.support:exifinterface:$supportVersion"
+    implementation "junit:junit:$junitVersion"
+    implementation "org.jetbrains.kotlin:kotlin-stdlib:$kotlin_version"
     //leak canary libs
     debugCompile "com.squareup.leakcanary:leakcanary-android:$leakCanaryVersion"
     releaseCompile "com.squareup.leakcanary:leakcanary-android-no-op:$leakCanaryVersion"

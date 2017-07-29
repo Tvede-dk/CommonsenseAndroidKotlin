@@ -2,7 +2,7 @@ class NoUpToDateTests implements Plugin<Project> {
     @Override
     void apply(Project mainProject) {
         def ENV = System.getenv()
-        def BUILDID = ENV['$BUILD_ID']
+        def BUILDID = ENV['BUILD_ID']
 
         println "----------"
         println BUILDID

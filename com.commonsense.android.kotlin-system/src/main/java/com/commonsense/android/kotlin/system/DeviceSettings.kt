@@ -11,15 +11,14 @@ import com.commonsense.android.kotlin.system.extensions.editWith
  */
 
 
-fun Context.createDeviceSettings(): DeviceSettings {
-    return DeviceSettings(this)
-}
+//todo application context or not ?
+fun Context.createDeviceSettings(): DeviceSettings = DeviceSettings(this)
 
 
-class DeviceSettings(val context: Context) {
+class DeviceSettings(context: Context, settingsName: String = "DeviceSettings") {
 
     val sharedPrefs: SharedPreferences by lazy {
-        context.getSharedPreferences("DeviceSettings", Context.MODE_PRIVATE)
+        context.getSharedPreferences(settingsName, Context.MODE_PRIVATE)
     }
 
     //<editor-fold desc="save functions">

@@ -9,27 +9,33 @@ import com.commonsense.android.kotlin.base.extensions.collections.*
  * Created by kasper on 05/07/2017.
  */
 
+
 data class TypeSection<T>(
         val sectionIndexValue: Int,
+        /**
+         * if this section is to be ignored. (in ui terms, hidden for example)
+         */
         var isIgnored: Boolean = false,
         val collection: MutableList<T> = mutableListOf()) {
+
+    /**
+     * retrieves the real size of the section  (ignores the isIgnored flag).
+     */
     val size: Int
         get() = collection.size
 
     /**
-     * if this section is to be ignored. (in ui terms, hidden for example)
+     * The size with respect to the isIgnored flag.
      */
-
     val visibleCount: Int
         get() = isIgnored.map(0, size)
-//
-//    var header: T? = null
-//
-//    var footer: T? = null
-
 }
 
-class TypeSectionLookupRepresentative<T : TypeHashCodeLookupRepresent<Rep>, out Rep : Any> {
+/**
+ *
+ *
+ */
+class SectionLookupRep<T : TypeHashCodeLookupRepresent<Rep>, out Rep : Any> {
 
     //<editor-fold desc="Internal data">
     private val lookup = TypeRepresentative<T, Rep>()
@@ -184,6 +190,93 @@ class TypeSectionLookupRepresentative<T : TypeHashCodeLookupRepresent<Rep>, out 
             lookup.getTypeRepresentativeFromTypeValue(type)
 
 
+
+    fun clear() {
+        data.clear()
+        lookup.clear()
+        cachedSize = 0
+    }
+
+
+    //this is btw O(Section) which is bad with many sections. can be optimized to O(log_2(sections)) then, even a million sections would be "good". (Log_2(10^6) ~ 20
+    //the idea; keep a sparseArray of "accumulated" sizes; then we can binary search that.
+    // the Accumulated calculation will be "O(section)" amortised but as the bright person have observed, that is the same speed as it is now...
+    //TODO hmm, convert this ?
+    fun indexToPath(@IntRange(from = 0) position: Int): IndexPath? {
+        //naive implementation
+        var currentPosition = position
+        var result: IndexPath? = null
+        //TODO , mabye cache the list implementation. or something.
+        val toIterate = data.toList().filterNot { it.value.isIgnored }
+        toIterate.find {
+            if (currentPosition < it.value.size) {
+                result = IndexPath(currentPosition, it.value.sectionIndexValue)
+                true
+            } else {
+                currentPosition -= it.value.size
+                false
+            }
+        }
+        return result
+    }
+
+    private fun IndexPathIsValid(@IntRange(from = 0) atRow: Int, @IntRange(from = 0) inSection: Int): Boolean =
+            getItem(atRow, inSection) != null
+
+    fun indexOf(newItem: T, inSection: Int): SectionLocation? {
+        val locationOfSection = calculateSectionLocation(inSection) ?: return null
+        val indexInSection = data[inSection].collection.indexOf(newItem)
+        if (indexInSection == -1) {
+            return null
+        }
+        return SectionLocation(locationOfSection.inRaw.start + indexInSection, indexInSection)
+    }
+
+
+
+    private fun getItem(@IntRange(from = 0) atRow: Int, @IntRange(from = 0) inSection: Int): T? =
+            data.get(inSection)?.collection?.getSafe(atRow)
+
+    //<editor-fold desc="Section igorance">
+    fun ignoreSection(@IntRange(from = 0) sectionIndex: Int): SectionUpdate? {
+        if (!sectionExists(sectionIndex) || data[sectionIndex].isIgnored) {
+            return null
+        }
+        val location = calculateSectionLocation(sectionIndex)
+        updateCacheForSection(sectionIndex) {
+            data[sectionIndex].isIgnored = true
+        }
+        return location
+    }
+
+    /**
+     * Inverse of ignore section.
+     */
+    fun acceptSection(@IntRange(from = 0) sectionIndex: Int): SectionUpdate? {
+        if (!sectionExists(sectionIndex) || !data[sectionIndex].isIgnored) {
+            return null
+        }
+        updateCacheForSection(sectionIndex) {
+            data[sectionIndex].isIgnored = false
+        }
+        return calculateSectionLocation(sectionIndex)
+    }
+
+    fun toggleSectionVisibility(@IntRange(from = 0) sectionIndex: Int): SectionUpdate? {
+        return setSectionVisibility(sectionIndex, !isSectionIgnored(sectionIndex))
+    }
+
+    fun setSectionVisibility(@IntRange(from = 0) sectionIndex: Int, visible: Boolean): SectionUpdate? {
+        return if (visible) {
+            acceptSection(sectionIndex)
+        } else {
+            ignoreSection(sectionIndex)
+        }
+    }
+    //</editor-fold>
+
+    //<editor-fold desc="Section opertations">
+
     /**
      * returns what have changed. (the diff).
      */
@@ -232,86 +325,7 @@ class TypeSectionLookupRepresentative<T : TypeHashCodeLookupRepresent<Rep>, out 
     }
 
 
-    fun clear() {
-        data.clear()
-        lookup.clear()
-        cachedSize = 0
-    }
 
-
-    //this is btw O(Section) which is bad with many sections. can be optimized to O(log_2(sections)) then, even a million sections would be "good". (Log_2(10^6) ~ 20
-    //the idea; keep a sparseArray of "accumulated" sizes; then we can binary search that.
-    // the Accumulated calculation will be "O(section)" amortised but as the bright person have observed, that is the same speed as it is now...
-    //TODO hmm, convert this ?
-    fun indexToPath(@IntRange(from = 0) position: Int): IndexPath? {
-        //naive implementation
-        var currentPosition = position
-        var result: IndexPath? = null
-        //TODO , mabye cache the list implementation. or something.
-        val toIterate = data.toList().filterNot { it.value.isIgnored }
-        toIterate.find {
-            if (currentPosition < it.value.size) {
-                result = IndexPath(currentPosition, it.value.sectionIndexValue)
-                true
-            } else {
-                currentPosition -= it.value.size
-                false
-            }
-        }
-        return result
-    }
-
-    private fun IndexPathIsValid(@IntRange(from = 0) atRow: Int, @IntRange(from = 0) inSection: Int): Boolean =
-            getItem(atRow, inSection) != null
-
-    fun indexOf(newItem: T, inSection: Int): SectionLocation? {
-        val locationOfSection = calculateSectionLocation(inSection) ?: return null
-        val indexInSection = data[inSection].collection.indexOf(newItem)
-        if (indexInSection == -1) {
-            return null
-        }
-        return SectionLocation(locationOfSection.inRaw.start + indexInSection, indexInSection)
-    }
-
-    //<editor-fold desc="Section igorance">
-    fun ignoreSection(@IntRange(from = 0) sectionIndex: Int): SectionUpdate? {
-        if (!sectionExists(sectionIndex) || data[sectionIndex].isIgnored) {
-            return null
-        }
-        val location = calculateSectionLocation(sectionIndex)
-        updateCacheForSection(sectionIndex) {
-            data[sectionIndex].isIgnored = true
-        }
-        return location
-    }
-
-    /**
-     * Inverse of ignore section.
-     */
-    fun acceptSection(@IntRange(from = 0) sectionIndex: Int): SectionUpdate? {
-        if (!sectionExists(sectionIndex) || !data[sectionIndex].isIgnored) {
-            return null
-        }
-        updateCacheForSection(sectionIndex) {
-            data[sectionIndex].isIgnored = false
-        }
-        return calculateSectionLocation(sectionIndex)
-    }
-
-    fun toggleSectionVisibility(@IntRange(from = 0) sectionIndex: Int): SectionUpdate? {
-        return setSectionVisibility(sectionIndex, !isSectionIgnored(sectionIndex))
-    }
-
-    fun setSectionVisibility(@IntRange(from = 0) sectionIndex: Int, visible: Boolean): SectionUpdate? {
-        return if (visible) {
-            acceptSection(sectionIndex)
-        } else {
-            ignoreSection(sectionIndex)
-        }
-    }
-    //</editor-fold>
-
-    //<editor-fold desc="Section opertations">
     fun getSectionLocation(@IntRange(from = 0) sectionIndex: Int): SectionUpdate? =
             calculateSectionLocation(sectionIndex)
 
@@ -352,16 +366,11 @@ class TypeSectionLookupRepresentative<T : TypeHashCodeLookupRepresent<Rep>, out 
     }
 
     /**  */
-    @VisibleForTesting(otherwise = VisibleForTesting.PRIVATE)
+    @VisibleForTesting(otherwise = VisibleForTesting.PROTECTED)
     fun sectionAt(sectionIndex: Int): TypeSection<T>? = data[sectionIndex]
 
     private fun sectionExists(sectionIndex: Int): Boolean = data[sectionIndex, null] != null
     //</editor-fold>
-
-
-    private fun getItem(@IntRange(from = 0) atRow: Int, @IntRange(from = 0) inSection: Int): T? =
-            data.get(inSection)?.collection?.getSafe(atRow)
-
 
     //<editor-fold desc="Operators">
 
@@ -418,7 +427,6 @@ class TypeSectionLookupRepresentative<T : TypeHashCodeLookupRepresent<Rep>, out 
 
     //</editor-fold>
 
-
 }
 
 data class IndexPath(@IntRange(from = 0) val row: Int, @IntRange(from = 0) val section: Int)
@@ -431,36 +439,3 @@ data class SectionUpdates(val changes: SectionUpdate?,
                           val optAdded: SectionUpdate?,
                           val optRemoved: SectionUpdate?)
 
-
-data class ListDiff<out T>(val intersect: List<T>, val outerSectA: List<T>, val outerSectB: List<T>, val isIndexConsidered: Boolean)
-
-class TypeSectionCodeLookupDiff<T>(val diff: SparseArray<ListDiff<T>>)
-
-fun <T : TypeHashCodeLookupRepresent<Rep>, Rep : Any> TypeSectionLookupRepresentative<T, Rep>.differenceTo(other: TypeSectionLookupRepresentative<T, Rep>, considerIndexes: Boolean = false): TypeSectionCodeLookupDiff<T> {
-    val result = SparseArray<ListDiff<T>>()
-    val thisMapped = this.mapAll { it }
-    val otherMapped = other.mapAll { it }
-
-    thisMapped.forEach { thisSection ->
-        val otherSection = otherMapped.find { it.sectionIndexValue == thisSection.sectionIndexValue }
-        if (otherSection == null) {
-            result.put(thisSection.sectionIndexValue, ListDiff(listOf(), thisSection.collection.toList(), listOf(), true))
-        } else {
-            val interSect = thisSection.collection.intersect(otherSection.collection)
-            val listA = thisSection.collection.filterNot { it in interSect }
-            val listB = otherSection.collection.filterNot { it in interSect }
-            result.put(thisSection.sectionIndexValue, ListDiff(interSect.toList(), listA, listB, false))
-        }
-    }
-
-    otherMapped.forEach { otherSection ->
-        val thisSection = thisMapped.find { it.sectionIndexValue == otherSection.sectionIndexValue }
-        if (thisSection == null) {
-            result.put(otherSection.sectionIndexValue, ListDiff(listOf(), listOf(), otherSection.collection.toList(), true))
-        }
-        //if not null then we have "processed it".
-    }
-
-
-    return TypeSectionCodeLookupDiff(result)
-}

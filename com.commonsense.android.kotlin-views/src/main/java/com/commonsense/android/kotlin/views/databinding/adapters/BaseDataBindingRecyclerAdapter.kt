@@ -271,7 +271,7 @@ abstract class DataBindingRecyclerAdapter<T>(context: Context) :
     }
 
     @UiThread
-    private fun clearSection(inSection: Int): Unit = updateData {
+    fun clearSection(inSection: Int): Unit = updateData {
         dataCollection.clearSection(inSection)?.inRaw.apply {
             this?.let { notifyItemRangeRemoved(it.start, it.length) }
         }

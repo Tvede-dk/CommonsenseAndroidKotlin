@@ -385,6 +385,10 @@ abstract class DataBindingRecyclerAdapter<T>(context: Context) :
      */
     open fun removeSection(@IntRange(from = 0) sectionIndex: Int) = clearSection(sectionIndex)
 
+    fun removeSections(@IntRange(from = 0) vararg sectionIndexes: Int) {
+        sectionIndexes.forEach(this::removeSection)
+    }
+
 }
 
 /**  */

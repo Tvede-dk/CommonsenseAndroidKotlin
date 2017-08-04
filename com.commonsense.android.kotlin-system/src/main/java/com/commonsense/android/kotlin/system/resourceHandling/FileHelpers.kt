@@ -3,6 +3,8 @@ package com.commonsense.android.kotlin.system.resourceHandling
 import android.content.ContentResolver
 import android.net.Uri
 import com.commonsense.android.kotlin.system.logging.tryAndLog
+import kotlinx.coroutines.experimental.CommonPool
+import kotlinx.coroutines.experimental.async
 import java.io.BufferedInputStream
 import java.io.BufferedOutputStream
 
@@ -11,8 +13,8 @@ import java.io.BufferedOutputStream
  *
  */
 
-fun Uri.copyTo(other: Uri, resolver: ContentResolver) {
-    val openIS = resolver.openInputStream(this)
+fun Uri.copyTo(other: Uri, resolver: ContentResolver) = async(CommonPool) {
+    val openIS = resolver.openInputStream(this@copyTo)
     val outIS = resolver.openOutputStream(other)
     tryAndLog("Uri.copyTo") {
         val bufferedIn = BufferedInputStream(openIS)

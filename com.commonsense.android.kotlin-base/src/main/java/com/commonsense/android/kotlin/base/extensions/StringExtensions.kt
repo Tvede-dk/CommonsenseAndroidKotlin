@@ -27,3 +27,14 @@ fun String.asUrl(forceHttps: Boolean = true): Uri {
     }
     return Uri.parse(safeUrl)
 }
+
+fun Uri.fileExtension(): String? {
+    return path.lastIndexOf('.').let {
+        if (it > 0 && it + 1 < path.length) {
+            return path.substring(it + 1)
+        } else {
+            null
+        }
+    }
+
+}

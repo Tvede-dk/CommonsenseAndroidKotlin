@@ -29,12 +29,15 @@ fun String.asUrl(forceHttps: Boolean = true): Uri {
 }
 
 fun Uri.fileExtension(): String? {
-    return path.lastIndexOf('.').let {
-        if (it > 0 && it + 1 < path.length) {
-            return path.substring(it + 1)
+    return path.fileExtension()
+}
+
+fun String.fileExtension(): String? {
+    return lastIndexOf('.').let {
+        if (it > 0 && it + 1 < length) {
+            return substring(it + 1)
         } else {
             null
         }
     }
-
 }

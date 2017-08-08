@@ -19,7 +19,7 @@ inline fun RecyclerView.addOnScrollWhenPastFirstItem(crossinline action: Functio
             if (recyclerView == null) {
                 return
             }
-            val isFirstVisible = recyclerView.findViewHolderForLayoutPosition(0) != null
+            val isFirstVisible = recyclerView.findViewHolderForLayoutPosition(0) == null
             action(isFirstVisible)
         }
     }

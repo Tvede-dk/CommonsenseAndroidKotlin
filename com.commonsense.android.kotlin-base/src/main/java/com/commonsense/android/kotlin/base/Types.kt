@@ -19,6 +19,7 @@ typealias SuspendFunctionUnit<E> = suspend (E) -> Unit
 typealias FunctionBoolean<E> = (E) -> Boolean
 
 
+typealias StringList = List<String>
 /**
  *
  */

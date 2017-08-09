@@ -33,6 +33,6 @@ fun <T> ImageView.loadAndUse(action: suspend () -> T?, actionAfter: (T, ImageVie
 
 }
 
-private val imageViewCounterTag = "ImageView" + "." + "counterTag"
+private val imageViewCounterTag = "ImageView.counterTag"
 private val ImageView.counterTag
     get() = getTagOr(imageViewCounterTag, { AtomicInteger(0) })

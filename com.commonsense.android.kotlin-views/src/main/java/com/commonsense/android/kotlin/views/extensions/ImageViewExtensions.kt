@@ -20,7 +20,10 @@ fun ImageView.colorOverlay(@ColorInt color: Int) {
     drawable?.withColor(color)?.let(this::setImageDrawable)
 }
 
-
+/**
+ * This is safe for use on lists, ect, where calling it multiple times will yield only the last as the real modifier.
+ * also cancels the "older" operation.
+ */
 fun <T> ImageView.loadAndUse(action: suspend () -> T?, actionAfter: (T, ImageView) -> Unit) {
     val name = ImageView::class.java.name + "." + "loadAndUse"
     val nameJob = name + "job"

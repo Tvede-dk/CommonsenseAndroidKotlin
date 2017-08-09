@@ -3,11 +3,7 @@ package com.commonsense.android.kotlin.views.extensions
 import android.support.annotation.ColorInt
 import android.widget.ImageView
 import com.commonsense.android.kotlin.system.imaging.withColor
-import com.commonsense.android.kotlin.views.features.clearTag
-import com.commonsense.android.kotlin.views.features.getTag
-import com.commonsense.android.kotlin.views.features.setTag
-import com.commonsense.android.kotlin.views.features.useTagOr
-import kotlinx.coroutines.experimental.Job
+import com.commonsense.android.kotlin.views.features.getTagOr
 import kotlinx.coroutines.experimental.android.UI
 import kotlinx.coroutines.experimental.launch
 import java.util.concurrent.atomic.AtomicInteger
@@ -22,24 +18,21 @@ fun ImageView.colorOverlay(@ColorInt color: Int) {
 
 /**
  * This is safe for use on lists, ect, where calling it multiple times will yield only the last as the real modifier.
- * also cancels the "older" operation.
+ * does not call "cancel" on the older action.
  */
 fun <T> ImageView.loadAndUse(action: suspend () -> T?, actionAfter: (T, ImageView) -> Unit) {
-    val name = ImageView::class.java.name + "." + "loadAndUse"
-    val nameJob = name + "job"
-    useTagOr(name, {
-        val ourStartIndex = it.incrementAndGet()
-        getTag<Job>(nameJob)?.cancel()
-        setTag(nameJob, launch(UI) {
-            val result = action()
-            if (getTag<AtomicInteger>(name)?.get() == ourStartIndex
-                    && result != null) {
-                actionAfter(result, this@loadAndUse)
-                clearTag(nameJob)
-            }
-        })
-    }, initialValue = {
-        AtomicInteger(0)
-    })
+    val index = counterTag
+    val ourIndex = index.incrementAndGet()
+    launch(UI) {
+        val result = action()
+        if (index.get() == ourIndex
+                && result != null) {
+            actionAfter(result, this@loadAndUse)
+        }
+    }
 
 }
+
+private val imageViewCounterTag = "ImageView" + "." + "counterTag"
+private val ImageView.counterTag
+    get() = getTagOr(imageViewCounterTag, { AtomicInteger(0) })

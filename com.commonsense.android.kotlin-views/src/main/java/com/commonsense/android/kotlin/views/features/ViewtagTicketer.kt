@@ -22,7 +22,7 @@ object ViewtagTicketer {
                 categoryStore.put(category, number)
             }
         }
-        return categoryStore.getOrDefault(category, 0)
+        return categoryStore[category] ?: 0
     }
 
     private fun drawNextNumber(): Int {
@@ -36,9 +36,10 @@ fun View.tagKeyFor(category: String): Int = ViewtagTicketer.getIdForCategory(cat
 
 fun View.tagKeyFor(classAsCategory: KClass<*>): Int = tagKeyFor(classAsCategory.java.simpleName)
 
-fun View.setTag(category: String, value: Any) {
+fun <T> View.setTag(category: String, value: T): T {
     val index = ViewtagTicketer.getIdForCategory(category)
     setTag(index, value)
+    return value
 }
 
 fun View.setTag(classAsCategory: KClass<*>, value: Any) =
@@ -55,13 +56,12 @@ inline fun <reified T : Any> View.getTag(classAsCategory: KClass<*>): T? =
 
 inline fun <reified T : Any> View.useTagOr(forCategory: String, action: FunctionUnit<T>, initialValue: () -> T) {
     val value = getTag<T>(forCategory)
-    if (value == null) {
-        val newValue = initialValue()
-        setTag(forCategory, newValue)
-        action(newValue)
-    } else {
-        action(value)
-    }
+    action(value ?: setTag(forCategory, initialValue()))
+}
+
+inline fun <reified T : Any> View.getTagOr(forCategory: String, defaultValue: () -> T): T {
+    return getTag(forCategory) ?:
+            setTag(forCategory, defaultValue())
 }
 
 inline fun <reified T : Any> View.useTagOr(classAsCategory: KClass<*>, action: FunctionUnit<T>, defaultToInsert: () -> T) =

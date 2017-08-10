@@ -3,8 +3,11 @@ package com.commonsense.android.kotlin.views.extensions
 import android.support.annotation.ColorInt
 import android.widget.ImageView
 import com.commonsense.android.kotlin.system.imaging.withColor
+import com.commonsense.android.kotlin.system.logging.tryAndLogSuspend
 import com.commonsense.android.kotlin.views.features.getTagOr
+import kotlinx.coroutines.experimental.CommonPool
 import kotlinx.coroutines.experimental.android.UI
+import kotlinx.coroutines.experimental.async
 import kotlinx.coroutines.experimental.launch
 import java.util.concurrent.atomic.AtomicInteger
 
@@ -24,10 +27,12 @@ fun <T> ImageView.loadAndUse(action: suspend () -> T?, actionAfter: (T, ImageVie
     val index = counterTag
     val ourIndex = index.incrementAndGet()
     launch(UI) {
-        val result = action()
-        if (index.get() == ourIndex
-                && result != null) {
-            actionAfter(result, this@loadAndUse)
+        tryAndLogSuspend("ImageView.loadAndUse") {
+            val result = async(CommonPool, block = { return@async action() }).await() //background the download.
+            if (index.get() == ourIndex
+                    && result != null) {
+                actionAfter(result, this@loadAndUse) //then mainthread the display phase.
+            }
         }
     }
 

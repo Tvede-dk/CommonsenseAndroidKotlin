@@ -3,7 +3,7 @@ apply plugin: 'kotlin-android'
 
 android {
     compileSdkVersion 26
-    buildToolsVersion "26.0.0"
+    buildToolsVersion "26.0.1"
 
 
     defaultConfig {
@@ -24,23 +24,27 @@ android {
     lintOptions {
         abortOnError false
     }
+    packagingOptions {
+        exclude 'licenses/javolution.license.TXT'
+    }
 }
 
 
 dependencies {
-    androidTestCompile("com.android.support.test.espresso:espresso-core:$espressoVersion", {
+    androidTestImplementation("com.android.support.test.espresso:espresso-core:$espressoVersion", {
         exclude group: 'com.android.support', module: 'support-annotations'
     })
 
     //coroutines libs
-    implementation"org.jetbrains.kotlinx:kotlinx-coroutines-core:$coroutinesVersion"
-    implementation"org.jetbrains.kotlinx:kotlinx-coroutines-android:$coroutinesVersion"
+    implementation "org.jetbrains.kotlinx:kotlinx-coroutines-core:$coroutinesVersion"
+    implementation "org.jetbrains.kotlinx:kotlinx-coroutines-android:$coroutinesVersion"
+
+    implementation "com.android.support:appcompat-v7:$supportVersion"
+    implementation "junit:junit:$junitVersion"
 
     testImplementation "org.robolectric:robolectric:$roboElectricVersion"
-    implementation"com.android.support:appcompat-v7:$supportVersion"
-    implementation"junit:junit:$junitVersion"
     testImplementation project(':com.commonsense.android.kotlin-test')
-    implementation"org.jetbrains.kotlin:kotlin-stdlib:$kotlin_version"
+    implementation "org.jetbrains.kotlin:kotlin-stdlib:$kotlin_version"
 
 }
 repositories {
@@ -51,3 +55,4 @@ kotlin {
         coroutines "enable"
     }
 }
+

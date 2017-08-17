@@ -4,7 +4,7 @@ apply plugin: 'kotlin-kapt'
 
 android {
     compileSdkVersion 26
-    buildToolsVersion "26.0.0"
+    buildToolsVersion "26.0.1"
 
 
     defaultConfig {
@@ -38,15 +38,15 @@ dependencies {
     implementation "org.jetbrains.kotlinx:kotlinx-coroutines-android:$coroutinesVersion"
 
 
-    api project(':com.commonsense.android.kotlin-system')
-    api project(':com.commonsense.android.kotlin-views')
-    api project(':com.commonsense.android.kotlin-base')
-    testApi project(':com.commonsense.android.kotlin-test')
+    implementation project(':com.commonsense.android.kotlin-system')
+    implementation project(':com.commonsense.android.kotlin-views')
+    implementation project(':com.commonsense.android.kotlin-base')
+    testImplementation project(':com.commonsense.android.kotlin-test')
 
     //leak canary libs
-    debugCompile "com.squareup.leakcanary:leakcanary-android:$leakCanaryVersion"
-    releaseCompile "com.squareup.leakcanary:leakcanary-android-no-op:$leakCanaryVersion"
-    testCompile "com.squareup.leakcanary:leakcanary-android-no-op:$leakCanaryVersion"
+    debugImplementation "com.squareup.leakcanary:leakcanary-android:$leakCanaryVersion"
+    releaseImplementation "com.squareup.leakcanary:leakcanary-android-no-op:$leakCanaryVersion"
+    testImplementation "com.squareup.leakcanary:leakcanary-android-no-op:$leakCanaryVersion"
 
     implementation "com.android.support:appcompat-v7:$supportVersion"
     kapt "com.android.databinding:compiler:$androidGradleVersion"

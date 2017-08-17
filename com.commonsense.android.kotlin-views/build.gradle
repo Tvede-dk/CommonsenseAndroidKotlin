@@ -4,7 +4,7 @@ apply plugin: 'kotlin-kapt'
 
 android {
     compileSdkVersion 26
-    buildToolsVersion "26.0.0"
+    buildToolsVersion "26.0.1"
 
 
     defaultConfig {
@@ -31,11 +31,10 @@ android {
 }
 
 dependencies {
-    androidTestCompile("com.android.support.test.espresso:espresso-core:$espressoVersion", {
+    androidTestImplementation("com.android.support.test.espresso:espresso-core:$espressoVersion", {
         exclude group: 'com.android.support', module: 'support-annotations'
     })
-    testCompile project(':com.commonsense.android.kotlin-test')
-    testImplementation "org.robolectric:robolectric:$roboElectricVersion"
+    testImplementation project(':com.commonsense.android.kotlin-test')
 
     //coroutines libs
     implementation "org.jetbrains.kotlinx:kotlinx-coroutines-core:$coroutinesVersion"
@@ -51,6 +50,7 @@ dependencies {
     implementation "com.android.support:design:$supportVersion"
     implementation "com.android.support:exifinterface:$supportVersion"
 
+    testImplementation "org.robolectric:robolectric:$roboElectricVersion"
     implementation "junit:junit:$junitVersion"
     implementation "org.jetbrains.kotlin:kotlin-stdlib:$kotlin_version"
 

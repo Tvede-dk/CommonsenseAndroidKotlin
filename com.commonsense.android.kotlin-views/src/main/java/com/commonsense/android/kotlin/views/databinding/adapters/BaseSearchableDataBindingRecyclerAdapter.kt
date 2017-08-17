@@ -4,8 +4,8 @@ import android.content.Context
 import android.databinding.ViewDataBinding
 import android.support.v7.widget.RecyclerView
 import com.commonsense.android.kotlin.base.FunctionUnit
+import com.commonsense.android.kotlin.system.datastructures.SectionLookupRep
 import com.commonsense.android.kotlin.system.datastructures.TypeSection
-import com.commonsense.android.kotlin.system.datastructures.TypeSectionLookupRepresentative
 import com.commonsense.android.kotlin.system.logging.L
 import kotlinx.coroutines.experimental.CommonPool
 import kotlinx.coroutines.experimental.android.UI
@@ -52,8 +52,8 @@ open class AbstractSearchableDataBindingRecyclerAdapter<
     : DataBindingRecyclerAdapter<T>(context.applicationContext) {
 
     //<editor-fold desc="Field variables">
-    private val allDataCollection: TypeSectionLookupRepresentative<T, InflatingFunction<*>>
-            = TypeSectionLookupRepresentative()
+    private val allDataCollection: SectionLookupRep<T, InflatingFunction<*>>
+            = SectionLookupRep()
 
     private var filterValue: F? = null
 

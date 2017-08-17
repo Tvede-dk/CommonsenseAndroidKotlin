@@ -15,6 +15,10 @@ fun Context.HideSoftKeyboardFrom(editText: EditText) {
 }
 
 fun EditText.requestFocusAndShowKeyboard() {
+    requestFocus()
     val service = context.getSystemService(Context.INPUT_METHOD_SERVICE) as? InputMethodManager
     service?.toggleSoftInput(InputMethodManager.SHOW_FORCED, InputMethodManager.HIDE_IMPLICIT_ONLY)
+    postDelayed(this::setSelectionAtEnd, 16 * 2) //apprently android does this partially async /the above,
+    //thus we cannot depend on sequential execution. (so focus will change selection)
 }
+

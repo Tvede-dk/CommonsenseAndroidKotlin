@@ -151,6 +151,7 @@ class SectionRecyclerTransaction<T : IRenderModelItem<*, *>> {
 
 
         fun removeItem(item: T, inSection: Int) {
+
             adapter.getIndexFor(item, inSection)?.let {
                 this.removeItemAt(item, it.row, it.section)
             }
@@ -161,7 +162,14 @@ class SectionRecyclerTransaction<T : IRenderModelItem<*, *>> {
         }
 
         fun removeItemAt(item: T, row: Int, inSection: Int) {
-            addOperation({ this.removeAt(row, inSection) }, { this.insert(item, row, inSection) })
+            addOperation({ this.removeAt(row, inSection) }, {
+                if (this.getSectionSize(inSection) == null) {
+                    //section dies, recreate it.
+                    this.add(item, inSection)
+                } else {
+                    this.insert(item, row, inSection)
+                }
+            })
         }
 
 

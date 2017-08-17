@@ -18,13 +18,13 @@ data class TestData(val str: String) : TypeHashCodeLookupRepresent<String> {
 
 /**  */
 @Config(manifest = Config.NONE)
-class TypeSectionLookupRepresentativeTest : BaseRoboElectricTest() {
+class SectionLookupRepTest : BaseRoboElectricTest() {
 
 
     @Test
     fun testDiff() {
-        val a = TypeSectionLookupRepresentative<TestData, String>()
-        val b = TypeSectionLookupRepresentative<TestData, String>()
+        val a = SectionLookupRep<TestData, String>()
+        val b = SectionLookupRep<TestData, String>()
         val diff = a.differenceTo(b).diff
         diff.size().assert(0, "no diff on empty")
 
@@ -71,7 +71,7 @@ class TypeSectionLookupRepresentativeTest : BaseRoboElectricTest() {
 
     @Test
     fun testAdditionsSingleSection() {
-        val a = TypeSectionLookupRepresentative<TestData, String>()
+        val a = SectionLookupRep<TestData, String>()
         a.assertSizeAndSections(0, 0)
 
         a.add(TestData("1"), 0).assertNotNullApply {
@@ -102,7 +102,7 @@ class TypeSectionLookupRepresentativeTest : BaseRoboElectricTest() {
 
     @Test
     fun testAdditionsMultipleSections() {
-        val a = TypeSectionLookupRepresentative<TestData, String>()
+        val a = SectionLookupRep<TestData, String>()
         a.assertSizeAndSections(0, 0)
 
         a.add(TestData("1"), 0).assertNotNullApply {
@@ -161,7 +161,7 @@ class TypeSectionLookupRepresentativeTest : BaseRoboElectricTest() {
 
     @Test
     fun testRemoveSimple() {
-        val a = TypeSectionLookupRepresentative<TestData, String>()
+        val a = SectionLookupRep<TestData, String>()
         a.assertSizeAndSections(0, 0)
         val tempTestData = TestData("0")
         val tempTestData2 = TestData("1")
@@ -255,7 +255,7 @@ class TypeSectionLookupRepresentativeTest : BaseRoboElectricTest() {
 
     @Test
     fun testRemoveSections() {
-        val a = TypeSectionLookupRepresentative<TestData, String>()
+        val a = SectionLookupRep<TestData, String>()
         a.assertSizeAndSections(0, 0)
         //create section [0,10,20,30,40,50] with 50 elements in each.
         (0 until 51 step 10).forEach { section ->
@@ -338,7 +338,7 @@ class TypeSectionLookupRepresentativeTest : BaseRoboElectricTest() {
 
     @Test
     fun testReplace() {
-        val a = TypeSectionLookupRepresentative<TestData, String>()
+        val a = SectionLookupRep<TestData, String>()
         a.assertSizeAndSections(0, 0)
 
         a.add(TestData("a"), 0).assertNotNullApply {
@@ -363,7 +363,7 @@ class TypeSectionLookupRepresentativeTest : BaseRoboElectricTest() {
 
     @Test
     fun testSectionOperations() {
-        val a = TypeSectionLookupRepresentative<TestData, String>()
+        val a = SectionLookupRep<TestData, String>()
 
         a.assertSizeAndSections(0, 0)
         a.setSection((0 until 50).map { TestData(it.toString()) }, 5).assertNotNullApply {
@@ -499,7 +499,7 @@ class TypeSectionLookupRepresentativeTest : BaseRoboElectricTest() {
 
     @Test
     fun testIndexPath() {
-        val a = TypeSectionLookupRepresentative<TestData, String>()
+        val a = SectionLookupRep<TestData, String>()
         a.indexToPath(0).assertNull() //cannot find a null item
 
         a.add(TestData("a"), 0)
@@ -543,7 +543,7 @@ class TypeSectionLookupRepresentativeTest : BaseRoboElectricTest() {
 
     @Test
     fun testSectionVisibility() {
-        val a = TypeSectionLookupRepresentative<TestData, String>()
+        val a = SectionLookupRep<TestData, String>()
         for (i in 0 until 20) {
             a.addAll((0 until 50).map { TestData(it.toString()) }, i)
         }
@@ -586,7 +586,7 @@ class TypeSectionLookupRepresentativeTest : BaseRoboElectricTest() {
 
 
 
-fun TypeSectionLookupRepresentative<*, *>.assertSizeAndSections(totalSize: Int, sections: Int, message: String = "") {
+fun SectionLookupRep<*, *>.assertSizeAndSections(totalSize: Int, sections: Int, message: String = "") {
     size.assert(totalSize, message)
     sectionCount.assert(sections, message)
 }

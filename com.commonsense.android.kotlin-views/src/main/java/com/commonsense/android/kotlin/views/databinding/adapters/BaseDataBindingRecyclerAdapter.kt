@@ -12,9 +12,9 @@ import com.commonsense.android.kotlin.base.extensions.collections.ifTrue
 import com.commonsense.android.kotlin.base.extensions.collections.length
 import com.commonsense.android.kotlin.base.extensions.isNullOrEqualTo
 import com.commonsense.android.kotlin.system.datastructures.IndexPath
+import com.commonsense.android.kotlin.system.datastructures.SectionLookupRep
 import com.commonsense.android.kotlin.system.datastructures.TypeHashCodeLookupRepresent
 import com.commonsense.android.kotlin.system.datastructures.TypeSection
-import com.commonsense.android.kotlin.system.datastructures.TypeSectionLookupRepresentative
 import com.commonsense.android.kotlin.system.logging.L
 import com.commonsense.android.kotlin.views.ViewInflatingFunction
 import java.lang.ref.WeakReference
@@ -145,8 +145,8 @@ abstract class DataBindingRecyclerAdapter<T>(context: Context) :
 
     override fun getItemId(position: Int): Long = RecyclerView.NO_ID
 
-    private val dataCollection: TypeSectionLookupRepresentative<T, InflatingFunction<*>>
-            = TypeSectionLookupRepresentative()
+    private val dataCollection: SectionLookupRep<T, InflatingFunction<*>>
+            = SectionLookupRep()
 
     private val listeningRecyclers = mutableSetOf<WeakReference<RecyclerView>>()
 
@@ -271,7 +271,7 @@ abstract class DataBindingRecyclerAdapter<T>(context: Context) :
     }
 
     @UiThread
-    private fun clearSection(inSection: Int): Unit = updateData {
+    fun clearSection(inSection: Int): Unit = updateData {
         dataCollection.clearSection(inSection)?.inRaw.apply {
             this?.let { notifyItemRangeRemoved(it.start, it.length) }
         }
@@ -384,6 +384,10 @@ abstract class DataBindingRecyclerAdapter<T>(context: Context) :
      * Removes the section by index, iff it exists.
      */
     open fun removeSection(@IntRange(from = 0) sectionIndex: Int) = clearSection(sectionIndex)
+
+    fun removeSections(@IntRange(from = 0) vararg sectionIndexes: Int) {
+        sectionIndexes.forEach(this::removeSection)
+    }
 
 }
 

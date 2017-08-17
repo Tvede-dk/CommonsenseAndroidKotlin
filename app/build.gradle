@@ -11,7 +11,7 @@ android {
 //    buildTypeMatching 'proguard', 'debug'
 
     compileSdkVersion 26
-    buildToolsVersion "26.0.0"
+    buildToolsVersion "26.0.1"
     defaultConfig {
         applicationId "com.CommonSenseAndroidKotlin.example"
         minSdkVersion 16
@@ -20,7 +20,7 @@ android {
         vectorDrawables.useSupportLibrary = true
         versionName "1.0"
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
-        multiDexEnabled false
+        multiDexEnabled true
         //flavorSelection 'sdkRequirements', 'fastDev'
 
     }
@@ -75,22 +75,18 @@ android {
         abortOnError false
     }
 
-    dexOptions{
+    dexOptions {
         maxProcessCount 20
     }
 
-    packagingOptions {
-        exclude 'META-INF/kotlin-stdlib.kotlin_module'
-        exclude 'META-INF/kotlin-runtime.kotlin_module'
-    }
 }
 
 dependencies {
 
     //UI libs
-    implementation 'com.futuremind.recyclerfastscroll:fastscroll:0.2.5'
+    compile 'com.futuremind.recyclerfastscroll:fastscroll:0.2.5'
     //time libs
-    implementation 'joda-time:joda-time:2.9.9'
+    compile 'joda-time:joda-time:2.9.9'
 
     //regularCompile 'com.android.support:multidex:1.0.2'
 
@@ -106,13 +102,12 @@ dependencies {
     androidTestCompile("com.android.support.test.espresso:espresso-core:$espressoVersion", {
         exclude group: 'com.android.support', module: 'support-annotations'
     })
-    testImplementation "junit:junit:$junitVersion"
+    testimplementation "junit:junit:$junitVersion"
     //kotlin specific
     implementation "org.jetbrains.kotlin:kotlin-stdlib:$kotlin_version"
-    implementation project(path: ':com.commonsense.android.kotlin-prebuilt')
+    compile project(path: ':com.commonsense.android.kotlin-prebuilt')
 
     kapt "com.android.databinding:compiler:$androidGradleVersion"
-    runtimeOnly "com.android.databinding:compiler:$androidGradleVersion"
 }
 
 repositories {

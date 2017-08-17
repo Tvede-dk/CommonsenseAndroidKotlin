@@ -27,3 +27,17 @@ fun String.asUrl(forceHttps: Boolean = true): Uri {
     }
     return Uri.parse(safeUrl)
 }
+
+fun Uri.fileExtension(): String? {
+    return path.fileExtension()
+}
+
+fun String.fileExtension(): String? {
+    return lastIndexOf('.').let {
+        if (it > 0 && it + 1 < length) {
+            return substring(it + 1)
+        } else {
+            null
+        }
+    }
+}

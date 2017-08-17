@@ -6,9 +6,13 @@ import android.content.res.TypedArray
 import android.os.Build
 import android.support.annotation.StyleableRes
 import android.support.annotation.UiThread
+import android.text.InputType
 import android.util.AttributeSet
 import android.view.View
+import android.view.ViewGroup
 import android.view.ViewTreeObserver
+import android.view.inputmethod.EditorInfo
+import android.widget.EditText
 import com.commonsense.android.kotlin.base.AsyncEmptyFunction
 import com.commonsense.android.kotlin.base.EmptyFunction
 import com.commonsense.android.kotlin.base.extensions.collections.forEachNotNull
@@ -168,4 +172,31 @@ object ViewHelper {
     fun showViews(views: Iterable<View?>) {
         views.forEachNotNull(View::visible)
     }
+}
+
+/**
+ * Computes the children as a list.
+ * instead of the old "0 to childCount".
+ */
+val ViewGroup.children: List<View>
+    get() {
+        return (0 until childCount).map(this::getChildAt)
+    }
+
+fun View.disable() {
+    isEnabled = false
+    isClickable = false
+    (this as? ViewGroup)?.children?.forEach(View::disable)
+}
+
+fun View.enable() {
+    isEnabled = true
+    isClickable = true
+    (this as? ViewGroup)?.children?.forEach(View::enable)
+}
+
+
+fun EditText.imeDone() {
+    imeOptions = EditorInfo.IME_ACTION_DONE
+    inputType = inputType xor InputType.TYPE_TEXT_FLAG_MULTI_LINE xor InputType.TYPE_TEXT_FLAG_IME_MULTI_LINE
 }

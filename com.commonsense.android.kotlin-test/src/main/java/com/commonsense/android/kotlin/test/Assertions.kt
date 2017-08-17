@@ -24,8 +24,8 @@ fun String.assert(value: String, message: String = "") {
     Assert.assertEquals(message, value, this)
 }
 
-fun Double.assert(value: Double, message: String = "") {
-    Assert.assertEquals(message, value, this)
+fun Double.assert(value: Double, delta: Double = 0.1, message: String = "") {
+    Assert.assertEquals(message, value, this, delta)
 }
 
 fun Float.assert(value: Float, message: String = "") {
@@ -82,5 +82,6 @@ inline fun assertThrows(message: String = "should throw", crossinline action: ()
 }
 
 fun <T> Any.assertAs(otherValue: T, message: String = "") {
+    @Suppress("UNCHECKED_CAST") //this is exepcted, we are just making life easier for testing, if it throws, then its "all right" for a test.
     Assert.assertEquals(message, this as? T, otherValue)
 }

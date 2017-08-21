@@ -43,6 +43,8 @@ dependencies {
     compile project(':com.commonsense.android.kotlin-system')
     compile project(':com.commonsense.android.kotlin-base')
 
+    testCompile "org.robolectric:robolectric:$roboElectricVersion"
+
     kapt "com.android.databinding:compiler:$androidGradleVersion"
 
     //support libs

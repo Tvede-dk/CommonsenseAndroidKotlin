@@ -4,7 +4,6 @@ import android.widget.EditText
 import com.commonsense.android.kotlin.base.extensions.toEditable
 import com.commonsense.android.kotlin.test.BaseRoboElectricTest
 import com.commonsense.android.kotlin.test.assert
-import com.commonsense.android.kotlin.views.widgets.ExtendedEditTextView
 import org.junit.Test
 import java.util.concurrent.Semaphore
 import java.util.concurrent.TimeUnit
@@ -47,7 +46,7 @@ class InputValidatorTest : BaseRoboElectricTest() {
     @Test
     fun testCallbacks() {
         val validator = InputValidator.Builder<String>()
-        val inputTextEdit = ExtendedEditTextView(context)
+        val inputTextEdit = EditText(context)
         inputTextEdit.text = "magic".toEditable()
         val sem = Semaphore(0)
 

@@ -8,6 +8,7 @@ import android.support.v7.app.ActionBar
 import android.support.v7.app.ActionBarDrawerToggle
 import android.support.v7.app.AppCompatActivity
 import android.support.v7.widget.Toolbar
+import kotlin.reflect.KClass
 
 /**
  * Created by Kasper Tvede on 30-10-2016.
@@ -25,6 +26,10 @@ fun AppCompatActivity.setupToolbarAppDrawer(drawer: DrawerLayout, toolbar: Toolb
 
 fun <T : Activity> Activity.startActivity(toStart: Class<T>) {
     startActivity(Intent(this, toStart))
+}
+
+fun <T : Activity> Activity.startActivity(toStart: KClass<T>) {
+    startActivity(Intent(this, toStart.java))
 }
 
 

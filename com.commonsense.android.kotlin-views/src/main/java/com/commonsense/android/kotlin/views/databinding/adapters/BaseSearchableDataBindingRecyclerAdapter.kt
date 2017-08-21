@@ -274,9 +274,8 @@ private class ConflatedActorHelper<F> {
             return
         }
 
-
         eventActor = actor(CommonPool, capacity = Channel.CONFLATED) {
-            channel.consumeEach(callback)
+            channel.consumeEach { callback(it) }
         }
     }
 

@@ -38,8 +38,10 @@ fun Fragment.onBackPressed() {
 
 fun Fragment.popToFirstFragment() {
     activity.runOnUiThread {
-        //first schedual a pop on "each" except the last. (n-1 pops)
-        (0 until fragmentManager.backStackEntryCount).forEach { fragmentManager?.popBackStack() }
-        fragmentManager.executePendingTransactions() //then allow Android to do the popping.
+        activity.supportFragmentManager.let { manager ->
+            //first schedual a pop on "each" except the last. (n-1 pops)
+            (0 until manager.backStackEntryCount).forEach { count -> manager.popBackStack() }
+            manager.executePendingTransactions() //then allow Android to do the popping.
+        }
     }
 }

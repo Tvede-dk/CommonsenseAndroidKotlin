@@ -4,6 +4,7 @@ import android.content.Context
 import android.content.res.TypedArray
 import android.graphics.Color
 import android.support.annotation.ColorInt
+import android.support.annotation.Dimension
 import android.support.annotation.StyleableRes
 import android.support.annotation.VisibleForTesting
 import android.util.AttributeSet
@@ -79,6 +80,13 @@ fun ViewAttribute.BooleanCallbackVariable(defaultValue: Boolean, @StyleableRes s
 
 fun ViewAttribute.BooleanCallbackVariable(@StyleableRes styleIndex: Int) =
         BooleanCallbackVariable(false, styleIndex)
+
+fun ViewAttribute.DimensionVariable(@StyleableRes styleIndex: Int): DimensionViewVariable =
+        DimensionVariable(0f, styleIndex)
+
+fun ViewAttribute.DimensionVariable(@Dimension defaultValue: Float, @StyleableRes styleIndex: Int)
+        : DimensionViewVariable =
+        DimensionViewVariable(defaultValue, styleIndex, attributes, this::updateView)
 
 
 fun ViewAttribute.prepareAttributes(attrs: AttributeSet? = null, defStyleAttr: Int? = null) {

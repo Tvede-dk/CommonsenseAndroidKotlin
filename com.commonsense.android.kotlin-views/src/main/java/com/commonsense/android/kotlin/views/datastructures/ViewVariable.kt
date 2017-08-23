@@ -3,9 +3,7 @@ package com.commonsense.android.kotlin.views.datastructures
 import android.content.Context
 import android.content.res.TypedArray
 import android.graphics.drawable.Drawable
-import android.support.annotation.ColorInt
-import android.support.annotation.ColorRes
-import android.support.annotation.StyleableRes
+import android.support.annotation.*
 import com.commonsense.android.kotlin.base.EmptyFunction
 import com.commonsense.android.kotlin.base.extensions.weakReference
 import com.commonsense.android.kotlin.system.extensions.getDrawableSafe
@@ -79,6 +77,11 @@ open class IntViewVariable(defaultValue: Int, @StyleableRes styleIndex: Int, toA
 
 }
 
+class DimensionViewVariable(@Dimension defaultValue: Float, @StyleableRes styleIndex: Int, toAttachTo: ViewAttributeList, onUpdate: EmptyFunction)
+    : ViewVariable<@android.support.annotation.Dimension Float>(defaultValue, styleIndex, toAttachTo, onUpdate) {
+    override fun parseFrom(typedArray: TypedArray, context: Context): Float? =
+            typedArray.getDimension(styleIndex, getInnerValue())
+}
 
 class BooleanCallbackViewVariable(defaultValue: Boolean, @StyleableRes styleIndex: Int, toAttachTo: ViewAttributeList, onUpdate: EmptyFunction)
     : BooleanViewVariable(defaultValue, styleIndex, toAttachTo, onUpdate) {

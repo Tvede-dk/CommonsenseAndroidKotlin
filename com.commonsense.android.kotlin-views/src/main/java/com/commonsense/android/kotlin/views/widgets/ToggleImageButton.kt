@@ -54,7 +54,7 @@ open class ToggleImageButton : AppCompatImageView, ViewAttribute, View.OnClickLi
         }
 
     private val internalChecked by lazy {
-        BooleanCallbackVariable(false, R.styleable.ToggleImageButton_checked)
+        BooleanVariable(false, R.styleable.ToggleImageButton_checked)
     }
     var isChecked by internalChecked
     //</editor-fold>

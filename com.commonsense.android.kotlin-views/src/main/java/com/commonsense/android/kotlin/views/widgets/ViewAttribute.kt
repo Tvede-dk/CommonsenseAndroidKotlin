@@ -10,7 +10,7 @@ import android.support.annotation.VisibleForTesting
 import android.util.AttributeSet
 import com.commonsense.android.kotlin.base.extensions.use
 import com.commonsense.android.kotlin.system.extensions.getTypedArrayFor
-import com.commonsense.android.kotlin.system.logging.L
+import com.commonsense.android.kotlin.system.logging.tryAndLog
 import com.commonsense.android.kotlin.views.datastructures.*
 import java.lang.ref.WeakReference
 
@@ -73,14 +73,6 @@ fun ViewAttribute.DrawableVariable(@StyleableRes styleIndex: Int): DrawableViewV
         DrawableViewVariable(styleIndex, attributes, this::updateView)
 
 
-fun ViewAttribute.BooleanCallbackVariable(defaultValue: Boolean, @StyleableRes styleIndex: Int)
-        : BooleanCallbackViewVariable =
-        BooleanCallbackViewVariable(defaultValue, styleIndex, attributes, this::updateView)
-
-
-fun ViewAttribute.BooleanCallbackVariable(@StyleableRes styleIndex: Int) =
-        BooleanCallbackVariable(false, styleIndex)
-
 fun ViewAttribute.DimensionVariable(@StyleableRes styleIndex: Int): DimensionViewVariable =
         DimensionVariable(0f, styleIndex)
 
@@ -93,15 +85,13 @@ fun ViewAttribute.prepareAttributes(attrs: AttributeSet? = null, defStyleAttr: I
     val style = getStyleResource()
     if (style != null && attrs != null) {
         val typedArray = getContext().getTypedArrayFor(attrs, style, defStyleAttr ?: 0)
-        try {
+        tryAndLog(this::class) {
             parseTypedArray(typedArray)
-            afterSetupView()
-            updateView()
-        } catch (e: Exception) {
-            L.warning(this::class.java.simpleName, "failed to parse typed array, ", e)
-        } finally {
-            typedArray.recycle()
         }
+        typedArray.recycle()
+        afterSetupView()
+        updateView()
+
     } else {
         afterSetupView()
     }

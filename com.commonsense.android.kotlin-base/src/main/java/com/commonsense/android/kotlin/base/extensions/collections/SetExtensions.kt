@@ -9,10 +9,14 @@ package com.commonsense.android.kotlin.base.extensions.collections
  * if the set contains the item it will be removed.
  * if it does not contain the item, the item will be inserted.
  */
-fun <T> MutableSet<T>.toggleExistance(item: T) {
-    if (contains(item)) {
-        remove(item)
-    } else {
+fun <T> MutableSet<T>.toggleExistence(item: T) {
+    setExistence(item, !contains(item))
+}
+
+fun <T> MutableSet<T>.setExistence(item: T, shouldExists: Boolean) {
+    if (shouldExists) {
         add(item)
+    } else {
+        remove(item)
     }
 }

@@ -3,7 +3,9 @@ package com.commonsense.android.kotlin.views.datastructures
 import android.content.Context
 import android.content.res.TypedArray
 import android.graphics.drawable.Drawable
-import android.support.annotation.*
+import android.support.annotation.ColorInt
+import android.support.annotation.Dimension
+import android.support.annotation.StyleableRes
 import com.commonsense.android.kotlin.base.EmptyFunction
 import com.commonsense.android.kotlin.base.extensions.weakReference
 import com.commonsense.android.kotlin.system.extensions.getDrawableSafe
@@ -37,8 +39,14 @@ abstract class ViewVariable<T>(initialValue: T, @StyleableRes val styleIndex: In
 
     open operator fun getValue(thisRef: Any?, property: KProperty<*>): T = innerValue.value
 
-    open operator fun setValue(thisRef: Any?, property: KProperty<*>, value: T) {
-        innerValue.value = value
+    var onChanged: EmptyFunction? = null
+
+    open operator fun setValue(thisRef: Any?, property: KProperty<*>, newValue: T) {
+        val beforeValue = innerValue
+        innerValue.value = newValue
+        if (beforeValue != newValue) {
+            onChanged?.invoke()
+        }
     }
 
     fun getInnerValue(): T = innerValue.value
@@ -81,32 +89,4 @@ class DimensionViewVariable(@Dimension defaultValue: Float, @StyleableRes styleI
     : ViewVariable<@android.support.annotation.Dimension Float>(defaultValue, styleIndex, toAttachTo, onUpdate) {
     override fun parseFrom(typedArray: TypedArray, context: Context): Float? =
             typedArray.getDimension(styleIndex, getInnerValue())
-}
-
-class BooleanCallbackViewVariable(defaultValue: Boolean, @StyleableRes styleIndex: Int, toAttachTo: ViewAttributeList, onUpdate: EmptyFunction)
-    : BooleanViewVariable(defaultValue, styleIndex, toAttachTo, onUpdate) {
-
-    var onChanged: EmptyFunction? = null
-
-    override fun setValue(thisRef: Any?, property: KProperty<*>, value: Boolean) {
-        val before = this.getInnerValue()
-        super.setValue(thisRef, property, value)
-        if (before != value) {
-            onChanged?.invoke()
-        }
-    }
-}
-
-class DrawableCallbackViewVariable(@StyleableRes styleIndex: Int, toAttachTo: ViewAttributeList, onUpdate: EmptyFunction) :
-        DrawableViewVariable(styleIndex, toAttachTo, onUpdate) {
-
-    var onChanged: EmptyFunction? = null
-
-    override fun setValue(thisRef: Any?, property: KProperty<*>, value: Drawable?) {
-        val before = this.getInnerValue()
-        super.setValue(thisRef, property, value)
-        if (before != value) {
-            onChanged?.invoke()
-        }
-    }
 }

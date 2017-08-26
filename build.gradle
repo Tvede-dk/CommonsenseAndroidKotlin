@@ -1,7 +1,10 @@
 buildscript {
-    ext.kotlin_version = '1.1.4'
+    ext.androidSdkBuildVersion = 26
+    ext.androidBuildToolsVersion ="26.0.1"
+
+    ext.kotlin_version = '1.1.4-2'
     ext.supportVersion = '26.0.1'
-    ext.coroutinesVersion = '0.17'
+    ext.coroutinesVersion = '0.18'
     ext.leakCanaryVersion = "1.5.1"
     ext.junitVersion = "4.12"
     ext.androidGradleVersion = "3.0.0-beta2"
@@ -13,7 +16,7 @@ buildscript {
         google()
     }
     dependencies {
-        classpath "com.android.tools.build:gradle:$androidGradleVersion"
+        classpath "com.android.tools.build:gradle:2.3.3"
         classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlin_version"
     }
 }

@@ -4,6 +4,7 @@ import android.text.Editable
 import com.commonsense.android.kotlin.base.EmptyFunction
 import com.commonsense.android.kotlin.base.FunctionUnit
 import java.lang.ref.WeakReference
+import java.util.*
 import kotlin.system.measureNanoTime
 
 /**
@@ -70,4 +71,14 @@ fun <T> WeakReference<FunctionUnit<T>?>.use(input: T) {
 /**
  * Creates a weak reference, if this is not null. otherwise returns null.
  */
-fun <T> T.optWeakReference(): WeakReference<T>? = this?.let(::WeakReference)
+fun <T> T?.weakReference(): WeakReference<T>? where T : Optional<*> = this?.let(::WeakReference)
+
+/**
+ * Allows us to call a function iff all is not null (the sender / receiver).
+ */
+fun <T> T?.parseTo(receiver: ((T) -> Unit)?): T? {
+    if (this != null && receiver != null) {
+        receiver(this)
+    }
+    return this
+}

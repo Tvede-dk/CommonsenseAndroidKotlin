@@ -34,3 +34,14 @@ fun DialogFragment.dialogFillParentView() {
 fun Fragment.onBackPressed() {
     activity.onBackPressed()
 }
+
+
+fun Fragment.popToFirstFragment() {
+    activity.runOnUiThread {
+        activity.supportFragmentManager.let { manager ->
+            //first schedual a pop on "each" except the last. (n-1 pops)
+            (0 until manager.backStackEntryCount).forEach { count -> manager.popBackStack() }
+            manager.executePendingTransactions() //then allow Android to do the popping.
+        }
+    }
+}

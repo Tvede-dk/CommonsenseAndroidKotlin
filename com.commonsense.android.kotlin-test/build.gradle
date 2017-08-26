@@ -2,8 +2,8 @@ apply plugin: 'com.android.library'
 apply plugin: 'kotlin-android'
 
 android {
-    compileSdkVersion 26
-    buildToolsVersion "26.0.1"
+    compileSdkVersion androidSdkBuildVersion
+    buildToolsVersion androidBuildToolsVersion
 
 
     defaultConfig {
@@ -27,11 +27,11 @@ android {
 }
 
 dependencies {
-    androidTestImplementation("com.android.support.test.espresso:espresso-core:$espressoVersion", {
+    androidTestCompile("com.android.support.test.espresso:espresso-core:$espressoVersion", {
         exclude group: 'com.android.support', module: 'support-annotations'
     })
-    implementation "junit:junit:$junitVersion"
-    implementation "org.jetbrains.kotlin:kotlin-stdlib:$kotlin_version"
-    implementation "org.robolectric:robolectric:$roboElectricVersion"
+    compile "junit:junit:$junitVersion"
+    compile "org.jetbrains.kotlin:kotlin-stdlib:$kotlin_version"
+    compile "org.robolectric:robolectric:$roboElectricVersion"
 }
 

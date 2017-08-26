@@ -3,6 +3,8 @@ package com.commonsense.android.kotlin.views.datastructures
 import android.content.Context
 import android.content.res.TypedArray
 import android.graphics.drawable.Drawable
+import android.support.annotation.ColorInt
+import android.support.annotation.Dimension
 import android.support.annotation.StyleableRes
 import com.commonsense.android.kotlin.base.EmptyFunction
 import com.commonsense.android.kotlin.base.extensions.weakReference
@@ -37,72 +39,54 @@ abstract class ViewVariable<T>(initialValue: T, @StyleableRes val styleIndex: In
 
     open operator fun getValue(thisRef: Any?, property: KProperty<*>): T = innerValue.value
 
-    open operator fun setValue(thisRef: Any?, property: KProperty<*>, value: T) {
-        innerValue.value = value
+    var onChanged: EmptyFunction? = null
+
+    open operator fun setValue(thisRef: Any?, property: KProperty<*>, newValue: T) {
+        val beforeValue = innerValue
+        innerValue.value = newValue
+        if (beforeValue != newValue) {
+            onChanged?.invoke()
+        }
     }
 
     fun getInnerValue(): T = innerValue.value
 
 }
 
-open class TextViewVariable(styleIndex: Int, toAttachTo: ViewAttributeList, onUpdate: EmptyFunction)
+open class TextViewVariable(@StyleableRes styleIndex: Int, toAttachTo: ViewAttributeList, onUpdate: EmptyFunction)
     : ViewVariable<CharSequence?>(null, styleIndex, toAttachTo, onUpdate) {
     override fun parseFrom(typedArray: TypedArray, context: Context): CharSequence? =
             typedArray.getTextSafe(styleIndex)
 }
 
-open class ColorValueViewVariable(defaultValue: Int, styleIndex: Int, toAttachTo: ViewAttributeList, onUpdate: EmptyFunction)
+open class ColorValueViewVariable(@ColorInt defaultValue: Int, @StyleableRes styleIndex: Int, toAttachTo: ViewAttributeList, onUpdate: EmptyFunction)
     : ViewVariable<Int>(defaultValue, styleIndex, toAttachTo, onUpdate) {
     override fun parseFrom(typedArray: TypedArray, context: Context): Int? =
             typedArray.getColor(styleIndex, getInnerValue())
 }
 
-open class BooleanViewVariable(defaultValue: Boolean, styleIndex: Int, toAttachTo: ViewAttributeList, onUpdate: EmptyFunction)
+open class BooleanViewVariable(defaultValue: Boolean, @StyleableRes styleIndex: Int, toAttachTo: ViewAttributeList, onUpdate: EmptyFunction)
     : ViewVariable<Boolean>(defaultValue, styleIndex, toAttachTo, onUpdate) {
 
     override fun parseFrom(typedArray: TypedArray, context: Context): Boolean? =
             typedArray.getBoolean(styleIndex, getInnerValue())
 }
 
-open class DrawableViewVariable(styleIndex: Int, toAttachTo: ViewAttributeList, onUpdate: EmptyFunction)
+open class DrawableViewVariable(@StyleableRes styleIndex: Int, toAttachTo: ViewAttributeList, onUpdate: EmptyFunction)
     : ViewVariable<Drawable?>(null, styleIndex, toAttachTo, onUpdate) {
-
     override fun parseFrom(typedArray: TypedArray, context: Context): Drawable? =
             typedArray.getDrawableSafe(styleIndex, context)
 }
 
-open class IntViewVariable(defaultValue: Int, styleIndex: Int, toAttachTo: ViewAttributeList, onUpdate: EmptyFunction)
+open class IntViewVariable(defaultValue: Int, @StyleableRes styleIndex: Int, toAttachTo: ViewAttributeList, onUpdate: EmptyFunction)
     : ViewVariable<Int>(defaultValue, styleIndex, toAttachTo, onUpdate) {
     override fun parseFrom(typedArray: TypedArray, context: Context): Int? =
             typedArray.getInteger(styleIndex, getInnerValue())
 
 }
 
-
-class BooleanCallbackViewVariable(defaultValue: Boolean, styleIndex: Int, toAttachTo: ViewAttributeList, onUpdate: EmptyFunction)
-    : BooleanViewVariable(defaultValue, styleIndex, toAttachTo, onUpdate) {
-
-    var onChanged: EmptyFunction? = null
-
-    override fun setValue(thisRef: Any?, property: KProperty<*>, value: Boolean) {
-        val before = this.getInnerValue()
-        super.setValue(thisRef, property, value)
-        if (before != value) {
-            onChanged?.invoke()
-        }
-    }
-}
-
-class DrawableCallbackViewVariable(styleIndex: Int, toAttachTo: ViewAttributeList, onUpdate: EmptyFunction) :
-        DrawableViewVariable(styleIndex, toAttachTo, onUpdate) {
-
-    var onChanged: EmptyFunction? = null
-    
-    override fun setValue(thisRef: Any?, property: KProperty<*>, value: Drawable?) {
-        val before = this.getInnerValue()
-        super.setValue(thisRef, property, value)
-        if (before != value) {
-            onChanged?.invoke()
-        }
-    }
+class DimensionViewVariable(@Dimension defaultValue: Float, @StyleableRes styleIndex: Int, toAttachTo: ViewAttributeList, onUpdate: EmptyFunction)
+    : ViewVariable<@android.support.annotation.Dimension Float>(defaultValue, styleIndex, toAttachTo, onUpdate) {
+    override fun parseFrom(typedArray: TypedArray, context: Context): Float? =
+            typedArray.getDimension(styleIndex, getInnerValue())
 }

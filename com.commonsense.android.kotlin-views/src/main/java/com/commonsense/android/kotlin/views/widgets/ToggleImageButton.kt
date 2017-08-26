@@ -1,7 +1,6 @@
 package com.commonsense.android.kotlin.views.widgets
 
 import android.content.Context
-import android.content.res.TypedArray
 import android.graphics.drawable.Drawable
 import android.support.v7.widget.AppCompatImageView
 import android.util.AttributeSet
@@ -11,9 +10,6 @@ import com.commonsense.android.kotlin.base.extensions.collections.map
 import com.commonsense.android.kotlin.system.extensions.getDrawableSafe
 import com.commonsense.android.kotlin.system.imaging.withTintColor
 import com.commonsense.android.kotlin.views.R
-import com.commonsense.android.kotlin.views.datastructures.BooleanCallbackViewVariable
-import com.commonsense.android.kotlin.views.datastructures.ColorValueViewVariable
-import com.commonsense.android.kotlin.views.datastructures.DrawableViewVariable
 import com.commonsense.android.kotlin.views.datastructures.ViewVariable
 import java.lang.ref.WeakReference
 
@@ -22,10 +18,8 @@ import java.lang.ref.WeakReference
  */
 open class ToggleImageButton : AppCompatImageView, ViewAttribute, View.OnClickListener {
 
-    private val noColor = 0
+    override val attributes: MutableList<WeakReference<ViewVariable<*>>> = mutableListOf()
 
-    //TODO move this ...
-    private val listOfCustomProperties = mutableListOf<WeakReference<ViewVariable<*>>>()
 
     //<editor-fold desc="Constructors">
     constructor(context: Context) : super(context) {
@@ -44,8 +38,7 @@ open class ToggleImageButton : AppCompatImageView, ViewAttribute, View.OnClickLi
 
     //<editor-fold desc="Selected color">
     private val internalSelectedColor by lazy {
-        ColorValueViewVariable(noColor, R.styleable.ToggleImageButton_selectedColor,
-                listOfCustomProperties, this::updateView)
+        ColorVariable(R.styleable.ToggleImageButton_selectedColor)
     }
 
 
@@ -61,15 +54,14 @@ open class ToggleImageButton : AppCompatImageView, ViewAttribute, View.OnClickLi
         }
 
     private val internalChecked by lazy {
-        BooleanCallbackViewVariable(false, R.styleable.ToggleImageButton_checked,
-                listOfCustomProperties, this::updateView)
+        BooleanVariable(false, R.styleable.ToggleImageButton_checked)
     }
     var isChecked by internalChecked
     //</editor-fold>
 
     //<editor-fold desc="unselected color">
     private val internalUnselectedColor by lazy {
-        ColorValueViewVariable(noColor, R.styleable.ToggleImageButton_unselectedColor, listOfCustomProperties, this::updateView)
+        ColorVariable(R.styleable.ToggleImageButton_unselectedColor)
     }
 
     var unselectedColor: Int by internalUnselectedColor
@@ -78,8 +70,7 @@ open class ToggleImageButton : AppCompatImageView, ViewAttribute, View.OnClickLi
 
     //<editor-fold desc="selected background">
     private val internalBackgroundSelected by lazy {
-        DrawableViewVariable(R.styleable.ToggleImageButton_selectedBackground, listOfCustomProperties,
-                this::updateView)
+        DrawableVariable(R.styleable.ToggleImageButton_selectedBackground)
     }
 
     var selectedBackground: Drawable? by internalBackgroundSelected
@@ -87,8 +78,7 @@ open class ToggleImageButton : AppCompatImageView, ViewAttribute, View.OnClickLi
 
     //<editor-fold desc="unselected background">
     private val internalBackgroundUnselected by lazy {
-        DrawableViewVariable(R.styleable.ToggleImageButton_unselectedBackground, listOfCustomProperties,
-                this::updateView)
+        DrawableVariable(R.styleable.ToggleImageButton_unselectedBackground)
     }
     var unselectedBackground: Drawable? by internalBackgroundUnselected
     //</editor-fold>
@@ -96,12 +86,6 @@ open class ToggleImageButton : AppCompatImageView, ViewAttribute, View.OnClickLi
     var internalOnclickListener: OnClickListener? = null
 
     override fun getStyleResource(): IntArray? = R.styleable.ToggleImageButton
-
-    override fun parseTypedArray(data: TypedArray) {
-        listOfCustomProperties.forEach {
-            it.get()?.parse(data, context)
-        }
-    }
 
     override fun updateView() {
         setImageDrawable(drawable.withTintColor(getCheckColor()))

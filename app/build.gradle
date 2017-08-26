@@ -84,9 +84,9 @@ android {
 dependencies {
 
     //UI libs
-    compile 'com.futuremind.recyclerfastscroll:fastscroll:0.2.5'
+    implementation 'com.futuremind.recyclerfastscroll:fastscroll:0.2.5'
     //time libs
-    compile 'joda-time:joda-time:2.9.9'
+    implementation 'joda-time:joda-time:2.9.9'
 
     //regularCompile 'com.android.support:multidex:1.0.2'
 
@@ -105,7 +105,7 @@ dependencies {
     testImplementation "junit:junit:$junitVersion"
     //kotlin specific
     implementation "org.jetbrains.kotlin:kotlin-stdlib:$kotlin_version"
-    compile project(path: ':com.commonsense.android.kotlin-prebuilt')
+    implementation project(path: ':com.commonsense.android.kotlin-prebuilt')
     implementation project(':com.commonsense.android.kotlin-system')
     implementation project(':com.commonsense.android.kotlin-views')
     implementation project(':com.commonsense.android.kotlin-base')

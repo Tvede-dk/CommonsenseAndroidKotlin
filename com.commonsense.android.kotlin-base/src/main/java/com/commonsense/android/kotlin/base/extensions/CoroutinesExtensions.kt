@@ -2,6 +2,7 @@ package com.commonsense.android.kotlin.base.extensions
 
 import com.commonsense.android.kotlin.base.AsyncEmptyFunction
 import com.commonsense.android.kotlin.base.EmptyFunction
+import kotlinx.coroutines.experimental.CoroutineStart
 import kotlinx.coroutines.experimental.Job
 import kotlinx.coroutines.experimental.launch
 import kotlin.coroutines.experimental.CoroutineContext
@@ -29,5 +30,14 @@ fun Job.launchOnCompletedAsync(context: CoroutineContext, action: AsyncEmptyFunc
         launch(context) {
             action()
         }
+    }
+}
+
+fun launch(context: CoroutineContext,
+           start: CoroutineStart = CoroutineStart.DEFAULT,
+           block: suspend () -> Unit): Job {
+
+    return launch(context, start) {
+        block()
     }
 }

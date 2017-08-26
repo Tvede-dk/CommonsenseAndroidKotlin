@@ -10,8 +10,11 @@ import android.support.annotation.UiThread
 import android.support.v4.app.ActivityCompat
 import android.support.v4.content.ContextCompat
 import com.commonsense.android.kotlin.base.extensions.collections.*
+import com.commonsense.android.kotlin.base.extensions.launch
 import com.commonsense.android.kotlin.system.base.BaseActivity
 import com.commonsense.android.kotlin.system.extensions.checkPermission
+import kotlinx.coroutines.experimental.Job
+import kotlinx.coroutines.experimental.android.UI
 
 /**
  * Created by Kasper Tvede on 06-12-2016.
@@ -27,7 +30,7 @@ private fun Int.isGranted(): Boolean {
 class PermissionsHandling(val handlerRequestCode: Int = 999) {
 
 
-    val requestsInFlight = mutableListOf<PermissionRequest>()
+    private val requestsInFlight = mutableListOf<PermissionRequest>()
 
     fun performActionForPermission(@DangerousPermissionString permission: String, activity: Activity, onGranted: () -> Unit, onFailed: () -> Unit) {
         activity.checkPermission(permission)
@@ -122,9 +125,45 @@ fun PermissionEnum.use(handler: PermissionsHandling, activity: Activity, functio
 }
 
 @UiThread
+fun PermissionEnum.useSuspend(handler: PermissionsHandling, activity: Activity, function: suspend () -> Unit, errorFunction: suspend () -> Unit) {
+    handler.performActionForPermission(permissionValue, activity, {
+        launch(UI, block = function)
+    }, {
+        launch(UI, block = errorFunction)
+    })
+}
+
+@UiThread
+fun PermissionEnum.useSuspend(handler: PermissionsHandling, activity: BaseActivity, function: suspend () -> Unit, errorFunction: suspend () -> Unit) {
+    handler.performActionForPermission(permissionValue, activity, {
+        activity.LaunchInUi("PermissionEnum.useSuspend", function)
+    }, {
+        activity.LaunchInUi("PermissionEnum.useSuspend", errorFunction)
+    })
+}
+
+
+@UiThread
 inline fun PermissionEnum.use(context: Context, crossinline usePermission: () -> Unit) {
     havePermission(context).ifTrue(usePermission)
 }
+
+@UiThread
+fun PermissionEnum.useSuspend(context: Context, usePermission: suspend () -> Unit): Job? {
+    return if (havePermission(context)) {
+        launch(UI, block = usePermission)
+    } else {
+        null
+    }
+}
+
+@UiThread
+fun PermissionEnum.useSuspend(context: BaseActivity, usePermission: suspend () -> Unit) {
+    if (havePermission(context)) {
+        context.LaunchInUi("PermissionEnum.useSuspend", usePermission)
+    }
+}
+
 
 @UiThread
 fun PermissionEnum.havePermission(context: Context): Boolean {

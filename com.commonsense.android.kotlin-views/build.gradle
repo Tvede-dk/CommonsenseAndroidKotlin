@@ -49,6 +49,7 @@ dependencies {
     implementation "com.android.support:appcompat-v7:$supportVersion"
     implementation "com.android.support:design:$supportVersion"
     implementation "com.android.support:exifinterface:$supportVersion"
+    api "com.android.support:recyclerview-v7:$supportVersion"
 
     testImplementation "org.robolectric:robolectric:$roboElectricVersion"
     implementation "junit:junit:$junitVersion"

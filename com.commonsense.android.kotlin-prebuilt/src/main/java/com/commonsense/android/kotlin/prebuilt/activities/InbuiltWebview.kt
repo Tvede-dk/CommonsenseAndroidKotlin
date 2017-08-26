@@ -11,7 +11,7 @@ import com.commonsense.android.kotlin.views.extensions.loadUri
 /**
  * Created by Kasper Tvede on 09-07-2017.
  */
-class InbuiltWebView : BaseActivity() {
+open class InbuiltWebView : BaseActivity() {
 
     private val webView by lazy {
         WebView(this)

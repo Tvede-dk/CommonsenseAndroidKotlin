@@ -25,11 +25,14 @@ android {
     lintOptions {
         abortOnError false
     }
+    dataBinding {
+        enabled true
+    }
 }
 
 
 dependencies {
-    androidTestCompile("com.android.support.test.espresso:espresso-core:$espressoVersion", {
+    androidTestImplementation("com.android.support.test.espresso:espresso-core:$espressoVersion", {
         exclude group: 'com.android.support', module: 'support-annotations'
     })
 
@@ -39,7 +42,7 @@ dependencies {
 
 
     implementation project(':com.commonsense.android.kotlin-system')
-    implementation project(':com.commonsense.android.kotlin-views')
+    api project(':com.commonsense.android.kotlin-views')
     implementation project(':com.commonsense.android.kotlin-base')
     testImplementation project(':com.commonsense.android.kotlin-test')
 
@@ -57,3 +60,5 @@ dependencies {
 repositories {
     mavenCentral()
 }
+
+apply from: '../resourcegroups.gradle'

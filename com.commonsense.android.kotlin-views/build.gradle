@@ -31,29 +31,29 @@ android {
 }
 
 dependencies {
-    androidTestImplementation("com.android.support.test.espresso:espresso-core:$espressoVersion", {
+    androidTestCompile("com.android.support.test.espresso:espresso-core:$espressoVersion", {
         exclude group: 'com.android.support', module: 'support-annotations'
     })
-    testImplementation project(':com.commonsense.android.kotlin-test')
+    testCompile project(':com.commonsense.android.kotlin-test')
 
     //coroutines libs
-    implementation "org.jetbrains.kotlinx:kotlinx-coroutines-core:$coroutinesVersion"
-    implementation "org.jetbrains.kotlinx:kotlinx-coroutines-android:$coroutinesVersion"
+    compile "org.jetbrains.kotlinx:kotlinx-coroutines-core:$coroutinesVersion"
+    compile "org.jetbrains.kotlinx:kotlinx-coroutines-android:$coroutinesVersion"
 
-    implementation project(':com.commonsense.android.kotlin-system')
-    implementation project(':com.commonsense.android.kotlin-base')
+    compile project(':com.commonsense.android.kotlin-system')
+    compile project(':com.commonsense.android.kotlin-base')
 
     kapt "com.android.databinding:compiler:$androidGradleVersion"
 
     //support libs
-    implementation "com.android.support:appcompat-v7:$supportVersion"
-    implementation "com.android.support:design:$supportVersion"
-    implementation "com.android.support:exifinterface:$supportVersion"
-    api "com.android.support:recyclerview-v7:$supportVersion"
+    compile "com.android.support:appcompat-v7:$supportVersion"
+    compile "com.android.support:design:$supportVersion"
+    compile "com.android.support:exifinterface:$supportVersion"
+    compile "com.android.support:recyclerview-v7:$supportVersion"
 
-    testImplementation "org.robolectric:robolectric:$roboElectricVersion"
-    implementation "junit:junit:$junitVersion"
-    implementation "org.jetbrains.kotlin:kotlin-stdlib:$kotlin_version"
+    testCompile "org.robolectric:robolectric:$roboElectricVersion"
+    compile "junit:junit:$junitVersion"
+    compile "org.jetbrains.kotlin:kotlin-stdlib:$kotlin_version"
 
 }
 repositories {

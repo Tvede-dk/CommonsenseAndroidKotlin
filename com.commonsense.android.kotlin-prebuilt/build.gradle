@@ -32,29 +32,29 @@ android {
 
 
 dependencies {
-    androidTestImplementation("com.android.support.test.espresso:espresso-core:$espressoVersion", {
+    androidTestCompile("com.android.support.test.espresso:espresso-core:$espressoVersion", {
         exclude group: 'com.android.support', module: 'support-annotations'
     })
 
     //coroutines libs
-    implementation "org.jetbrains.kotlinx:kotlinx-coroutines-core:$coroutinesVersion"
-    implementation "org.jetbrains.kotlinx:kotlinx-coroutines-android:$coroutinesVersion"
+    compile "org.jetbrains.kotlinx:kotlinx-coroutines-core:$coroutinesVersion"
+    compile "org.jetbrains.kotlinx:kotlinx-coroutines-android:$coroutinesVersion"
 
 
-    implementation project(':com.commonsense.android.kotlin-system')
-    api project(':com.commonsense.android.kotlin-views')
-    implementation project(':com.commonsense.android.kotlin-base')
-    testImplementation project(':com.commonsense.android.kotlin-test')
+    compile project(':com.commonsense.android.kotlin-system')
+    compile project(':com.commonsense.android.kotlin-views')
+    compile project(':com.commonsense.android.kotlin-base')
+    testCompile project(':com.commonsense.android.kotlin-test')
 
     //leak canary libs
-    debugImplementation "com.squareup.leakcanary:leakcanary-android:$leakCanaryVersion"
-    releaseImplementation "com.squareup.leakcanary:leakcanary-android-no-op:$leakCanaryVersion"
-    testImplementation "com.squareup.leakcanary:leakcanary-android-no-op:$leakCanaryVersion"
+    debugCompile "com.squareup.leakcanary:leakcanary-android:$leakCanaryVersion"
+    releaseCompile "com.squareup.leakcanary:leakcanary-android-no-op:$leakCanaryVersion"
+    testCompile "com.squareup.leakcanary:leakcanary-android-no-op:$leakCanaryVersion"
 
-    implementation "com.android.support:appcompat-v7:$supportVersion"
+    compile "com.android.support:appcompat-v7:$supportVersion"
     kapt "com.android.databinding:compiler:$androidGradleVersion"
-    implementation "junit:junit:$junitVersion"
-    implementation "org.jetbrains.kotlin:kotlin-stdlib:$kotlin_version"
+    compile "junit:junit:$junitVersion"
+    compile "org.jetbrains.kotlin:kotlin-stdlib:$kotlin_version"
 
 }
 repositories {

@@ -11,6 +11,7 @@ import android.support.annotation.IntRange
 import android.support.media.ExifInterface
 import com.commonsense.android.kotlin.base.extensions.collections.map
 import com.commonsense.android.kotlin.system.extensions.getVirtualScreenSize
+import com.commonsense.android.kotlin.system.logging.L
 import com.commonsense.android.kotlin.system.logging.tryAndLogSuspend
 import kotlinx.coroutines.experimental.CommonPool
 import kotlinx.coroutines.experimental.Deferred
@@ -91,9 +92,12 @@ private fun getPowerOfTwoForSampleRatio(ratio: Double): Int {
     return maxOf(k, 1)
 }
 
-suspend fun Bitmap.scaleToWidth(@IntRange(from = 0) width: Int, respectAspectRatio: Boolean): Deferred<Bitmap> = async(CommonPool) {
-    val size = getImgeSize().scaleWidth(width)
-    Bitmap.createScaledBitmap(this@scaleToWidth, size.width, size.height, true)
+suspend fun Bitmap.scaleToWidth(@IntRange(from = 0) width: Int, respectAspectRatio: Boolean): Deferred<Bitmap?> = async(CommonPool) {
+    tryAndLogSuspend("Bitmap.scaleToWidth") {
+        val size = getImgeSize().scaleWidth(width)
+        L.error("test", "size is : $size")
+        Bitmap.createScaledBitmap(this@scaleToWidth, size.width, size.height, true)
+    }
 }
 
 /**
@@ -179,11 +183,13 @@ val ImageSize.largest: Int
     get() = maxOf(width, height)
 
 
-//eg i have 200 height, and 500 width, and want to ratio that to 50 x ?
+
 fun ImageSize.scaleWidth(destWidth: Int): ImageSize {
     val destFloat = destWidth.toFloat()
     val srcFloat = width.toFloat()
-    val ratio = maxOf(destFloat, srcFloat) / minOf(destFloat, srcFloat)
+
+    val ratio = (1f / (maxOf(destFloat, srcFloat) / minOf(destFloat, srcFloat)))
+    L.error("test", "math: ratio: $ratio, srcFloat : $srcFloat, destFloat : $destFloat")
     return applyRatio(ratio)
 }
 

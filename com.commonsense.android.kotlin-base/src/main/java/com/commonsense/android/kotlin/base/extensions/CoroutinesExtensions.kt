@@ -3,6 +3,7 @@ package com.commonsense.android.kotlin.base.extensions
 import com.commonsense.android.kotlin.base.AsyncEmptyFunction
 import com.commonsense.android.kotlin.base.EmptyFunction
 import kotlinx.coroutines.experimental.CoroutineStart
+import kotlinx.coroutines.experimental.Deferred
 import kotlinx.coroutines.experimental.Job
 import kotlinx.coroutines.experimental.launch
 import kotlin.coroutines.experimental.CoroutineContext
@@ -36,8 +37,20 @@ fun Job.launchOnCompletedAsync(context: CoroutineContext, action: AsyncEmptyFunc
 fun launch(context: CoroutineContext,
            start: CoroutineStart = CoroutineStart.DEFAULT,
            block: suspend () -> Unit): Job {
-
     return launch(context, start) {
         block()
     }
+}
+
+fun <T> asyncSimple(context: CoroutineContext,
+                    start: CoroutineStart = CoroutineStart.DEFAULT,
+                    block: suspend () -> T): Deferred<T> {
+    return kotlinx.coroutines.experimental.async(context, start, {
+        block()
+    })
+}
+
+fun <T> asyncSimple(context: CoroutineContext,
+                    block: suspend () -> T): Deferred<T> {
+    return asyncSimple(context, CoroutineStart.DEFAULT, block)
 }

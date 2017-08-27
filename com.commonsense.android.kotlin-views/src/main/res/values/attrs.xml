@@ -7,4 +7,15 @@
         <attr name="unselectedBackground" format="reference" />
         <attr name="selectedBackground" format="reference" />
     </declare-styleable>
+
+    <declare-styleable name="DotView">
+        <attr name="color" format="color" />
+        <attr name="radius" format="dimension" />
+    </declare-styleable>
+
+    <declare-styleable name="UniformBaseLayout">
+        <attr name="contentMargin" format="dimension" />
+        <attr name="forceDrawBackground" format="boolean" />
+    </declare-styleable>
+
 </resources>

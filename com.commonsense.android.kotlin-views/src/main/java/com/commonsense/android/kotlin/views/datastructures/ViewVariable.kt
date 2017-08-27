@@ -8,8 +8,10 @@ import android.support.annotation.Dimension
 import android.support.annotation.StyleableRes
 import com.commonsense.android.kotlin.base.EmptyFunction
 import com.commonsense.android.kotlin.base.extensions.weakReference
+import com.commonsense.android.kotlin.system.extensions.getColorSafe
 import com.commonsense.android.kotlin.system.extensions.getDrawableSafe
 import com.commonsense.android.kotlin.system.extensions.getTextSafe
+import com.commonsense.android.kotlin.system.logging.tryAndLog
 import java.lang.ref.WeakReference
 import kotlin.reflect.KProperty
 
@@ -53,40 +55,58 @@ abstract class ViewVariable<T>(initialValue: T, @StyleableRes val styleIndex: In
 
 }
 
-open class TextViewVariable(@StyleableRes styleIndex: Int, toAttachTo: ViewAttributeList, onUpdate: EmptyFunction)
-    : ViewVariable<CharSequence?>(null, styleIndex, toAttachTo, onUpdate) {
-    override fun parseFrom(typedArray: TypedArray, context: Context): CharSequence? =
-            typedArray.getTextSafe(styleIndex)
-}
+open class TextViewVariable(@StyleableRes styleIndex: Int,
+                            toAttachTo: ViewAttributeList,
+                            onUpdate: EmptyFunction)
+    : AbstractViewVariable<CharSequence?>(null, TypedArray::getTextSafe, styleIndex, toAttachTo, onUpdate)
 
-open class ColorValueViewVariable(@ColorInt defaultValue: Int, @StyleableRes styleIndex: Int, toAttachTo: ViewAttributeList, onUpdate: EmptyFunction)
-    : ViewVariable<Int>(defaultValue, styleIndex, toAttachTo, onUpdate) {
-    override fun parseFrom(typedArray: TypedArray, context: Context): Int? =
-            typedArray.getColor(styleIndex, getInnerValue())
-}
+open class ColorValueViewVariable(@ColorInt defaultValue: Int,
+                                  @StyleableRes styleIndex: Int,
+                                  toAttachTo: ViewAttributeList,
+                                  onUpdate: EmptyFunction)
+    : AbstractViewVariable<@ColorInt Int>(defaultValue, TypedArray::getColorSafe, styleIndex, toAttachTo, onUpdate)
 
-open class BooleanViewVariable(defaultValue: Boolean, @StyleableRes styleIndex: Int, toAttachTo: ViewAttributeList, onUpdate: EmptyFunction)
-    : ViewVariable<Boolean>(defaultValue, styleIndex, toAttachTo, onUpdate) {
+open class BooleanViewVariable(defaultValue: Boolean,
+                               @StyleableRes styleIndex: Int,
+                               toAttachTo: ViewAttributeList,
+                               onUpdate: EmptyFunction)
+    : AbstractViewVariable<Boolean>(defaultValue, TypedArray::getBoolean, styleIndex, toAttachTo, onUpdate)
 
-    override fun parseFrom(typedArray: TypedArray, context: Context): Boolean? =
-            typedArray.getBoolean(styleIndex, getInnerValue())
-}
-
-open class DrawableViewVariable(@StyleableRes styleIndex: Int, toAttachTo: ViewAttributeList, onUpdate: EmptyFunction)
+open class DrawableViewVariable(@StyleableRes styleIndex: Int,
+                                toAttachTo: ViewAttributeList,
+                                onUpdate: EmptyFunction)
     : ViewVariable<Drawable?>(null, styleIndex, toAttachTo, onUpdate) {
     override fun parseFrom(typedArray: TypedArray, context: Context): Drawable? =
             typedArray.getDrawableSafe(styleIndex, context)
 }
 
-open class IntViewVariable(defaultValue: Int, @StyleableRes styleIndex: Int, toAttachTo: ViewAttributeList, onUpdate: EmptyFunction)
-    : ViewVariable<Int>(defaultValue, styleIndex, toAttachTo, onUpdate) {
-    override fun parseFrom(typedArray: TypedArray, context: Context): Int? =
-            typedArray.getInteger(styleIndex, getInnerValue())
+open class FloatViewVariable(defaultValue: Float,
+                             @StyleableRes styleIndex: Int,
+                             toAttachTo: ViewAttributeList,
+                             onUpdate: EmptyFunction)
+    : AbstractViewVariable<Float>(defaultValue, TypedArray::getFloat, styleIndex, toAttachTo, onUpdate)
 
-}
+open class IntViewVariable(defaultValue: Int,
+                           @StyleableRes styleIndex: Int,
+                           toAttachTo: ViewAttributeList,
+                           onUpdate: EmptyFunction)
+    : AbstractViewVariable<Int>(defaultValue, TypedArray::getInt, styleIndex, toAttachTo, onUpdate)
 
-class DimensionViewVariable(@Dimension defaultValue: Float, @StyleableRes styleIndex: Int, toAttachTo: ViewAttributeList, onUpdate: EmptyFunction)
-    : ViewVariable<@android.support.annotation.Dimension Float>(defaultValue, styleIndex, toAttachTo, onUpdate) {
-    override fun parseFrom(typedArray: TypedArray, context: Context): Float? =
-            typedArray.getDimension(styleIndex, getInnerValue())
+
+open class DimensionViewVariable(@Dimension defaultValue: Float,
+                                 @StyleableRes styleIndex: Int,
+                                 toAttachTo: ViewAttributeList,
+                                 onUpdate: EmptyFunction)
+    : AbstractViewVariable<@Dimension Float>(defaultValue, TypedArray::getDimension, styleIndex, toAttachTo, onUpdate)
+
+
+abstract class AbstractViewVariable<T>(defaultValue: T,
+                                       private val extractor: (TypedArray, Int, T) -> T?,
+                                       @StyleableRes styleIndex: Int,
+                                       toAttachTo: ViewAttributeList,
+                                       onUpdate: EmptyFunction)
+
+    : ViewVariable<T>(defaultValue, styleIndex, toAttachTo, onUpdate) {
+    override fun parseFrom(typedArray: TypedArray, context: Context): T? =
+                extractor(typedArray, styleIndex, getInnerValue())
 }

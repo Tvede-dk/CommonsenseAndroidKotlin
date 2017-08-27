@@ -8,6 +8,7 @@ import android.support.annotation.Dimension
 import android.support.annotation.StyleableRes
 import android.support.annotation.VisibleForTesting
 import android.util.AttributeSet
+import com.commonsense.android.kotlin.base.EmptyFunction
 import com.commonsense.android.kotlin.base.extensions.use
 import com.commonsense.android.kotlin.system.extensions.getTypedArrayFor
 import com.commonsense.android.kotlin.system.logging.tryAndLog
@@ -41,6 +42,14 @@ interface ViewAttribute {
     fun afterSetupView()
 
     fun getContext(): Context
+
+    fun post(action: Runnable): Boolean
+
+    fun post(action: EmptyFunction) {
+        post(Runnable(action))
+    }
+
+    fun invalidate()
 
     @VisibleForTesting(otherwise = VisibleForTesting.PROTECTED)
     val attributes: MutableList<WeakReference<ViewVariable<*>>>
@@ -97,4 +106,26 @@ fun ViewAttribute.prepareAttributes(attrs: AttributeSet? = null, defStyleAttr: I
     }
 }
 
+
+interface LateAttributes : ViewAttribute {
+    var partialTypedArray: TypedArray?
+
+    fun setupTypedArray(attrs: AttributeSet?, defStyleAttr: Int = 0) {
+        val style = getStyleResource()
+        if (style != null && attrs != null)
+            partialTypedArray = getContext().getTypedArrayFor(attrs, style, defStyleAttr)
+    }
+
+    fun afterFinishInflate() {
+        partialTypedArray?.let {
+            tryAndLog(this::class) {
+                parseTypedArray(it)
+            }
+            it.recycle()
+        }
+        partialTypedArray = null
+        afterSetupView()
+        updateView()
+    }
+}
 

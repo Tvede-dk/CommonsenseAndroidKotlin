@@ -1,13 +1,16 @@
 package com.commonsense.android.kotlin.views.extensions
 
+import android.graphics.Bitmap
 import android.support.annotation.ColorInt
 import android.widget.ImageView
+import com.commonsense.android.kotlin.system.imaging.ImageDecodingType
+import com.commonsense.android.kotlin.system.imaging.ImageLoader
+import com.commonsense.android.kotlin.system.imaging.ImageLoaderType
 import com.commonsense.android.kotlin.system.imaging.withColor
+import com.commonsense.android.kotlin.system.logging.L
 import com.commonsense.android.kotlin.system.logging.tryAndLogSuspend
 import com.commonsense.android.kotlin.views.features.getTagOr
-import kotlinx.coroutines.experimental.CommonPool
 import kotlinx.coroutines.experimental.android.UI
-import kotlinx.coroutines.experimental.async
 import kotlinx.coroutines.experimental.launch
 import java.util.concurrent.atomic.AtomicInteger
 
@@ -23,19 +26,43 @@ fun ImageView.colorOverlay(@ColorInt color: Int) {
  * This is safe for use on lists, ect, where calling it multiple times will yield only the last as the real modifier.
  * does not call "cancel" on the older action.
  */
-fun <T> ImageView.loadAndUse(action: suspend () -> T?, actionAfter: (T, ImageView) -> Unit) {
+fun ImageView.loadAndUse(loading: ImageLoaderType, decodeScale: ImageDecodingType, afterDecoded: (ImageView, Bitmap) -> Unit) {
     val index = counterTag
     val ourIndex = index.incrementAndGet()
     launch(UI) {
+
         tryAndLogSuspend("ImageView.loadAndUse") {
-            val result = async(CommonPool, block = { return@async action() }).await() //background the download.
-            if (index.get() == ourIndex
-                    && result != null) {
-                actionAfter(result, this@loadAndUse) //then mainthread the display phase.
+            val bitmap = ImageLoader.instance.loadAndScale(
+                    ourIndex.toString(),
+                    validateId(ourIndex, index, loading),
+                    validateIdWith(ourIndex, index, decodeScale))
+            if (index.get() == ourIndex && bitmap != null) {
+                afterDecoded(this@loadAndUse, bitmap)
+            } else {
+                L.error("test", "index is:${index.get()}, but we expected : $ourIndex")
             }
         }
     }
+}
 
+private fun <T> validateId(ourIndex: Int, index: AtomicInteger, action: suspend () -> T?): suspend () -> T? {
+    return {
+        if (ourIndex == index.get()) {
+            action()
+        } else {
+            null
+        }
+    }
+}
+
+private fun <T, U> validateIdWith(ourIndex: Int, index: AtomicInteger, action: suspend (U) -> T?): suspend (U) -> T? {
+    return {
+        if (ourIndex == index.get()) {
+            action(it)
+        } else {
+            null
+        }
+    }
 }
 
 private val imageViewCounterTag = "ImageView.counterTag"

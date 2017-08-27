@@ -82,3 +82,9 @@ fun <T> T?.parseTo(receiver: ((T) -> Unit)?): T? {
     }
     return this
 }
+
+inline fun Int.forEach(crossinline action: EmptyFunction) {
+    for (i in 0 until this) {
+        action()
+    }
+}

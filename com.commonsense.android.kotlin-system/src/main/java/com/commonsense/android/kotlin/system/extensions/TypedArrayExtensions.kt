@@ -35,6 +35,10 @@ fun TypedArray.getTextSafe(@StyleableRes style: Int): CharSequence? {
     }
 }
 
+fun TypedArray.getTextSafe(@StyleableRes style: Int, defaultValue: CharSequence?): CharSequence? {
+    return getTextSafe(style) ?: defaultValue
+}
+
 fun TypedArray.getColorSafe(@StyleableRes style: Int): Int? {
     return ifHaveOrNull(style) {
         getColorStateList(style)?.defaultColor

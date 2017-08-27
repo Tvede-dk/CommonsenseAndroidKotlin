@@ -1,11 +1,13 @@
 package com.commonsense.android.kotlin.system.imaging
 
+import android.Manifest
 import android.app.Activity
 import android.content.ContentValues
 import android.content.Intent
 import android.graphics.Bitmap
 import android.net.Uri
 import android.provider.MediaStore
+import android.support.annotation.RequiresPermission
 import com.commonsense.android.kotlin.base.EmptyFunction
 import com.commonsense.android.kotlin.system.PermissionEnum
 import com.commonsense.android.kotlin.system.askAndUsePermission
@@ -74,6 +76,7 @@ class PictureRetriver(private val activity: BaseActivity,
         pictureUri = null
     }
 
+    @RequiresPermission(allOf = arrayOf(Manifest.permission.WRITE_EXTERNAL_STORAGE, Manifest.permission.READ_EXTERNAL_STORAGE))
     fun getImage(fromCamera: Boolean) {
         if (fromCamera) {
             useCamera()

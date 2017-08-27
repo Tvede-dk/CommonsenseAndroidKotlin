@@ -19,6 +19,12 @@ import kotlinx.coroutines.experimental.android.UI
  * Created by Kasper Tvede on 30-05-2017.
  */
 class SwipeRefreshRecyclerView : CustomDataBindingView<SwipeRefreshRecylerViewBinding>, SwipeRefreshLayout.OnRefreshListener {
+    override fun getStyleResource(): IntArray? = null
+
+    override fun updateView() {}
+
+    override fun afterSetupView() {}
+
     override fun inflate(): InflaterFunction<SwipeRefreshRecylerViewBinding>
             = SwipeRefreshRecylerViewBinding::inflate
 

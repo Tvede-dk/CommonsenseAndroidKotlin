@@ -25,7 +25,7 @@ abstract class FragmentContainerActivity<ViewBinding : ViewDataBinding, Fragment
 
 
     override fun useBinding() {
-        replaceFragment(getFragmentContainer().id, createFragment())
+        replaceFragment(getFragmentContainer().id, fragment)
         afterFragmentAttached()
     }
 }

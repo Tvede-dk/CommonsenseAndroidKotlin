@@ -183,6 +183,14 @@ val ViewGroup.children: List<View>
         return (0 until childCount).map(this::getChildAt)
     }
 
+
+val ViewGroup.visibleChildren: List<View>
+    get() = children.filterNot { it.isGone }
+
+val ViewGroup.visibleChildrenCount: Int
+    get() = visibleChildren.size
+
+
 fun View.disable() {
     isEnabled = false
     isClickable = false

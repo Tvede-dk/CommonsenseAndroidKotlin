@@ -3,8 +3,10 @@ package com.commonsense.android.kotlin.system.base
 import android.content.Intent
 import android.support.annotation.IntRange
 import android.support.v4.app.DialogFragment
+import android.view.MenuItem
 import com.commonsense.android.kotlin.base.scheduling.JobContainer
 import com.commonsense.android.kotlin.system.base.helpers.*
+import com.commonsense.android.kotlin.system.extensions.onBackPressed
 import com.commonsense.android.kotlin.system.logging.logWarning
 import kotlinx.coroutines.experimental.CommonPool
 import kotlinx.coroutines.experimental.Job
@@ -53,6 +55,15 @@ open class BaseFragment : DialogFragment(), ActivityResultHelperContainer {
         localJobs.cleanJobs()
         activityResultHelper.clear()
         super.onDestroy()
+    }
+
+    override fun onOptionsItemSelected(item: MenuItem?): Boolean {
+        return if (item?.itemId == android.R.id.home) {
+            onBackPressed()
+            true
+        } else {
+            super.onOptionsItemSelected(item)
+        }
     }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {

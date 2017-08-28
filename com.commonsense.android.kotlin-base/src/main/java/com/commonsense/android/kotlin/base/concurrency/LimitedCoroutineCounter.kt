@@ -9,7 +9,6 @@ import kotlinx.coroutines.experimental.channels.Channel
 class LimitedCoroutineCounter(maxCounter: Int) {
     private val channel = Channel<Unit>(maxCounter)
     suspend fun <T> perform(action: suspend () -> T): T {
-        Log.w("omg", "isFull: ${channel.isFull}")
         channel.send(Unit)
         try {
             return action()

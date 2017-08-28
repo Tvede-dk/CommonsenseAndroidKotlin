@@ -35,6 +35,9 @@ fun Fragment.onBackPressed() {
     activity.onBackPressed()
 }
 
+fun android.app.Fragment.onBackPressed() {
+    activity.onBackPressed()
+}
 
 fun Fragment.popToFirstFragment() {
     activity.runOnUiThread {

@@ -9,10 +9,12 @@ import android.support.annotation.UiThread
 import android.support.v4.app.Fragment
 import android.support.v4.app.FragmentActivity
 import android.support.v7.app.AppCompatActivity
+import android.view.MenuItem
 import com.commonsense.android.kotlin.base.scheduling.JobContainer
 import com.commonsense.android.kotlin.system.PermissionsHandling
 import com.commonsense.android.kotlin.system.base.helpers.*
 import com.commonsense.android.kotlin.system.dataFlow.ReferenceCountingMap
+import com.commonsense.android.kotlin.system.extensions.backPressIfHome
 import com.commonsense.android.kotlin.system.extensions.transactionCommit
 import com.commonsense.android.kotlin.system.extensions.transactionCommitNow
 import com.commonsense.android.kotlin.system.logging.logWarning
@@ -60,6 +62,9 @@ open class BaseActivity : AppCompatActivity(), ActivityResultHelperContainer {
         super.onDestroy()
     }
 
+    override fun onOptionsItemSelected(item: MenuItem?): Boolean {
+        return item.backPressIfHome(this) || super.onOptionsItemSelected(item)
+    }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)

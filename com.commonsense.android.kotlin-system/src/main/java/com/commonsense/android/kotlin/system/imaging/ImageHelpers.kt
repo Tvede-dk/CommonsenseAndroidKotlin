@@ -11,7 +11,6 @@ import android.support.annotation.IntRange
 import android.support.media.ExifInterface
 import com.commonsense.android.kotlin.base.extensions.collections.map
 import com.commonsense.android.kotlin.system.extensions.getVirtualScreenSize
-import com.commonsense.android.kotlin.system.logging.L
 import com.commonsense.android.kotlin.system.logging.tryAndLogSuspend
 import kotlinx.coroutines.experimental.CommonPool
 import kotlinx.coroutines.experimental.Deferred
@@ -94,8 +93,7 @@ private fun getPowerOfTwoForSampleRatio(ratio: Double): Int {
 
 suspend fun Bitmap.scaleToWidth(@IntRange(from = 0) width: Int, respectAspectRatio: Boolean): Deferred<Bitmap?> = async(CommonPool) {
     tryAndLogSuspend("Bitmap.scaleToWidth") {
-        val size = getImgeSize().scaleWidth(width)
-        L.error("test", "size is : $size")
+        val size = getImageSize().scaleWidth(width)
         Bitmap.createScaledBitmap(this@scaleToWidth, size.width, size.height, true)
     }
 }
@@ -183,13 +181,10 @@ val ImageSize.largest: Int
     get() = maxOf(width, height)
 
 
-
 fun ImageSize.scaleWidth(destWidth: Int): ImageSize {
     val destFloat = destWidth.toFloat()
     val srcFloat = width.toFloat()
-
     val ratio = (1f / (maxOf(destFloat, srcFloat) / minOf(destFloat, srcFloat)))
-    L.error("test", "math: ratio: $ratio, srcFloat : $srcFloat, destFloat : $destFloat")
     return applyRatio(ratio)
 }
 
@@ -197,4 +192,4 @@ fun ImageSize.applyRatio(ratio: Float): ImageSize =
         ImageSize((width * ratio).toInt(), (height * ratio).toInt())
 
 
-fun Bitmap.getImgeSize(): ImageSize = ImageSize(width, height)
+fun Bitmap.getImageSize(): ImageSize = ImageSize(width, height)

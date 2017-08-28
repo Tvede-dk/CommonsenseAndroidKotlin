@@ -41,7 +41,6 @@ class ImageLoader(loadingCapacity: Int = 3, decodingScalingCapacity: Int = 2) {
     suspend fun loadAndScale(id: String, loader: ImageLoaderType, decoder: ImageDecodingType): Bitmap? {
         removeIdFromCancel(id) //remove the id from cancel if we are to load it now.
         return loadingSemaphore.perform {
-            L.error("test", "\tload stage")
             loadStage(id, loader, decoder)
         }
     }
@@ -53,7 +52,6 @@ class ImageLoader(loadingCapacity: Int = 3, decodingScalingCapacity: Int = 2) {
 
         return asyncSimple(CommonPool, loader).await()?.let { bitmap ->
             decodingSemaphore.perform {
-                L.error("test", "\t\tdecode stage")
                 decodeStage(id, bitmap, decoder)
             }
         }
@@ -89,11 +87,3 @@ class ImageLoader(loadingCapacity: Int = 3, decodingScalingCapacity: Int = 2) {
 ////        decodingChannel.close()
 //    }
 }
-
-
-suspend fun ImageView.loadImage(id: String, loader: ImageLoaderType, decoder: ImageDecodingType, imageLoader: ImageLoader = ImageLoader.instance) {
-    imageLoader.loadAndScale(id, loader, decoder)?.let {
-        launch(UI) { this@loadImage.setImageBitmap(it) }
-    }
-}
-

@@ -3,6 +3,7 @@ package com.commonsense.android.kotlin.system.base.helpers
 import android.app.Activity
 import android.os.Bundle
 import com.commonsense.android.kotlin.system.base.BaseActivity
+import com.commonsense.android.kotlin.system.logging.logError
 
 /**
  * Created by Kasper Tvede on 23-07-2017.
@@ -38,6 +39,8 @@ open class BaseActivityData<out InputType> : BaseActivity() {
      * run'ed before we kill this activity
      */
     open fun beforeCloseOnBadData() {
+        logError("requried data for this activity not presented, please make sure you provide it. ")
+
     }
 
     /**

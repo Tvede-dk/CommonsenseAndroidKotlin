@@ -39,7 +39,11 @@ fun ImageView.loadAndUse(loading: ImageLoaderType, decodeScale: ImageDecodingTyp
             if (index.get() == ourIndex && bitmap != null) {
                 afterDecoded(this@loadAndUse, bitmap)
             } else {
-                L.error("test", "index is:${index.get()}, but we expected : $ourIndex")
+                if (bitmap == null) {
+                    L.error("test", "expected index, but no bitmap")
+                } else {
+                    L.error("test", "index is:${index.get()}, but we expected : $ourIndex")
+                }
             }
         }
     }

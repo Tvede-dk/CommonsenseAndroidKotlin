@@ -64,15 +64,13 @@ inline fun Boolean.onFalse(crossinline action: EmptyFunction): Boolean {
  */
 inline fun Boolean.ifFalse(crossinline action: EmptyFunction): Boolean = onFalse(action)
 
-inline fun <reified T : kotlin.Enum<T>> valueOfOrUnsafe(type: String?, orValue: T?): T? =
-        java.lang.Enum.valueOf(T::class.java, type) ?: orValue
+inline fun <reified T : kotlin.Enum<T>> enumFromOrNull(name: String?): T? {
+    return enumValues<T>().find { it.name == name }
+}
 
-inline fun <reified T : kotlin.Enum<T>> enumFromOr(type: String?, orValue: T): T =
-        java.lang.Enum.valueOf(T::class.java, type) ?: orValue
-
-inline fun <reified T : kotlin.Enum<T>> enumFromOrNull(type: String?): T? =
-        java.lang.Enum.valueOf(T::class.java, type) ?: null
-
+inline fun <reified T : kotlin.Enum<T>> enumFromOr(name: String?, orElse: T): T {
+    return enumFromOrNull<T>(name) ?: orElse
+}
 
 val IntRange.length
     get() = (last - start) + 1 //+1 since start is inclusive.

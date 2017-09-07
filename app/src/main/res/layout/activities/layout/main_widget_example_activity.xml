@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@color/white"
+        android:orientation="vertical">
+
+        <RadioButton
+            android:id="@+id/radio_1"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="1" />
+
+        <RadioButton
+            android:id="@+id/radio_2"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="1" />
+
+        <RadioButton
+            android:id="@+id/radio_3"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="1" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@color/white"
+            android:orientation="vertical">
+
+            <com.commonsense.android.kotlin.views.widgets.ToggleImageButton
+                android:id="@+id/radio_11"
+                android:layout_width="match_parent"
+                app:selectedColor="#00f"
+                app:unselectedColor="#f00"
+                android:src="@drawable/ic_memory_black_24dp"
+                android:layout_height="wrap_content"
+                android:text="1" />
+
+            <com.commonsense.android.kotlin.views.widgets.ToggleImageButton
+                android:id="@+id/radio_22"
+                app:selectedColor="#00f"
+                app:unselectedColor="#f00"
+                android:layout_width="match_parent"
+                android:src="@drawable/ic_memory_black_24dp"
+                android:layout_height="wrap_content"
+                android:text="1" />
+
+            <com.commonsense.android.kotlin.views.widgets.ToggleImageButton
+                android:id="@+id/radio_33"
+                android:layout_width="match_parent"
+                app:selectedColor="#00f"
+                app:unselectedColor="#f00"
+                android:layout_height="wrap_content"
+                android:src="@drawable/ic_memory_black_24dp"
+                android:text="1" />
+
+        </LinearLayout>
+    </LinearLayout>
+
+
+</layout>

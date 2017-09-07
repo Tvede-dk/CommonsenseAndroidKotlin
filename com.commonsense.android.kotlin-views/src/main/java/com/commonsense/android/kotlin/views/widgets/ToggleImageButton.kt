@@ -11,12 +11,14 @@ import com.commonsense.android.kotlin.system.extensions.getDrawableSafe
 import com.commonsense.android.kotlin.system.imaging.withTintColor
 import com.commonsense.android.kotlin.views.R
 import com.commonsense.android.kotlin.views.datastructures.ViewVariable
+import com.commonsense.android.kotlin.views.input.selection.CheckableStatusCallback
 import java.lang.ref.WeakReference
 
 /**
  * Created by Kasper Tvede on 13-06-2017.
  */
-open class ToggleImageButton : AppCompatImageView, ViewAttribute, View.OnClickListener {
+open class ToggleImageButton : AppCompatImageView, ViewAttribute, View.OnClickListener, CheckableStatusCallback {
+
 
     override val attributes: MutableList<WeakReference<ViewVariable<*>>> = mutableListOf()
 
@@ -45,8 +47,11 @@ open class ToggleImageButton : AppCompatImageView, ViewAttribute, View.OnClickLi
     var selectedColor: Int by internalSelectedColor
     //</editor-fold>
 
+    override fun setOnCheckedChangedListener(callback: EmptyFunction) {
+        onCheckedChanged = callback
+    }
 
-    //<editor-fold desc="isChecked">
+    //<editor-fold desc="is Checked">
     private var onCheckedChanged: EmptyFunction?
         get() = internalChecked.onChanged
         set(value) {
@@ -56,7 +61,7 @@ open class ToggleImageButton : AppCompatImageView, ViewAttribute, View.OnClickLi
     private val internalChecked by lazy {
         BooleanVariable(false, R.styleable.ToggleImageButton_checked)
     }
-    var isChecked by internalChecked
+    override var checked by internalChecked
     //</editor-fold>
 
     //<editor-fold desc="unselected color">
@@ -88,7 +93,7 @@ open class ToggleImageButton : AppCompatImageView, ViewAttribute, View.OnClickLi
     override fun getStyleResource(): IntArray? = R.styleable.ToggleImageButton
 
     override fun updateView() {
-        setImageDrawable(drawable.withTintColor(getCheckColor()))
+        setImageDrawable(drawable?.withTintColor(getCheckColor()))
         val checkBackground = getCheckBackground()
         if (checkBackground != background) {
             background = checkBackground
@@ -97,10 +102,10 @@ open class ToggleImageButton : AppCompatImageView, ViewAttribute, View.OnClickLi
     }
 
     private fun getCheckColor(): Int
-            = isChecked.map(selectedColor, unselectedColor)
+            = checked.map(selectedColor, unselectedColor)
 
     private fun getCheckBackground(): Drawable?
-            = isChecked.map(selectedBackground, unselectedBackground)
+            = checked.map(selectedBackground, unselectedBackground)
 
     override fun afterSetupView() {
         super.setOnClickListener(this)
@@ -108,7 +113,7 @@ open class ToggleImageButton : AppCompatImageView, ViewAttribute, View.OnClickLi
     }
 
     override fun onClick(sender: View?) {
-        isChecked = !isChecked
+        checked = !checked
     }
 
 
@@ -118,7 +123,7 @@ open class ToggleImageButton : AppCompatImageView, ViewAttribute, View.OnClickLi
 
 
     fun setOnCheckedChangedListener(onCheckedChanged: (Boolean) -> Unit) {
-        this.onCheckedChanged = { onCheckedChanged(this.isChecked) }
+        this.onCheckedChanged = { onCheckedChanged(this.checked) }
     }
 
     var checkedNoNotify: Boolean

@@ -1,6 +1,7 @@
 package com.commonsense.android.kotlin.views.input.selection
 
 import com.commonsense.android.kotlin.test.assert
+import com.commonsense.android.kotlin.test.assertNotNullAndEquals
 import org.junit.Test
 
 /**
@@ -106,9 +107,6 @@ class SingleSelectionHandlerTest {
 
     }
 
-
-    //TODO test callback funcitonality here.
-
     @Test
     fun testCallback() {
         val selectionHandler = SingleSelectionHandler<String>()
@@ -132,6 +130,45 @@ class SingleSelectionHandlerTest {
         toggle2.checked = true
 
         "qwe".assert(ourValue!!)
+    }
+
+
+    @Test
+    fun testDeselection() {
+        val selectionHandler = SingleSelectionHandler<String>()
+        val toggle1 = MockedToggleableViewWithCallback("1234")
+        selectionHandler += toggle1
+
+        var ourValue: String? = null
+
+        selectionHandler.callback = {
+            ourValue = it
+        }
+        toggle1.checked = true
+        "1234".assertNotNullAndEquals(ourValue)
+        toggle1.checked = false
+        "1234".assertNotNullAndEquals(ourValue)
+
+        //before setup should still resepct it.
+        selectionHandler.allowDeselection { ourValue = "<null>" }
+        toggle1.checked = false
+        "<null>".assertNotNullAndEquals(ourValue)
+        toggle1.checked = true
+        "1234".assertNotNullAndEquals(ourValue)
+        toggle1.checked = false
+        "<null>".assertNotNullAndEquals(ourValue)
+
+        val toggle2 = MockedToggleableViewWithCallback("4321")
+        selectionHandler += toggle2
+
+        toggle2.checked = true
+        toggle1.checked.assert(false)
+        "4321".assertNotNullAndEquals(ourValue)
+
+        toggle2.checked = false
+        "<null>".assertNotNullAndEquals(ourValue)
+        toggle1.checked.assert(false)
+        toggle2.checked.assert(false)
     }
 
 }

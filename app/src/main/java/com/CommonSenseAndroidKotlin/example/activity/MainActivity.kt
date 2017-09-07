@@ -3,7 +3,7 @@ package com.CommonSenseAndroidKotlin.example.activity
 
 import android.content.Intent
 import com.CommonSenseAndroidKotlin.example.databinding.ActivityMainBinding
-import com.CommonSenseAndroidKotlin.example.fragments.EditDatabindingFragment
+import com.CommonSenseAndroidKotlin.example.widgetsExamples.MainWidgetExampleActivity
 import com.commonsense.android.kotlin.views.databinding.activities.BaseDatabindingActivity
 import com.commonsense.android.kotlin.views.databinding.activities.InflaterFunctionSimple
 import com.commonsense.android.kotlin.views.extensions.setOnClick
@@ -33,7 +33,8 @@ class MainActivity : BaseDatabindingActivity<ActivityMainBinding>() {
         }
 
         binding.activityMainAdvanceAsyncButton.setOnclickAsync {
-            EditDatabindingFragment().show(supportFragmentManager, "test")
+//            EditDatabindingFragment().show(supportFragmentManager, "test")
+            startActivity(Intent(applicationContext, MainWidgetExampleActivity::class.java))
         }
 
         binding.activityMainCameraButton.setOnClick {

@@ -29,6 +29,7 @@
         <activity android:name=".activity.CameraActivity" />
         <activity android:name=".activity.LargeDataActivity" />
         <activity android:name=".activity.MainActivity" />
+        <activity android:name=".widgetsExamples.MainWidgetExampleActivity" />
 
     </application>
 

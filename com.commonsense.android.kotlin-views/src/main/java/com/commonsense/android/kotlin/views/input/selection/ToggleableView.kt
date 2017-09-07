@@ -1,6 +1,7 @@
 package com.commonsense.android.kotlin.views.input.selection
 
 import android.view.View
+import android.widget.RadioButton
 import com.commonsense.android.kotlin.base.EmptyFunction
 
 /**
@@ -15,7 +16,7 @@ interface CheckableStatus {
 }
 
 interface CheckableStatusCallback : CheckableStatus {
-    fun setOnCheckedChanged(callback: EmptyFunction)
+    fun setOnCheckedChangedListener(callback: EmptyFunction)
 }
 
 interface ToggleableView<out T> : CheckableStatus {
@@ -23,10 +24,11 @@ interface ToggleableView<out T> : CheckableStatus {
 
     fun setOnSelectionChanged(callback: SelectionToggleCallback<T>)
 
-    fun deselect(){
+    fun deselect() {
         checked = false
     }
-    fun select(){
+
+    fun select() {
         checked = true
     }
 }
@@ -73,5 +75,12 @@ fun <T, ViewType : View> ViewType.asToggleable(value: T,
 
 fun <T, ViewType> ViewType.asToggleable(value: T): ToggleableViewFunctional<T, ViewType>
         where ViewType : View, ViewType : CheckableStatusCallback {
-    return this.asToggleable(value, CheckableStatusCallback::setOnCheckedChanged)
+    return this.asToggleable(value, CheckableStatusCallback::setOnCheckedChangedListener)
+}
+
+
+fun <T> RadioButton.asToggleable(value: T): ToggleableView<T> {
+    return this.asToggleable(value, android.widget.RadioButton::isChecked, android.widget.RadioButton::setChecked, { radioButton, function ->
+        radioButton.setOnCheckedChangeListener { _, _ -> function() }
+    })
 }

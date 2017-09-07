@@ -11,6 +11,10 @@ class SingleSelectionHandler<T> {
     // use toggleable view
     private val viewsToWorkOn = mutableListOf<ToggleableView<T>>()
 
+
+    //simple guard against callback hell / massacre
+    private var innerDisableSelectionChanged = false
+
     private var _selected: ToggleableView<T>? = null
     private var selected: ToggleableView<T>?
         get() = _selected
@@ -24,8 +28,14 @@ class SingleSelectionHandler<T> {
 
     var callback: FunctionUnit<T>? = null
 
-    //simple guard against callback hell / massacre
-    private var innerDisableSelectionChanged = false
+    private var isAllowedToUnselectedAll: Boolean = false
+
+    fun allowDeselection(onDeselection: EmptyFunction) {
+        onDeselectCallback = onDeselection
+        isAllowedToUnselectedAll = true
+    }
+
+    private var onDeselectCallback: EmptyFunction? = null
 
 
     fun addView(view: ToggleableView<T>) = updateSelection {
@@ -34,20 +44,28 @@ class SingleSelectionHandler<T> {
         viewsToWorkOn.add(view)
     }
 
-    private var isAllowedToUnselectedAll: Boolean = false
+    /**
+     * Controls iff we allow the user to un-select the current selected.
+     */
+
 
     private fun onSelectionChanged(view: ToggleableView<T>, selection: Boolean) = updateSelection {
         when {
-            selection && selected != view -> {
-                selected?.deselect()
-                selected = view
-                return@updateSelection
-            }
+            selection && selected != view -> changeSelection(view)
+
+        //if not allowed to deselect, make the "deselected" view selected again :)
             selected == view && !selection && !isAllowedToUnselectedAll -> selected?.select()
-        //by default it will be unselected, however if that is not allowed,
-        // then we are to correct that "mistake" (reselect it)
-        //   !selection && !isAllowedToUnselectedAll -> selected?.select()
+        //if allowed, then nothing is selected.
+            selected == view && !selection && isAllowedToUnselectedAll -> {
+                selected = null
+                onDeselectCallback?.invoke()
+            }
         }
+    }
+
+    private fun changeSelection(view: ToggleableView<T>) {
+        selected?.deselect()
+        selected = view
     }
 
     fun setSelectedValue(selectedValue: T?) = updateSelection {
@@ -74,4 +92,5 @@ class SingleSelectionHandler<T> {
     operator fun plusAssign(selectionToAdd: ToggleableView<T>) {
         addView(selectionToAdd)
     }
+
 }

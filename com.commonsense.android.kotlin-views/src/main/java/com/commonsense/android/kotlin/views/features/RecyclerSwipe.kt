@@ -164,6 +164,8 @@ private class innerSwipeHelper(val recyclerAdapter: DataBindingRecyclerAdapter<*
         val optInterface = getOptInterface(viewHolder)
         val dir = directionInt.ToDirection()
         val baseViewHolder = viewHolder as? BaseViewHolderItem<*>
+        //TODO hotpatch the dir as it sometimes is.. wrong ??? thx google.
+        //use the
         if (dir != null && baseViewHolder != null && optInterface != null) {
             optInterface.onSwiped(dir, baseViewHolder.item)
         }

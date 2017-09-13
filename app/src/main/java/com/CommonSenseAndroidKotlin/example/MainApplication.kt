@@ -1,6 +1,7 @@
 package com.CommonSenseAndroidKotlin.example
 
 import com.commonsense.android.kotlin.prebuilt.baseClasses.BaseApplication
+import com.commonsense.android.kotlin.system.extensions.safeToast
 
 
 /**
@@ -14,4 +15,14 @@ class MainApplication : BaseApplication() {
 
     }
 
+    override fun onApplicationResumed() {
+        super.onApplicationResumed()
+        safeToast("application resumed")
+    }
+
+    override fun onApplicationPaused() {
+        super.onApplicationPaused()
+        safeToast("application paused.")
+
+    }
 }

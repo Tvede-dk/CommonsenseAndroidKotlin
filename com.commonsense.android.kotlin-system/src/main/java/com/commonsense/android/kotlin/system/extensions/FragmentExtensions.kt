@@ -53,10 +53,6 @@ fun Fragment.popToFirstFragment() {
     }
 }
 
-fun BaseFragment.startActivityForResult() {
-
-}
-
 
 fun <Input, T : BaseActivityData<Input>>
         BaseFragment.startActivityWithData(activity: KClass<T>,

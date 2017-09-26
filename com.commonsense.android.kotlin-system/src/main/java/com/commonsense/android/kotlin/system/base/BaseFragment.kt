@@ -1,5 +1,6 @@
 package com.commonsense.android.kotlin.system.base
 
+import android.app.Activity
 import android.content.Intent
 import android.support.annotation.IntRange
 import android.support.v4.app.DialogFragment
@@ -18,9 +19,11 @@ import kotlinx.coroutines.experimental.android.UI
 
 open class BaseFragment : DialogFragment(), ActivityResultHelperContainer {
 
-    protected val activityAsBase
-        get() = activity as BaseActivity
+    protected val baseActivity: BaseActivity?
+        get() = activity as? BaseActivity
 
+    val safeActivity: Activity?
+        get() = activity
 
     private val localJobs by lazy {
         JobContainer()

@@ -20,6 +20,7 @@ import com.commonsense.android.kotlin.system.extensions.transactionCommitNow
 import com.commonsense.android.kotlin.system.logging.logWarning
 import kotlinx.coroutines.experimental.CommonPool
 import kotlinx.coroutines.experimental.android.UI
+import kotlin.reflect.KClass
 
 /**
  * created by Kasper Tvede on 29-09-2016.
@@ -93,6 +94,14 @@ open class BaseActivity : AppCompatActivity(), ActivityResultHelperContainer {
     }
     //</editor-fold>
 
+
+    fun <Input, T : BaseActivityData<Input>>
+            startActivityWithData(activity: KClass<T>,
+                                  data: Input,
+                                  requestCode: Int,
+                                  optOnResult: AsyncActivityResultCallback?) {
+        startActivityWithData(activity.java, data, requestCode, optOnResult)
+    }
 
     fun <Input, T : BaseActivityData<Input>>
             startActivityWithData(activity: Class<T>,

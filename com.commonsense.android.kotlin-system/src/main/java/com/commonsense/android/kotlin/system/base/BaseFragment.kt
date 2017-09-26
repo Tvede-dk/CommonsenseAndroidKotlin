@@ -19,7 +19,7 @@ import kotlinx.coroutines.experimental.android.UI
 
 open class BaseFragment : DialogFragment(), ActivityResultHelperContainer {
 
-    protected val baseActivity: BaseActivity?
+    val baseActivity: BaseActivity?
         get() = activity as? BaseActivity
 
     val safeActivity: Activity?

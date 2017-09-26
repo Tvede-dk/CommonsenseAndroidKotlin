@@ -70,3 +70,7 @@ fun <Input, T : BaseActivityData<Input>>
                                            optOnResult: AsyncActivityResultCallback?) {
     baseActivity?.startActivityWithData(activity, data, requestCode, optOnResult)
 }
+
+fun Fragment.finishActivity() {
+    activity?.finish()
+}

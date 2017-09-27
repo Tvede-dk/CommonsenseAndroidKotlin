@@ -41,3 +41,7 @@ fun String.fileExtension(): String? {
         }
     }
 }
+
+fun Uri.withoutQueryParameters(): Uri {
+    return buildUpon().query("").build()
+}

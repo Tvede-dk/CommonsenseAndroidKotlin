@@ -57,7 +57,7 @@ class CameraFragment : BaseDatabindingFragment<CameraFragmentDemoBinding>() {
         })
     }
 
-    fun onImageSelected(imageUri: Uri) = LaunchInUi("bitmap") {
+    fun onImageSelected(imageUri: Uri) = launchInUi("bitmap") {
         tryAndLogSuspend("bitmap") {
             //            val bitmap = imageUri.loadBitmapScaled(context.contentResolver, 200).await() ?: return@tryAndLogSuspend
             var images: List<Bitmap>? = null

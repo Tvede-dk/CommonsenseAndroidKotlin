@@ -8,6 +8,7 @@ import android.view.WindowManager
 import com.commonsense.android.kotlin.system.base.BaseFragment
 import com.commonsense.android.kotlin.system.base.helpers.AsyncActivityResultCallback
 import com.commonsense.android.kotlin.system.base.helpers.BaseActivityData
+import com.commonsense.android.kotlin.system.base.startActivityWithData
 import kotlin.reflect.KClass
 
 /**
@@ -17,8 +18,8 @@ import kotlin.reflect.KClass
 
 fun Fragment.getParrentContainerId() = (view?.parent as? ViewGroup)?.id
 
-fun Fragment.PresentDialer(phoneNumber: String) {
-    context.PresentDialer(phoneNumber)
+fun Fragment.presentDialer(phoneNumber: String) {
+    context.presentDialer(phoneNumber)
 }
 
 fun Fragment.getActivityAsCompat(): AppCompatActivity? {

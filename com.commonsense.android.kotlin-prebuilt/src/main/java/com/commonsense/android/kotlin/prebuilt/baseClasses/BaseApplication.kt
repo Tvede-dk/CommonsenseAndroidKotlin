@@ -7,6 +7,7 @@ import android.os.StrictMode
 import android.support.v7.app.AppCompatDelegate
 import com.commonsense.android.kotlin.base.EmptyFunction
 import com.commonsense.android.kotlin.base.extensions.collections.ifTrue
+import com.commonsense.android.kotlin.base.extensions.collections.ifTrue
 import com.commonsense.android.kotlin.base.extensions.isZero
 import com.commonsense.android.kotlin.system.extensions.isApiLowerThan
 import com.commonsense.android.kotlin.system.logging.logDebug

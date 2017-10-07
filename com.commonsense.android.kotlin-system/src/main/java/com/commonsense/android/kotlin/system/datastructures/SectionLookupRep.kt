@@ -190,7 +190,6 @@ class SectionLookupRep<T : TypeHashCodeLookupRepresent<Rep>, out Rep : Any> {
             lookup.getTypeRepresentativeFromTypeValue(type)
 
 
-
     fun clear() {
         data.clear()
         lookup.clear()
@@ -220,7 +219,7 @@ class SectionLookupRep<T : TypeHashCodeLookupRepresent<Rep>, out Rep : Any> {
         return result
     }
 
-    private fun IndexPathIsValid(@IntRange(from = 0) atRow: Int, @IntRange(from = 0) inSection: Int): Boolean =
+    private fun indexPathIsValid(@IntRange(from = 0) atRow: Int, @IntRange(from = 0) inSection: Int): Boolean =
             getItem(atRow, inSection) != null
 
     fun indexOf(newItem: T, inSection: Int): SectionLocation? {
@@ -231,7 +230,6 @@ class SectionLookupRep<T : TypeHashCodeLookupRepresent<Rep>, out Rep : Any> {
         }
         return SectionLocation(locationOfSection.inRaw.start + indexInSection, indexInSection)
     }
-
 
 
     private fun getItem(@IntRange(from = 0) atRow: Int, @IntRange(from = 0) inSection: Int): T? =
@@ -323,7 +321,6 @@ class SectionLookupRep<T : TypeHashCodeLookupRepresent<Rep>, out Rep : Any> {
             else -> SectionUpdates(changedRange, null, null)
         }
     }
-
 
 
     fun getSectionLocation(@IntRange(from = 0) sectionIndex: Int): SectionUpdate? =

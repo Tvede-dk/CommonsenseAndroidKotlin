@@ -46,11 +46,11 @@ open class BaseFragment : DialogFragment(), ActivityResultHelperContainer {
         localJobs.addJob(job, group)
     }
 
-    fun LaunchInBackground(group: String, action: suspend () -> Unit): Job =
+    fun launchInBackground(group: String, action: suspend () -> Unit): Job =
             localJobs.performAction(CommonPool, action, group)
 
 
-    fun LaunchInUi(group: String, action: suspend () -> Unit): Job =
+    fun launchInUi(group: String, action: suspend () -> Unit): Job =
             localJobs.performAction(UI, action, group)
 
 

@@ -5,19 +5,15 @@ import android.content.pm.PackageManager
 import android.os.Bundle
 import com.commonsense.android.kotlin.system.base.BaseActivity
 import com.commonsense.android.kotlin.test.BaseRoboElectricTest
+import com.commonsense.android.kotlin.test.testCallbackWithSemaphore
 import org.junit.Assert
 import org.junit.Test
-import org.junit.runner.RunWith
-import org.robolectric.RobolectricTestRunner
-import org.robolectric.annotation.Config
 import java.util.concurrent.Semaphore
 
 /**
  * Created by Kasper Tvede on 27-05-2017.
  */
 
-@RunWith(RobolectricTestRunner::class)
-@Config(manifest = Config.NONE)
 class PermissionsHandlingTest : BaseRoboElectricTest() {
 
 
@@ -34,16 +30,22 @@ class PermissionsHandlingTest : BaseRoboElectricTest() {
 
     @Test
     fun testPermissionFlowDenyAccept() {
-        val sem = Semaphore(0)
         val act = createActivity<DenyPermissionActivity>()
+        testCallbackWithSemaphore { sem ->
+            act.permissionHandler.performActionForPermission(Manifest.permission.CALL_PHONE, act, {
+                Assert.fail("should be granted in tests")
+            }, sem::release)
 
-        act.permissionHandler.performActionForPermission(Manifest.permission.CALL_PHONE, act, {
-            Assert.fail("should be granted in tests")
-        }, sem::release)
-
-        callHandlerWith(act.permissionHandler, Manifest.permission.CALL_PHONE, true)
+            callHandlerWith(act.permissionHandler, Manifest.permission.CALL_PHONE, false)
+        }
         //simulate response from user
-        Assert.assertTrue(sem.tryAcquire())
+        testCallbackWithSemaphore { sem ->
+            act.permissionHandler.performActionForPermission(Manifest.permission.CALL_PHONE, act,
+                    { sem.release() },
+                    { Assert.fail("should be granted in tests") })
+
+            callHandlerWith(act.permissionHandler, Manifest.permission.CALL_PHONE, true)
+        }
     }
 
     @Test
@@ -88,7 +90,7 @@ class PermissionsHandlingTest : BaseRoboElectricTest() {
                 Assert.fail("should not be granted in tests")
             }, sem::release)
         }
-        callHandlerWith(act.permissionHandler, Manifest.permission.CALL_PHONE, true)
+        callHandlerWith(act.permissionHandler, Manifest.permission.CALL_PHONE, false)
         Assert.assertTrue(sem.tryAcquire(listenerCount))
 
     }

@@ -7,10 +7,10 @@ import android.support.v7.widget.helper.ItemTouchHelper
 import android.view.View
 import com.commonsense.android.kotlin.base.extensions.collections.forEachNotNull
 import com.commonsense.android.kotlin.base.extensions.collections.map
-import com.commonsense.android.kotlin.views.databinding.adapters.DataBindingRecyclerAdapter
 import com.commonsense.android.kotlin.views.databinding.adapters.AbstractSearchableDataBindingRecyclerAdapter
 import com.commonsense.android.kotlin.views.databinding.adapters.BaseDataBindingRecyclerAdapter
 import com.commonsense.android.kotlin.views.databinding.adapters.BaseViewHolderItem
+import com.commonsense.android.kotlin.views.databinding.adapters.DataBindingRecyclerAdapter
 import com.commonsense.android.kotlin.views.extensions.ViewHelper
 import com.commonsense.android.kotlin.views.extensions.resetTransformations
 import com.commonsense.android.kotlin.views.extensions.visible
@@ -22,13 +22,13 @@ import com.commonsense.android.kotlin.views.extensions.visible
 
 
 enum class Direction {
-    startToEnd, endToStart
+    StartToEnd, EndToStart
 }
 
-fun Int.ToDirection(): Direction? =
+fun Int.toDirection(): Direction? =
         when (this) {
-            ItemTouchHelper.START -> Direction.startToEnd
-            ItemTouchHelper.END -> Direction.endToStart
+            ItemTouchHelper.START -> Direction.StartToEnd
+            ItemTouchHelper.END -> Direction.EndToStart
             else -> null
         }
 
@@ -60,11 +60,11 @@ fun AbstractSearchableDataBindingRecyclerAdapter<*, *>.attachSwipeFeature(
  *
  */
 class RecyclerSwipe(recyclerAdapter: DataBindingRecyclerAdapter<*>)
-    : ItemTouchHelper(innerSwipeHelper(recyclerAdapter))
+    : ItemTouchHelper(InnerSwipeHelper(recyclerAdapter))
 
 private data class SwipeItemViews(val startView: View?, val endView: View?, val mainView: View)
 
-private class innerSwipeHelper(val recyclerAdapter: DataBindingRecyclerAdapter<*>)
+private class InnerSwipeHelper(val recyclerAdapter: DataBindingRecyclerAdapter<*>)
     : ItemTouchHelper.Callback() {
 
     override fun getMovementFlags(recyclerView: RecyclerView?, viewHolder: RecyclerView.ViewHolder?): Int {
@@ -162,7 +162,7 @@ private class innerSwipeHelper(val recyclerAdapter: DataBindingRecyclerAdapter<*
 
     override fun onSwiped(viewHolder: RecyclerView.ViewHolder?, directionInt: Int) {
         val optInterface = getOptInterface(viewHolder)
-        val dir = directionInt.ToDirection()
+        val dir = directionInt.toDirection()
         val baseViewHolder = viewHolder as? BaseViewHolderItem<*>
         //TODO hotpatch the dir as it sometimes is.. wrong ??? thx google.
         //use the

@@ -1,7 +1,10 @@
 package com.commonsense.android.kotlin.test
 
 import android.net.Uri
+import android.support.annotation.IntRange
 import org.junit.Assert
+import java.util.concurrent.Semaphore
+import java.util.concurrent.TimeUnit
 
 /**
  * Created by Kasper Tvede on 18-07-2017.
@@ -68,7 +71,7 @@ fun <T> T?.assertNotNullAndEquals(other: T?, message: String = "") {
 }
 
 
-fun IntRange.assert(otherRange: IntRange, message: String = "") {
+fun kotlin.ranges.IntRange.assert(otherRange: kotlin.ranges.IntRange, message: String = "") {
     Assert.assertEquals(message, otherRange, this)
 }
 
@@ -84,4 +87,20 @@ inline fun assertThrows(message: String = "should throw", crossinline action: ()
 fun <T> Any.assertAs(otherValue: T, message: String = "") {
     @Suppress("UNCHECKED_CAST") //this is exepcted, we are just making life easier for testing, if it throws, then its "all right" for a test.
     Assert.assertEquals(message, this as? T, otherValue)
+}
+
+fun failTest(message: String = "") {
+    Assert.fail(message)
+}
+
+inline fun testCallbackWithSemaphore(@IntRange(from = 0) startPermits: Int = 0,
+                                     @IntRange(from = 0) startAquire: Int = startPermits + 1,
+                                     @IntRange(from = 0) timeoutTime: Int = 50,
+                                     timeoutUnit: TimeUnit = TimeUnit.MILLISECONDS,
+                                     shouldAquire: Boolean = true,
+                                     errorMessage: String = "",
+                                     callback: (Semaphore) -> Unit) {
+    val sem = Semaphore(startPermits)
+    callback(sem)
+    sem.tryAcquire(startAquire, timeoutTime.toLong(), timeoutUnit).assert(shouldAquire, errorMessage)
 }

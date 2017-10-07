@@ -6,19 +6,33 @@ import org.junit.runner.RunWith
 import org.robolectric.Robolectric
 import org.robolectric.RobolectricTestRunner
 import org.robolectric.RuntimeEnvironment
+import org.robolectric.android.controller.ActivityController
 import org.robolectric.annotation.Config
 
 /**
  * Created by Kasper Tvede on 20-07-2017.
+ * Base class of roboeletric tests, not requiring the manifest to be the set.
  */
-
 @RunWith(RobolectricTestRunner::class)
 @Config(manifest = Config.NONE)
 abstract class BaseRoboElectricTest {
+    /**
+     * the context to use in roboelectric tests
+     */
     val context: Context by lazy {
         RuntimeEnvironment.application
     }
 
+    /**  */
+
     inline fun <reified T : Activity> createActivity(): T =
-            Robolectric.buildActivity(T::class.java).create().get()
+            createActivityController<T>().create().get().apply { setTheme(R.style.Theme_AppCompat) }
+
+    /**
+     * creates an activity controller to test lifecycle events
+     */
+    inline fun <reified T : Activity> createActivityController(): ActivityController<T> =
+            Robolectric.buildActivity(T::class.java).apply { get().setTheme(R.style.Theme_AppCompat) }
+
+
 }

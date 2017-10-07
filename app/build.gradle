@@ -10,8 +10,8 @@ jacoco {
 android {
 //    buildTypeMatching 'proguard', 'debug'
 
-    compileSdkVersion 26
-    buildToolsVersion "26.0.1"
+    compileSdkVersion androidSdkBuildVersion
+    buildToolsVersion "$androidBuildToolsVersion"
     defaultConfig {
         applicationId "com.CommonSenseAndroidKotlin.example"
         minSdkVersion 16

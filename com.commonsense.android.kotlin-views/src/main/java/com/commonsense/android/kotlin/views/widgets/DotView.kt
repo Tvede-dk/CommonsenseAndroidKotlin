@@ -20,20 +20,20 @@ class DotView @JvmOverloads constructor(
         defStyleAttr: Int = 0
 ) : BaseCustomDrawView(context, attrs, defStyleAttr) {
 
-    val FILL_SPACE = -1F
+    val Fill_space = -1F
 
     override fun getStyleResource(): IntArray? = R.styleable.DotView
 
     private val paint by lazy { Paint() }
 
     //<editor-fold desc="Radius">
-    private val innerRadius by lazy { DimensionVariable(FILL_SPACE, R.styleable.DotView_radius) }
+    private val innerRadius by lazy { dimensionVariable(Fill_space, R.styleable.DotView_radius) }
 
     var radius: Float by innerRadius
     //</editor-fold>
 
     //<editor-fold desc="Color">
-    private val innerColor by lazy { ColorVariable(Color.BLACK, R.styleable.DotView_color) }
+    private val innerColor by lazy { colorVariable(Color.BLACK, R.styleable.DotView_color) }
 
     var color: Int by innerColor
     //</editor-fold>
@@ -45,7 +45,7 @@ class DotView @JvmOverloads constructor(
 
     override fun onMeasure(widthMeasureSpec: Int, heightMeasureSpec: Int) {
         val expectedHeight = getDefaultSize(suggestedMinimumHeight, heightMeasureSpec)
-        if (radius.equals(FILL_SPACE, 0.1f)) {
+        if (radius.equals(Fill_space, 0.1f)) {
             val expectedWidth = getDefaultSize(suggestedMinimumWidth, widthMeasureSpec)
             val size = minOf(expectedHeight, expectedWidth)
             setMeasuredDimension(size, size)
@@ -57,7 +57,7 @@ class DotView @JvmOverloads constructor(
 
 
     override fun doDrawing(canvas: Canvas) {
-        val size = if (radius.equals(FILL_SPACE, 0.1f)) {
+        val size = if (radius.equals(Fill_space, 0.1f)) {
             minOf(canvas.height, canvas.width) / 2f
         } else {
             radius

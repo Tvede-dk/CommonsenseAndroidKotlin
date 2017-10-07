@@ -30,12 +30,12 @@ class EditDatabindingFragment : BaseDatabindingFragment<UserExampleViewBinding>(
 }
 
 private fun UserViewModel.toModel(): User {
-    return User(this.Username.get(), this.email.get(), this.password.get(), this.realName.get())
+    return User(this.username.get(), this.email.get(), this.password.get(), this.realName.get())
 }
 
 private fun User.toViewModel(): UserViewModel {
     return UserViewModel().also {
-        it.Username.set(this.Username)
+        it.username.set(this.Username)
         it.email.set(this.email)
         it.password.set(this.password)
         it.realName.set(this.realName)

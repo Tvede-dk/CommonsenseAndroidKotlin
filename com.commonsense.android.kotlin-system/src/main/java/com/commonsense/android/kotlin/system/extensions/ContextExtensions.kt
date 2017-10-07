@@ -30,7 +30,7 @@ fun Context.checkPermission(@DangerousPermissionString permission: String): Bool
     return ContextCompat.checkSelfPermission(this, permission) == PackageManager.PERMISSION_GRANTED
 }
 
-fun Context.PresentDialer(phoneNumber: String) {
+fun Context.presentDialer(phoneNumber: String) {
     val intent = Intent(Intent.ACTION_DIAL).apply {
         data = Uri.parse("tel:$phoneNumber")
     }

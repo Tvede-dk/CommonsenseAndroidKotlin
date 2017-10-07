@@ -136,9 +136,9 @@ fun PermissionEnum.useSuspend(handler: PermissionsHandling, activity: Activity, 
 @UiThread
 fun PermissionEnum.useSuspend(handler: PermissionsHandling, activity: BaseActivity, function: suspend () -> Unit, errorFunction: suspend () -> Unit) {
     handler.performActionForPermission(permissionValue, activity, {
-        activity.LaunchInUi("PermissionEnum.useSuspend", function)
+        activity.launchInUi("PermissionEnum.useSuspend", function)
     }, {
-        activity.LaunchInUi("PermissionEnum.useSuspend", errorFunction)
+        activity.launchInUi("PermissionEnum.useSuspend", errorFunction)
     })
 }
 
@@ -160,7 +160,7 @@ fun PermissionEnum.useSuspend(context: Context, usePermission: suspend () -> Uni
 @UiThread
 fun PermissionEnum.useSuspend(context: BaseActivity, usePermission: suspend () -> Unit) {
     if (havePermission(context)) {
-        context.LaunchInUi("PermissionEnum.useSuspend", usePermission)
+        context.launchInUi("PermissionEnum.useSuspend", usePermission)
     }
 }
 

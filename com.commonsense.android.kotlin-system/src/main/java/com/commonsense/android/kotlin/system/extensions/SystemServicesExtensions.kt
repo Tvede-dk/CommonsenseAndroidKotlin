@@ -9,7 +9,7 @@ import android.widget.EditText
  */
 
 
-fun Context.HideSoftKeyboardFrom(editText: EditText) {
+fun Context.hideSoftKeyboardFrom(editText: EditText) {
     val service = getSystemService(Context.INPUT_METHOD_SERVICE) as? InputMethodManager
     service?.hideSoftInputFromWindow(editText.windowToken, 0)
 }

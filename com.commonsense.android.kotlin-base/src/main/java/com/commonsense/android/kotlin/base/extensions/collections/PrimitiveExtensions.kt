@@ -1,5 +1,6 @@
 package com.commonsense.android.kotlin.base.extensions.collections
 
+import com.commonsense.android.kotlin.base.AsyncEmptyFunction
 import com.commonsense.android.kotlin.base.EmptyFunction
 import com.commonsense.android.kotlin.base.FunctionUnit
 import com.commonsense.android.kotlin.base.extensions.isNull
@@ -12,6 +13,16 @@ import com.commonsense.android.kotlin.base.extensions.isNull
  * performs the action if the boolean is true.
  */
 inline fun Boolean.onTrue(crossinline action: EmptyFunction): Boolean {
+    if (this) {
+        action()
+    }
+    return this
+}
+
+/**
+ *  performs the action if the boolean is true.
+ */
+suspend fun Boolean.onTrueAsync(action: AsyncEmptyFunction): Boolean {
     if (this) {
         action()
     }
@@ -47,6 +58,11 @@ inline fun <T> T?.ifNotNull(crossinline action: FunctionUnit<T>) {
  * Makes a more "elegant" sentence for some expressions, same as "com.commonsense.android.kotlin.base.extensions.collections.onTrue"
  */
 inline fun Boolean.ifTrue(crossinline action: EmptyFunction): Boolean = onTrue(action)
+
+/**
+ * Makes a more "elegant" sentence for some expressions, same as "com.commonsense.android.kotlin.base.extensions.collections.onTrue"
+ */
+suspend fun Boolean.ifTrueAsync(action: AsyncEmptyFunction): Boolean = onTrueAsync(action)
 
 /**
  * performs the action if the boolean is false.

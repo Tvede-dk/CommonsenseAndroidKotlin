@@ -1,14 +1,10 @@
 package com.commonsense.android.kotlin.system.imaging
 
 import android.graphics.Bitmap
-import android.widget.ImageView
 import com.commonsense.android.kotlin.base.concurrency.LimitedCoroutineCounter
 import com.commonsense.android.kotlin.base.extensions.asyncSimple
 import com.commonsense.android.kotlin.base.extensions.collections.ifTrue
-import com.commonsense.android.kotlin.system.logging.L
 import kotlinx.coroutines.experimental.CommonPool
-import kotlinx.coroutines.experimental.android.UI
-import kotlinx.coroutines.experimental.launch
 import kotlinx.coroutines.experimental.sync.Mutex
 import kotlinx.coroutines.experimental.sync.withLock
 

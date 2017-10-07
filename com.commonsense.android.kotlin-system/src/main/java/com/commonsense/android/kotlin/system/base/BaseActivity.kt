@@ -10,6 +10,8 @@ import android.support.v4.app.Fragment
 import android.support.v4.app.FragmentActivity
 import android.support.v7.app.AppCompatActivity
 import android.view.MenuItem
+import com.commonsense.android.kotlin.base.AsyncEmptyFunction
+import com.commonsense.android.kotlin.base.extensions.collections.ifTrueAsync
 import com.commonsense.android.kotlin.base.scheduling.JobContainer
 import com.commonsense.android.kotlin.system.PermissionsHandling
 import com.commonsense.android.kotlin.system.base.helpers.*
@@ -20,6 +22,7 @@ import com.commonsense.android.kotlin.system.extensions.transactionCommitNow
 import com.commonsense.android.kotlin.system.logging.logWarning
 import kotlinx.coroutines.experimental.CommonPool
 import kotlinx.coroutines.experimental.android.UI
+import kotlin.reflect.KClass
 
 /**
  * created by Kasper Tvede on 29-09-2016.
@@ -41,13 +44,20 @@ open class BaseActivity : AppCompatActivity(), ActivityResultHelperContainer {
     }
 
 
-    fun LaunchInBackground(group: String, action: suspend () -> Unit) {
+    fun launchInBackground(group: String, action: AsyncEmptyFunction) {
         localJobs.performAction(CommonPool, action, group)
     }
 
 
-    fun LaunchInUi(group: String, action: suspend () -> Unit) {
-        localJobs.performAction(UI, action, group)
+    /**
+     * a safe callback, that verifies the lifecycle, and also disallows multiple concurrenct events of the same group.
+     * Meant for updating the ui, or handling clicks'n events.
+     */
+    fun launchInUi(group: String, action: AsyncEmptyFunction) {
+        val otherAction: AsyncEmptyFunction = {
+            isVisible.ifTrueAsync(action)
+        }
+        localJobs.performAction(UI, otherAction, group)
     }
 
 
@@ -62,9 +72,8 @@ open class BaseActivity : AppCompatActivity(), ActivityResultHelperContainer {
         super.onDestroy()
     }
 
-    override fun onOptionsItemSelected(item: MenuItem?): Boolean {
-        return item.backPressIfHome(this) || super.onOptionsItemSelected(item)
-    }
+    override fun onOptionsItemSelected(item: MenuItem?): Boolean =
+            item.backPressIfHome(this) || super.onOptionsItemSelected(item)
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
@@ -94,19 +103,22 @@ open class BaseActivity : AppCompatActivity(), ActivityResultHelperContainer {
     //</editor-fold>
 
 
-    fun <Input, T : BaseActivityData<Input>>
-            startActivityWithData(activity: Class<T>,
-                                  data: Input,
-                                  requestCode: Int,
-                                  optOnResult: AsyncActivityResultCallback?) {
-        val intent = Intent(this, activity)
-        val index = dataReferenceMap.count.toString()
-        dataReferenceMap.addItem(data, index)
-        intent.putExtra(dataIntentIndex, index)
-        startActivityForResultAsync(intent, null, requestCode, { resultCode, resultIntent ->
-            dataReferenceMap.decrementCounter(index)
-            optOnResult?.invoke(resultCode, resultIntent)
-        })
+    val isPaused: Boolean
+        get () = mIsPaused
+
+    val isVisible: Boolean
+        get() = !isPaused
+
+    protected var mIsPaused: Boolean = false
+
+    override fun onResume() {
+        super.onResume()
+        mIsPaused = false
+    }
+
+    override fun onPause() {
+        super.onPause()
+        mIsPaused = true
     }
 
     /**
@@ -117,6 +129,29 @@ open class BaseActivity : AppCompatActivity(), ActivityResultHelperContainer {
         internal val dataReferenceMap = ReferenceCountingMap()
     }
 
+}
+
+fun <Input, T : BaseActivityData<Input>>
+        BaseActivity.startActivityWithData(activity: KClass<T>,
+                                           data: Input,
+                                           requestCode: Int,
+                                           optOnResult: AsyncActivityResultCallback?) {
+    startActivityWithData(activity.java, data, requestCode, optOnResult)
+}
+
+fun <Input, T : BaseActivityData<Input>>
+        BaseActivity.startActivityWithData(activity: Class<T>,
+                                           data: Input,
+                                           requestCode: Int,
+                                           optOnResult: AsyncActivityResultCallback?) {
+    val intent = Intent(this, activity)
+    val index = BaseActivity.dataReferenceMap.count.toString()
+    BaseActivity.dataReferenceMap.addItem(data, index)
+    intent.putExtra(BaseActivity.dataIntentIndex, index)
+    startActivityForResultAsync(intent, null, requestCode, { resultCode, resultIntent ->
+        BaseActivity.dataReferenceMap.decrementCounter(index)
+        optOnResult?.invoke(resultCode, resultIntent)
+    })
 }
 
 @AnyThread

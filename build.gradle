@@ -1,18 +1,21 @@
 buildscript {
     ext.androidSdkBuildVersion = 26
-    ext.androidBuildToolsVersion = "26.0.1"
+    ext.androidBuildToolsVersion = "26.0.2"
 
-    ext.kotlin_version = '1.1.4-3'
+    ext.kotlin_version = '1.2.0-beta-31'
     ext.supportVersion = '26.1.0'
     ext.coroutinesVersion = '0.18'
-    ext.leakCanaryVersion = "1.5.1"
+    ext.leakCanaryVersion = "1.5.4"
     ext.junitVersion = "4.12"
-    ext.androidGradleVersion = "3.0.0-beta6"
+    ext.androidGradleVersion = "3.0.0-beta7"
     ext.roboElectricVersion = "3.4.2"
-    ext.espressoVersion = "3.0.0"
+    ext.espressoVersion = "3.0.1"
 
     repositories {
         jcenter()
+        maven {
+            url "http://dl.bintray.com/kotlin/kotlin-eap-1.2"
+        }
         google()
     }
     dependencies {
@@ -25,6 +28,9 @@ allprojects {
     repositories {
         jcenter()
         google()
+        maven {
+            url "http://dl.bintray.com/kotlin/kotlin-eap-1.2"
+        }
     }
 }
 

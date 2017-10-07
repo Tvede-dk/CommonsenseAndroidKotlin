@@ -38,7 +38,7 @@ open class ToggleImageButton : AppCompatImageView, ViewAttribute, View.OnClickLi
 
     //<editor-fold desc="Selected color">
     private val internalSelectedColor by lazy {
-        ColorVariable(R.styleable.ToggleImageButton_selectedColor)
+        colorVariable(R.styleable.ToggleImageButton_selectedColor)
     }
 
 
@@ -54,14 +54,14 @@ open class ToggleImageButton : AppCompatImageView, ViewAttribute, View.OnClickLi
         }
 
     private val internalChecked by lazy {
-        BooleanVariable(false, R.styleable.ToggleImageButton_checked)
+        booleanVariable(false, R.styleable.ToggleImageButton_checked)
     }
     var isChecked by internalChecked
     //</editor-fold>
 
     //<editor-fold desc="unselected color">
     private val internalUnselectedColor by lazy {
-        ColorVariable(R.styleable.ToggleImageButton_unselectedColor)
+        colorVariable(R.styleable.ToggleImageButton_unselectedColor)
     }
 
     var unselectedColor: Int by internalUnselectedColor
@@ -70,7 +70,7 @@ open class ToggleImageButton : AppCompatImageView, ViewAttribute, View.OnClickLi
 
     //<editor-fold desc="selected background">
     private val internalBackgroundSelected by lazy {
-        DrawableVariable(R.styleable.ToggleImageButton_selectedBackground)
+        drawableVariable(R.styleable.ToggleImageButton_selectedBackground)
     }
 
     var selectedBackground: Drawable? by internalBackgroundSelected
@@ -78,7 +78,7 @@ open class ToggleImageButton : AppCompatImageView, ViewAttribute, View.OnClickLi
 
     //<editor-fold desc="unselected background">
     private val internalBackgroundUnselected by lazy {
-        DrawableVariable(R.styleable.ToggleImageButton_unselectedBackground)
+        drawableVariable(R.styleable.ToggleImageButton_unselectedBackground)
     }
     var unselectedBackground: Drawable? by internalBackgroundUnselected
     //</editor-fold>

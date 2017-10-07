@@ -57,9 +57,9 @@ class DataComposer<T, U> : FunctionUnit<T> {
     /**
      * register this data composer to a lifecycle.
      */
-    fun registerToLifeCycle(observableCollection: Any) {
-
-    }
+//    fun registerToLifeCycle(observableCollection: Any) {
+//
+//    }
 
     //callback from registered listener
     override fun invoke(newData: T) {

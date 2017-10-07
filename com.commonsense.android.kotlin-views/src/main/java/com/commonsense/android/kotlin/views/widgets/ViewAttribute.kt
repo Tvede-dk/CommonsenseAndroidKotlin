@@ -56,36 +56,36 @@ interface ViewAttribute {
 }
 
 
-fun ViewAttribute.ColorVariable(@ColorInt defaultValue: Int, @StyleableRes styleIndex: Int): ColorValueViewVariable =
+fun ViewAttribute.colorVariable(@ColorInt defaultValue: Int, @StyleableRes styleIndex: Int): ColorValueViewVariable =
         ColorValueViewVariable(defaultValue, styleIndex, attributes, this::updateView)
 
-fun ViewAttribute.ColorVariable(@StyleableRes styleIndex: Int): ColorValueViewVariable =
-        ColorVariable(Color.BLACK, styleIndex)
+fun ViewAttribute.colorVariable(@StyleableRes styleIndex: Int): ColorValueViewVariable =
+        colorVariable(Color.BLACK, styleIndex)
 
-fun ViewAttribute.IntVariable(defaultValue: Int, @StyleableRes styleIndex: Int): IntViewVariable =
+fun ViewAttribute.intVariable(defaultValue: Int, @StyleableRes styleIndex: Int): IntViewVariable =
         IntViewVariable(defaultValue, styleIndex, attributes, this::updateView)
 
-fun ViewAttribute.IntVariable(@StyleableRes styleIndex: Int): IntViewVariable =
-        IntVariable(0, styleIndex)
+fun ViewAttribute.intVariable(@StyleableRes styleIndex: Int): IntViewVariable =
+        intVariable(0, styleIndex)
 
-fun ViewAttribute.TextVariable(@StyleableRes styleIndex: Int): TextViewVariable =
+fun ViewAttribute.textVariable(@StyleableRes styleIndex: Int): TextViewVariable =
         TextViewVariable(styleIndex, attributes, this::updateView)
 
-fun ViewAttribute.BooleanVariable(defaultValue: Boolean, @StyleableRes styleIndex: Int): BooleanViewVariable =
+fun ViewAttribute.booleanVariable(defaultValue: Boolean, @StyleableRes styleIndex: Int): BooleanViewVariable =
         BooleanViewVariable(defaultValue, styleIndex, attributes, this::updateView)
 
-fun ViewAttribute.BooleanVariable(@StyleableRes styleIndex: Int): BooleanViewVariable =
-        BooleanVariable(false, styleIndex)
+fun ViewAttribute.booleanVariable(@StyleableRes styleIndex: Int): BooleanViewVariable =
+        booleanVariable(false, styleIndex)
 
 
-fun ViewAttribute.DrawableVariable(@StyleableRes styleIndex: Int): DrawableViewVariable =
+fun ViewAttribute.drawableVariable(@StyleableRes styleIndex: Int): DrawableViewVariable =
         DrawableViewVariable(styleIndex, attributes, this::updateView)
 
 
-fun ViewAttribute.DimensionVariable(@StyleableRes styleIndex: Int): DimensionViewVariable =
-        DimensionVariable(0f, styleIndex)
+fun ViewAttribute.dimensionVariable(@StyleableRes styleIndex: Int): DimensionViewVariable =
+        dimensionVariable(0f, styleIndex)
 
-fun ViewAttribute.DimensionVariable(@Dimension defaultValue: Float, @StyleableRes styleIndex: Int)
+fun ViewAttribute.dimensionVariable(@Dimension defaultValue: Float, @StyleableRes styleIndex: Int)
         : DimensionViewVariable =
         DimensionViewVariable(defaultValue, styleIndex, attributes, this::updateView)
 

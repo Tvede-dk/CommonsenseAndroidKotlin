@@ -13,8 +13,8 @@ import android.view.WindowManager
 
 fun Fragment.getParrentContainerId() = (view?.parent as? ViewGroup)?.id
 
-fun Fragment.PresentDialer(phoneNumber: String) {
-    context.PresentDialer(phoneNumber)
+fun Fragment.presentDialer(phoneNumber: String) {
+    context.presentDialer(phoneNumber)
 }
 
 fun Fragment.getActivityAsCompat(): AppCompatActivity? {
@@ -43,7 +43,7 @@ fun Fragment.popToFirstFragment() {
     activity.runOnUiThread {
         activity.supportFragmentManager.let { manager ->
             //first schedual a pop on "each" except the last. (n-1 pops)
-            (0 until manager.backStackEntryCount).forEach { count -> manager.popBackStack() }
+            (0 until manager.backStackEntryCount).forEach { manager.popBackStack() }
             manager.executePendingTransactions() //then allow Android to do the popping.
         }
     }

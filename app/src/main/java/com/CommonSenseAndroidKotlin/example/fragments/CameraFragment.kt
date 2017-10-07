@@ -31,7 +31,7 @@ class CameraFragment : BaseDatabindingFragment<CameraFragmentDemoBinding>() {
             = CameraFragmentDemoBinding::inflate
 
     private val imageHelper by lazy {
-        PictureRetriver(activity as BaseActivity, { path, fromCamera -> onImageSelected(path) })
+        PictureRetriver(activity as BaseActivity, { path, _-> onImageSelected(path) })
     }
 
     private val imageAdapter by lazy {
@@ -57,7 +57,7 @@ class CameraFragment : BaseDatabindingFragment<CameraFragmentDemoBinding>() {
         })
     }
 
-    fun onImageSelected(imageUri: Uri) = LaunchInUi("bitmap") {
+    fun onImageSelected(imageUri: Uri) = launchInUi("bitmap") {
         tryAndLogSuspend("bitmap") {
             //            val bitmap = imageUri.loadBitmapScaled(context.contentResolver, 200).await() ?: return@tryAndLogSuspend
             var images: List<Bitmap>? = null

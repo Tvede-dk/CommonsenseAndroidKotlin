@@ -7,6 +7,7 @@ import android.graphics.drawable.Drawable
 import android.util.AttributeSet
 import android.view.View
 import com.commonsense.android.kotlin.base.extensions.collections.ifTrue
+import com.commonsense.android.kotlin.base.extensions.collections.ifTrue
 import com.commonsense.android.kotlin.views.datastructures.ViewVariable
 import com.commonsense.android.kotlin.views.widgets.LateAttributes
 import java.lang.ref.WeakReference

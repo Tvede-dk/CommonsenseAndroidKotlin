@@ -29,7 +29,7 @@ class UserListItemRender<in F : Any>(item: User) : BaseSearchRenderModel<User, U
 }
 
 class UserViewModel {
-    val Username = ObservableField<String>()
+    val username = ObservableField<String>()
 
     val password = ObservableField<String>()
 

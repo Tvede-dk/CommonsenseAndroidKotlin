@@ -10,7 +10,7 @@ data class ListDiff<out T>(val intersect: List<T>, val outerSectA: List<T>, val 
 
 class TypeSectionCodeLookupDiff<T>(val diff: SparseArray<ListDiff<T>>)
 
-fun <T : TypeHashCodeLookupRepresent<Rep>, Rep : Any> SectionLookupRep<T, Rep>.differenceTo(other: SectionLookupRep<T, Rep>, considerIndexes: Boolean = false): TypeSectionCodeLookupDiff<T> {
+fun <T : TypeHashCodeLookupRepresent<Rep>, Rep : Any> SectionLookupRep<T, Rep>.differenceTo(other: SectionLookupRep<T, Rep>): TypeSectionCodeLookupDiff<T> {
     val result = SparseArray<ListDiff<T>>()
     val thisMapped = this.mapAll { it }
     val otherMapped = other.mapAll { it }

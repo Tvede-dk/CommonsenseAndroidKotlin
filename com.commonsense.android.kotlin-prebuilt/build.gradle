@@ -3,8 +3,8 @@ apply plugin: 'kotlin-android'
 apply plugin: 'kotlin-kapt'
 
 android {
-    compileSdkVersion 26
-    buildToolsVersion "26.0.1"
+    compileSdkVersion androidSdkBuildVersion
+    buildToolsVersion "$androidBuildToolsVersion"
 
 
     defaultConfig {
@@ -28,11 +28,24 @@ android {
     dataBinding {
         enabled true
     }
+    testOptions {
+        unitTests {
+            includeAndroidResources = true
+        }
+        unitTests.all {
+            forkEvery = 2
+        }
+    }
+
 }
 
+kapt {
+    processors = "com.android.databinding:compiler:$androidGradleVersion"
+    useLightAnalysis true
+}
 
 dependencies {
-    androidTestCompile("com.android.support.test.espresso:espresso-core:$espressoVersion", {
+    androidTestImplementation("com.android.support.test.espresso:espresso-core:$espressoVersion", {
         exclude group: 'com.android.support', module: 'support-annotations'
     })
 
@@ -62,3 +75,8 @@ repositories {
 }
 
 apply from: '../resourcegroups.gradle'
+kotlin {
+    experimental {
+        coroutines "enable"
+    }
+}

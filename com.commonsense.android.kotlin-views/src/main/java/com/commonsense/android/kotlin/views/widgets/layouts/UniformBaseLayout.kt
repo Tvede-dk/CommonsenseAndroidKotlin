@@ -6,8 +6,8 @@ import android.graphics.drawable.Drawable
 import android.util.AttributeSet
 import com.commonsense.android.kotlin.base.extensions.equals
 import com.commonsense.android.kotlin.views.R
-import com.commonsense.android.kotlin.views.widgets.BooleanVariable
-import com.commonsense.android.kotlin.views.widgets.DimensionVariable
+import com.commonsense.android.kotlin.views.widgets.booleanVariable
+import com.commonsense.android.kotlin.views.widgets.dimensionVariable
 import com.commonsense.android.kotlin.views.widgets.base.BaseCustomViewGroup
 
 /**
@@ -36,13 +36,13 @@ abstract class UniformBaseLayout @JvmOverloads constructor(
 
     //<editor-fold desc="Force draw background">
     private val innerForceDrawBackground by lazy {
-        BooleanVariable(false, R.styleable.UniformBaseLayout_forceDrawBackground)
+        booleanVariable(false, R.styleable.UniformBaseLayout_forceDrawBackground)
     }
     var forceDrawBackground by innerForceDrawBackground
     //</editor-fold>
 
     //<editor-fold desc="Content margin">
-    private val innerContentMargin by lazy { DimensionVariable(0f, R.styleable.UniformBaseLayout_contentMargin) }
+    private val innerContentMargin by lazy { dimensionVariable(0f, R.styleable.UniformBaseLayout_contentMargin) }
 
     var contentMargin: Float by innerContentMargin
     //</editor-fold>

@@ -16,7 +16,7 @@ class RoundCornersImageView : AppCompatImageView {
         setupAttrs(attrs)
     }
 
-    fun setupAttrs(attrs: android.util.AttributeSet) {
+    fun setupAttrs(@Suppress("UNUSED_PARAMETER") attrs: android.util.AttributeSet) {
 
     }
 

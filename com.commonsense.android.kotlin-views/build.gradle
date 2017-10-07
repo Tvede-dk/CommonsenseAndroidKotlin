@@ -1,6 +1,6 @@
 apply plugin: 'com.android.library'
 apply plugin: 'kotlin-android'
-apply plugin: 'kotlin-kapt'
+apply plugin: "kotlin-kapt"
 
 android {
     compileSdkVersion androidSdkBuildVersion
@@ -22,13 +22,22 @@ android {
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }
     }
+
     dataBinding {
         enabled true
     }
+
     lintOptions {
         abortOnError false
     }
 }
+
+
+kapt {
+    processors = "com.android.databinding:compiler:$androidGradleVersion"
+    useLightAnalysis true
+}
+
 
 dependencies {
     androidTestCompile("com.android.support.test.espresso:espresso-core:$espressoVersion", {

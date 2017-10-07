@@ -2,6 +2,7 @@ package com.commonsense.android.kotlin.test
 
 import android.app.Activity
 import android.content.Context
+import android.support.annotation.StyleRes
 import org.junit.runner.RunWith
 import org.robolectric.Robolectric
 import org.robolectric.RobolectricTestRunner
@@ -14,7 +15,7 @@ import org.robolectric.annotation.Config
  * Base class of roboeletric tests, not requiring the manifest to be the set.
  */
 @RunWith(RobolectricTestRunner::class)
-@Config(manifest = Config.NONE)
+@Config(constants = BuildConfig::class)
 abstract class BaseRoboElectricTest {
     /**
      * the context to use in roboelectric tests
@@ -25,14 +26,18 @@ abstract class BaseRoboElectricTest {
 
     /**  */
 
-    inline fun <reified T : Activity> createActivity(): T =
-            createActivityController<T>().create().get().apply { setTheme(R.style.Theme_AppCompat) }
+    inline fun <reified T : Activity> createActivity(@StyleRes theme: Int = 0): T =
+            createActivityController<T>(theme).create().get()
 
     /**
      * creates an activity controller to test lifecycle events
      */
-    inline fun <reified T : Activity> createActivityController(): ActivityController<T> =
-            Robolectric.buildActivity(T::class.java).apply { get().setTheme(R.style.Theme_AppCompat) }
+    inline fun <reified T : Activity> createActivityController(@StyleRes theme: Int = 0): ActivityController<T> =
+            Robolectric.buildActivity(T::class.java).apply {
+                if (theme != 0) {
+                    get().setTheme(theme)
+                }
+            }
 
 
 }

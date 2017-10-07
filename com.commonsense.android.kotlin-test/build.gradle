@@ -37,6 +37,7 @@ dependencies {
     })
     compile "junit:junit:$junitVersion"
     compile "com.android.support:appcompat-v7:$supportVersion"
+    testCompile "com.android.support:appcompat-v7:$supportVersion"
     compile "org.jetbrains.kotlin:kotlin-stdlib:$kotlin_version"
     compile "org.robolectric:robolectric:$roboElectricVersion"
 }

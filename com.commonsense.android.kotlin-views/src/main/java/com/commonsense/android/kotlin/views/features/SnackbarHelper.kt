@@ -14,7 +14,6 @@ import com.commonsense.android.kotlin.base.FunctionUnit
  */
 
 
-
 fun Fragment.showSnackbar(view: View,
                           @StringRes text: Int,
                           @StringRes actionText: Int,
@@ -22,14 +21,12 @@ fun Fragment.showSnackbar(view: View,
                           durationInMs: Int,
                           onAction: EmptyFunction,
                           modifyView: FunctionUnit<View>? = null,
-                          onTimeout: EmptyFunction?= null,
+                          onTimeout: EmptyFunction? = null,
                           onDismissOtherwise: EmptyFunction? = null): Snackbar {
 
     val mySnackbar = Snackbar.make(view,
             text, Snackbar.LENGTH_SHORT)
-    mySnackbar.setAction(actionText, { view ->
-        onAction()
-    })
+    mySnackbar.setAction(actionText, { onAction() })
     mySnackbar.duration = durationInMs
     mySnackbar.addCallback(object : BaseTransientBottomBar.BaseCallback<Snackbar?>() {
         override fun onDismissed(transientBottomBar: Snackbar?, event: Int) {

@@ -31,7 +31,7 @@ class CameraFragment : BaseDatabindingFragment<CameraFragmentDemoBinding>() {
             = CameraFragmentDemoBinding::inflate
 
     private val imageHelper by lazy {
-        PictureRetriver(activity as BaseActivity, { path, fromCamera -> onImageSelected(path) })
+        PictureRetriver(activity as BaseActivity, { path, _ -> onImageSelected(path) })
     }
 
     private val imageAdapter by lazy {

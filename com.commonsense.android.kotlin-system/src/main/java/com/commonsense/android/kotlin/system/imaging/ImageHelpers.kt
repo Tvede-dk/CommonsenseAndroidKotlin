@@ -91,12 +91,12 @@ private fun getPowerOfTwoForSampleRatio(ratio: Double): Int {
     return maxOf(k, 1)
 }
 
-suspend fun Bitmap.scaleToWidth(@IntRange(from = 0) width: Int, respectAspectRatio: Boolean): Deferred<Bitmap?> = async(CommonPool) {
-    tryAndLogSuspend("Bitmap.scaleToWidth") {
-        val size = getImageSize().scaleWidth(width)
-        Bitmap.createScaledBitmap(this@scaleToWidth, size.width, size.height, true)
-    }
-}
+//suspend fun Bitmap.scaleToWidth(@IntRange(from = 0) width: Int, respectAspectRatio: Boolean): Deferred<Bitmap?> = async(CommonPool) {
+//    tryAndLogSuspend("Bitmap.scaleToWidth") {
+//        val size = getImageSize().scaleWidth(width)
+//        Bitmap.createScaledBitmap(this@scaleToWidth, size.width, size.height, true)
+//    }
+//}
 
 /**
  * Assuming a thumbnail is square

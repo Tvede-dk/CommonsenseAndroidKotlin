@@ -1,6 +1,5 @@
 package com.commonsense.android.kotlin.views.input
 
-import com.commonsense.android.kotlin.base.EmptyFunction
 import com.commonsense.android.kotlin.base.FunctionUnit
 
 /**
@@ -38,11 +37,10 @@ class InputValidator<U> {
 
         fun <T> add(objectToUse: T,
                     validationCallback: ValidationCallback<T, U>,
-                    onValidationFailed: ValidationFailedCallback<T, U>? = null,
-                    attachEvents: FunctionUnit<(T, EmptyFunction) -> Unit>? = null
+                    onValidationFailed: ValidationFailedCallback<T, U>? = null
         ) {
-               val rule = ValidationRule(objectToUse, validationCallback, onValidationFailed)
-               elementsToValidate.add(rule)
+            val rule = ValidationRule(objectToUse, validationCallback, onValidationFailed)
+            elementsToValidate.add(rule)
             /*   attachEvents?.invoke(objectToUse, {
 
                    //TODO something in this manner.

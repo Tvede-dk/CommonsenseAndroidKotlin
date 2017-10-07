@@ -2,6 +2,7 @@ apply plugin: 'com.android.library'
 apply plugin: 'kotlin-android'
 apply plugin: 'kotlin-kapt'
 
+
 android {
     compileSdkVersion androidSdkBuildVersion
     buildToolsVersion "$androidBuildToolsVersion"
@@ -28,6 +29,10 @@ android {
     dataBinding {
         enabled true
     }
+}
+kapt {
+    processors = "com.android.databinding:compiler:$androidGradleVersion"
+    useLightAnalysis true
 }
 
 
@@ -60,6 +65,9 @@ dependencies {
 repositories {
     mavenCentral()
 }
+
+
+
 
 apply from: '../resourcegroups.gradle'
 kotlin {

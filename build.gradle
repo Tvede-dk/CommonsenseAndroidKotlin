@@ -24,6 +24,10 @@ buildscript {
     }
 }
 
+
+
+
+
 allprojects {
     repositories {
         jcenter()
@@ -33,6 +37,14 @@ allprojects {
         }
     }
 }
+subprojects {
+    tasks.withType(org.jetbrains.kotlin.gradle.tasks.KotlinCompile).all {
+        kotlinOptions {
+//            warningsAsErrors = true //enable when kapt is behaving nice.
+        }
+    }
+}
+
 
 task clean(type: Delete) {
     delete rootProject.buildDir

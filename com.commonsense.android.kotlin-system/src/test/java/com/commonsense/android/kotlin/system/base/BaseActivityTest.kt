@@ -1,19 +1,23 @@
 package com.commonsense.android.kotlin.system.base
 
+import com.commonsense.android.kotlin.system.BuildConfig
+import com.commonsense.android.kotlin.system.R
 import com.commonsense.android.kotlin.test.BaseRoboElectricTest
 import com.commonsense.android.kotlin.test.failTest
 import com.commonsense.android.kotlin.test.testCallbackWithSemaphore
 import org.junit.Test
+import org.robolectric.annotation.Config
 
 /**
  * Created by Kasper Tvede on 07-10-2017.
  */
+@Config(constants = BuildConfig::class)
 class BaseActivityTest : BaseRoboElectricTest() {
     @Test
     fun launchInUiLifecycleEventsPaused() = testCallbackWithSemaphore(
             shouldAquire = false,
-            errorMessage = "callback should not be called") { sem ->
-        val act = createActivityController<BaseActivity>().apply {
+            errorMessage = "callback should not be called") { _ ->
+        val act = createActivityController<BaseActivity>(R.style.Theme_AppCompat).apply {
             setup()
             pause()
         }
@@ -26,7 +30,7 @@ class BaseActivityTest : BaseRoboElectricTest() {
     fun launchInUiLifecycleEventsVisible() = testCallbackWithSemaphore(
             shouldAquire = true,
             errorMessage = "callback should be called") { sem ->
-        val act = createActivityController<BaseActivity>().apply {
+        val act = createActivityController<BaseActivity>(R.style.Theme_AppCompat).apply {
             setup()
             visible()
         }

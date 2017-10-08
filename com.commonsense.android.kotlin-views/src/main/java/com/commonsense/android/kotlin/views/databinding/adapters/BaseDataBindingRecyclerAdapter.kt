@@ -12,6 +12,7 @@ import com.commonsense.android.kotlin.base.extensions.collections.ifTrue
 import com.commonsense.android.kotlin.base.extensions.collections.ifTrue
 import com.commonsense.android.kotlin.base.extensions.collections.length
 import com.commonsense.android.kotlin.base.extensions.isNullOrEqualTo
+import com.commonsense.android.kotlin.base.extensions.use
 import com.commonsense.android.kotlin.system.datastructures.IndexPath
 import com.commonsense.android.kotlin.system.datastructures.SectionLookupRep
 import com.commonsense.android.kotlin.system.datastructures.TypeHashCodeLookupRepresent
@@ -132,7 +133,7 @@ open class RenderModel<
         }
     }
 
-    //more performant than an inline getter that retrives it.
+    //more performance than an inline getter that retrieves it.
     private val vmTypeValue: Int by lazy {
         classType.hashCode()
     }
@@ -388,6 +389,14 @@ abstract class DataBindingRecyclerAdapter<T>(context: Context) :
 
     fun removeSections(@IntRange(from = 0) vararg sectionIndexes: Int) {
         sectionIndexes.forEach(this::removeSection)
+    }
+
+
+    fun smoothScrollToSection(@IntRange(from = 0) sectionIndex: Int) {
+        val positionInList = dataCollection.getSectionLocation(sectionIndex)?.inRaw?.first ?: return
+        listeningRecyclers.forEach {
+            it.use { this.smoothScrollToPosition(positionInList) }
+        }
     }
 
 }

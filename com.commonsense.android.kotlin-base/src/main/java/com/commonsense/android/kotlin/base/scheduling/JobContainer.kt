@@ -2,6 +2,7 @@ package com.commonsense.android.kotlin.base.scheduling
 
 import com.commonsense.android.kotlin.base.AsyncCoroutineFunction
 import com.commonsense.android.kotlin.base.AsyncEmptyFunction
+import com.commonsense.android.kotlin.base.extensions.use
 import com.commonsense.android.kotlin.base.extensions.weakReference
 import kotlinx.coroutines.experimental.Job
 import kotlinx.coroutines.experimental.launch
@@ -16,15 +17,21 @@ import kotlin.coroutines.experimental.CoroutineContext
  */
 private typealias WeakJob = WeakReference<Job>
 
+private typealias WeakQueuedJob = WeakReference<Pair<CoroutineContext, AsyncEmptyFunction>>
+
 class JobContainer {
 
     private val localJobMutex = Mutex()
 
     private val groupJobMutex = Mutex()
 
+    private val queuedGroupedJobsMutex = Mutex()
+
     private val localJobs = mutableListOf<WeakJob>()
 
-    private val groupedJobs = HashMap<String, WeakJob>()
+    private val queuedGroupedJobs = hashMapOf<String, MutableList<WeakQueuedJob>>()
+
+    private val groupedJobs = hashMapOf<String, WeakJob>()
 
     //<editor-fold desc="Add job ">
     private fun addJobToLocal(job: Job) {
@@ -121,10 +128,36 @@ class JobContainer {
         }
     }
 
-    private inline fun changeGroupJob(crossinline action: HashMap<String, WeakJob>.() -> Unit) = runBlocking {
+    private inline fun changeGroupJob(crossinline action: MutableMap<String, WeakJob>.() -> Unit) = runBlocking {
         groupJobMutex.withLock {
             action(groupedJobs)
         }
     }
+
+
+    private inline fun changeQueuedJob(crossinline action: MutableMap<String, MutableList<WeakQueuedJob>>.() -> Unit) = runBlocking {
+        queuedGroupedJobsMutex.withLock {
+            action(queuedGroupedJobs)
+        }
+    }
+
     //</editor-fold>
+    /**
+     * Executes all queued up actions in that group.
+     */
+    fun executeQueue(group: String) = changeQueuedJob {
+        get(group)?.let {
+            it.forEach {
+                it.use { performAction(first, second) }
+            }
+        }
+    }
+
+    /**
+     * Adds a given operation to a named queue.
+     */
+    fun addToQueue(context: CoroutineContext, action: AsyncEmptyFunction, group: String) = changeQueuedJob {
+        getOrPut(group, { mutableListOf(Pair(context, action).weakReference()) })
+    }
+
 }

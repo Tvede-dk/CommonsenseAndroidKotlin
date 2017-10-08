@@ -5,6 +5,7 @@ import android.content.Intent
 import android.support.annotation.IntRange
 import android.support.v4.app.DialogFragment
 import android.view.MenuItem
+import com.commonsense.android.kotlin.base.AsyncEmptyFunction
 import com.commonsense.android.kotlin.base.scheduling.JobContainer
 import com.commonsense.android.kotlin.system.base.helpers.*
 import com.commonsense.android.kotlin.system.extensions.onBackPressed
@@ -50,8 +51,16 @@ open class BaseFragment : DialogFragment(), ActivityResultHelperContainer {
             localJobs.performAction(CommonPool, action, group)
 
 
-    fun launchInUi(group: String, action: suspend () -> Unit): Job =
-            localJobs.performAction(UI, action, group)
+    fun launchInUi(group: String, action: suspend () -> Unit): Job {
+        val otherAction: AsyncEmptyFunction = {
+            if (isVisible) {
+                action()
+            } else {
+                localJobs.addToQueue(UI, action, "onPostResume")
+            }
+        }
+        return localJobs.performAction(UI, otherAction, group)
+    }
 
 
     override fun onDestroy() {

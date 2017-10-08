@@ -23,7 +23,16 @@ android {
     lintOptions {
         abortOnError false
     }
+    testOptions {
+        unitTests {
+//            includeAndroidResources = true
+        }
+        unitTests.all {
+            forkEvery = 2
+        }
+    }
 }
+
 
 
 dependencies {

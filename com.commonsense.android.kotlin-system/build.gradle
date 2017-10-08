@@ -26,12 +26,10 @@ android {
     }
     testOptions {
         unitTests {
-//            includeAndroidResources = true
-
+            //includeAndroidResources = true
         }
         unitTests.all {
-            forkEvery = 10
-
+            forkEvery = 2
         }
     }
 }

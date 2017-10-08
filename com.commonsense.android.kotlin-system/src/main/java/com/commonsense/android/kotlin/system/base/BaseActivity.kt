@@ -11,7 +11,6 @@ import android.support.v4.app.FragmentActivity
 import android.support.v7.app.AppCompatActivity
 import android.view.MenuItem
 import com.commonsense.android.kotlin.base.AsyncEmptyFunction
-import com.commonsense.android.kotlin.base.extensions.collections.ifTrueAsync
 import com.commonsense.android.kotlin.base.scheduling.JobContainer
 import com.commonsense.android.kotlin.system.PermissionsHandling
 import com.commonsense.android.kotlin.system.base.helpers.*
@@ -55,7 +54,11 @@ open class BaseActivity : AppCompatActivity(), ActivityResultHelperContainer {
      */
     fun launchInUi(group: String, action: AsyncEmptyFunction) {
         val otherAction: AsyncEmptyFunction = {
-            isVisible.ifTrueAsync(action)
+            if (isVisible) {
+                action()
+            } else {
+                localJobs.addToQueue(UI, action, "onPostResume")
+            }
         }
         localJobs.performAction(UI, otherAction, group)
     }
@@ -114,6 +117,13 @@ open class BaseActivity : AppCompatActivity(), ActivityResultHelperContainer {
     override fun onResume() {
         super.onResume()
         mIsPaused = false
+
+    }
+
+
+    override fun onPostResume() {
+        super.onPostResume()
+        localJobs.executeQueue("onPostResume")
     }
 
     override fun onPause() {

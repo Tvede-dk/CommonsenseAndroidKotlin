@@ -30,6 +30,21 @@ android {
     lintOptions {
         abortOnError false
     }
+
+    testOptions {
+        unitTests {
+//            includeAndroidResources = true
+        }
+        unitTests.all {
+            forkEvery = 2
+        }
+    }
+}
+
+
+kapt {
+    processors = "com.android.databinding:compiler:$androidGradleVersion"
+    useLightAnalysis true
 }
 
 

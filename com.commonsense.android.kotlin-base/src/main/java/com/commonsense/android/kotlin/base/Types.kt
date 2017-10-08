@@ -14,6 +14,9 @@ typealias AsyncEmptyFunction = suspend () -> Unit
  */
 typealias FunctionUnit<E> = (E) -> Unit
 
+
+typealias MapFunction<E,U> = (E) -> U
+
 typealias SuspendFunctionUnit<E> = suspend (E) -> Unit
 
 typealias FunctionBoolean<E> = (E) -> Boolean

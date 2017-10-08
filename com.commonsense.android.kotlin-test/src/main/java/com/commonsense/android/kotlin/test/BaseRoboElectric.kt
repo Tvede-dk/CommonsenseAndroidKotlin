@@ -24,8 +24,9 @@ abstract class BaseRoboElectricTest {
         RuntimeEnvironment.application
     }
 
-    /**  */
-
+    /**
+     *
+     */
     inline fun <reified T : Activity> createActivity(@StyleRes theme: Int = 0): T =
             createActivityController<T>(theme).create().get()
 

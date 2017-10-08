@@ -67,6 +67,8 @@ private data class SwipeItemViews(val startView: View?, val endView: View?, val 
 private class InnerSwipeHelper(val recyclerAdapter: DataBindingRecyclerAdapter<*>)
     : ItemTouchHelper.Callback() {
 
+    private var lastDirection: Direction? = null
+
     override fun getMovementFlags(recyclerView: RecyclerView?, viewHolder: RecyclerView.ViewHolder?): Int {
         val swipeItem = getOptInterface(viewHolder) ?: return 0
         val baseViewHolder = viewHolder as? BaseViewHolderItem<*> ?: return 0
@@ -110,18 +112,19 @@ private class InnerSwipeHelper(val recyclerAdapter: DataBindingRecyclerAdapter<*
         }
 
         when {
-            dX in (-0.1f..0.1f) -> //nothing is visible. just hide it
+            dX in (-0.1f..0.1f) -> { //nothing is visible. just hide it
                 ViewHelper.goneViews(startView, endView)
-            dX > 0 -> //else, what side.
+                lastDirection = null
+            }
+            dX > 0 -> { //else, what side.
                 ViewHelper.showGoneView(startView, endView)
+                lastDirection = Direction.StartToEnd
+            }
             else -> {
                 ViewHelper.showGoneView(endView, startView)
+                lastDirection = Direction.EndToStart
             }
         }
-    }
-
-    override fun onChildDrawOver(c: Canvas?, recyclerView: RecyclerView?, viewHolder: RecyclerView.ViewHolder?, dX: Float, dY: Float, actionState: Int, isCurrentlyActive: Boolean) {
-        super.onChildDrawOver(c, recyclerView, viewHolder, dX, dY, actionState, isCurrentlyActive)
     }
 
 
@@ -167,7 +170,9 @@ private class InnerSwipeHelper(val recyclerAdapter: DataBindingRecyclerAdapter<*
         //TODO hotpatch the dir as it sometimes is.. wrong ??? thx google.
         //use the
         if (dir != null && baseViewHolder != null && optInterface != null) {
-            optInterface.onSwiped(dir, baseViewHolder.item)
+            //use our own logic, since the dir from the item touch helper can sometimes be reveresed.
+            //if we do not have any clue, use the helper class's idea.
+            optInterface.onSwiped(lastDirection ?: dir, baseViewHolder.item)
         }
     }
 

@@ -1,7 +1,6 @@
 package com.commonsense.android.kotlin.system.datastructures
 
 import android.support.annotation.IntRange
-import android.support.annotation.VisibleForTesting
 import android.util.SparseArray
 import com.commonsense.android.kotlin.base.extensions.collections.*
 
@@ -330,7 +329,6 @@ class SectionLookupRep<T : TypeHashCodeLookupRepresent<Rep>, out Rep : Any> {
         if (data[inSection, null] == null) { //missing section => null.
             return null
         }
-        @IntRange(from = 0)
         val location = calculateSectionLocation(inSection)
         updateCacheForSection(inSection) {
             data.remove(inSection)
@@ -363,7 +361,6 @@ class SectionLookupRep<T : TypeHashCodeLookupRepresent<Rep>, out Rep : Any> {
     }
 
     /**  */
-    @VisibleForTesting(otherwise = VisibleForTesting.PROTECTED)
     fun sectionAt(sectionIndex: Int): TypeSection<T>? = data[sectionIndex]
 
     private fun sectionExists(sectionIndex: Int): Boolean = data[sectionIndex, null] != null

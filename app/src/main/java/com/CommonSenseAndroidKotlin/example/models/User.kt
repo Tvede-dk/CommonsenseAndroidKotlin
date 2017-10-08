@@ -21,7 +21,6 @@ class UserListItemRender<in F : Any>(item: User) : BaseSearchRenderModel<User, U
     }
 
     override fun isAcceptedByFilter(value: F): Boolean {
-        //TODO impl me.
         return false
     }
 

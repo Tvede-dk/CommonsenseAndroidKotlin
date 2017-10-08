@@ -1,10 +1,9 @@
 apply plugin: 'com.android.library'
 apply plugin: 'kotlin-android'
-apply plugin: 'kotlin-kapt'
 
 android {
     compileSdkVersion androidSdkBuildVersion
-    buildToolsVersion "$androidBuildToolsVersion"
+    buildToolsVersion androidBuildToolsVersion
 
 
     defaultConfig {
@@ -25,9 +24,6 @@ android {
     lintOptions {
         abortOnError false
     }
-    dataBinding {
-        enabled true
-    }
     testOptions {
         unitTests {
             includeAndroidResources = true
@@ -36,36 +32,24 @@ android {
             forkEvery = 2
         }
     }
-
-}
-
-kapt {
-    processors = "com.android.databinding:compiler:$androidGradleVersion"
-    useLightAnalysis true
 }
 
 dependencies {
     androidTestImplementation("com.android.support.test.espresso:espresso-core:$espressoVersion", {
         exclude group: 'com.android.support', module: 'support-annotations'
     })
-
+    implementation "com.android.support:exifinterface:$supportVersion"
     //coroutines libs
     implementation "org.jetbrains.kotlinx:kotlinx-coroutines-core:$coroutinesVersion"
     implementation "org.jetbrains.kotlinx:kotlinx-coroutines-android:$coroutinesVersion"
 
-
-    implementation project(':com.commonsense.android.kotlin-system')
-    implementation project(':com.commonsense.android.kotlin-views')
-    implementation project(':com.commonsense.android.kotlin-base')
+    testImplementation "org.robolectric:robolectric:$roboElectricVersion"
     testImplementation project(':com.commonsense.android.kotlin-test')
 
-    //leak canary libs
-    debugApi "com.squareup.leakcanary:leakcanary-android:$leakCanaryVersion"
-    releaseApi "com.squareup.leakcanary:leakcanary-android-no-op:$leakCanaryVersion"
-    testApi "com.squareup.leakcanary:leakcanary-android-no-op:$leakCanaryVersion"
+    implementation project(":com.commonsense.android.kotlin-base")
+
 
     implementation "com.android.support:appcompat-v7:$supportVersion"
-    kapt "com.android.databinding:compiler:$androidGradleVersion"
     implementation "junit:junit:$junitVersion"
     implementation "org.jetbrains.kotlin:kotlin-stdlib:$kotlin_version"
 
@@ -73,8 +57,6 @@ dependencies {
 repositories {
     mavenCentral()
 }
-
-apply from: '../resourcegroups.gradle'
 kotlin {
     experimental {
         coroutines "enable"

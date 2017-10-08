@@ -27,11 +27,19 @@ interface Expected<out Value> {
 
 inline fun <T, U> Expected<T>.use(crossinline action: (T) -> U): U? {
     return if (isValid) {
-        value.let(action)
+        action(value)
     } else {
         null
     }
+}
 
+
+suspend fun <T, U> Expected<T>.useAsync(action: suspend (T) -> U): U? {
+    return if (isValid) {
+        action(value)
+    } else {
+        null
+    }
 }
 
 class ExpectedFailed<out T>(exception: Throwable) : Expected<T> {

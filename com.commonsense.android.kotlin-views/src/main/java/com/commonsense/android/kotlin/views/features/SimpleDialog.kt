@@ -12,14 +12,15 @@ import com.commonsense.android.kotlin.base.EmptyFunction
 
 data class DialogOption(@StringRes val text: Int, val callback: EmptyFunction)
 
-fun Context.showOptionsDialog(optClosedOnOutside: EmptyFunction?, vararg options: DialogOption) {
+fun Context.showOptionsDialog(@StringRes message: Int, optClosedOnOutside: EmptyFunction?, vararg options: DialogOption) {
 
     val stringOptions = options.map { getString(it.text) }.toTypedArray()
-    val dialog = AlertDialog.Builder(this).setItems(stringOptions,
-            { dialogInterface: DialogInterface?, index: Int ->
+    val dialog = AlertDialog.Builder(this)
+            .setItems(stringOptions, { dialogInterface: DialogInterface?, index: Int ->
                 options[index].callback()
                 dialogInterface?.dismiss()
             })
+            .setMessage(message)
 
     val dialogToShow = dialog.create()
     if (optClosedOnOutside != null) {

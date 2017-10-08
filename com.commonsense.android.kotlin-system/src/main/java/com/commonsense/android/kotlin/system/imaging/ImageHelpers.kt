@@ -91,18 +91,21 @@ private fun getPowerOfTwoForSampleRatio(ratio: Double): Int {
     return maxOf(k, 1)
 }
 
-//suspend fun Bitmap.scaleToWidth(@IntRange(from = 0) width: Int, respectAspectRatio: Boolean): Deferred<Bitmap?> = async(CommonPool) {
-//    tryAndLogSuspend("Bitmap.scaleToWidth") {
-//        val size = getImageSize().scaleWidth(width)
-//        Bitmap.createScaledBitmap(this@scaleToWidth, size.width, size.height, true)
-//    }
-//}
+suspend fun Bitmap.scaleToWidth(@IntRange(from = 0) width: Int, respectAspectRatio: Boolean): Deferred<Bitmap?> = async(CommonPool) {
+    tryAndLogSuspend("Bitmap.scaleToWidth") {
+        val size = getImageSize().scaleWidth(width)
+        Bitmap.createScaledBitmap(this@scaleToWidth, size.width, size.height, true)
+    }
+}
 
 /**
  * Assuming a thumbnail is square
  *
  */
-fun Context.calculateOptimalThumbnailSize(defaultSize: Int = 200, minSize: Int = 50, fraction: Int = 8): Int {
+@IntRange(from = 0)
+fun Context.calculateOptimalThumbnailSize(@IntRange(from = 0) defaultSize: Int = 200,
+                                          @IntRange(from = 0) minSize: Int = 50,
+                                          @IntRange(from = 0) fraction: Int = 8): Int {
     val virtualSize = getVirtualScreenSize() ?: return defaultSize
     val widthFraction = virtualSize.x / fraction
     val heightFraction = virtualSize.y / fraction

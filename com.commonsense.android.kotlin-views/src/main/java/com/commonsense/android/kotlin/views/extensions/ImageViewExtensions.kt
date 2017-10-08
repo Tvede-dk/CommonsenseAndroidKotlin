@@ -7,7 +7,6 @@ import com.commonsense.android.kotlin.system.imaging.ImageDecodingType
 import com.commonsense.android.kotlin.system.imaging.ImageLoader
 import com.commonsense.android.kotlin.system.imaging.ImageLoaderType
 import com.commonsense.android.kotlin.system.imaging.withColor
-import com.commonsense.android.kotlin.system.logging.L
 import com.commonsense.android.kotlin.system.logging.tryAndLogSuspend
 import com.commonsense.android.kotlin.views.features.getTagOr
 import kotlinx.coroutines.experimental.android.UI
@@ -38,12 +37,6 @@ fun ImageView.loadAndUse(loading: ImageLoaderType, decodeScale: ImageDecodingTyp
                     validateIdWith(ourIndex, index, decodeScale))
             if (index.get() == ourIndex && bitmap != null) {
                 afterDecoded(this@loadAndUse, bitmap)
-            } else {
-                if (bitmap == null) {
-                    L.error("test", "expected index, but no bitmap")
-                } else {
-                    L.error("test", "index is:${index.get()}, but we expected : $ourIndex")
-                }
             }
         }
     }

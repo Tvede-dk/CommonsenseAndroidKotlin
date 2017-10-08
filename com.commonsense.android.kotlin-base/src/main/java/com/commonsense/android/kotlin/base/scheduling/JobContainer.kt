@@ -15,11 +15,11 @@ import kotlin.coroutines.experimental.CoroutineContext
 /**
  * Created by Kasper Tvede on 22-06-2017.
  */
-private typealias WeakJob = WeakReference<Job>
+typealias WeakJob = WeakReference<Job>
 
-private typealias WeakQueuedJob = WeakReference<Pair<CoroutineContext, AsyncEmptyFunction>>
+typealias WeakQueuedJob = WeakReference<Pair<CoroutineContext, AsyncEmptyFunction>>
 
-class JobContainer {
+open class JobContainer {
 
     private val localJobMutex = Mutex()
 
@@ -70,6 +70,7 @@ class JobContainer {
     fun cleanJobs() {
         localJobs.forEach { it.get()?.cancel() }
         groupedJobs.forEach { it.value.get()?.cancel() }
+        queuedGroupedJobs.clear()
     }
     //</editor-fold>
 

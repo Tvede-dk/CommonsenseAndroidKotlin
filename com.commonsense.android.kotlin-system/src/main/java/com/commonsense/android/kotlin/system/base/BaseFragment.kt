@@ -2,17 +2,16 @@ package com.commonsense.android.kotlin.system.base
 
 import android.app.Activity
 import android.content.Intent
+import android.os.Bundle
 import android.support.annotation.IntRange
 import android.support.v4.app.DialogFragment
 import android.view.MenuItem
-import com.commonsense.android.kotlin.base.AsyncEmptyFunction
-import com.commonsense.android.kotlin.base.scheduling.JobContainer
 import com.commonsense.android.kotlin.system.base.helpers.*
 import com.commonsense.android.kotlin.system.extensions.onBackPressed
 import com.commonsense.android.kotlin.system.logging.logWarning
+import com.commonsense.android.kotlin.system.uiAware.UiAwareJobContainer
 import kotlinx.coroutines.experimental.CommonPool
 import kotlinx.coroutines.experimental.Job
-import kotlinx.coroutines.experimental.android.UI
 
 /**
  * created by Kasper Tvede on 29-09-2016.
@@ -27,7 +26,7 @@ open class BaseFragment : DialogFragment(), ActivityResultHelperContainer {
         get() = activity
 
     private val localJobs by lazy {
-        JobContainer()
+        UiAwareJobContainer()
     }
 
     private val activityResultHelper by lazy {
@@ -51,20 +50,21 @@ open class BaseFragment : DialogFragment(), ActivityResultHelperContainer {
             localJobs.performAction(CommonPool, action, group)
 
 
-    fun launchInUi(group: String, action: suspend () -> Unit): Job {
-        val otherAction: AsyncEmptyFunction = {
-            if (isVisible) {
-                action()
-            } else {
-                localJobs.addToQueue(UI, action, "onPostResume")
-            }
-        }
-        return localJobs.performAction(UI, otherAction, group)
+    fun launchInUi(group: String, action: suspend () -> Unit): Job =
+            localJobs.launchInUi({ isVisible }, group, action)
+
+    override fun onResume() {
+        super.onResume()
+        localJobs.onPostResume()
     }
 
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        localJobs.onCreate()
+    }
 
     override fun onDestroy() {
-        localJobs.cleanJobs()
+        localJobs.onDestory()
         activityResultHelper.clear()
         super.onDestroy()
     }

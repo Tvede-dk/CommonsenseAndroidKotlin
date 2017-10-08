@@ -2,6 +2,7 @@ package com.commonsense.android.kotlin.system.base
 
 import android.app.Activity
 import android.content.Intent
+import android.os.Bundle
 import android.support.annotation.AnyThread
 import android.support.annotation.IdRes
 import android.support.annotation.IntRange
@@ -11,7 +12,6 @@ import android.support.v4.app.FragmentActivity
 import android.support.v7.app.AppCompatActivity
 import android.view.MenuItem
 import com.commonsense.android.kotlin.base.AsyncEmptyFunction
-import com.commonsense.android.kotlin.base.scheduling.JobContainer
 import com.commonsense.android.kotlin.system.PermissionsHandling
 import com.commonsense.android.kotlin.system.base.helpers.*
 import com.commonsense.android.kotlin.system.dataFlow.ReferenceCountingMap
@@ -19,8 +19,8 @@ import com.commonsense.android.kotlin.system.extensions.backPressIfHome
 import com.commonsense.android.kotlin.system.extensions.transactionCommit
 import com.commonsense.android.kotlin.system.extensions.transactionCommitNow
 import com.commonsense.android.kotlin.system.logging.logWarning
+import com.commonsense.android.kotlin.system.uiAware.UiAwareJobContainer
 import kotlinx.coroutines.experimental.CommonPool
-import kotlinx.coroutines.experimental.android.UI
 import kotlin.reflect.KClass
 
 /**
@@ -35,7 +35,7 @@ open class BaseActivity : AppCompatActivity(), ActivityResultHelperContainer {
     }
 
     private val localJobs by lazy {
-        JobContainer()
+        UiAwareJobContainer()
     }
 
     private val activityResultHelper by lazy {
@@ -47,20 +47,17 @@ open class BaseActivity : AppCompatActivity(), ActivityResultHelperContainer {
         localJobs.performAction(CommonPool, action, group)
     }
 
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        localJobs.onCreate()
+    }
 
     /**
      * a safe callback, that verifies the lifecycle, and also disallows multiple concurrenct events of the same group.
      * Meant for updating the ui, or handling clicks'n events.
      */
     fun launchInUi(group: String, action: AsyncEmptyFunction) {
-        val otherAction: AsyncEmptyFunction = {
-            if (isVisible) {
-                action()
-            } else {
-                localJobs.addToQueue(UI, action, "onPostResume")
-            }
-        }
-        localJobs.performAction(UI, otherAction, group)
+        localJobs.launchInUi({ isVisible }, group, action)
     }
 
 
@@ -70,7 +67,7 @@ open class BaseActivity : AppCompatActivity(), ActivityResultHelperContainer {
     }
 
     override fun onDestroy() {
-        localJobs.cleanJobs()
+        localJobs.onDestory()
         activityResultHelper.clear()
         super.onDestroy()
     }
@@ -123,7 +120,7 @@ open class BaseActivity : AppCompatActivity(), ActivityResultHelperContainer {
 
     override fun onPostResume() {
         super.onPostResume()
-        localJobs.executeQueue("onPostResume")
+        localJobs.onPostResume()
     }
 
     override fun onPause() {

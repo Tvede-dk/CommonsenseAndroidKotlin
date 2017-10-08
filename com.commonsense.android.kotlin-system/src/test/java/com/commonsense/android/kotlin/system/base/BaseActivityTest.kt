@@ -51,6 +51,27 @@ class BaseActivityTest : BaseRoboElectricTest() {
         act.resume()
     }
 
+    @Test
+    fun launchInUiLifecycleEventsPausedDestory() = testCallbackWithSemaphore(
+            shouldAquire = false,
+            errorMessage = "callback should be called after onresume after a pause") { sem ->
+        val act = createActivityController<BaseActivity>(R.style.Theme_AppCompat).apply {
+            setup()
+            pause()
+        }
+        act.get().launchInUi("test", {
+            failTest("Should not get called when the pause or destroy have been called")
+        })
+        runBlocking {
+            Robolectric.flushBackgroundThreadScheduler()
+            Robolectric.flushForegroundThreadScheduler()
+            delay(50)
+        }
+        act.destroy()
+        act.postResume()
+
+    }
+
 
     @Test
     fun launchInBackgroundLifecycleEventsPaused() = testCallbackWithSemaphore(

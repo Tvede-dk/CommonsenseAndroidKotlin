@@ -51,12 +51,13 @@ open class BaseFragment : DialogFragment(), ActivityResultHelperContainer {
 
 
     fun launchInUi(group: String, action: suspend () -> Unit): Job =
-            localJobs.launchInUi({ isVisible }, group, action)
+            localJobs.launchInUi({ isAdded && !this.isHidden && isResumed }, group, action)
 
     override fun onResume() {
         super.onResume()
         localJobs.onPostResume()
     }
+
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)

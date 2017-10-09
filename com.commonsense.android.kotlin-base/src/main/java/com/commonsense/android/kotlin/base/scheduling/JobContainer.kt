@@ -152,6 +152,7 @@ open class JobContainer {
                 it.use { performAction(first, second) }
             }
         }
+        remove(group)
     }
 
     /**

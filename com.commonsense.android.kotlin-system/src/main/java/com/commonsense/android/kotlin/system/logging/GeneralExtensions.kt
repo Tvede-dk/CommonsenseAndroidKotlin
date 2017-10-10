@@ -14,7 +14,7 @@ inline fun <T> tryAndLog(classAsTitle: KClass<*>, crossinline action: () -> T): 
 inline fun <T> tryAndLog(logTitle: String, crossinline action: () -> T): T? {
     return try {
         action()
-    } catch (exception: Exception) {
+    } catch (exception: Throwable) {
         L.error(logTitle, "", exception)
         null
     }
@@ -23,7 +23,7 @@ inline fun <T> tryAndLog(logTitle: String, crossinline action: () -> T): T? {
 suspend fun <T> tryAndLogSuspend(logTitle: String, action: suspend () -> T): T? {
     return try {
         action()
-    } catch (exception: Exception) {
+    } catch (exception: Throwable) {
         L.error(logTitle, "", exception)
         null
     }

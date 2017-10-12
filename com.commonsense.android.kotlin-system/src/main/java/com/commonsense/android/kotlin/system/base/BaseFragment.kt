@@ -35,7 +35,9 @@ open class BaseFragment : DialogFragment(), ActivityResultHelperContainer {
 
     override fun dismiss() {
         localJobs.cleanJobs()
-        super.dismiss()
+        launchInUi("dismiss") {
+            super.dismiss()
+        }
     }
 
     /**

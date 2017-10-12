@@ -9,7 +9,6 @@ import android.support.v7.widget.RecyclerView
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import com.commonsense.android.kotlin.base.extensions.collections.ifTrue
-import com.commonsense.android.kotlin.base.extensions.collections.ifTrue
 import com.commonsense.android.kotlin.base.extensions.collections.length
 import com.commonsense.android.kotlin.base.extensions.isNullOrEqualTo
 import com.commonsense.android.kotlin.base.extensions.use
@@ -271,6 +270,9 @@ abstract class DataBindingRecyclerAdapter<T>(context: Context) :
             notifyItemRangeRemoved(it.inRaw.start, it.inRaw.length)
         }
     }
+
+    fun setSection(item: T, inSection: Int)
+            = setSection(listOf(item), inSection)
 
     @UiThread
     fun clearSection(inSection: Int): Unit = updateData {

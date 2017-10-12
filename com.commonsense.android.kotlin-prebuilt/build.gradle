@@ -5,6 +5,7 @@ apply plugin: 'kotlin-kapt'
 
 android {
     compileSdkVersion androidSdkBuildVersion
+
     buildToolsVersion "$androidBuildToolsVersion"
 
 
@@ -40,39 +41,39 @@ android {
 
 }
 kapt {
-    processors = "com.android.databinding:compiler:$androidGradleVersion"
+    processors = "com.android.databinding:implementationr:$androidGradleVersion"
     useLightAnalysis true
 }
 
 kapt {
-    processors = "com.android.databinding:compiler:$androidGradleVersion"
+    processors = "com.android.databinding:implementationr:$androidGradleVersion"
     useLightAnalysis true
 }
 
 dependencies {
-    androidTestCompile("com.android.support.test.espresso:espresso-core:$espressoVersion", {
+    androidTestImplementation("com.android.support.test.espresso:espresso-core:$espressoVersion", {
         exclude group: 'com.android.support', module: 'support-annotations'
     })
 
     //coroutines libs
-    compile "org.jetbrains.kotlinx:kotlinx-coroutines-core:$coroutinesVersion"
-    compile "org.jetbrains.kotlinx:kotlinx-coroutines-android:$coroutinesVersion"
+    implementation "org.jetbrains.kotlinx:kotlinx-coroutines-core:$coroutinesVersion"
+    implementation "org.jetbrains.kotlinx:kotlinx-coroutines-android:$coroutinesVersion"
 
 
-    compile project(':com.commonsense.android.kotlin-system')
-    compile project(':com.commonsense.android.kotlin-views')
-    compile project(':com.commonsense.android.kotlin-base')
-    testCompile project(':com.commonsense.android.kotlin-test')
+    implementation project(':com.commonsense.android.kotlin-system')
+    implementation project(':com.commonsense.android.kotlin-views')
+    implementation project(':com.commonsense.android.kotlin-base')
+    testImplementation project(':com.commonsense.android.kotlin-test')
 
     //leak canary libs
-    debugCompile "com.squareup.leakcanary:leakcanary-android:$leakCanaryVersion"
-    releaseCompile "com.squareup.leakcanary:leakcanary-android-no-op:$leakCanaryVersion"
-    testCompile "com.squareup.leakcanary:leakcanary-android-no-op:$leakCanaryVersion"
+    debugImplementation "com.squareup.leakcanary:leakcanary-android:$leakCanaryVersion"
+    releaseImplementation "com.squareup.leakcanary:leakcanary-android-no-op:$leakCanaryVersion"
+    testImplementation "com.squareup.leakcanary:leakcanary-android-no-op:$leakCanaryVersion"
 
-    compile "com.android.support:appcompat-v7:$supportVersion"
+    implementation "com.android.support:appcompat-v7:$supportVersion"
     kapt "com.android.databinding:compiler:$androidGradleVersion"
-    compile "junit:junit:$junitVersion"
-    compile "org.jetbrains.kotlin:kotlin-stdlib:$kotlin_version"
+    implementation "junit:junit:$junitVersion"
+    implementation "org.jetbrains.kotlin:kotlin-stdlib:$kotlin_version"
 
 }
 repositories {

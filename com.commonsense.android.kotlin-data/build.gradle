@@ -35,23 +35,23 @@ android {
 }
 
 dependencies {
-    androidTestCompile("com.android.support.test.espresso:espresso-core:$espressoVersion", {
+    androidTestImplementation("com.android.support.test.espresso:espresso-core:$espressoVersion", {
         exclude group: 'com.android.support', module: 'support-annotations'
     })
-    compile "com.android.support:exifinterface:$supportVersion"
+    implementation "com.android.support:exifinterface:$supportVersion"
     //coroutines libs
-    compile "org.jetbrains.kotlinx:kotlinx-coroutines-core:$coroutinesVersion"
-    compile "org.jetbrains.kotlinx:kotlinx-coroutines-android:$coroutinesVersion"
+    implementation "org.jetbrains.kotlinx:kotlinx-coroutines-core:$coroutinesVersion"
+    implementation "org.jetbrains.kotlinx:kotlinx-coroutines-android:$coroutinesVersion"
 
-    testCompile "org.robolectric:robolectric:$roboElectricVersion"
-    testCompile project(':com.commonsense.android.kotlin-test')
+    testImplementation "org.robolectric:robolectric:$roboElectricVersion"
+    testImplementation project(':com.commonsense.android.kotlin-test')
 
-    compile project(":com.commonsense.android.kotlin-base")
+    implementation project(":com.commonsense.android.kotlin-base")
 
 
-    compile "com.android.support:appcompat-v7:$supportVersion"
-    compile "junit:junit:$junitVersion"
-    compile "org.jetbrains.kotlin:kotlin-stdlib:$kotlin_version"
+    implementation "com.android.support:appcompat-v7:$supportVersion"
+    implementation "junit:junit:$junitVersion"
+    implementation "org.jetbrains.kotlin:kotlin-stdlib:$kotlin_version"
 
 }
 repositories {

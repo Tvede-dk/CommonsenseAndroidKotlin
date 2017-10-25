@@ -17,8 +17,7 @@ fun <T> Collection<T>.getSafe(index: Int): T? = if (this.isIndexValid(index)) {
     null
 }
 
-@Size(min = 0)
-fun <T> List<T>.categorizeInto(vararg filters: (T) -> Boolean): List<List<T>> {
+fun <T> List<T>.categorizeInto(@Size(min = 0) vararg filters: (T) -> Boolean): List<List<T>> {
     val result = filters.map { mutableListOf<T>() }
     this.forEach {
         filters.forEachIndexed { index, filterAccepts ->

@@ -7,10 +7,10 @@ android {
     buildToolsVersion androidBuildToolsVersion
 
     defaultConfig {
-        minSdkVersion 16
-        targetSdkVersion 26
-        versionCode 1
-        versionName "1.0"
+        minSdkVersion project.minSdk
+        targetSdkVersion project.targetSdk
+        versionCode project.versionNumber
+        versionName project.versionName
 
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
 

@@ -15,11 +15,13 @@ android {
     buildToolsVersion "$androidBuildToolsVersion"
     defaultConfig {
         applicationId "com.CommonSenseAndroidKotlin.example"
-        minSdkVersion 16
-        targetSdkVersion 26
-        versionCode 1
+
+        minSdkVersion project.minSdk
+        targetSdkVersion project.targetSdk
+        versionCode project.versionNumber
+        versionName project.versionName
+
         vectorDrawables.useSupportLibrary = true
-        versionName "1.0"
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
         multiDexEnabled true
         //flavorSelection 'sdkRequirements', 'fastDev'

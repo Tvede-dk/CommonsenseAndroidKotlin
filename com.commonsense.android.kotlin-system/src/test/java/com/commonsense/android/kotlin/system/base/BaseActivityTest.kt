@@ -1,17 +1,21 @@
 package com.commonsense.android.kotlin.system.base
 
 import com.commonsense.android.kotlin.system.R
+import com.commonsense.android.kotlin.system.logging.tryAndLog
 import com.commonsense.android.kotlin.test.BaseRoboElectricTest
+import com.commonsense.android.kotlin.test.assert
 import com.commonsense.android.kotlin.test.failTest
 import com.commonsense.android.kotlin.test.testCallbackWithSemaphore
 import kotlinx.coroutines.experimental.delay
 import kotlinx.coroutines.experimental.runBlocking
 import org.junit.Test
 import org.robolectric.Robolectric
+import org.robolectric.annotation.Config
 
 /**
  * Created by Kasper Tvede on 07-10-2017.
  */
+@Config(sdk = intArrayOf(21))
 class BaseActivityTest : BaseRoboElectricTest() {
     @Test
     fun launchInUiLifecycleEventsPaused() = testCallbackWithSemaphore(
@@ -68,7 +72,11 @@ class BaseActivityTest : BaseRoboElectricTest() {
             delay(50)
         }
         act.destroy()
-        act.postResume()
+
+        (tryAndLog("should throw due to ") {
+            act.postResume()
+            false
+        } ?: true).assert(true, "should throw as the activity is dead. ")
 
     }
 

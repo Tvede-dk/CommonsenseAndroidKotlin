@@ -7,10 +7,10 @@ import android.os.StrictMode
 import android.support.v7.app.AppCompatDelegate
 import com.commonsense.android.kotlin.base.EmptyFunction
 import com.commonsense.android.kotlin.base.extensions.collections.ifTrue
-import com.commonsense.android.kotlin.base.extensions.collections.ifTrue
 import com.commonsense.android.kotlin.base.extensions.isZero
 import com.commonsense.android.kotlin.system.extensions.isApiLowerThan
 import com.commonsense.android.kotlin.system.logging.logDebug
+import com.commonsense.android.kotlin.system.logging.tryAndLog
 import com.squareup.leakcanary.LeakCanary
 import java.util.concurrent.atomic.AtomicInteger
 
@@ -38,16 +38,26 @@ abstract class BaseApplication : Application() {
 
     override fun onCreate() {
         super.onCreate()
-        if (LeakCanary.isInAnalyzerProcess(this)) {
-            logDebug("Spawning analyzer procees. skipping setup")
-            // This process is dedicated to LeakCanary for heap analysis.
-            // You should not init your app in this process.
+        if (shouldBailOnCreate() != false) {
             return
         }
         registerActivityLifecycleCallbacks(activityCounter)
         isDebugMode().ifTrue { setupDebugTools() }
         setupVectorDrawableOldAndroid()
         afterOnCreate()
+    }
+
+    /**
+     * Function handling the checking if we are a special process (required for eg leak canary).
+     */
+    fun shouldBailOnCreate() = tryAndLog(BaseApplication::class) {
+        if (LeakCanary.isInAnalyzerProcess(this)) {
+            logDebug("Spawning analyzer procees. skipping setup")
+            // This process is dedicated to LeakCanary for heap analysis.
+            // You should not init your app in this process.
+            return@tryAndLog true
+        }
+        return@tryAndLog false
     }
 
     /**
@@ -70,7 +80,7 @@ abstract class BaseApplication : Application() {
     abstract fun afterOnCreate()
 
     //<editor-fold desc="Debug tools">
-    private fun setupDebugTools() {
+    private fun setupDebugTools() = tryAndLog(BaseApplication::class) {
         logDebug("Setting up debugging tools")
         enableLeakCanary()
         enableStrictMode()

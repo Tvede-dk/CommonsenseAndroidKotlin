@@ -6,16 +6,17 @@ import kotlinx.coroutines.experimental.CoroutineScope
  * Created by kasper on 21/07/2017.
  */
 typealias EmptyFunction = () -> Unit
-
+typealias EmptyFunctionResult<T> = () -> T
 typealias AsyncEmptyFunction = suspend () -> Unit
 
 /**
  * Function with 1 parameter that returns unit
  */
 typealias FunctionUnit<E> = (E) -> Unit
+typealias FunctionResult<I, O> = (I) -> O
 
 
-typealias MapFunction<E,U> = (E) -> U
+typealias MapFunction<E, U> = (E) -> U
 
 typealias SuspendFunctionUnit<E> = suspend (E) -> Unit
 

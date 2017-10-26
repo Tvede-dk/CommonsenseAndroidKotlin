@@ -12,6 +12,7 @@ import android.support.v4.app.FragmentActivity
 import android.support.v7.app.AppCompatActivity
 import android.view.MenuItem
 import com.commonsense.android.kotlin.base.AsyncEmptyFunction
+import com.commonsense.android.kotlin.base.EmptyFunctionResult
 import com.commonsense.android.kotlin.system.PermissionsHandling
 import com.commonsense.android.kotlin.system.base.helpers.*
 import com.commonsense.android.kotlin.system.dataFlow.ReferenceCountingMap
@@ -34,6 +35,28 @@ open class BaseActivity : AppCompatActivity(), ActivityResultHelperContainer {
         PermissionsHandling()
     }
 
+    //<editor-fold desc="on back press listener">
+    private val onBackPressedListeners by lazy {
+        mutableListOf<EmptyFunctionResult<Boolean>>()
+    }
+
+    /**
+     * The listener to get called before this activity handles the on back pressed event;
+     * if it returns true then the event is not propagated further and the
+     * activity does not call on back pressed on super
+     */
+    fun addOnbackPressedListener(listener: EmptyFunctionResult<Boolean>) {
+        onBackPressedListeners.add(listener)
+    }
+
+    /**
+     * Removes a listener, if registered.
+     */
+    fun removeOnbackPressedListener(listener: EmptyFunctionResult<Boolean>) {
+        onBackPressedListeners.remove(listener)
+    }
+    //</editor-fold>
+
     private val localJobs by lazy {
         UiAwareJobContainer()
     }
@@ -43,15 +66,6 @@ open class BaseActivity : AppCompatActivity(), ActivityResultHelperContainer {
     }
 
 
-    fun launchInBackground(group: String, action: AsyncEmptyFunction) {
-        localJobs.performAction(CommonPool, action, group)
-    }
-
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        localJobs.onCreate()
-    }
-
     /**
      * a safe callback, that verifies the lifecycle, and also disallows multiple concurrenct events of the same group.
      * Meant for updating the ui, or handling clicks'n events.
@@ -60,6 +74,17 @@ open class BaseActivity : AppCompatActivity(), ActivityResultHelperContainer {
         localJobs.launchInUi({ isVisible }, group, action)
     }
 
+    fun launchInBackground(group: String, action: AsyncEmptyFunction) {
+        localJobs.performAction(CommonPool, action, group)
+    }
+
+
+    //<editor-fold desc="Lifecycle events">
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        localJobs.onCreate()
+    }
 
     override fun onRequestPermissionsResult(requestCode: Int, permissions: Array<out String>, grantResults: IntArray) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults)
@@ -79,6 +104,32 @@ open class BaseActivity : AppCompatActivity(), ActivityResultHelperContainer {
         super.onActivityResult(requestCode, resultCode, data)
         activityResultHelper.handle(requestCode, resultCode, data)
     }
+
+    override fun onResume() {
+        super.onResume()
+        mIsPaused = false
+    }
+
+    override fun onPostResume() {
+        super.onPostResume()
+        localJobs.onPostResume()
+    }
+
+    override fun onPause() {
+        super.onPause()
+        mIsPaused = true
+    }
+
+
+    override fun onBackPressed() {
+        //if any wants to handle the on back press of the listeners,
+        // then we should "ignore it"
+        if (onBackPressedListeners.any { it() }) {
+            return
+        }
+        super.onBackPressed()
+    }
+    //</editor-fold>
 
     //<editor-fold desc="Add activity result listener">
     override fun addActivityResultListenerOnlyOk(requestCode: Int, receiver: ActivityResultCallbackOk) {
@@ -103,6 +154,7 @@ open class BaseActivity : AppCompatActivity(), ActivityResultHelperContainer {
     //</editor-fold>
 
 
+    //<editor-fold desc="On paused ">
     val isPaused: Boolean
         get () = mIsPaused
 
@@ -110,23 +162,8 @@ open class BaseActivity : AppCompatActivity(), ActivityResultHelperContainer {
         get() = !isPaused
 
     protected var mIsPaused: Boolean = false
+    //</editor-fold>
 
-    override fun onResume() {
-        super.onResume()
-        mIsPaused = false
-
-    }
-
-
-    override fun onPostResume() {
-        super.onPostResume()
-        localJobs.onPostResume()
-    }
-
-    override fun onPause() {
-        super.onPause()
-        mIsPaused = true
-    }
 
     /**
      * Protected such that the ActivityWithData can get these.

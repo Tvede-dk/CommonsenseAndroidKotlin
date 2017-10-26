@@ -119,7 +119,54 @@ class BaseActivityTest : BaseRoboElectricTest() {
         act.get().launchInBackground("test", {
             sem.release()
         })
+
     }
+
+    @Test
+    fun addOnBackPressedListeners() = testCallbackWithSemaphore(
+            shouldAquire = true,
+            errorMessage = "callback should be called") { sem ->
+        val act = createActivityController<BaseActivity>(R.style.Theme_AppCompat).apply {
+            setup()
+            visible()
+        }
+        val listerner = {
+            sem.release()
+            true
+        }
+        act.get().apply {
+            addOnbackPressedListener(listerner)
+        }
+        act.get().onBackPressed()
+    }
+
+    @Test
+    fun removeOnBackPressedListeners() = testCallbackWithSemaphore(
+            shouldAquire = false,
+            errorMessage = "callback should NOT be called") { sem ->
+        val act = createActivityController<BaseActivity>(R.style.Theme_AppCompat).apply {
+            setup()
+            visible()
+        }
+        val listerner = {
+            failTest("Should not be called once removed.")
+            true
+        }
+        act.get().apply {
+            addOnbackPressedListener(listerner)
+            removeOnbackPressedListener(listerner)
+        }
+        act.get().onBackPressed()
+    }
+
+    /* @Test
+     fun onBackPressedSuperNotCalledDueToListener() {
+         //TODO make me
+         //listener for the supers on back pressed and tell if it gets called. in all senarious (no listeners,
+            , only no listeners, only yes listeners, mixture).
+            
+
+     }*/
 
 
 }

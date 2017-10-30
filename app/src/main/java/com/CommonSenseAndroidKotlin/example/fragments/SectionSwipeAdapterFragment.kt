@@ -23,11 +23,12 @@ class SectionSwipeAdapterFragment : BaseDatabindingFragment<DemoRecyclerSectionS
             = DemoRecyclerSectionSwipeBinding::inflate
 
     val adapter by lazy {
-        BaseSearchableDataBindingRecyclerAdapter<String>(context)
+        context?.let { BaseSearchableDataBindingRecyclerAdapter<String>(it) }
     }
 
 
     override fun useBinding() {
+        val adapter = adapter ?: return
         launchInBackground("useBinding") {
             val items = (0 until 100).map { SimpleSwipeItem("") { adapter.removeAt(it, 0) } }
             launchInUi("useBindingInside") {

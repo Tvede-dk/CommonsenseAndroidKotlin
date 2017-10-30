@@ -35,10 +35,11 @@ class CameraFragment : BaseDatabindingFragment<CameraFragmentDemoBinding>() {
     }
 
     private val imageAdapter by lazy {
-        BaseDataBindingRecyclerAdapter(context)
+        context?.let { BaseDataBindingRecyclerAdapter(it) }
     }
 
     override fun useBinding() {
+        val imageAdapter = imageAdapter ?: return
         binding.cameraFragmentImagesTake.setOnclickAsync {
             imageHelper.getImage(fromCamera = true)
         }
@@ -58,6 +59,10 @@ class CameraFragment : BaseDatabindingFragment<CameraFragmentDemoBinding>() {
     }
 
     fun onImageSelected(imageUri: Uri) = launchInUi("bitmap") {
+        val context = context ?: return@launchInUi
+        val activity = activity ?: return@launchInUi
+        val imageAdapter = imageAdapter ?: return@launchInUi
+
         tryAndLogSuspend("bitmap") {
             //            val bitmap = imageUri.loadBitmapScaled(context.contentResolver, 200).await() ?: return@tryAndLogSuspend
             var images: List<Bitmap>? = null

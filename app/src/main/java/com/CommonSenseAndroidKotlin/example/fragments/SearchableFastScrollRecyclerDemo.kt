@@ -63,11 +63,12 @@ class SearchableFastScrollRecyclerDemo : BaseDatabindingFragment<DemoRecyclerFas
             = DemoRecyclerFastscrollSearchableBinding::inflate
 
     private val adapter by lazy {
-        FastScrollAdapter(context)
+        context?.let { FastScrollAdapter(it) }
     }
 
 
     override fun useBinding() {
+        val adapter = adapter ?: return
 
         val items = (0 until 50000).map { SearchAbleSimpleListDateTime(DateTime.now().plusHours(it)) }
 

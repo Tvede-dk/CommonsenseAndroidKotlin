@@ -29,10 +29,12 @@ open class SimpleRecyclerDemo : BaseDatabindingFragment<DemoRecyclerSimpleViewBi
             = DemoRecyclerSimpleViewBinding::inflate
 
     private val adapter by lazy {
-        BaseDataBindingRecyclerAdapter(context.applicationContext)
+        context?.let { BaseDataBindingRecyclerAdapter(it) }
     }
 
     override fun useBinding() {
+        val adapter = adapter ?: return
+        val context = context ?: return
         adapter.clear()
         for (section in 0 until 10) {
             for (i in 0 until 10) {
@@ -53,7 +55,7 @@ open class SimpleRecyclerDemo : BaseDatabindingFragment<DemoRecyclerSimpleViewBi
             }
         }
 
-        binding.demoRecyclerSimpleViewRecyclerview.setup(adapter, LinearLayoutManager(context.applicationContext))
+        binding.demoRecyclerSimpleViewRecyclerview.setup(adapter, LinearLayoutManager(context))
         binding.demoRecyclerSimpleViewReset.setOnclickAsync {
             for (i in 0 until adapter.sectionCount) {
                 adapter.showSection(i)

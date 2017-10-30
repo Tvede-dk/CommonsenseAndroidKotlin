@@ -27,10 +27,11 @@ class SearchAbleRecyclerDemo : BaseDatabindingFragment<DemoRecyclerSearchableBin
             = DemoRecyclerSearchableBinding::inflate
 
     private val adapter by lazy {
-        BaseSearchableDataBindingRecyclerAdapter<String>(context)
+        context?.let { BaseSearchableDataBindingRecyclerAdapter<String>(it) }
     }
 
     override fun useBinding() {
+        val adapter = adapter ?: return
         val items = mutableListOf<IRenderModelSearchItem<*, *, String>>(
                 SearchAbleSimpleListItemRender("First []"),
                 SimpleListImageItemRender(Color.BLUE, 0).toSearchable { _, _ -> false },
@@ -46,6 +47,7 @@ class SearchAbleRecyclerDemo : BaseDatabindingFragment<DemoRecyclerSearchableBin
     }
 
     fun performFilter(s: Editable) {
+        val adapter = adapter ?: return
         val temp = s.toString()
         if (temp.isEmpty()) {
             adapter.removeFilter()

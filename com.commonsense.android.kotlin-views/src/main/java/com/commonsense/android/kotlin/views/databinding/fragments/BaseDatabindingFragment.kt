@@ -38,7 +38,7 @@ abstract class BaseDatabindingFragment<out T : ViewDataBinding> : BaseFragment()
 
     private var parentView: ViewGroup? = null
 
-    override fun onCreateView(inflater: LayoutInflater?, container: ViewGroup?, savedInstanceState: Bundle?): View? {
+    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         if (showsDialog) {
             return super.onCreateView(inflater, container, savedInstanceState)
         }
@@ -55,12 +55,12 @@ abstract class BaseDatabindingFragment<out T : ViewDataBinding> : BaseFragment()
     abstract fun useBinding()
 
     inline fun replaceThisFragment(otherFragment: () -> Fragment) {
-        getParrentContainerId()?.let { activity.replaceFragment(it, otherFragment()) }
+        getParrentContainerId()?.let { activity?.replaceFragment(it, otherFragment()) }
     }
 
     //adds a new fragment after the current fragment
     inline fun Fragment.pushThisFragment(crossinline otherFragment: () -> Fragment) {
-        getParrentContainerId()?.let { activity.pushNewFragmentTo(it, otherFragment()) }
+        getParrentContainerId()?.let { activity?.pushNewFragmentTo(it, otherFragment()) }
     }
 
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {

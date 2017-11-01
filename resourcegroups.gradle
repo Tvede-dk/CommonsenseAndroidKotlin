@@ -13,14 +13,14 @@ class MultiDirRes implements Plugin<Project> {
     }
 
     def resDirs = [
-            "anims",
-            "colors",
-            "drawables",
+            "anim",
+            "color",
+            "drawable",
             "mipmap",
-            "drawables-hdpi",
-            "drawables-mdpi",
-            "drawables-xhdpi",
-            "drawables-xxhdpi",
+            "drawable-hdpi",
+            "drawable-mdpi",
+            "drawable-xhdpi",
+            "drawable-xxhdpi",
             "layout",
             "values",
     ]

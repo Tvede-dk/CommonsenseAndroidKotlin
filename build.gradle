@@ -3,10 +3,16 @@ buildscript {
     ext.androidBuildToolsVersion = "27.0.0"
 
     //Lib version and sdks
-    ext.versionName = "1.0"
-    ext.versionNumber = 1
+    ext.commonsenseVersionName = "0.0.2"
+    ext.commonsenseVersionNumber = 2
     ext.minSdk = 16
     ext.targetSdk = 27
+
+    //for bintray
+    ext.commonsenseUserOrg = "tvede-oss"
+    ext.commonsenseGroupId = "com.commonsense.android.kotlin"
+    ext.commonsenseRepoName = "Commonsence-android-kotlin"
+    ext.commonsenseWebsite = "https://github.com/Tvede-dk/CommonsenseAndroidKotlin/"
 
 //    ext.kotlin_version = '1.2.0-beta-31'
     ext.kotlin_version = '1.1.51'
@@ -26,9 +32,11 @@ buildscript {
     dependencies {
         classpath "com.android.tools.build:gradle:$androidGradleVersion"
         classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlin_version"
+        //for deploying to bintray
+        classpath 'com.novoda:bintray-release:0.7.0'
+
     }
 }
-
 
 
 
@@ -40,13 +48,13 @@ allprojects {
 
     }
 }
-subprojects {
-    tasks.withType(org.jetbrains.kotlin.gradle.tasks.KotlinCompile).all {
-        kotlinOptions {
-//            warningsAsErrors = true //enable when kapt is behaving nice.
-        }
-    }
-}
+//subprojects {
+//    tasks.withType(org.jetbrains.kotlin.gradle.tasks.KotlinCompile).all {
+//        kotlinOptions {
+////            warningsAsErrors = true //enable when kapt is behaving nice.
+//        }
+//    }
+//}
 
 
 task clean(type: Delete) {
@@ -56,3 +64,7 @@ task clean(type: Delete) {
 //for CI / jenkins integration
 
 apply from: "fix-tests.gradle"
+//disable javadoc since it breaks with kotlin.
+tasks.withType(Javadoc).all {
+    enabled = false
+}

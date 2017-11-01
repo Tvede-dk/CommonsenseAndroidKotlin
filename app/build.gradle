@@ -18,8 +18,8 @@ android {
 
         minSdkVersion project.minSdk
         targetSdkVersion project.targetSdk
-        versionCode project.versionNumber
-        versionName project.versionName
+        versionCode project.commonsenseVersionNumber
+        versionName project.commonsenseVersionName
 
         vectorDrawables.useSupportLibrary = true
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"

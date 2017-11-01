@@ -9,21 +9,24 @@ android {
     defaultConfig {
         minSdkVersion project.minSdk
         targetSdkVersion project.targetSdk
-        versionCode project.versionNumber
-        versionName project.versionName
+        versionCode project.commonsenseVersionNumber
+        versionName project.commonsenseVersionName
 
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
 
     }
+
     buildTypes {
         release {
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }
     }
+
     lintOptions {
         abortOnError false
     }
+
     testOptions {
         unitTests {
             includeAndroidResources = true
@@ -32,6 +35,7 @@ android {
             forkEvery = 2
         }
     }
+
 }
 
 
@@ -60,4 +64,16 @@ kotlin {
     experimental {
         coroutines "enable"
     }
+}
+
+apply plugin: 'com.novoda.bintray-release' // must be applied after your artifact generating plugin (eg. java / com.android.library)
+
+publish {
+    userOrg = project.commonsenseUserOrg
+    groupId = project.commonsenseGroupId
+    publishVersion = project.commonsenseVersionName
+    repoName = project.commonsenseRepoName
+    website = project.commonsenseWebsite
+    artifactId = 'base'
+    desc = 'Base android features'
 }

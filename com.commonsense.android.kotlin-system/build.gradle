@@ -10,8 +10,8 @@ android {
     defaultConfig {
         minSdkVersion project.minSdk
         targetSdkVersion project.targetSdk
-        versionCode project.versionNumber
-        versionName project.versionName
+        versionCode project.commonsenseVersionNumber
+        versionName project.commonsenseVersionName
 
 
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
@@ -64,4 +64,18 @@ kotlin {
     experimental {
         coroutines "enable"
     }
+}
+
+
+
+apply plugin: 'com.novoda.bintray-release' // must be applied after your artifact generating plugin (eg. java / com.android.library)
+
+publish {
+    userOrg = project.commonsenseUserOrg
+    groupId = project.commonsenseGroupId
+    publishVersion = project.commonsenseVersionName
+    repoName = project.commonsenseRepoName
+    website = project.commonsenseWebsite
+    artifactId = 'system'
+    desc = 'kotlin features'
 }

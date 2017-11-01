@@ -5,4 +5,5 @@ include ':app',
         ':com.commonsense.android.kotlin-system',
         ':com.commonsense.android.kotlin-data',
         ':com.commonsense.android.kotlin-prebuilt',
-        ':com.commonsense.android.kotlin-tools'
+        ':com.commonsense.android.kotlin-tools',
+        ':com.commonsense.android.kotlin-all'

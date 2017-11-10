@@ -6,6 +6,8 @@ import android.view.ViewGroup
 /**
  * Created by Kasper Tvede on 22-07-2017.
  */
-typealias ViewInflatingFunction<Vm> = (inflater: LayoutInflater, parent: ViewGroup?, attach: Boolean) -> Vm
+typealias ViewInflatingFunction<Vm> = (inflater: LayoutInflater,
+                                       parent: ViewGroup?,
+                                       attach: Boolean) -> Vm
 
 

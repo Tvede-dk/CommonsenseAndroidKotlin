@@ -259,9 +259,8 @@ class SectionLookupRep<T : TypeHashCodeLookupRepresent<Rep>, out Rep : Any> {
         return calculateSectionLocation(sectionIndex)
     }
 
-    fun toggleSectionVisibility(@IntRange(from = 0) sectionIndex: Int): SectionUpdate? {
-        return setSectionVisibility(sectionIndex, !isSectionIgnored(sectionIndex))
-    }
+    fun toggleSectionVisibility(@IntRange(from = 0) sectionIndex: Int): SectionUpdate? =
+            setSectionVisibility(sectionIndex, !isSectionIgnored(sectionIndex))
 
     fun setSectionVisibility(@IntRange(from = 0) sectionIndex: Int, visible: Boolean): SectionUpdate? {
         return if (visible) {

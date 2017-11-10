@@ -2,6 +2,7 @@ package com.commonsense.android.kotlin.system.base.helpers
 
 import android.app.Activity
 import android.os.Bundle
+import com.commonsense.android.kotlin.base.extensions.collections.ifTrue
 import com.commonsense.android.kotlin.system.base.BaseActivity
 import com.commonsense.android.kotlin.system.logging.logError
 
@@ -39,7 +40,14 @@ open class BaseActivityData<out InputType> : BaseActivity() {
      * run'ed before we kill this activity
      */
     open fun beforeCloseOnBadData() {
-        logError("requried data for this activity not presented, please make sure you provide it. ")
+        logError("required data for this activity not presented, please make sure you provide it;")
+        val isBadCall = intent?.getStringExtra(dataIntentIndex).isNullOrBlank()
+        isBadCall.ifTrue {
+            logError("You properly called this without the data index;" +
+                    " use the \"startActivityWithData\" method, that takes care of it")
+
+        }
+
 
     }
 

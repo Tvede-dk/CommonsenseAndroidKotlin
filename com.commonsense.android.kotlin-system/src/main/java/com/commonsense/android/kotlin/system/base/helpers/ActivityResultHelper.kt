@@ -4,6 +4,7 @@ import android.app.Activity
 import android.content.Intent
 import android.os.Bundle
 import android.support.annotation.IntRange
+import android.support.v4.app.ActivityCompat
 import android.util.SparseArray
 import com.commonsense.android.kotlin.base.FunctionUnit
 import com.commonsense.android.kotlin.base.extensions.collections.ifNull
@@ -179,7 +180,7 @@ fun BaseActivity.startActivityForResult(intent: Intent,
                                         requestCode: Int,
                                         activityResultCallback: ActivityResultCallbackOk) {
     addActivityResultListenerOnlyOk(requestCode, activityResultCallback)
-    startActivityForResult(intent, requestCode, options)
+    ActivityCompat.startActivityForResult(this, intent, requestCode, options)
 }
 
 fun BaseActivity.startActivityForResult(intent: Intent,
@@ -187,7 +188,7 @@ fun BaseActivity.startActivityForResult(intent: Intent,
                                         requestCode: Int,
                                         activityResultCallback: ActivityResultCallback) {
     addActivityResultListener(requestCode, activityResultCallback)
-    startActivityForResult(intent, requestCode, options)
+    ActivityCompat.startActivityForResult(this, intent, requestCode, options)
 }
 
 
@@ -196,7 +197,7 @@ fun BaseActivity.startActivityForResultAsync(intent: Intent,
                                              requestCode: Int,
                                              activityResultCallback: AsyncActivityResultCallbackOk) {
     addActivityResultListenerOnlyOkAsync(requestCode, activityResultCallback)
-    startActivityForResult(intent, requestCode, options)
+    ActivityCompat.startActivityForResult(this, intent, requestCode, options)
 }
 
 fun BaseActivity.startActivityForResultAsync(intent: Intent,
@@ -204,7 +205,7 @@ fun BaseActivity.startActivityForResultAsync(intent: Intent,
                                              requestCode: Int,
                                              activityResultCallback: AsyncActivityResultCallback) {
     addActivityResultListenerAsync(requestCode, activityResultCallback)
-    startActivityForResult(intent, requestCode, options)
+    ActivityCompat.startActivityForResult(this, intent, requestCode, options)
 }
 //</editor-fold>
 

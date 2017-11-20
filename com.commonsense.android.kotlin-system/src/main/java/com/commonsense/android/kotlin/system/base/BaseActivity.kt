@@ -67,7 +67,7 @@ open class BaseActivity : AppCompatActivity(), ActivityResultHelperContainer {
 
 
     /**
-     * a safe callback, that verifies the lifecycle, and also disallows multiple concurrenct events of the same group.
+     * a safe callback, that verifies the lifecycle, and also disallows multiple concurrent events of the same group.
      * Meant for updating the ui, or handling clicks'n events.
      */
     fun launchInUi(group: String, action: AsyncEmptyFunction) {

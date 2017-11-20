@@ -13,6 +13,7 @@ import com.commonsense.android.kotlin.base.extensions.use
 import com.commonsense.android.kotlin.base.extensions.weakReference
 import com.commonsense.android.kotlin.system.base.BaseActivity
 import com.commonsense.android.kotlin.system.base.BaseFragment
+import com.commonsense.android.kotlin.system.logging.L
 import kotlinx.coroutines.experimental.android.UI
 import kotlinx.coroutines.experimental.launch
 
@@ -150,7 +151,7 @@ interface ActivityResultHelperContainer {
 
 
 //<editor-fold desc="Wrappers">
-class ActivityResultWrapper(val callback: (resultCode: Int, data: Intent?) -> Unit,
+class ActivityResultWrapper(val callback: ActivityResultCallback,
                             override val requestCode: Int,
                             val removerFunction: (requestCode: Int) -> Unit)
     : ActivityResultCallbackInterface {
@@ -160,7 +161,7 @@ class ActivityResultWrapper(val callback: (resultCode: Int, data: Intent?) -> Un
     }
 }
 
-class AsyncActivityResultWrapper(val callback: suspend (resultCode: Int, data: Intent?) -> Unit,
+class AsyncActivityResultWrapper(val callback: AsyncActivityResultCallback,
                                  override val requestCode: Int,
                                  val removerFunction: (requestCode: Int) -> Unit)
     : ActivityResultCallbackInterface {
@@ -175,72 +176,114 @@ class AsyncActivityResultWrapper(val callback: suspend (resultCode: Int, data: I
 
 
 //<editor-fold desc="Base activity hook points">
-fun BaseActivity.startActivityForResult(intent: Intent,
-                                        options: Bundle?,
-                                        requestCode: Int,
-                                        activityResultCallback: ActivityResultCallbackOk) {
+fun BaseActivity?.startActivityForResult(intent: Intent,
+                                         options: Bundle?,
+                                         requestCode: Int,
+                                         activityResultCallback: ActivityResultCallbackOk) {
+    if (this == null) {
+        logBadActivity()
+        return
+    }
     addActivityResultListenerOnlyOk(requestCode, activityResultCallback)
     ActivityCompat.startActivityForResult(this, intent, requestCode, options)
 }
 
-fun BaseActivity.startActivityForResult(intent: Intent,
-                                        options: Bundle?,
-                                        requestCode: Int,
-                                        activityResultCallback: ActivityResultCallback) {
+fun BaseActivity?.startActivityForResult(intent: Intent,
+                                         options: Bundle?,
+                                         requestCode: Int,
+                                         activityResultCallback: ActivityResultCallback) {
+    if (this == null) {
+        logBadActivity()
+        return
+    }
     addActivityResultListener(requestCode, activityResultCallback)
     ActivityCompat.startActivityForResult(this, intent, requestCode, options)
 }
 
 
-fun BaseActivity.startActivityForResultAsync(intent: Intent,
-                                             options: Bundle?,
-                                             requestCode: Int,
-                                             activityResultCallback: AsyncActivityResultCallbackOk) {
+fun BaseActivity?.startActivityForResultAsync(intent: Intent,
+                                              options: Bundle?,
+                                              requestCode: Int,
+                                              activityResultCallback: AsyncActivityResultCallbackOk) {
+    if (this == null) {
+        logBadActivity()
+        return
+    }
     addActivityResultListenerOnlyOkAsync(requestCode, activityResultCallback)
     ActivityCompat.startActivityForResult(this, intent, requestCode, options)
 }
 
-fun BaseActivity.startActivityForResultAsync(intent: Intent,
-                                             options: Bundle?,
-                                             requestCode: Int,
-                                             activityResultCallback: AsyncActivityResultCallback) {
+fun BaseActivity?.startActivityForResultAsync(intent: Intent,
+                                              options: Bundle?,
+                                              requestCode: Int,
+                                              activityResultCallback: AsyncActivityResultCallback) {
+    if (this == null) {
+        logBadActivity()
+        return
+    }
     addActivityResultListenerAsync(requestCode, activityResultCallback)
     ActivityCompat.startActivityForResult(this, intent, requestCode, options)
 }
 //</editor-fold>
 
 //<editor-fold desc="Base fragment hookpoints">
-fun BaseFragment.startActivityForResult(intent: Intent,
-                                        options: Bundle?,
-                                        requestCode: Int,
-                                        activityResultCallback: ActivityResultCallbackOk) {
+fun BaseFragment?.startActivityForResult(intent: Intent,
+                                         options: Bundle?,
+                                         requestCode: Int,
+                                         activityResultCallback: ActivityResultCallbackOk) {
+    if (this == null) {
+        logBadFragment()
+        return
+    }
     addActivityResultListenerOnlyOk(requestCode, activityResultCallback)
     startActivityForResult(intent, requestCode, options)
 }
 
-fun BaseFragment.startActivityForResult(intent: Intent,
-                                        options: Bundle?,
-                                        requestCode: Int,
-                                        activityResultCallback: ActivityResultCallback) {
+fun BaseFragment?.startActivityForResult(intent: Intent,
+                                         options: Bundle?,
+                                         requestCode: Int,
+                                         activityResultCallback: ActivityResultCallback) {
+    if (this == null) {
+        logBadFragment()
+        return
+    }
     addActivityResultListener(requestCode, activityResultCallback)
     startActivityForResult(intent, requestCode, options)
 }
 
 
-fun BaseFragment.startActivityForResultAsync(intent: Intent,
-                                             options: Bundle?,
-                                             requestCode: Int,
-                                             activityResultCallback: AsyncActivityResultCallbackOk) {
+fun BaseFragment?.startActivityForResultAsync(intent: Intent,
+                                              options: Bundle?,
+                                              requestCode: Int,
+                                              activityResultCallback: AsyncActivityResultCallbackOk) {
+    if (this == null) {
+        logBadFragment()
+        return
+    }
     addActivityResultListenerOnlyOkAsync(requestCode, activityResultCallback)
     startActivityForResult(intent, requestCode, options)
 }
 
-fun BaseFragment.startActivityForResult(intent: Intent,
-                                        options: Bundle?,
-                                        requestCode: Int,
-                                        activityResultCallback: AsyncActivityResultCallback) {
+fun BaseFragment?.startActivityForResult(intent: Intent,
+                                         options: Bundle?,
+                                         requestCode: Int,
+                                         activityResultCallback: AsyncActivityResultCallback) {
+    if (this == null) {
+        logBadFragment()
+        return
+    }
     addActivityResultListenerAsync(requestCode, activityResultCallback)
     startActivityForResult(intent, requestCode, options)
 }
 //</editor-fold>
 
+private fun logBadActivity(){
+    L.error(BaseFragment::class.java.name,
+            "Could not start activity for result, as the activity is properly not a BaseActivity",
+            RuntimeException())
+}
+
+private fun logBadFragment(){
+    L.error(BaseFragment::class.java.name, "Could not start activity for result, as the caller is null",
+            RuntimeException())
+}

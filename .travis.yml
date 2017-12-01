@@ -9,11 +9,12 @@ android:
      # The BuildTools version used by your project
     - build-tools-27.0.1
     - android-27
-    
+
   licenses:
     - 'android-sdk-preview-license-52d11cd2'
     - 'android-sdk-license-.+'
     - 'google-gdk-license-.+'
+
 
 before_cache:
   - rm -f  $HOME/.gradle/caches/modules-2/modules-2.lock
@@ -24,3 +25,6 @@ cache:
     - $HOME/.gradle/caches/
     - $HOME/.gradle/wrapper/
     - $HOME/.android/build-cache
+
+before_install:
+ - chmod +x gradlew

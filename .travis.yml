@@ -1,22 +1,19 @@
 language: android
-
-jdk:
-  - oraclejdk8
-
-install:
-  - echo yes | sdkmanager "tools" &>/dev/null
-  - echo yes | sdkmanager "platform-tools" &>/dev/null
-  - echo yes | sdkmanager "build-tools;27.0.1" &>/dev/null
-  - echo yes | sdkmanager "platforms;android-27" &>/dev/null
-
-script:
-  - ./gradlew clean testDebug lintDebug jacocoDebugReport coveralls -Dscan --stacktrace --profile
-
-branches:
-  except:
-    - gh-pages
-
-sudo: false
+android:
+  components:
+    # Uncomment the lines below if you want to
+    # use the latest revision of Android SDK Tools
+    - tools
+    - platform-tools
+    - tools
+     # The BuildTools version used by your project
+    - build-tools-27.0.1
+    - android-27
+    
+  licenses:
+    - 'android-sdk-preview-license-52d11cd2'
+    - 'android-sdk-license-.+'
+    - 'google-gdk-license-.+'
 
 before_cache:
   - rm -f  $HOME/.gradle/caches/modules-2/modules-2.lock

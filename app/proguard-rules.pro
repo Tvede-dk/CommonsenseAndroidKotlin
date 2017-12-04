@@ -19,3 +19,7 @@
 
 -ignorewarnings
 -optimizationpasses 5
+
+-keepclassmembernames class kotlinx.** {
+    volatile <fields>;
+}

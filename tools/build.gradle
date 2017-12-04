@@ -1,0 +1,86 @@
+apply plugin: 'com.android.library'
+apply plugin: 'kotlin-android'
+apply plugin: "kotlin-kapt"
+
+android {
+    compileSdkVersion androidSdkBuildVersion
+    buildToolsVersion androidBuildToolsVersion
+
+
+    defaultConfig {
+        minSdkVersion project.minSdk
+        targetSdkVersion project.targetSdk
+        versionCode project.commonsenseVersionNumber
+        versionName project.commonsenseVersionName
+        testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
+    }
+
+    buildTypes {
+        release {
+            minifyEnabled false
+            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+        }
+    }
+
+    dataBinding {
+        enabled true
+    }
+
+    lintOptions {
+        abortOnError false
+    }
+
+    testOptions {
+        unitTests {
+            includeAndroidResources = true
+        }
+        unitTests.all {
+            forkEvery = 2
+        }
+    }
+}
+
+
+
+
+kapt {
+    processors = "com.android.databinding:implementation:$androidGradleVersion"
+    useLightAnalysis true
+}
+
+dependencies {
+    //TEST LIBS
+    testImplementation "junit:junit:$junitVersion"
+    androidTestImplementation("com.android.support.test.espresso:espresso-core:$espressoVersion", {
+        exclude group: 'com.android.support', module: 'support-annotations'
+    })
+
+    //support libs
+    implementation "com.android.support:appcompat-v7:$supportVersion"
+    implementation "com.android.support:design:$supportVersion"
+    api "com.android.support:exifinterface:$supportVersion"
+
+
+    kapt "com.android.databinding:compiler:$androidGradleVersion"
+    //KOTLIN
+    implementation "org.jetbrains.kotlin:kotlin-stdlib:$kotlin_version"
+
+    //leak canary libs
+    /*debugImplementation "com.squareup.leakcanary:leakcanary-android:$leakCanaryVersion"
+    releaseImplementation "com.squareup.leakcanary:leakcanary-android-no-op:$leakCanaryVersion"
+    testImplementation "com.squareup.leakcanary:leakcanary-android-no-op:$leakCanaryVersion"*/
+}
+
+
+
+apply plugin: 'com.novoda.bintray-release' // must be applied after your artifact generating plugin (eg. java / com.android.library)
+
+publish {
+    userOrg = project.commonsenseUserOrg
+    groupId = project.commonsenseGroupId
+    publishVersion = project.commonsenseVersionName
+    repoName = project.commonsenseRepoName
+    website = project.commonsenseWebsite
+    artifactId = 'tools'
+    desc = 'tools - both for dev and prod'
+}

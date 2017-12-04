@@ -1,0 +1,43 @@
+apply plugin: 'com.android.library'
+
+android {
+    compileSdkVersion androidSdkBuildVersion
+    buildToolsVersion androidBuildToolsVersion
+
+
+    defaultConfig {
+        minSdkVersion project.minSdk
+        targetSdkVersion project.targetSdk
+        versionCode project.commonsenseVersionNumber
+        versionName project.commonsenseVersionName
+
+    }
+
+    lintOptions {
+        abortOnError false
+    }
+
+}
+
+dependencies {
+    api project(":base")
+    api project(":data")
+    api project(':prebuilt')
+    api project(":system")
+    api project(":tools")
+    api project(":views")
+}
+
+
+apply plugin: 'com.novoda.bintray-release' // must be applied after your artifact generating plugin (eg. java / com.android.library)
+
+publish {
+    userOrg = project.commonsenseUserOrg
+    groupId = project.commonsenseGroupId
+    publishVersion = project.commonsenseVersionName
+    repoName = project.commonsenseRepoName
+    website = project.commonsenseWebsite
+    artifactId = 'all'
+    desc = 'combining all sub projects'
+}
+

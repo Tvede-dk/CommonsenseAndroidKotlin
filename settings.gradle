@@ -1,9 +1,9 @@
 include ':app',
-        ':com.commonsense.android.kotlin-test',
-        ':com.commonsense.android.kotlin-base',
-        ':com.commonsense.android.kotlin-views',
-        ':com.commonsense.android.kotlin-system',
-        ':com.commonsense.android.kotlin-data',
-        ':com.commonsense.android.kotlin-prebuilt',
-        ':com.commonsense.android.kotlin-tools',
-        ':com.commonsense.android.kotlin-all'
+        ':test',
+        ':base',
+        ':views',
+        ':system',
+        ':data',
+        ':prebuilt',
+        ':tools',
+        ':all'

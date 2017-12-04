@@ -91,11 +91,6 @@ dependencies {
     //time libs
     implementation 'joda-time:joda-time:2.9.9'
 
-    //regularCompile 'com.android.support:multidex:1.0.2'
-
-    //coroutines
-    implementation "org.jetbrains.kotlinx:kotlinx-coroutines-core:$coroutinesVersion"
-    implementation "org.jetbrains.kotlinx:kotlinx-coroutines-android:$coroutinesVersion"
     //support libs
     implementation "com.android.support:appcompat-v7:$supportVersion"
     implementation "com.android.support:design:$supportVersion"
@@ -108,11 +103,11 @@ dependencies {
     testImplementation "junit:junit:$junitVersion"
     //kotlin specific
     implementation "org.jetbrains.kotlin:kotlin-stdlib:$kotlin_version"
-    implementation project(path: ':com.commonsense.android.kotlin-prebuilt')
-    implementation project(':com.commonsense.android.kotlin-system')
-    implementation project(':com.commonsense.android.kotlin-views')
-    implementation project(':com.commonsense.android.kotlin-base')
-    testImplementation project(':com.commonsense.android.kotlin-test')
+    implementation project(':prebuilt')
+    implementation project(':system')
+    implementation project(':views')
+    implementation project(':base')
+    testImplementation project(':test')
 
     kapt "com.android.databinding:compiler:$androidGradleVersion"
 }

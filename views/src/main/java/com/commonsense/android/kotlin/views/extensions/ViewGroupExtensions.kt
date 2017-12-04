@@ -32,7 +32,7 @@ fun ViewGroup.contentSize(rectToUse: Rect) {
  *
  */
 fun ViewGroup.addViews(views: List<View>) {
-    views.forEach(::addView)
+    views.forEach(this::addView)
 }
 
 /**

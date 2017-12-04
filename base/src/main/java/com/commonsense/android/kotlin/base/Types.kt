@@ -8,6 +8,7 @@ import kotlinx.coroutines.experimental.CoroutineScope
 typealias EmptyFunction = () -> Unit
 typealias EmptyFunctionResult<T> = () -> T
 typealias AsyncEmptyFunction = suspend () -> Unit
+typealias AsyncFunctionUnit<T> = suspend (T) -> Unit
 
 /**
  * Function with 1 parameter that returns unit

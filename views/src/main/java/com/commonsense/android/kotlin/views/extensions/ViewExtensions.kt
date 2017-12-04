@@ -2,6 +2,7 @@ package com.commonsense.android.kotlin.views.extensions
 
 import android.annotation.SuppressLint
 import android.annotation.TargetApi
+import android.content.Context
 import android.content.res.TypedArray
 import android.os.Build
 import android.support.annotation.StyleableRes
@@ -14,7 +15,9 @@ import android.view.ViewTreeObserver
 import android.view.inputmethod.EditorInfo
 import android.widget.EditText
 import com.commonsense.android.kotlin.base.AsyncEmptyFunction
+import com.commonsense.android.kotlin.base.AsyncFunctionUnit
 import com.commonsense.android.kotlin.base.EmptyFunction
+import com.commonsense.android.kotlin.base.FunctionUnit
 import com.commonsense.android.kotlin.base.extensions.collections.forEachNotNull
 import com.commonsense.android.kotlin.base.extensions.collections.ifFalse
 import com.commonsense.android.kotlin.base.extensions.collections.ifTrue
@@ -57,21 +60,39 @@ fun ViewTreeObserver.removeOnGlobalLayoutListenerCompact(listener: ViewTreeObser
 }
 
 @UiThread
-fun View.setOnclickAsyncSuspend(action: AsyncEmptyFunction) {
+fun View.setOnclickAsyncSuspend(action: AsyncFunctionUnit<Context>) {
     val eventActor = actor<Unit>(UI, capacity = Channel.CONFLATED) {
-        channel.consumeEach { tryAndLogSuspend("onclickAsyncSuspend", action) }
+        channel.consumeEach {
+            val cont = getContext() ?: return@actor
+            tryAndLogSuspend("onclickAsyncSuspend") {
+                action(cont)
+            }
+        }
     }
     setOnClick { eventActor.offer(Unit) }
 }
 
 @UiThread
-fun View.setOnclickAsync(action: EmptyFunction) {
+fun View.setOnclickAsyncSuspendEmpty(action: AsyncEmptyFunction) {
+    this.setOnclickAsyncSuspend({ _ -> action() })
+}
+
+@UiThread
+fun View.setOnclickAsync(action: FunctionUnit<Context>) {
     val eventActor = actor<Unit>(UI, capacity = Channel.CONFLATED) {
         channel.consumeEach {
-            tryAndLog("onclickAsync", action)
+            val cont = getContext() ?: return@actor
+            tryAndLog("onclickAsync") {
+                action(cont)
+            }
         }
     }
     setOnClick { eventActor.offer(Unit) }
+}
+
+@UiThread
+fun View.setOnclickAsyncEmpty(action: EmptyFunction) {
+    this.setOnclickAsync({ _ -> action() })
 }
 
 

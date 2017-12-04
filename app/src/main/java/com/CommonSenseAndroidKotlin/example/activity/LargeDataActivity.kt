@@ -6,7 +6,7 @@ import android.widget.Button
 import com.CommonSenseAndroidKotlin.example.R
 import com.commonsense.android.kotlin.system.base.helpers.BaseActivityData
 import com.commonsense.android.kotlin.system.extensions.safeToast
-import com.commonsense.android.kotlin.views.extensions.setOnclickAsync
+import com.commonsense.android.kotlin.views.extensions.setOnclickAsyncEmpty
 
 /**
  * Created by Kasper Tvede on 23-07-2017.
@@ -20,8 +20,8 @@ class LargeDataActivity : BaseActivityData<LargeDataActivityData>() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.large_data_activity)
         safeToast("got items: ${data.randomNumbers.size}")
-        findViewById<Button>(R.id.large_data_activity_main_click).setOnclickAsync(this::onMainActivityClicked)
-        findViewById<Button>(R.id.large_data_activity_data_click).setOnclickAsync(this::ondataReload)
+        findViewById<Button>(R.id.large_data_activity_main_click).setOnclickAsyncEmpty(this::onMainActivityClicked)
+        findViewById<Button>(R.id.large_data_activity_data_click).setOnclickAsyncEmpty(this::ondataReload)
     }
 
     private fun ondataReload() {

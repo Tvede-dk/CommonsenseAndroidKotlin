@@ -33,11 +33,6 @@ abstract class BaseDatabindingActivityToolbar<out T : ViewDataBinding> : BaseDat
         if (drawerToggle.onOptionsItemSelected(item)) {
             return true
         }
-        //TODO make this work again.
-//        if (item?.itemId == R.id.home) {
-//            onBackPressed()
-//            return true
-//        }
 
         return super.onOptionsItemSelected(item)
     }

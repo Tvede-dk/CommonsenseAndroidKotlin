@@ -1,8 +1,11 @@
 package com.commonsense.android.kotlin.system.base
 
 import android.app.Activity
+import android.content.BroadcastReceiver
 import android.content.Intent
+import android.content.IntentFilter
 import android.os.Bundle
+import android.os.Handler
 import android.support.annotation.AnyThread
 import android.support.annotation.IdRes
 import android.support.annotation.IntRange
@@ -38,6 +41,14 @@ open class BaseActivity : AppCompatActivity(), ActivityResultHelperContainer {
     //<editor-fold desc="on back press listener">
     private val onBackPressedListeners by lazy {
         mutableListOf<EmptyFunctionResult<Boolean>>()
+    }
+    /**
+     * Manages the registration and espeically unregistration of receivers.
+     * since android does not perform a "forced" cleanup, this handles it.
+     * however its functionality can be turned off by setting isEnabled to false.
+     */
+    val receiverHandler by lazy {
+        ActivityRecieversHelper()
     }
 
     /**
@@ -92,6 +103,7 @@ open class BaseActivity : AppCompatActivity(), ActivityResultHelperContainer {
     }
 
     override fun onDestroy() {
+        receiverHandler.onDestroy(this)
         localJobs.onDestory()
         activityResultHelper.clear()
         super.onDestroy()
@@ -165,6 +177,32 @@ open class BaseActivity : AppCompatActivity(), ActivityResultHelperContainer {
     //</editor-fold>
 
 
+    //<editor-fold desc="Register / unregistter receivers">
+    override fun registerReceiver(receiver: BroadcastReceiver?, filter: IntentFilter?): Intent {
+        receiverHandler.registerReceiver(receiver)
+        return super.registerReceiver(receiver, filter)
+    }
+
+    override fun registerReceiver(receiver: BroadcastReceiver?, filter: IntentFilter?, flags: Int): Intent {
+        receiverHandler.registerReceiver(receiver)
+        return super.registerReceiver(receiver, filter, flags)
+    }
+
+    override fun registerReceiver(receiver: BroadcastReceiver?, filter: IntentFilter?, broadcastPermission: String?, scheduler: Handler?): Intent {
+        receiverHandler.registerReceiver(receiver)
+        return super.registerReceiver(receiver, filter, broadcastPermission, scheduler)
+    }
+
+    override fun registerReceiver(receiver: BroadcastReceiver?, filter: IntentFilter?, broadcastPermission: String?, scheduler: Handler?, flags: Int): Intent {
+        receiverHandler.registerReceiver(receiver)
+        return super.registerReceiver(receiver, filter, broadcastPermission, scheduler, flags)
+    }
+
+    override fun unregisterReceiver(receiver: BroadcastReceiver?) {
+        receiverHandler.unregisterReceiver(receiver)
+        super.unregisterReceiver(receiver)
+    }
+    //</editor-fold>
     /**
      * Protected such that the ActivityWithData can get these.
      */

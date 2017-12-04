@@ -18,8 +18,10 @@ import android.view.WindowManager
 import android.widget.Toast
 import com.commonsense.android.kotlin.system.DangerousPermissionString
 import com.commonsense.android.kotlin.system.logging.L
+import com.commonsense.android.kotlin.system.logging.tryAndLog
 import kotlinx.coroutines.experimental.android.UI
 import kotlinx.coroutines.experimental.launch
+import java.net.URLEncoder
 
 
 /**
@@ -34,7 +36,23 @@ fun Context.presentDialer(phoneNumber: String) {
     val intent = Intent(Intent.ACTION_DIAL).apply {
         data = Uri.parse("tel:$phoneNumber")
     }
-    startActivity(intent)
+    startActivitySafe(intent)
+}
+
+fun Context.showOnMaps(address: String) {
+    val urlEncoded = address.urlEncoded()
+    val toLaunch = Uri.parse("geo:0,0?q=$urlEncoded")
+    val intent = Intent(Intent.ACTION_VIEW, toLaunch)
+    startActivitySafe(intent)
+}
+
+
+//fun Context.composeEmail(recipient : String, subject : String, message : String) {
+//
+//}
+
+private fun String.urlEncoded(): String {
+    return URLEncoder.encode(this, "UTF-8")
 }
 
 fun Context.getDrawableSafe(@DrawableRes drawable: Int): Drawable? {
@@ -80,3 +98,7 @@ fun Context.getTypedArrayFor(attributeSet: AttributeSet,
                              defStyleAttr: Int = 0,
                              defStyleRes: Int = 0): TypedArray =
         theme.obtainStyledAttributes(attributeSet, style, defStyleAttr, defStyleRes)
+
+fun Context.startActivitySafe(intent: Intent) = tryAndLog("ContextExtensions") {
+    startActivity(intent)
+}

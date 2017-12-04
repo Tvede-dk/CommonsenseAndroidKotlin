@@ -6,6 +6,7 @@ import android.view.KeyEvent
 import android.view.inputmethod.EditorInfo
 import android.view.inputmethod.InputConnection
 import android.view.inputmethod.InputConnectionWrapper
+import com.commonsense.android.kotlin.views.extensions.isEmpty
 
 /**
  * Created by kasper on 10/07/2017.
@@ -56,7 +57,7 @@ class ExtendedEditTextView : AppCompatEditText {
     //TODO listen for custom sequences ? (hmm ) would avoid opening this func.
     private fun onKeyboardEvent(event: KeyEvent): Boolean {
         if (event.action == KeyEvent.ACTION_DOWN && event.keyCode == KeyEvent.KEYCODE_DEL) {
-            backspaceDetectedCallback?.invoke(this, length() == 0)
+            backspaceDetectedCallback?.invoke(this, isEmpty)
         }
         return false
     }

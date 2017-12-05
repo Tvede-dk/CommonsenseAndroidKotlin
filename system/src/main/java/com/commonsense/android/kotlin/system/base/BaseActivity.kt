@@ -178,22 +178,32 @@ open class BaseActivity : AppCompatActivity(), ActivityResultHelperContainer {
 
 
     //<editor-fold desc="Register / unregistter receivers">
-    override fun registerReceiver(receiver: BroadcastReceiver?, filter: IntentFilter?): Intent {
+    override fun registerReceiver(receiver: BroadcastReceiver?,
+                                  filter: IntentFilter?): Intent? {
         receiverHandler.registerReceiver(receiver)
         return super.registerReceiver(receiver, filter)
     }
 
-    override fun registerReceiver(receiver: BroadcastReceiver?, filter: IntentFilter?, flags: Int): Intent {
+    override fun registerReceiver(receiver: BroadcastReceiver?,
+                                  filter: IntentFilter?,
+                                  flags: Int): Intent? {
         receiverHandler.registerReceiver(receiver)
         return super.registerReceiver(receiver, filter, flags)
     }
 
-    override fun registerReceiver(receiver: BroadcastReceiver?, filter: IntentFilter?, broadcastPermission: String?, scheduler: Handler?): Intent {
+    override fun registerReceiver(receiver: BroadcastReceiver?,
+                                  filter: IntentFilter?,
+                                  broadcastPermission: String?,
+                                  scheduler: Handler?): Intent? {
         receiverHandler.registerReceiver(receiver)
         return super.registerReceiver(receiver, filter, broadcastPermission, scheduler)
     }
 
-    override fun registerReceiver(receiver: BroadcastReceiver?, filter: IntentFilter?, broadcastPermission: String?, scheduler: Handler?, flags: Int): Intent {
+    override fun registerReceiver(receiver: BroadcastReceiver?,
+                                  filter: IntentFilter?,
+                                  broadcastPermission: String?,
+                                  scheduler: Handler?,
+                                  flags: Int): Intent? {
         receiverHandler.registerReceiver(receiver)
         return super.registerReceiver(receiver, filter, broadcastPermission, scheduler, flags)
     }

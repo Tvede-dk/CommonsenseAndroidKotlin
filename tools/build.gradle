@@ -58,7 +58,7 @@ dependencies {
     //support libs
     implementation "com.android.support:appcompat-v7:$supportVersion"
     implementation "com.android.support:design:$supportVersion"
-    api "com.android.support:exifinterface:$supportVersion"
+    implementation "com.android.support:exifinterface:$supportVersion"
 
 
     kapt "com.android.databinding:compiler:$androidGradleVersion"

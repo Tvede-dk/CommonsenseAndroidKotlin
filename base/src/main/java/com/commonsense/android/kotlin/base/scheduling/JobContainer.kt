@@ -15,9 +15,8 @@ import kotlin.coroutines.experimental.CoroutineContext
 /**
  * Created by Kasper Tvede on 22-06-2017.
  */
-typealias WeakJob = WeakReference<Job>
 
-typealias WeakQueuedJob = WeakReference<Pair<CoroutineContext, AsyncEmptyFunction>>
+typealias QueuedJob = Pair<CoroutineContext, AsyncEmptyFunction>
 
 open class JobContainer {
 
@@ -27,22 +26,22 @@ open class JobContainer {
 
     private val queuedGroupedJobsMutex = Mutex()
 
-    private val localJobs = mutableListOf<WeakJob>()
+    private val localJobs = mutableListOf<Job>()
 
-    private val queuedGroupedJobs = hashMapOf<String, MutableList<WeakQueuedJob>>()
+    private val queuedGroupedJobs = hashMapOf<String, MutableList<QueuedJob>>()
 
-    private val groupedJobs = hashMapOf<String, WeakJob>()
+    private val groupedJobs = hashMapOf<String, Job>()
 
     //<editor-fold desc="Add job ">
     private fun addJobToLocal(job: Job) {
-        changeLocalJob { localJobs.add(job.weakReference()) }
+        changeLocalJob { localJobs.add(job) }
         handleCompletedCompletion(job)
     }
 
     private fun addJobToGroup(job: Job, group: String) {
         changeGroupJob {
-            this[group]?.get()?.cancel()
-            this[group] = job.weakReference()
+            this[group]?.cancel()
+            this[group] = job
         }
         handleCompletedCompletion(job)
     }
@@ -59,17 +58,14 @@ open class JobContainer {
 
     //<editor-fold desc="Description">
     fun removeDoneJobs() {
-        changeLocalJob { removeAll { it.get()?.isCompleted != false } }
-        changeGroupJob {
-            this.filter { it.value.get() == null }
-                    .forEach { remove(it.key) }
-        }
+        changeLocalJob { removeAll { it.isCompleted } }
+        changeGroupJob { forEach { remove(it.key) } }
     }
 
 
     fun cleanJobs() {
-        localJobs.forEach { it.get()?.cancel() }
-        groupedJobs.forEach { it.value.get()?.cancel() }
+        localJobs.forEach { it.cancel() }
+        groupedJobs.forEach { it.value.cancel() }
         queuedGroupedJobs.clear()
     }
     //</editor-fold>
@@ -123,20 +119,20 @@ open class JobContainer {
     //</editor-fold>
 
     //<editor-fold desc="Inline mutex functions">
-    private inline fun changeLocalJob(crossinline action: MutableList<WeakJob>.() -> Unit) = runBlocking {
+    private inline fun changeLocalJob(crossinline action: MutableList<Job>.() -> Unit) = runBlocking {
         localJobMutex.withLock {
             action(localJobs)
         }
     }
 
-    private inline fun changeGroupJob(crossinline action: MutableMap<String, WeakJob>.() -> Unit) = runBlocking {
+    private inline fun changeGroupJob(crossinline action: MutableMap<String, Job>.() -> Unit) = runBlocking {
         groupJobMutex.withLock {
             action(groupedJobs)
         }
     }
 
 
-    private inline fun changeQueuedJob(crossinline action: MutableMap<String, MutableList<WeakQueuedJob>>.() -> Unit) = runBlocking {
+    private inline fun changeQueuedJob(crossinline action: MutableMap<String, MutableList<QueuedJob>>.() -> Unit) = runBlocking {
         queuedGroupedJobsMutex.withLock {
             action(queuedGroupedJobs)
         }
@@ -149,7 +145,7 @@ open class JobContainer {
     fun executeQueue(group: String) = changeQueuedJob {
         get(group)?.let {
             it.forEach {
-                it.use { performAction(first, second) }
+                performAction(it.first, it.second)
             }
         }
         remove(group)
@@ -159,7 +155,7 @@ open class JobContainer {
      * Adds a given operation to a named queue.
      */
     fun addToQueue(context: CoroutineContext, action: AsyncEmptyFunction, group: String) = changeQueuedJob {
-        getOrPut(group, { mutableListOf(Pair(context, action).weakReference()) })
+        getOrPut(group, { mutableListOf(Pair(context, action)) })
     }
 
 }

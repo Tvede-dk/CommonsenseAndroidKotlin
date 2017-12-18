@@ -37,7 +37,6 @@ buildscript {
 }
 
 plugins {
-//    id 'org.jmailen.kotlinter' version '1.5.0'
     id "org.gradle.android.cache-fix" version "0.2.0"
 }
 
@@ -50,7 +49,6 @@ allprojects {
     }
 }
 subprojects {
-//    apply plugin: "org.jmailen.kotlinter"
     apply plugin: "org.gradle.android.cache-fix"
 }
 

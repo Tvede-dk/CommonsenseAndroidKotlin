@@ -23,6 +23,7 @@ import com.commonsense.android.kotlin.system.extensions.backPressIfHome
 import com.commonsense.android.kotlin.system.extensions.transactionCommit
 import com.commonsense.android.kotlin.system.extensions.transactionCommitNow
 import com.commonsense.android.kotlin.system.logging.logWarning
+import com.commonsense.android.kotlin.system.logging.tryAndLog
 import com.commonsense.android.kotlin.system.uiAware.UiAwareJobContainer
 import kotlinx.coroutines.experimental.CommonPool
 import kotlin.reflect.KClass
@@ -34,6 +35,9 @@ import kotlin.reflect.KClass
 
 open class BaseActivity : AppCompatActivity(), ActivityResultHelperContainer {
 
+    /**
+     * Handles permissions
+     */
     val permissionHandler by lazy {
         PermissionsHandling()
     }
@@ -46,9 +50,19 @@ open class BaseActivity : AppCompatActivity(), ActivityResultHelperContainer {
      * Manages the registration and espeically unregistration of receivers.
      * since android does not perform a "forced" cleanup, this handles it.
      * however its functionality can be turned off by setting isEnabled to false.
+     * its by default active
      */
     val receiverHandler by lazy {
-        ActivityRecieversHelper()
+        ActivityReceiversHelper()
+    }
+
+    /**
+     *  Manges the keyboard, especially when switching screen ect.
+     *
+     * its by default active
+     */
+    val keyboardHandler by lazy {
+        KeyboardHandlerHelper()
     }
 
     /**
@@ -106,6 +120,7 @@ open class BaseActivity : AppCompatActivity(), ActivityResultHelperContainer {
         receiverHandler.onDestroy(this)
         localJobs.onDestory()
         activityResultHelper.clear()
+        keyboardHandler.onDestroy(this)
         super.onDestroy()
     }
 
@@ -130,6 +145,7 @@ open class BaseActivity : AppCompatActivity(), ActivityResultHelperContainer {
     override fun onPause() {
         super.onPause()
         mIsPaused = true
+        keyboardHandler.onPause(this)
     }
 
 
@@ -209,8 +225,10 @@ open class BaseActivity : AppCompatActivity(), ActivityResultHelperContainer {
     }
 
     override fun unregisterReceiver(receiver: BroadcastReceiver?) {
-        receiverHandler.unregisterReceiver(receiver)
-        super.unregisterReceiver(receiver)
+        tryAndLog(BaseActivity::class.java.simpleName) {
+            receiverHandler.unregisterReceiver(receiver)
+            super.unregisterReceiver(receiver)
+        }
     }
     //</editor-fold>
     /**

@@ -5,14 +5,19 @@ import android.content.Context
 import com.commonsense.android.kotlin.base.EmptyFunction
 import com.commonsense.android.kotlin.base.extensions.collections.ifFalse
 import com.commonsense.android.kotlin.base.extensions.collections.ifTrue
+import com.commonsense.android.kotlin.system.logging.tryAndLog
 
 /**
  * Created by Kasper Tvede on 04-12-2017.
  */
-public class ActivityRecieversHelper {
+class ActivityReceiversHelper {
 
-    private val registeredListeners: MutableList<BroadcastReceiver?> = mutableListOf()
-    public var isEnabled: Boolean = true
+    private val registeredListeners: MutableList<BroadcastReceiver> = mutableListOf()
+
+    /**
+     *
+     */
+    var isEnabled: Boolean = true
         set(value) {
             field = value.ifFalse(this::cleanup)
         }
@@ -22,22 +27,32 @@ public class ActivityRecieversHelper {
     }
 
     fun registerReceiver(receiver: BroadcastReceiver?) = useIfEnabled {
-        registeredListeners.add(receiver)
+        receiver?.let {
+            registeredListeners.add(it)
+        }
     }
 
     fun unregisterReceiver(receiver: BroadcastReceiver?) {
         registeredListeners.remove(receiver)
     }
 
+    fun listReceivers(): List<BroadcastReceiver> = registeredListeners
+
     fun onDestroy(context: Context) {
         useIfEnabled {
-            registeredListeners.forEach(context::unregisterReceiver)
+            tryAndLog(ActivityReceiversHelper::class.java.simpleName) {
+                //toList to make sure if we call our self that we have no concurrent exceptions
+                registeredListeners.toList().forEach {
+                    context.unregisterReceiver(it)
+                }
+            }
         }
         cleanup()
     }
 
-    inline fun useIfEnabled(crossinline action: EmptyFunction) {
+    private inline fun useIfEnabled(crossinline action: EmptyFunction) {
         isEnabled.ifTrue(action)
     }
+
 
 }

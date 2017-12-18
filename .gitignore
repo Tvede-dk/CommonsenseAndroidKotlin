@@ -36,3 +36,4 @@ captures/
 *.jks
 projectFilesBackup/
 reports/
+*.exec

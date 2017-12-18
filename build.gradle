@@ -1,10 +1,10 @@
 buildscript {
     ext.androidSdkBuildVersion = 27
-    ext.androidBuildToolsVersion = "27.0.1"
+    ext.androidBuildToolsVersion = "27.0.2"
 
     //Lib version and sdks
-    ext.commonsenseVersionName = "0.0.7"
-    ext.commonsenseVersionNumber = 7
+    ext.commonsenseVersionName = "0.0.8"
+    ext.commonsenseVersionNumber = 8
     ext.minSdk = 16
     ext.targetSdk = 27
 
@@ -14,7 +14,7 @@ buildscript {
     ext.commonsenseRepoName = "Commonsense-android-kotlin"
     ext.commonsenseWebsite = "https://github.com/Tvede-dk/CommonsenseAndroidKotlin/"
 
-    ext.kotlin_version = '1.2.0'
+    ext.kotlin_version = '1.2.10'
     ext.supportVersion = '27.0.2'
     ext.coroutinesVersion = '0.20'
     ext.leakCanaryVersion = "1.5.4"
@@ -32,14 +32,14 @@ buildscript {
         classpath "com.android.tools.build:gradle:$androidGradleVersion"
         classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlin_version"
         //for deploying to bintray
-        classpath 'com.novoda:bintray-release:0.7.0'
+        classpath 'com.novoda:bintray-release:0.8.0'
 
     }
 }
 
 
 plugins {
-    id "org.gradle.android.cache-fix" version "0.2.0"
+    id "org.gradle.android.cache-fix" version "0.2.4"
     id "io.gitlab.arturbosch.detekt" version "1.0.0.RC5-6"
 }
 

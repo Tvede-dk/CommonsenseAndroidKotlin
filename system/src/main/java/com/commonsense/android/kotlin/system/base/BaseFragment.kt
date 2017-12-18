@@ -6,8 +6,10 @@ import android.os.Bundle
 import android.support.annotation.IntRange
 import android.support.v4.app.DialogFragment
 import android.view.MenuItem
+import com.commonsense.android.kotlin.system.PermissionsHandling
 import com.commonsense.android.kotlin.system.base.helpers.*
 import com.commonsense.android.kotlin.system.extensions.onBackPressed
+import com.commonsense.android.kotlin.system.logging.logError
 import com.commonsense.android.kotlin.system.logging.logWarning
 import com.commonsense.android.kotlin.system.uiAware.UiAwareJobContainer
 import kotlinx.coroutines.experimental.CommonPool
@@ -19,14 +21,44 @@ import kotlinx.coroutines.experimental.Job
 
 open class BaseFragment : DialogFragment(), ActivityResultHelperContainer {
 
+    /**
+     * Gateway for permission handling.
+     * This requires the hosting activity to be a BaseActivity
+     * if the parent is not a BaseActivity or not there an error will be logged.
+     */
+    val permissionHandler: PermissionsHandling?
+        get() {
+            if (baseActivity == null) {
+                logError("The activity is either not a base activity or its not there;" +
+                        " the permission handling only works with BaseActivity")
+            }
+            return baseActivity?.permissionHandler
+        }
+    /**
+     *
+     */
     val baseActivity: BaseActivity?
         get() = activity as? BaseActivity
 
+    /**
+     *
+     */
     val safeActivity: Activity?
         get() = activity
 
+
+    /**
+     *
+     */
     private val localJobs by lazy {
         UiAwareJobContainer()
+    }
+
+    /**
+     *
+     */
+    val keyboardHandler by lazy {
+        KeyboardHandlerHelper()
     }
 
     private val activityResultHelper by lazy {

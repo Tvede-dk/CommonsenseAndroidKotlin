@@ -8,12 +8,14 @@ import com.commonsense.android.kotlin.test.BaseRoboElectricTest
 import com.commonsense.android.kotlin.test.testCallbackWithSemaphore
 import org.junit.Assert
 import org.junit.Test
+import org.robolectric.annotation.Config
 import java.util.concurrent.Semaphore
 
 /**
  * Created by Kasper Tvede on 27-05-2017.
  */
 
+@Config(sdk  = [23])
 class PermissionsHandlingTest : BaseRoboElectricTest() {
 
 

@@ -3,8 +3,8 @@ class NoUpToDateTests implements Plugin<Project> {
     void apply(Project mainProject) {
         def ENV = System.getenv()
         def BUILDID = ENV['BUILD_ID'] //jenkins sets this.
-        //TODO missing for other CI's.
-        boolean isCi = BUILDID != null
+        def ENVCI = ENV['CI'] //some CI's sets this
+        boolean isCi = BUILDID != null || ENVCI != null
         mainProject.gradle.projectsEvaluated {
             if (isCi) {
                 mainProject.allprojects { handleProject it }

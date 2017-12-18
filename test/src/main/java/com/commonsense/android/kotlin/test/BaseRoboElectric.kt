@@ -15,7 +15,7 @@ import org.robolectric.annotation.Config
  * Base class of roboeletric tests, not requiring the manifest to be the set.
  */
 @RunWith(RobolectricTestRunner::class)
-@Config(constants = BuildConfig::class, sdk = [23] )
+@Config(constants = BuildConfig::class, sdk = [23])
 abstract class BaseRoboElectricTest {
     /**
      * the context to use in roboelectric tests
@@ -27,13 +27,13 @@ abstract class BaseRoboElectricTest {
     /**
      *
      */
-    inline fun <reified T : Activity> createActivity(@StyleRes theme: Int = R.style.Theme_MyTheme): T =
+    inline fun <reified T : Activity> createActivity(@StyleRes theme: Int = 0): T =
             createActivityController<T>(theme).create().get()
 
     /**
      * creates an activity controller to test lifecycle events
      */
-    inline fun <reified T : Activity> createActivityController(@StyleRes theme: Int = R.style.Theme_MyTheme): ActivityController<T> =
+    inline fun <reified T : Activity> createActivityController(@StyleRes theme: Int = 0): ActivityController<T> =
             Robolectric.buildActivity(T::class.java).apply {
                 if (theme != 0) {
                     get().setTheme(theme)

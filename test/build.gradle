@@ -13,12 +13,7 @@ buildscript {
 apply plugin: 'org.jetbrains.dokka-android'
 
 dokka {
-    outputFormat = 'javadoc'
-    outputDirectory = "$buildDir/javadoc"
-}
-
-task dokkaJavadoc(type: org.jetbrains.dokka.gradle.DokkaTask) {
-    outputFormat = 'javadoc'
+    outputFormat = 'html'
     outputDirectory = "$buildDir/javadoc"
 }
 

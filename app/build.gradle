@@ -14,7 +14,7 @@ android {
 
     buildToolsVersion "$androidBuildToolsVersion"
     defaultConfig {
-        applicationId "com.CommonSenseAndroidKotlin.example"
+        applicationId "com.commonsense.androidkotlin.example"
 
         minSdkVersion project.minSdk
         targetSdkVersion project.targetSdk

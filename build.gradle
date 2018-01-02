@@ -1,10 +1,10 @@
 buildscript {
     ext.androidSdkBuildVersion = 27
-    ext.androidBuildToolsVersion = "27.0.2"
+    ext.androidBuildToolsVersion = "27.0.3"
 
     //Lib version and sdks
-    ext.commonsenseVersionName = "0.0.8"
-    ext.commonsenseVersionNumber = 8
+    ext.commonsenseVersionName = "0.0.9"
+    ext.commonsenseVersionNumber = 9
     ext.minSdk = 16
     ext.targetSdk = 27
 
@@ -16,11 +16,11 @@ buildscript {
 
     ext.kotlin_version = '1.2.10'
     ext.supportVersion = '27.0.2'
-    ext.coroutinesVersion = '0.20'
+    ext.coroutinesVersion = '0.21'
     ext.leakCanaryVersion = "1.5.4"
     ext.junitVersion = "4.12"
     ext.androidGradleVersion = "3.0.1"
-    ext.roboElectricVersion = "3.5.1"
+    ext.roboElectricVersion = "3.6.1"
     ext.espressoVersion = "3.0.1"
     ext.dokkaVersion = "0.9.15"
 
@@ -39,11 +39,17 @@ buildscript {
 
 
 plugins {
-    id "org.gradle.android.cache-fix" version "0.2.4"
-    id "io.gitlab.arturbosch.detekt" version "1.0.0.RC5-6"
+    id 'com.gradle.build-scan' version '1.11'
+    id "org.gradle.android.cache-fix" version "0.2.5"
+    id "io.gitlab.arturbosch.detekt" version "1.0.0.RC6-1"
 }
 
 apply plugin: 'io.gitlab.arturbosch.detekt'
+
+buildScan {
+    licenseAgreementUrl = 'https://gradle.com/terms-of-service'
+    licenseAgree = 'yes'
+}
 
 
 allprojects {
@@ -52,9 +58,11 @@ allprojects {
         google()
     }
 }
+
 subprojects {
     apply plugin: "org.gradle.android.cache-fix"
     apply from: "../jacoco-kotlin.gradle"
+
 }
 
 
@@ -66,12 +74,12 @@ task clean(type: Delete) {
 
 apply from: "fix-tests.gradle"
 //disable javadoc since it breaks with kotlin.
-tasks.withType(Javadoc).all {
-    enabled = false
-}
+//tasks.withType(Javadoc).all {
+//    enabled = false
+//}
 
 detekt {
-    version = "1.0.0.RC5.6"
+    version = "1.0.0.RC6-1"
     profile("main") {
         input = "$projectDir/src/main/java"
         config = "$projectDir/detekt.yml"

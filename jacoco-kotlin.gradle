@@ -19,13 +19,7 @@ task jacocoTestReport(type: JacocoReport, dependsOn: ['test']) {
             "jacoco/testDebugUnitTest.exec",
             "outputs/code-coverage/connected/*coverage.ec"
     ])
-    println "report may be found at:"
-    final
-    def file = buildDir.toURI().toString() + "customJacocoReportDir/jacocoTestReport/html/index.html"
-
-    println file
-
-    //C:\Users\admin\Documents\CommonsenseAndroidKotlin\views\src\main\java\com\commonsense\android\kotlin\views\extensions\ViewExtensions.kt: (64, 22):
-    println(file.substring(6).replace("/","\\") + ": (1, 1): swag")
-
+//    println "report may be found at:"
+//    final def file = buildDir.toURI().toString() + "customJacocoReportDir/jacocoTestReport/html/index.html"
+//    println file
 }

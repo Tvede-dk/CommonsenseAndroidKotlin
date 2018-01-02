@@ -5,7 +5,6 @@ import com.CommonSenseAndroidKotlin.example.models.User
 import com.CommonSenseAndroidKotlin.example.models.UserViewModel
 import com.commonsense.android.kotlin.views.databinding.fragments.BaseDatabindingFragment
 import com.commonsense.android.kotlin.views.databinding.fragments.InflateBinding
-import com.commonsense.android.kotlin.views.extensions.setOnclickAsync
 
 /**
  * Created by Kasper Tvede on 11-06-2017.
@@ -18,13 +17,13 @@ class EditDatabindingFragment : BaseDatabindingFragment<UserExampleViewBinding>(
             = UserExampleViewBinding::inflate
 
     override fun useBinding() {
-        binding.userExampleItemView?.user = user
-        binding.userExampleEditView?.user = user.toViewModel()
-        binding.userExampleUpdateBtn.setOnclickAsync {
-            binding.userExampleEditView?.user?.toModel().let {
-                binding.userExampleItemView?.user = it
-            }
-        }
+//        binding.userExampleItemView?.user = user
+//        binding.userExampleEditView?.user = user.toViewModel()
+//        binding.userExampleUpdateBtn.setOnclickAsync {
+//            binding.userExampleEditView?.user?.toModel().let {
+//                binding.userExampleItemView?.user = it
+//            }
+//        }
     }
 
 }

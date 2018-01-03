@@ -94,4 +94,16 @@ class JobContainerTest {
         container.getRemainingGroupedJobs().assert(0, "only(last) job should exists so no done yet.")
     }
 
+    @Test
+    fun testQueuing() {
+        val container = JobContainer()
+        var counter = 0
+        container.addToQueue(CommonPool, { counter++ }, "test")
+        container.addToQueue(CommonPool, { counter++ }, "test")
+        container.addToQueue(CommonPool, { counter++ }, "test")
+        counter.assert(0, " no jobs should run before ready.")
+        container.executeQueue("test")
+        counter.assert(3, "all should have randed")
+    }
+
 }

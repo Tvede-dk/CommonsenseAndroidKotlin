@@ -161,7 +161,9 @@ open class JobContainer {
      * Adds a given operation to a named queue.
      */
     fun addToQueue(context: CoroutineContext, action: AsyncEmptyFunction, group: String): Unit = changeQueuedJob {
-        return@changeQueuedJob this.toMutableMap().apply { getOrPut(group, { mutableListOf(Pair(context, action)) }) }
+        return@changeQueuedJob this.toMutableMap().apply {
+            getOrPut(group, { mutableListOf() }).add(Pair(context, action))
+        }
     }
 
 }

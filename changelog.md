@@ -1,5 +1,10 @@
 #Changelog
 
+##0.0.11
+  
+###bugs
+- fixed last issues with JobContainer
+
 ##0.0.10
 
 ### Bugs

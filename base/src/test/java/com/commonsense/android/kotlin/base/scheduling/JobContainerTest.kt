@@ -37,10 +37,61 @@ class JobContainerTest {
     }
 
     @Test
-    fun testMultipleSchedualed(){
-        val jobContainer = JobContainer()
-        val jobs = mutableListOf<Job>()
+    fun testLaunchDelay() = runBlocking {
+        val container = JobContainer()
+        val slowJob = launch(CommonPool) {
+            delay(200)
+        }
+        container.addJob(slowJob, "test")
+        container.getRemainingGroupedJobs().assert(1,
+                        "should have 1 job that is not done yet")
 
+        delay(200)
+        container.getRemainingGroupedJobs().assert(0, "jobs should have finished.")
+    }
+
+    @Test
+    fun testLaunchDelayAdvanced() = runBlocking {
+        val container = JobContainer()
+        val slowJob = launch(CommonPool) {
+            delay(300)
+        }
+        val slowJob2 = launch(CommonPool) {
+            delay(500)
+        }
+        val slowJob3 = launch(CommonPool) {
+            delay(100)
+        }
+        container.addJob(slowJob, "test")
+        container.addJob(slowJob2, "test2")
+        container.addJob(slowJob3, "test3")
+        container.getRemainingGroupedJobs().assert(3,
+                        "should have 2 job that is not done yet")
+        delay(200)
+        container.getRemainingGroupedJobs().assert(2, "job should have finished.")
+        delay(150)
+        container.getRemainingGroupedJobs().assert(1, "job should have finished.")
+        delay(300)
+        container.getRemainingGroupedJobs().assert(0, "job should have finished.")
+    }
+
+    @Test
+    fun testDuplicatedGroups() = runBlocking {
+        val container = JobContainer()
+        val slowJob = launch(CommonPool) {
+            delay(200)
+        }
+        val slowJob2 = launch(CommonPool) {
+            delay(400)
+        }
+        container.addJob(slowJob, "test")
+        container.addJob(slowJob2, "test")
+        container.getRemainingGroupedJobs().assert(1,
+                        "should have 2 job that is not done yet")
+        delay(250)
+        container.getRemainingGroupedJobs().assert(1, "only(last) job should exists so no done yet.")
+        delay(250)
+        container.getRemainingGroupedJobs().assert(0, "only(last) job should exists so no done yet.")
     }
 
 }

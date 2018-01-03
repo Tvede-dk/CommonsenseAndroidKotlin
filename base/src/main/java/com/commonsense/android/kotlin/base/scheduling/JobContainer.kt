@@ -59,7 +59,7 @@ open class JobContainer {
     //<editor-fold desc="Description">
     fun removeDoneJobs() {
         changeLocalJob { filterNot { it.isCompleted } }
-        changeGroupJob { return@changeGroupJob mapOf() }
+        changeGroupJob { filterNot { it.value.isCompleted } }
     }
 
 

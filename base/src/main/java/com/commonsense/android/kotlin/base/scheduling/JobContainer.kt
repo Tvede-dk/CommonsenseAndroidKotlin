@@ -2,19 +2,17 @@ package com.commonsense.android.kotlin.base.scheduling
 
 import com.commonsense.android.kotlin.base.AsyncCoroutineFunction
 import com.commonsense.android.kotlin.base.AsyncEmptyFunction
-import com.commonsense.android.kotlin.base.extensions.use
-import com.commonsense.android.kotlin.base.extensions.weakReference
+import com.commonsense.android.kotlin.base.extensions.collections.set
 import kotlinx.coroutines.experimental.Job
 import kotlinx.coroutines.experimental.launch
 import kotlinx.coroutines.experimental.runBlocking
 import kotlinx.coroutines.experimental.sync.Mutex
 import kotlinx.coroutines.experimental.sync.withLock
-import java.lang.ref.WeakReference
 import kotlin.coroutines.experimental.CoroutineContext
 
-/**
- * Created by Kasper Tvede on 22-06-2017.
- */
+        /**
+         * Created by Kasper Tvede on 22-06-2017.
+         */
 
 typealias QueuedJob = Pair<CoroutineContext, AsyncEmptyFunction>
 
@@ -34,14 +32,16 @@ open class JobContainer {
 
     //<editor-fold desc="Add job ">
     private fun addJobToLocal(job: Job) {
-        changeLocalJob { localJobs.add(job) }
+        changeLocalJob { this.toMutableList().apply { add(job) } }
         handleCompletedCompletion(job)
     }
 
     private fun addJobToGroup(job: Job, group: String) {
         changeGroupJob {
-            this[group]?.cancel()
-            this[group] = job
+            val res = toMutableMap()
+            res[group]?.cancel()
+            res[group] = job
+            return@changeGroupJob res
         }
         handleCompletedCompletion(job)
     }
@@ -58,8 +58,8 @@ open class JobContainer {
 
     //<editor-fold desc="Description">
     fun removeDoneJobs() {
-        changeLocalJob { removeAll { it.isCompleted } }
-        changeGroupJob { forEach { remove(it.key) } }
+        changeLocalJob { filterNot { it.isCompleted } }
+        changeGroupJob { return@changeGroupJob mapOf() }
     }
 
 
@@ -119,22 +119,28 @@ open class JobContainer {
     //</editor-fold>
 
     //<editor-fold desc="Inline mutex functions">
-    private inline fun changeLocalJob(crossinline action: MutableList<Job>.() -> Unit) = runBlocking {
+    private inline fun changeLocalJob(crossinline action: List<Job>.() -> List<Job>): Unit = runBlocking {
         localJobMutex.withLock {
-            action(localJobs)
+            val result = action(localJobs)
+            localJobs.set(result)
         }
     }
 
-    private inline fun changeGroupJob(crossinline action: MutableMap<String, Job>.() -> Unit) = runBlocking {
+    private inline fun changeGroupJob(crossinline action: Map<String, Job>.() -> Map<String, Job>): Unit = runBlocking {
         groupJobMutex.withLock {
-            action(groupedJobs)
+            val result = action(groupedJobs)
+            groupedJobs.clear()
+            groupedJobs.putAll(result)
         }
     }
 
 
-    private inline fun changeQueuedJob(crossinline action: MutableMap<String, MutableList<QueuedJob>>.() -> Unit) = runBlocking {
+    private inline fun changeQueuedJob(crossinline action: Map<String, MutableList<QueuedJob>>.() -> Map<String, MutableList<QueuedJob>>)
+            : Unit = runBlocking {
         queuedGroupedJobsMutex.withLock {
-            action(queuedGroupedJobs)
+            val result = action(queuedGroupedJobs)
+            queuedGroupedJobs.clear()
+            queuedGroupedJobs.putAll(result)
         }
     }
 
@@ -142,20 +148,20 @@ open class JobContainer {
     /**
      * Executes all queued up actions in that group.
      */
-    fun executeQueue(group: String) = changeQueuedJob {
+    fun executeQueue(group: String): Unit = changeQueuedJob {
         get(group)?.let {
             it.forEach {
                 performAction(it.first, it.second)
             }
         }
-        remove(group)
+        return@changeQueuedJob this.filter { it.key != group }
     }
 
     /**
      * Adds a given operation to a named queue.
      */
-    fun addToQueue(context: CoroutineContext, action: AsyncEmptyFunction, group: String) = changeQueuedJob {
-        getOrPut(group, { mutableListOf(Pair(context, action)) })
+    fun addToQueue(context: CoroutineContext, action: AsyncEmptyFunction, group: String): Unit = changeQueuedJob {
+        return@changeQueuedJob this.toMutableMap().apply { getOrPut(group, { mutableListOf(Pair(context, action)) }) }
     }
 
 }

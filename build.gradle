@@ -3,8 +3,8 @@ buildscript {
     ext.androidBuildToolsVersion = "27.0.3"
 
     //Lib version and sdks
-    ext.commonsenseVersionName = "0.0.9"
-    ext.commonsenseVersionNumber = 9
+    ext.commonsenseVersionName = "0.0.10"
+    ext.commonsenseVersionNumber = 10
     ext.minSdk = 16
     ext.targetSdk = 27
 
@@ -39,17 +39,17 @@ buildscript {
 
 
 plugins {
-    id 'com.gradle.build-scan' version '1.11'
+//    id 'com.gradle.build-scan' version '1.11'
     id "org.gradle.android.cache-fix" version "0.2.5"
     id "io.gitlab.arturbosch.detekt" version "1.0.0.RC6-1"
 }
 
 apply plugin: 'io.gitlab.arturbosch.detekt'
 
-buildScan {
-    licenseAgreementUrl = 'https://gradle.com/terms-of-service'
-    licenseAgree = 'yes'
-}
+//buildScan {
+//    licenseAgreementUrl = 'https://gradle.com/terms-of-service'
+//    licenseAgree = 'yes'
+//}
 
 
 allprojects {
@@ -61,7 +61,7 @@ allprojects {
 
 subprojects {
     apply plugin: "org.gradle.android.cache-fix"
-    apply from: "../jacoco-kotlin.gradle"
+//    apply from: "../jacoco-kotlin.gradle"
 
 }
 

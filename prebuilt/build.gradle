@@ -11,13 +11,8 @@ buildscript {
         classpath "org.jetbrains.dokka:dokka-android-gradle-plugin:${dokkaVersion}"
     }
 }
-apply plugin: 'org.jetbrains.dokka-android'
 
 
-dokka {
-    outputFormat = 'html'
-    outputDirectory = "$buildDir/javadoc"
-}
 android {
     compileSdkVersion androidSdkBuildVersion
 
@@ -69,11 +64,10 @@ kapt {
 dependencies {
     //Tests
     androidTestImplementation("com.android.support.test.espresso:espresso-core:$espressoVersion", {
-    testImplementation project(':test')
+        testImplementation project(':test')
         exclude group: 'com.android.support', module: 'support-annotations'
     })
     testImplementation "junit:junit:$junitVersion"
-
 
     //coroutines libs
     implementation "org.jetbrains.kotlinx:kotlinx-coroutines-core:$coroutinesVersion"
@@ -118,19 +112,4 @@ publish {
     desc = 'Base android features'
 }
 
-
-task dokkaJavadoc(type: org.jetbrains.dokka.gradle.DokkaTask) {
-    outputFormat = 'javadoc'
-    outputDirectory = "$buildDir/javadoc"
-    inputs.dir 'src/main/java'
-}
-
-task javadocJar(type: Jar, dependsOn: dokkaJavadoc) {
-    classifier = 'javadoc'
-    from "$buildDir/javadoc"
-}
-
-task sourcesJar(type: Jar) {
-    classifier = 'sources'
-    from android.sourceSets.main.java.srcDirs
-}
+apply from: "../javadocSourceDokka.gradle"

@@ -10,21 +10,21 @@ import kotlinx.coroutines.experimental.android.UI
  */
 class UiAwareJobContainer : JobContainer() {
 
-    fun onPostResume() {
+    fun onPostResume(): Unit {
         executeQueue("onPostResume")
     }
 
-    fun onDestory() {
+    fun onDestory(): Unit {
         cleanJobs()
 
     }
 
-    fun onCreate() {
+    fun onCreate(): Unit {
         cleanJobs()
     }
 
 
-    fun launchInUi(isUiVisible: () -> Boolean, group: String, action: AsyncEmptyFunction) :Job {
+    fun launchInUi(isUiVisible: () -> Boolean, group: String, action: AsyncEmptyFunction): Job {
         val otherAction: AsyncEmptyFunction = {
             if (isUiVisible()) {
                 action()

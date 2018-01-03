@@ -23,9 +23,16 @@ open class BaseActivityData<out InputType> : BaseActivity() {
      * Unfortunately we are unable to Type safe bypass the map though this. not in this generic manner
      */
     @Suppress("UNCHECKED_CAST")
-    val data by lazy {
-        BaseActivity.dataReferenceMap.getItemOr(intent.getStringExtra(dataIntentIndex)) as InputType
-    }
+    val data: InputType
+        get() {
+            val safeIntent = intent ?: throw RuntimeException("intent is null")
+            val intentIndex = safeIntent.getStringExtra(dataIntentIndex)
+                    ?: throw RuntimeException("Intent content not presented; extra is: ${safeIntent.extras}")
+            val item = BaseActivity.dataReferenceMap.getItemOr(intentIndex)
+                    ?: throw RuntimeException("Data is not in map, so this activity is " +
+                            "\"${this.javaClass.simpleName}\" referring to the data after closing.")
+            return item as InputType
+        }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)

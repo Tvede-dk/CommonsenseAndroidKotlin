@@ -1,6 +1,5 @@
 apply plugin: 'com.android.library'
 apply plugin: 'kotlin-android'
-apply plugin: 'jacoco'
 
 buildscript {
     repositories {
@@ -10,12 +9,6 @@ buildscript {
     dependencies {
         classpath "org.jetbrains.dokka:dokka-android-gradle-plugin:${dokkaVersion}"
     }
-}
-apply plugin: 'org.jetbrains.dokka-android'
-
-dokka {
-    outputFormat = 'javadoc'
-    outputDirectory = "$buildDir/javadoc"
 }
 
 android {
@@ -54,10 +47,6 @@ android {
         unitTests.all {
             forkEvery = 2
         }
-    }
-    sourceSets {
-        main.java.srcDirs += 'src/main/kotlin'
-        test.java.srcDirs += 'src/test/kotlin'
     }
 }
 
@@ -100,19 +89,4 @@ publish {
     desc = 'Base android features'
 }
 
-
-task dokkaJavadoc(type: org.jetbrains.dokka.gradle.DokkaTask) {
-    outputFormat = 'javadoc'
-    outputDirectory = "$buildDir/javadoc"
-    inputs.dir 'src/main/java'
-}
-
-task javadocJar(type: Jar, dependsOn: dokkaJavadoc) {
-    classifier = 'javadoc'
-    from "$buildDir/javadoc"
-}
-
-task sourcesJar(type: Jar) {
-    classifier = 'sources'
-    from android.sourceSets.main.java.srcDirs
-}
+apply from: "../javadocSourceDokka.gradle"

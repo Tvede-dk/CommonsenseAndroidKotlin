@@ -21,21 +21,24 @@ import kotlinx.coroutines.experimental.launch
  * Created by Kasper Tvede on 20-07-2017.
  */
 
-/**
- *
- */
+        /**
+         *
+         */
 typealias ActivityResultCallback = (resultCode: Int, data: Intent?) -> Unit
-/**
- *
- */
+
+        /**
+         *
+         */
 typealias ActivityResultCallbackOk = (data: Intent?) -> Unit
-/**
- *
- */
+
+        /**
+         *
+         */
 typealias AsyncActivityResultCallback = suspend (resultCode: Int, data: Intent?) -> Unit
-/**
- *
- */
+
+        /**
+         *
+         */
 typealias AsyncActivityResultCallbackOk = suspend (data: Intent?) -> Unit
 
 
@@ -277,13 +280,13 @@ fun BaseFragment?.startActivityForResult(intent: Intent,
 }
 //</editor-fold>
 
-private fun logBadActivity(){
+private fun logBadActivity() {
     L.error(BaseFragment::class.java.name,
             "Could not start activity for result, as the activity is properly not a BaseActivity",
             RuntimeException())
 }
 
-private fun logBadFragment(){
+private fun logBadFragment() {
     L.error(BaseFragment::class.java.name, "Could not start activity for result, as the caller is null",
             RuntimeException())
 }

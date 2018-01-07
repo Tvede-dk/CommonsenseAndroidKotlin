@@ -1,17 +1,11 @@
 package com.commonsense.android.kotlin.system.base
 
-import android.app.Activity
 import android.content.BroadcastReceiver
 import android.content.Intent
 import android.content.IntentFilter
 import android.os.Bundle
 import android.os.Handler
-import android.support.annotation.AnyThread
-import android.support.annotation.IdRes
 import android.support.annotation.IntRange
-import android.support.annotation.UiThread
-import android.support.v4.app.Fragment
-import android.support.v4.app.FragmentActivity
 import android.support.v7.app.AppCompatActivity
 import android.view.MenuItem
 import com.commonsense.android.kotlin.base.AsyncEmptyFunction
@@ -20,8 +14,6 @@ import com.commonsense.android.kotlin.system.PermissionsHandling
 import com.commonsense.android.kotlin.system.base.helpers.*
 import com.commonsense.android.kotlin.system.dataFlow.ReferenceCountingMap
 import com.commonsense.android.kotlin.system.extensions.backPressIfHome
-import com.commonsense.android.kotlin.system.extensions.transactionCommit
-import com.commonsense.android.kotlin.system.extensions.transactionCommitNow
 import com.commonsense.android.kotlin.system.logging.logWarning
 import com.commonsense.android.kotlin.system.logging.tryAndLog
 import com.commonsense.android.kotlin.system.uiAware.UiAwareJobContainer
@@ -263,25 +255,4 @@ fun <Input, T : BaseActivityData<Input>>
         optOnResult?.invoke(resultCode, resultIntent)
     })
 }
-
-@AnyThread
-fun Activity.safeFinish() = runOnUiThread(this::finish)
-
-
-//<editor-fold desc="push / replace fragment">
-@UiThread
-fun FragmentActivity.replaceFragment(@IdRes container: Int, fragment: Fragment) {
-    supportFragmentManager.transactionCommitNow {
-        replace(container, fragment)
-    }
-}
-
-@UiThread
-fun FragmentActivity.pushNewFragmentTo(@IdRes container: Int, fragment: Fragment) {
-    supportFragmentManager.transactionCommit {
-        replace(container, fragment)
-        addToBackStack(fragment.id.toString())
-    }
-}
-//</editor-fold>
 

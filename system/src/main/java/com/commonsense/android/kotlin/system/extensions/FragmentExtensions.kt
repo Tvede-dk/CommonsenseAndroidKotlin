@@ -44,14 +44,12 @@ fun android.app.Fragment.onBackPressed() {
     activity?.onBackPressed()
 }
 
+/**
+ * Pops all fragments from the current FragmentManager, except the bottom fragment
+ * Logs if the operation fails (does not throw)
+ */
 fun Fragment.popToFirstFragment() {
-    activity?.runOnUiThread {
-        activity?.supportFragmentManager?.let { manager ->
-            //first schedual a pop on "each" except the last. (n-1 pops)
-            (0 until manager.backStackEntryCount).forEach { manager.popBackStack() }
-            manager.executePendingTransactions() //then allow Android to do the popping.
-        }
-    }
+    activity?.popToFirstFragment()
 }
 
 

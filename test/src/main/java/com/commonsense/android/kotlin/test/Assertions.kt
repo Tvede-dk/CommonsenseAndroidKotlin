@@ -9,12 +9,6 @@ import java.util.concurrent.TimeUnit
 /**
  * Created by Kasper Tvede on 18-07-2017.
  */
-
-/**
- * Created by Kasper Tvede on 15-07-2017.
- */
-
-
 fun Boolean.assert(value: Boolean, message: String = "") {
     Assert.assertEquals(message, value, this)
 }

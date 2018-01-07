@@ -2,34 +2,25 @@ package com.commonsense.android.kotlin.views.features
 
 import android.view.View
 import com.commonsense.android.kotlin.base.FunctionUnit
-import java.util.concurrent.atomic.AtomicInteger
+import com.commonsense.android.kotlin.base.datastructures.Ticketer
 import kotlin.reflect.KClass
 
 
 /**
- * Created by Kasper Tvede on 08-08-2017.
+ * A ticket system for view tag's , the point being that we are going to allow multiple
+ * features working side by side, without ever overlapping by forcing them to draw a number to
+ * use for their ViewTag indexes
  */
 object ViewtagTicketer {
-    private var currentDrawNumber = AtomicInteger(0x0200_0000) // all 24 bits set, such that ushr 24 > 2
-    private val categoryStore = mutableMapOf<String, Int>()
+    /**
+     * The ticket system behind the scenes.
+     */
+    private val ticketer: Ticketer = Ticketer(0x0200_0000)
+
     /**
      * Draws a number  (category uniqed) key for use with "setTag" and "getTag"  on a view.
      */
-    fun getIdForCategory(category: String): Int {
-        if (!categoryStore.containsKey(category)) {
-            synchronized(ViewtagTicketer) {
-                val number = drawNextNumber()
-                categoryStore.put(category, number)
-            }
-        }
-        return categoryStore[category] ?: 0
-    }
-
-    private fun drawNextNumber(): Int {
-        return currentDrawNumber.getAndIncrement()
-    }
-
-
+    fun getIdForCategory(category: String): Int = ticketer.getIdForCategory(category)
 }
 
 fun View.tagKeyFor(category: String): Int = ViewtagTicketer.getIdForCategory(category)
@@ -60,8 +51,7 @@ inline fun <reified T : Any> View.useTagOr(forCategory: String, action: Function
 }
 
 inline fun <reified T : Any> View.getTagOr(forCategory: String, defaultValue: () -> T): T {
-    return getTag(forCategory) ?:
-            setTag(forCategory, defaultValue())
+    return getTag(forCategory) ?: setTag(forCategory, defaultValue())
 }
 
 inline fun <reified T : Any> View.useTagOr(classAsCategory: KClass<*>, action: FunctionUnit<T>, defaultToInsert: () -> T) =

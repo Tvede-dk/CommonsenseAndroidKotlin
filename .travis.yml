@@ -7,7 +7,7 @@ android:
     - platform-tools
     - tools
      # The BuildTools version used by your project
-    - build-tools-26.0.2
+    - build-tools-27.0.3
     - android-27
 
   licenses:
@@ -20,11 +20,16 @@ before_cache:
   - rm -f  $HOME/.gradle/caches/modules-2/modules-2.lock
   - rm -fr $HOME/.gradle/caches/*/plugin-resolution/
 
+before_script:
+    - export ANDROID_HOME=$HOME/.android
+    - mkdir -p $HOME/.android
+    - cp -r extra/licenses $ANDROID_HOME/licenses
+    - chmod +x gradlew
+script:
+- ./gradlew clean test
+
 cache:
   directories:
     - $HOME/.gradle/caches/
     - $HOME/.gradle/wrapper/
     - $HOME/.android/build-cache
-
-before_install:
- - chmod +x gradlew

@@ -9,13 +9,14 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import com.commonsense.android.kotlin.system.base.BaseFragment
-import com.commonsense.android.kotlin.system.base.pushNewFragmentTo
-import com.commonsense.android.kotlin.system.base.replaceFragment
 import com.commonsense.android.kotlin.system.extensions.dialogFillParentView
 import com.commonsense.android.kotlin.system.extensions.getParrentContainerId
+import com.commonsense.android.kotlin.system.extensions.pushNewFragmentTo
+import com.commonsense.android.kotlin.system.extensions.replaceFragment
 import com.commonsense.android.kotlin.views.R
 
 typealias InflateBinding<T> = (inflater: LayoutInflater, parent: ViewGroup?, attach: Boolean) -> T
+
 /**
  * created by Kasper Tvede on 29-09-2016.
  */
@@ -55,12 +56,12 @@ abstract class BaseDatabindingFragment<out T : ViewDataBinding> : BaseFragment()
     abstract fun useBinding()
 
     inline fun replaceThisFragment(otherFragment: () -> Fragment) {
-        getParrentContainerId()?.let { activity?.replaceFragment(it, otherFragment()) }
+        getParrentContainerId()?.let { fragmentManager?.replaceFragment(it, otherFragment()) }
     }
 
     //adds a new fragment after the current fragment
     inline fun Fragment.pushThisFragment(crossinline otherFragment: () -> Fragment) {
-        getParrentContainerId()?.let { activity?.pushNewFragmentTo(it, otherFragment()) }
+        getParrentContainerId()?.let { fragmentManager?.pushNewFragmentTo(it, otherFragment()) }
     }
 
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {

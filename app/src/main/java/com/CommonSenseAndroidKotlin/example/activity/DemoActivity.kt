@@ -2,7 +2,7 @@ package com.CommonSenseAndroidKotlin.example.activity
 
 import com.CommonSenseAndroidKotlin.example.databinding.DemoActivityBinding
 import com.CommonSenseAndroidKotlin.example.fragments.SimpleRecyclerDemo
-import com.commonsense.android.kotlin.system.base.replaceFragment
+import com.commonsense.android.kotlin.system.extensions.replaceFragment
 import com.commonsense.android.kotlin.views.databinding.activities.BaseDatabindingActivity
 import com.commonsense.android.kotlin.views.databinding.activities.InflaterFunctionSimple
 
@@ -12,8 +12,7 @@ import com.commonsense.android.kotlin.views.databinding.activities.InflaterFunct
 
 
 open class DemoActivity : BaseDatabindingActivity<DemoActivityBinding>() {
-    override fun createBinding(): InflaterFunctionSimple<DemoActivityBinding>
-            = DemoActivityBinding::inflate
+    override fun createBinding(): InflaterFunctionSimple<DemoActivityBinding> = DemoActivityBinding::inflate
 
     override fun useBinding() {
         replaceFragment(binding.demoActivityContainer.id, SimpleRecyclerDemo())

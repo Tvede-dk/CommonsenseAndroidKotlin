@@ -1,7 +1,7 @@
 package com.CommonSenseAndroidKotlin.example.activity
 
 import com.CommonSenseAndroidKotlin.example.fragments.SectionSwipeAdapterFragment
-import com.commonsense.android.kotlin.system.base.replaceFragment
+import com.commonsense.android.kotlin.system.extensions.replaceFragment
 
 /**
  * Created by Kasper Tvede on 24-06-2017.

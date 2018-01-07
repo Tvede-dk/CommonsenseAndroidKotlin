@@ -3,7 +3,7 @@ package com.CommonSenseAndroidKotlin.example.activity
 import android.content.Intent
 import android.os.Bundle
 import com.commonsense.android.kotlin.system.base.BaseActivity
-import com.commonsense.android.kotlin.system.base.safeFinish
+import com.commonsense.android.kotlin.system.extensions.safeFinish
 
 /**
  * Created by Kasper Tvede on 29-07-2017.

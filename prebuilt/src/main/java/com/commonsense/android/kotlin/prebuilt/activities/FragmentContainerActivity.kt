@@ -3,7 +3,7 @@ package com.commonsense.android.kotlin.prebuilt.activities
 import android.databinding.ViewDataBinding
 import android.support.v4.app.Fragment
 import android.view.ViewGroup
-import com.commonsense.android.kotlin.system.base.replaceFragment
+import com.commonsense.android.kotlin.system.extensions.replaceFragment
 import com.commonsense.android.kotlin.views.databinding.activities.BaseDatabindingActivity
 
 /**

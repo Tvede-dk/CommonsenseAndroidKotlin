@@ -23,8 +23,8 @@ before_cache:
 before_script:
     - export ANDROID_HOME=$HOME/.android
     - mkdir -p $HOME/.android
-    - cp -r extra/licenses $ANDROID_HOME/licenses
     - chmod +x gradlew
+
 script:
 - ./gradlew clean test
 

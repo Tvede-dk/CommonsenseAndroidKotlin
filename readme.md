@@ -37,12 +37,16 @@ The artifacts can be viewed at: https://bintray.com/tvede-oss/Commonsense-androi
 
 # Introduction 
 
-This library is a layer upon the android platform, trying to lift out bad design designdecissions, and other annoyances. including the tremendous boilerplate code that is required in android programming.
+This library is a layer upon the android platform, trying to lift out bad design design decisions, and other annoyances. including the tremendous boilerplate code that is required in android programming.
 
 ##  Sub components
+The project is layered into a number of components, each laying a foundation for others to build apron.
 
+There is an inter-dependency between the components. However taking base for example does not mean you have to take system.
 
 ### Base
+
+
 
 ### System
 
@@ -50,7 +54,4 @@ This library is a layer upon the android platform, trying to lift out bad design
 
 ### Views (widgets)
 
-
 ### Prebuilt 
-
-

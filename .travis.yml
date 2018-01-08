@@ -21,6 +21,7 @@ before_cache:
   - rm -fr $HOME/.gradle/caches/*/plugin-resolution/
 
 before_script:
+    - yes | sudo sdkmanager --licenses
     - export ANDROID_HOME=$HOME/.android
     - mkdir -p $HOME/.android
     - chmod +x gradlew

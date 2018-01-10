@@ -62,7 +62,7 @@ class ExtendedEditTextView : AppCompatEditText {
         return false
     }
 
-    fun setOnBackSpaceDeteced(callback: (view: ExtendedEditTextView, isEmpty: Boolean) -> Unit) {
+    fun setOnBackSpaceDetected(callback: (view: ExtendedEditTextView, isEmpty: Boolean) -> Unit) {
         backspaceDetectedCallback = callback
     }
 

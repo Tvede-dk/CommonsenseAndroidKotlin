@@ -47,6 +47,50 @@ There is an inter-dependency between the components. However taking base for exa
 ### Base
 
 
+> Types
+
+There are a couple of type decleartions to make simple types look a lot nicer, since having the codebased filled with parans makes it harder to read. 
+The most common onces:
+````kotlin
+    typealias EmptyFunction = () -> Unit
+    typealias EmptyFunctionResult<T> = () -> T
+    typealias AsyncEmptyFunction = suspend () -> Unit
+    typealias AsyncFunctionUnit<T> = suspend (T) -> Unit
+    
+    /**
+     * Function with 1 parameter that returns unit
+     */
+    typealias FunctionUnit<E> = (E) -> Unit
+    typealias FunctionResult<I, O> = (I) -> O
+````    
+
+> Compat
+Since android api 16 to 20 have support for TLS 1.1 and TLS 1.2 , but it is disabled, 
+ you have to manually enable that for ALL sockets (by explicit setting the enabledProtocols to "TLSv1.2").
+ This is tedious and a lot of annoying boilerplate, so we provide the class
+````kotlin
+     SSLSocketFactoryCompat
+````
+to handle that. (only tls 1.2, due to security.)
+ 
+ 
+ 
+> Extensions
+
+
+> Patterns
+
+
+> JobContainer
+This feature is the basis of job scheduling and containing (in the system package is named **UiAwareJobContainer** )
+
+It is meant for handling 3 types of scheduling
+
+    * Quing  (executing aware) 
+    * Sequential ( as they come in , with no specific order)
+    * Grouped ( if multiple of these are put in, only 1 will be ranned)
+     
+
 
 ### System
 

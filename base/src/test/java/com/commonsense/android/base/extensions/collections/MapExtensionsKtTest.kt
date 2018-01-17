@@ -1,6 +1,9 @@
-package com.commonsense.android.kotlin.base.extensions.collections
+package com.commonsense.android.base.extensions.collections
 
 import android.util.SparseArray
+import com.commonsense.android.kotlin.base.extensions.collections.forEach
+import com.commonsense.android.kotlin.base.extensions.collections.forEachIndexed
+import com.commonsense.android.kotlin.base.extensions.collections.map
 import com.commonsense.android.kotlin.test.*
 import org.junit.Test
 

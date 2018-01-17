@@ -1,5 +1,6 @@
-package com.commonsense.android.kotlin.base.patterns
+package com.commonsense.android.base.patterns
 
+import com.commonsense.android.kotlin.base.patterns.ObserverPattern
 import com.commonsense.android.kotlin.test.assert
 import org.junit.Test
 

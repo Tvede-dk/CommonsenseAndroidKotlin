@@ -1,6 +1,5 @@
 package com.commonsense.android.kotlin.base.concurrency
 
-import android.util.Log
 import kotlinx.coroutines.experimental.channels.Channel
 
 /**

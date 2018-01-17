@@ -1,4 +1,4 @@
-package com.commonsense.android.kotlin.base.scheduling
+package com.commonsense.android.base.scheduling
 
 import com.commonsense.android.kotlin.base.extensions.collections.onFalse
 import com.commonsense.android.kotlin.base.extensions.collections.onTrue

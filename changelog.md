@@ -1,5 +1,32 @@
 #Changelog
 
+
+##0.0.12
+in this release:
+- kotlin versions updates
+- logging updates
+- more error logging to help developers.
+
+
+
+### Updates
+- kotlin to 1.2.20
+- kotlin coroutines to 0.21.2
+
+### Additions
+
+- added error message for using focusable for ExtendedEditTextView
+### Features added / updated
+vastly improved the logging functionality
+
+- added contains multiple controls for disabling log types
+- added production log "channel" that is special since its only meant for application logs, that should be allowed in production.
+- added documentation for theses improvements
+- broke the isLoggingAllowed as it previous was a field, now its a function. 
+- added test for these additions / improvements.
+- added LoggingType
+
+
 ##0.0.11
   
 ###bugs

@@ -31,9 +31,6 @@ android {
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }
-        debug {
-            testCoverageEnabled true
-        }
     }
 
     lintOptions {
@@ -47,10 +44,6 @@ android {
         unitTests.all {
             forkEvery = 2
         }
-    }
-    sourceSets {
-        main.java.srcDirs += 'src/main/kotlin'
-        test.java.srcDirs += "src/test/kotlin"
     }
 }
 
@@ -92,4 +85,3 @@ publish {
 
 apply from: "../javadocSourceDokka.gradle"
 
-apply from: "../jacoco-kotlin.gradle"

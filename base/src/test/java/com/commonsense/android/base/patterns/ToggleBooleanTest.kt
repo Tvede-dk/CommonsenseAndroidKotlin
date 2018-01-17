@@ -1,5 +1,6 @@
-package com.commonsense.android.kotlin.base.patterns
+package com.commonsense.android.base.patterns
 
+import com.commonsense.android.kotlin.base.patterns.ToggleBoolean
 import com.commonsense.android.kotlin.test.BaseRoboElectricTest
 import com.commonsense.android.kotlin.test.assert
 import org.junit.Assert

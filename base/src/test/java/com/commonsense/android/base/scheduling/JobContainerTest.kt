@@ -1,5 +1,6 @@
-package com.commonsense.android.kotlin.base.scheduling
+package com.commonsense.android.base.scheduling
 
+import com.commonsense.android.kotlin.base.scheduling.JobContainer
 import com.commonsense.android.kotlin.test.assert
 import kotlinx.coroutines.experimental.*
 import org.junit.Test

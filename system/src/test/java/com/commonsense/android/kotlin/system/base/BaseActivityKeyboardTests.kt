@@ -9,6 +9,7 @@ import com.commonsense.android.kotlin.system.extensions.inputMethodManager
 import com.commonsense.android.kotlin.system.extensions.requestFocusAndShowKeyboard
 import com.commonsense.android.kotlin.test.BaseRoboElectricTest
 import com.commonsense.android.kotlin.test.assert
+import org.junit.Ignore
 import org.junit.Test
 import org.robolectric.Shadows
 import org.robolectric.annotation.Config
@@ -23,6 +24,7 @@ class BaseActivityKeyboardTests : BaseRoboElectricTest() {
 
 
     @Test
+    @Ignore
     fun testHideKeyboard() {
         val helper = createActivityController<BaseActivity>(R.style.Theme_AppCompat).create()
         val act = helper.get()

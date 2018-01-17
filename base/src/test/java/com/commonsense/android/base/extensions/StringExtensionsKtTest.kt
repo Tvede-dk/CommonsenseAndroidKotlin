@@ -1,5 +1,6 @@
-package com.commonsense.android.kotlin.base.extensions
+package com.commonsense.android.base.extensions
 
+import com.commonsense.android.kotlin.base.extensions.asUrl
 import com.commonsense.android.kotlin.test.BaseRoboElectricTest
 import com.commonsense.android.kotlin.test.assert
 

@@ -11,7 +11,6 @@ import com.commonsense.android.kotlin.base.extensions.weakReference
 import com.commonsense.android.kotlin.system.extensions.getColorSafe
 import com.commonsense.android.kotlin.system.extensions.getDrawableSafe
 import com.commonsense.android.kotlin.system.extensions.getTextSafe
-import com.commonsense.android.kotlin.system.logging.tryAndLog
 import java.lang.ref.WeakReference
 import kotlin.reflect.KProperty
 

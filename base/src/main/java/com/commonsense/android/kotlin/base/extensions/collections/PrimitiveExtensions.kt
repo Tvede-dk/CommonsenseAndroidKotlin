@@ -55,12 +55,12 @@ inline fun <T> T?.ifNotNull(crossinline action: FunctionUnit<T>) {
 }
 
 /**
- * Makes a more "elegant" sentence for some expressions, same as "com.commonsense.android.kotlin.base.extensions.collections.onTrue"
+ * Makes a more "elegant" sentence for some expressions, same as "com.commonsense.android.kotlin.com.commonsense.android.kotlin.base.onTrue"
  */
 inline fun Boolean.ifTrue(crossinline action: EmptyFunction): Boolean = onTrue(action)
 
 /**
- * Makes a more "elegant" sentence for some expressions, same as "com.commonsense.android.kotlin.base.extensions.collections.onTrue"
+ * Makes a more "elegant" sentence for some expressions, same as "com.commonsense.android.kotlin.com.commonsense.android.kotlin.base.onTrue"
  */
 suspend fun Boolean.ifTrueAsync(action: AsyncEmptyFunction): Boolean = onTrueAsync(action)
 
@@ -76,7 +76,7 @@ inline fun Boolean.onFalse(crossinline action: EmptyFunction): Boolean {
 
 
 /**
- * Makes a more "elegant" sentence for some expressions, same as "com.commonsense.android.kotlin.base.extensions.collections.onTrue"
+ * Makes a more "elegant" sentence for some expressions, same as "com.commonsense.android.kotlin.com.commonsense.android.kotlin.base.onTrue"
  */
 inline fun Boolean.ifFalse(crossinline action: EmptyFunction): Boolean = onFalse(action)
 

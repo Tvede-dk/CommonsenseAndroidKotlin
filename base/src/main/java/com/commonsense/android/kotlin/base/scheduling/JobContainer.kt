@@ -10,12 +10,13 @@ import kotlinx.coroutines.experimental.sync.Mutex
 import kotlinx.coroutines.experimental.sync.withLock
 import kotlin.coroutines.experimental.CoroutineContext
 
-        /**
-         * Created by Kasper Tvede on 22-06-2017.
-         */
 
 typealias QueuedJob = Pair<CoroutineContext, AsyncEmptyFunction>
 
+/**
+ * Created by Kasper Tvede on 22-06-2017.
+ * It is meant for handling 3 types of scheduling
+ */
 open class JobContainer {
 
     private val localJobMutex = Mutex()

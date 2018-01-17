@@ -45,7 +45,11 @@ android {
         }
     }
 }
-
+kotlin {
+    experimental {
+        coroutines "enable"
+    }
+}
 
 dependencies {
     //Tests

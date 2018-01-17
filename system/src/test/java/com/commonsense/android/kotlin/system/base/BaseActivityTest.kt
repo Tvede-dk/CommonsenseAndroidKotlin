@@ -58,7 +58,7 @@ class BaseActivityTest : BaseRoboElectricTest() {
     @Test
     fun launchInUiLifecycleEventsPausedDestory() = testCallbackWithSemaphore(
             shouldAquire = false,
-            errorMessage = "callback should be called after onresume after a pause") { sem ->
+            errorMessage = "callback should be called after onresume after a pause") {
         val act = createActivityController<BaseActivity>(R.style.Theme_AppCompat).apply {
             setup()
             pause()
@@ -143,7 +143,7 @@ class BaseActivityTest : BaseRoboElectricTest() {
     @Test
     fun removeOnBackPressedListeners() = testCallbackWithSemaphore(
             shouldAquire = false,
-            errorMessage = "callback should NOT be called") { sem ->
+            errorMessage = "callback should NOT be called") {
         val act = createActivityController<BaseActivity>(R.style.Theme_AppCompat).apply {
             setup()
             visible()

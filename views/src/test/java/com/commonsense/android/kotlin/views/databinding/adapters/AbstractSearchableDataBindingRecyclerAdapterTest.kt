@@ -12,9 +12,9 @@ import org.robolectric.annotation.Config
 
 class TestRender(value: String)
     : RenderModel<String, ViewDataBinding>(value,
-        { inflater, parent, attach -> TODO() },
+        { _, _, _ -> TODO() },
         ViewDataBinding::class.java,
-        { view, model, viewHolder -> })
+        { _, _, _ -> })
 
 
 @Config(manifest = Config.NONE)

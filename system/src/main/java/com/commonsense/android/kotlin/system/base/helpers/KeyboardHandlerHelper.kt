@@ -1,11 +1,9 @@
 package com.commonsense.android.kotlin.system.base.helpers
 
 import android.app.Activity
-import android.content.Context
 import com.commonsense.android.kotlin.base.EmptyFunction
 import com.commonsense.android.kotlin.base.extensions.collections.ifTrue
 import com.commonsense.android.kotlin.system.extensions.hideSoftKeyboard
-import com.commonsense.android.kotlin.system.extensions.hideSoftKeyboardFrom
 
 /**
  * Created by kasper on 15/12/2017.

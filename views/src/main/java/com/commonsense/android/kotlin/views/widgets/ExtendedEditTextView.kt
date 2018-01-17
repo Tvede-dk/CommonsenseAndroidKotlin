@@ -51,6 +51,11 @@ class ExtendedEditTextView : AppCompatEditText {
 
 
     override fun onCreateInputConnection(outAttrs: EditorInfo?): InputConnection {
+        if (outAttrs == null) {
+            throw RuntimeException("Bad editor info supplied;" +
+                    "\n You have properly added the focusAble attribute to this view in the xml), just remove it. " +
+                    "\n (reason for throwing: super call will fail with unhelpful exception in android code.)")
+        }
         return KeyboardConnection(super.onCreateInputConnection(outAttrs), true, this::onKeyboardEvent)
     }
 

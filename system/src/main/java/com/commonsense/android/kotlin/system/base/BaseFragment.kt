@@ -99,7 +99,7 @@ open class BaseFragment : DialogFragment(), ActivityResultHelperContainer {
     }
 
     override fun onDestroy() {
-        localJobs.onDestory()
+        localJobs.onDestroy()
         activityResultHelper.clear()
         super.onDestroy()
     }

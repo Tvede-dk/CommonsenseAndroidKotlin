@@ -19,7 +19,7 @@ class MapExtensionsKtTest : BaseRoboElectricTest() {
         }
 
         //test num of callbacks
-        testCallbackWithSemaphore(startAquire = 2, startPermits = 0, shouldAquire = true, errorMessage = "should be called 2 times") { sem ->
+        testCallbackWithSemaphore(startAcquire = 2, startPermits = 0, shouldAcquire = true, errorMessage = "should be called 2 times") { sem ->
             mapOf(Pair("a", "1"), Pair("b", "2")).forEachIndexed { _, _ ->
                 sem.release()
             }
@@ -60,7 +60,7 @@ class MapExtensionsKtTest : BaseRoboElectricTest() {
 
 
         //test num of callbacks
-        testCallbackWithSemaphore(startAquire = 2, startPermits = 0, shouldAquire = true, errorMessage = "should be called 2 times") { sem ->
+        testCallbackWithSemaphore(startAcquire = 2, startPermits = 0, shouldAcquire = true, errorMessage = "should be called 2 times") { sem ->
             sparseArray.forEach { _ ->
                 sem.release()
             }

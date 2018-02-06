@@ -20,7 +20,5 @@ class RoundCornersImageView : AppCompatImageView {
 
     }
 
-    override fun onDraw(canvas: android.graphics.Canvas?) {
-        super.onDraw(canvas)
-    }
+
 }

@@ -15,11 +15,11 @@ import org.robolectric.annotation.Config
 /**
  * Created by Kasper Tvede on 07-10-2017.
  */
-@Config(sdk = intArrayOf(21))
+@Config(sdk = [21])
 class BaseActivityTest : BaseRoboElectricTest() {
     @Test
     fun launchInUiLifecycleEventsPaused() = testCallbackWithSemaphore(
-            shouldAquire = false,
+            shouldAcquire = false,
             errorMessage = "callback should not be called") { _ ->
         val act = createActivityController<BaseActivity>(R.style.Theme_AppCompat).apply {
             setup()
@@ -32,8 +32,8 @@ class BaseActivityTest : BaseRoboElectricTest() {
 
     @Test
     fun launchInUiLifecycleEventsPausedResume() = testCallbackWithSemaphore(
-            shouldAquire = true,
-            errorMessage = "callback should be called after onresume after a pause") { sem ->
+            shouldAcquire = true,
+            errorMessage = "callback should be called after onResume after a pause") { sem ->
         val act = createActivityController<BaseActivity>(R.style.Theme_AppCompat).apply {
             setup()
             pause()
@@ -56,9 +56,9 @@ class BaseActivityTest : BaseRoboElectricTest() {
     }
 
     @Test
-    fun launchInUiLifecycleEventsPausedDestory() = testCallbackWithSemaphore(
-            shouldAquire = false,
-            errorMessage = "callback should be called after onresume after a pause") {
+    fun launchInUiLifecycleEventsPausedDestroy() = testCallbackWithSemaphore(
+            shouldAcquire = false,
+            errorMessage = "callback should be called after onResume after a pause") {
         val act = createActivityController<BaseActivity>(R.style.Theme_AppCompat).apply {
             setup()
             pause()
@@ -83,7 +83,7 @@ class BaseActivityTest : BaseRoboElectricTest() {
 
     @Test
     fun launchInBackgroundLifecycleEventsPaused() = testCallbackWithSemaphore(
-            shouldAquire = true,
+            shouldAcquire = true,
             errorMessage = "callback should be called even when activity is paused.") { sem ->
         val act = createActivityController<BaseActivity>(R.style.Theme_AppCompat).apply {
             setup()
@@ -96,7 +96,7 @@ class BaseActivityTest : BaseRoboElectricTest() {
 
     @Test
     fun launchInUiLifecycleEventsVisible() = testCallbackWithSemaphore(
-            shouldAquire = true,
+            shouldAcquire = true,
             errorMessage = "callback should be called") { sem ->
         val act = createActivityController<BaseActivity>(R.style.Theme_AppCompat).apply {
             setup()
@@ -110,7 +110,7 @@ class BaseActivityTest : BaseRoboElectricTest() {
 
     @Test
     fun launchInBackgroundLifecycleEventsVisible() = testCallbackWithSemaphore(
-            shouldAquire = true,
+            shouldAcquire = true,
             errorMessage = "callback should be called") { sem ->
         val act = createActivityController<BaseActivity>(R.style.Theme_AppCompat).apply {
             setup()
@@ -124,37 +124,37 @@ class BaseActivityTest : BaseRoboElectricTest() {
 
     @Test
     fun addOnBackPressedListeners() = testCallbackWithSemaphore(
-            shouldAquire = true,
+            shouldAcquire = true,
             errorMessage = "callback should be called") { sem ->
         val act = createActivityController<BaseActivity>(R.style.Theme_AppCompat).apply {
             setup()
             visible()
         }
-        val listerner = {
+        val listener = {
             sem.release()
             true
         }
         act.get().apply {
-            addOnbackPressedListener(listerner)
+            addOnBackPressedListener(listener)
         }
         act.get().onBackPressed()
     }
 
     @Test
     fun removeOnBackPressedListeners() = testCallbackWithSemaphore(
-            shouldAquire = false,
+            shouldAcquire = false,
             errorMessage = "callback should NOT be called") {
         val act = createActivityController<BaseActivity>(R.style.Theme_AppCompat).apply {
             setup()
             visible()
         }
-        val listerner = {
+        val listener = {
             failTest("Should not be called once removed.")
             true
         }
         act.get().apply {
-            addOnbackPressedListener(listerner)
-            removeOnbackPressedListener(listerner)
+            addOnBackPressedListener(listener)
+            removeOnBackPressedListener(listener)
         }
         act.get().onBackPressed()
     }

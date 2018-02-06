@@ -29,7 +29,7 @@ class BaseActivityReceiverTest : BaseRoboElectricTest() {
     }
 
     /**
-     * due to the weierd nature in android that registering twice is allowed, we are however not allowed
+     * due to the weird nature in android that registering twice is allowed, we are however not allowed
      * to unregister twice, which seems rather inconvenient and bad.
      * so the base activity makes sure we are not throwing when unregister.
      */

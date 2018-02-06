@@ -6,8 +6,8 @@ import android.net.Uri
  * Created by Kasper Tvede on 23-07-2017.
  */
 
-private val httpsPrefix = "https://"
-private val httpPrefix = "http://"
+private const val httpsPrefix = "https://"
+private const val httpPrefix = "http://"
 
 /**
  * Makes sure that the given string would work as a url.
@@ -45,3 +45,16 @@ fun String.fileExtension(): String? {
 fun Uri.withoutQueryParameters(): Uri {
     return buildUpon().query("").build()
 }
+
+fun StringBuilder.clear(){
+
+}
+
+fun StringBuilder.set(){
+
+}
+
+
+
+
+

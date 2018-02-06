@@ -1,6 +1,6 @@
 package com.commonsense.android.kotlin.system.datastructures
 
-import com.commonsense.android.kotlin.base.extensions.collections.repeateToSize
+import com.commonsense.android.kotlin.base.extensions.collections.repeatToSize
 import com.commonsense.android.kotlin.test.*
 import org.junit.Test
 import org.robolectric.annotation.Config
@@ -25,7 +25,7 @@ class TypeLookupCollectionRepresentiveTest : BaseRoboElectricTest() {
     fun testRemove() {
         val collection = TypeLookupCollectionRepresentative<TestClassTypeLookupHashcode<*>, String>()
         val firstClass = TestClassTypeLookupHashcode("asd", 1)
-        collection.addAll(listOf(firstClass).repeateToSize(10))
+        collection.addAll(listOf(firstClass).repeatToSize(10))
         collection.size.assert(10)
         collection.remove(collection[5]!!)
         collection.remove(collection[7]!!)
@@ -55,7 +55,7 @@ class TypeLookupCollectionRepresentiveTest : BaseRoboElectricTest() {
     fun clear() {
         val collection = TypeLookupCollectionRepresentative<TestClassTypeLookupHashcode<*>, String>()
         val firstClass = TestClassTypeLookupHashcode("asd", 1)
-        collection.addAll(listOf(firstClass).repeateToSize(10))
+        collection.addAll(listOf(firstClass).repeatToSize(10))
         collection.size.assert(10)
         collection.clear()
         collection.size.assert(0)

@@ -10,16 +10,16 @@ import kotlinx.coroutines.experimental.android.UI
  */
 class UiAwareJobContainer : JobContainer() {
 
-    fun onPostResume(): Unit {
+    fun onPostResume() {
         executeQueue("onPostResume")
     }
 
-    fun onDestory(): Unit {
+    fun onDestroy() {
         cleanJobs()
 
     }
 
-    fun onCreate(): Unit {
+    fun onCreate() {
         cleanJobs()
     }
 

@@ -52,7 +52,7 @@ abstract class BaseApplication : Application() {
      */
     fun shouldBailOnCreate() = tryAndLog(BaseApplication::class) {
         if (LeakCanary.isInAnalyzerProcess(this)) {
-            logDebug("Spawning analyzer procees. skipping setup")
+            logDebug("Spawning analyzer process. skipping setup")
             // This process is dedicated to LeakCanary for heap analysis.
             // You should not init your app in this process.
             return@tryAndLog true
@@ -94,11 +94,7 @@ abstract class BaseApplication : Application() {
     private fun enableStrictMode() {
         logDebug("Setting up strictMode")
         StrictMode.setThreadPolicy(
-                StrictMode.ThreadPolicy.Builder().
-                        detectAll().
-                        penaltyLog().
-                        penaltyFlashScreen().
-                        build())
+                StrictMode.ThreadPolicy.Builder().detectAll().penaltyLog().penaltyFlashScreen().build())
 
         StrictMode.setVmPolicy(StrictMode.VmPolicy.Builder().detectAll()
                 .penaltyLog().penaltyDeath().build())
@@ -121,7 +117,7 @@ class ActivityCounter : Application.ActivityLifecycleCallbacks {
      */
     var onNonZeroCallback: EmptyFunction? = null
 
-    private val runningActivites = AtomicInteger(0)
+    private val runningActivities = AtomicInteger(0)
 
     override fun onActivityPaused(p0: Activity?) {
     }
@@ -140,14 +136,14 @@ class ActivityCounter : Application.ActivityLifecycleCallbacks {
      * Count "just started" activities.
      */
     override fun onActivityStarted(p0: Activity?) {
-        (runningActivites.incrementAndGet() == 1).ifTrue { onNonZeroCallback?.invoke() }
+        (runningActivities.incrementAndGet() == 1).ifTrue { onNonZeroCallback?.invoke() }
     }
 
     /**
      * Count "not dead" but close to activities
      */
     override fun onActivityStopped(p0: Activity?) {
-        runningActivites.decrementAndGet().isZero.ifTrue { onZeroCallback?.invoke() }
+        runningActivities.decrementAndGet().isZero.ifTrue { onZeroCallback?.invoke() }
 
     }
 

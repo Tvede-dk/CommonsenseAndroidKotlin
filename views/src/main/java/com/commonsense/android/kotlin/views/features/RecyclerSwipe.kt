@@ -111,18 +111,18 @@ private class InnerSwipeHelper(val recyclerAdapter: DataBindingRecyclerAdapter<*
             return
         }
 
-        when {
+        lastDirection = when {
             dX in (-0.1f..0.1f) -> { //nothing is visible. just hide it
                 ViewHelper.goneViews(startView, endView)
-                lastDirection = null
+                null
             }
             dX > 0 -> { //else, what side.
                 ViewHelper.showGoneView(startView, endView)
-                lastDirection = Direction.StartToEnd
+                Direction.StartToEnd
             }
             else -> {
                 ViewHelper.showGoneView(endView, startView)
-                lastDirection = Direction.EndToStart
+                Direction.EndToStart
             }
         }
     }

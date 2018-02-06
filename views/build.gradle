@@ -55,11 +55,6 @@ android {
 }
 
 
-kapt {
-    processors = "com.android.databinding:implementation:$androidGradleVersion"
-    useLightAnalysis true
-}
-
 
 dependencies {
 
@@ -76,8 +71,6 @@ dependencies {
     implementation project(':system')
     implementation project(':base')
 
-    kapt "com.android.databinding:compiler:$androidGradleVersion"
-
     //support libs
     api "com.android.support:appcompat-v7:$supportVersion"
     api "com.android.support:design:$supportVersion"
@@ -93,16 +86,16 @@ kotlin {
     }
 }
 
-apply plugin: 'com.novoda.bintray-release' // must be applied after your artifact generating plugin (eg. java / com.android.library)
-
-publish {
-    userOrg = project.commonsenseUserOrg
-    groupId = project.commonsenseGroupId
-    publishVersion = project.commonsenseVersionName
-    repoName = project.commonsenseRepoName
-    website = project.commonsenseWebsite
-    artifactId = 'widgets'
-    desc = 'views features'
-}
+//apply plugin: 'com.novoda.bintray-release' // must be applied after your artifact generating plugin (eg. java / com.android.library)
+//
+//publish {
+//    userOrg = project.commonsenseUserOrg
+//    groupId = project.commonsenseGroupId
+//    publishVersion = project.commonsenseVersionName
+//    repoName = project.commonsenseRepoName
+//    website = project.commonsenseWebsite
+//    artifactId = 'widgets'
+//    desc = 'views features'
+//}
 
 apply from: "../javadocSourceDokka.gradle"

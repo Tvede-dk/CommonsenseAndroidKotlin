@@ -66,11 +66,10 @@ abstract class BaseDatabindingFragment<out T : ViewDataBinding> : BaseFragment()
 
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
         val builder = AlertDialog.Builder(context, R.style.TransperantDialog)
-        val res = builder
+        return builder
                 .setCustomTitle(null)
                 .setView(binding.root)
                 .create()
-        return res
     }
 
     override fun onResume() {

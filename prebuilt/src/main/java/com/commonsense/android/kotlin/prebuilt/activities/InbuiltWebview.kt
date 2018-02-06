@@ -33,7 +33,7 @@ open class InbuiltWebView : BaseActivity() {
     // https://developer.chrome.com/multidevice/android/customtabs
 
     companion object {
-        private val uriIntentIndex = "uri"
+        private const val uriIntentIndex = "uri"
         /**
          *
          */

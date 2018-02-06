@@ -32,8 +32,8 @@ class CollectionExtensionsKtTest : BaseRoboElectricTest() {
         array.put(20, 20)
         Assert.assertEquals(array.size(), 1)
         val map = HashMap<Int, Int>()
-        map.put(10, 10)
-        map.put(30, 30)
+        map[10] = 10
+        map[30] = 30
         array.set(map)
         Assert.assertEquals(array.size(), 2)
         Assert.assertEquals(array[10], 10)

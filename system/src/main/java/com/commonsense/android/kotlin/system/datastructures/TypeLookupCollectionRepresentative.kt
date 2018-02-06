@@ -89,7 +89,8 @@ class TypeRepresentative<in T : TypeHashCodeLookupRepresent<Rep>, out Rep : Any>
     fun removeAll(vararg toRemove: T) {
         toRemove.forEach(this::remove)
     }
-    fun removeAll(items : Collection<T>){
+
+    fun removeAll(items: Collection<T>) {
         items.forEach(this::remove)
     }
 }
@@ -120,7 +121,7 @@ class TypeLookupCollectionRepresentative<T : TypeHashCodeLookupRepresent<Rep>, o
         data.add(at, item)
     }
 
-    private inline fun ifSafeIndex(at: Int, crossinline function: () -> Unit): Unit {
+    private inline fun ifSafeIndex(at: Int, crossinline function: () -> Unit) {
         if (isIndexValid(at)) {
             function()
         }

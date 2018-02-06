@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="com.CommonSenseAndroidKotlin.example">
+    package="com.commonsense.android.kotlin.example">
 
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
 
@@ -21,15 +21,7 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".activity.DemoActivity" />
-        <activity android:name=".activity.Demo2Activity" />
-        <activity android:name=".activity.Demo3Activity" />
-        <activity android:name=".activity.Demo4Activity" />
-        <activity android:name=".activity.Demo5Activity" />
-        <activity android:name=".activity.CameraActivity" />
-        <activity android:name=".activity.LargeDataActivity" />
-        <activity android:name=".activity.MainActivity" />
-        <activity android:name=".widgetsExamples.MainWidgetExampleActivity" />
+
 
     </application>
 

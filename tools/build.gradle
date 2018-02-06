@@ -51,13 +51,7 @@ android {
     }
 }
 
-
-
-
-kapt {
-    processors = "com.android.databinding:implementation:$androidGradleVersion"
-    useLightAnalysis true
-}
+apply from: "../resourcegroups.gradle"
 
 dependencies {
     //TEST LIBS
@@ -72,7 +66,6 @@ dependencies {
     implementation "com.android.support:exifinterface:$supportVersion"
 
 
-    kapt "com.android.databinding:compiler:$androidGradleVersion"
     //KOTLIN
     implementation "org.jetbrains.kotlin:kotlin-stdlib:$kotlin_version"
 
@@ -80,20 +73,23 @@ dependencies {
     /*debugImplementation "com.squareup.leakcanary:leakcanary-android:$leakCanaryVersion"
     releaseImplementation "com.squareup.leakcanary:leakcanary-android-no-op:$leakCanaryVersion"
     testImplementation "com.squareup.leakcanary:leakcanary-android-no-op:$leakCanaryVersion"*/
+    implementation project(path: ':views')
+    implementation project(path: ':base')
+    implementation project(path: ':system')
 }
 
 
 
-apply plugin: 'com.novoda.bintray-release' // must be applied after your artifact generating plugin (eg. java / com.android.library)
-
-publish {
-    userOrg = project.commonsenseUserOrg
-    groupId = project.commonsenseGroupId
-    publishVersion = project.commonsenseVersionName
-    repoName = project.commonsenseRepoName
-    website = project.commonsenseWebsite
-    artifactId = 'tools'
-    desc = 'tools - both for dev and prod'
-}
+//apply plugin: 'com.novoda.bintray-release' // must be applied after your artifact generating plugin (eg. java / com.android.library)
+//
+//publish {
+//    userOrg = project.commonsenseUserOrg
+//    groupId = project.commonsenseGroupId
+//    publishVersion = project.commonsenseVersionName
+//    repoName = project.commonsenseRepoName
+//    website = project.commonsenseWebsite
+//    artifactId = 'tools'
+//    desc = 'tools - both for dev and prod'
+//}
 
 apply from: "../javadocSourceDokka.gradle"

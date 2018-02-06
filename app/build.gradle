@@ -110,8 +110,6 @@ dependencies {
     implementation project(':views')
     implementation project(':base')
     testImplementation project(':test')
-
-    kapt "com.android.databinding:compiler:$androidGradleVersion"
 }
 
 repositories {

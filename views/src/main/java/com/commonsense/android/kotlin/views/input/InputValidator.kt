@@ -58,7 +58,7 @@ class InputValidator<U> {
 
 
         fun build(): InputValidator<U> {
-            return InputValidator<U>(elementsToValidate.toList(), onFailedValidation)
+            return InputValidator(elementsToValidate.toList(), onFailedValidation)
         }
 
     }

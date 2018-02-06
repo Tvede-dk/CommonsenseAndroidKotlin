@@ -229,7 +229,7 @@ fun BaseActivity?.startActivityForResultAsync(intent: Intent,
 }
 //</editor-fold>
 
-//<editor-fold desc="Base fragment hookpoints">
+//<editor-fold desc="Base fragment hook points">
 fun BaseFragment?.startActivityForResult(intent: Intent,
                                          options: Bundle?,
                                          requestCode: Int,

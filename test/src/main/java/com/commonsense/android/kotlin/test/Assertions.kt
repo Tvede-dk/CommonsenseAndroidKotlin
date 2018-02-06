@@ -79,7 +79,8 @@ inline fun assertThrows(message: String = "should throw", crossinline action: ()
 }
 
 fun <T> Any.assertAs(otherValue: T, message: String = "") {
-    @Suppress("UNCHECKED_CAST") //this is exepcted, we are just making life easier for testing, if it throws, then its "all right" for a test.
+    @Suppress("UNCHECKED_CAST") //this is expected, w
+    // e are just making life easier for testing, if it throws, then its "all right" for a test.
     Assert.assertEquals(message, this as? T, otherValue)
 }
 
@@ -88,13 +89,13 @@ fun failTest(message: String = "") {
 }
 
 inline fun testCallbackWithSemaphore(@IntRange(from = 0) startPermits: Int = 0,
-                                     @IntRange(from = 0) startAquire: Int = startPermits + 1,
+                                     @IntRange(from = 0) startAcquire: Int = startPermits + 1,
                                      @IntRange(from = 0) timeoutTime: Int = 50,
                                      timeoutUnit: TimeUnit = TimeUnit.MILLISECONDS,
-                                     shouldAquire: Boolean = true,
+                                     shouldAcquire: Boolean = true,
                                      errorMessage: String = "",
                                      callback: (Semaphore) -> Unit) {
     val sem = Semaphore(startPermits)
     callback(sem)
-    sem.tryAcquire(startAquire, timeoutTime.toLong(), timeoutUnit).assert(shouldAquire, errorMessage)
+    sem.tryAcquire(startAcquire, timeoutTime.toLong(), timeoutUnit).assert(shouldAcquire, errorMessage)
 }

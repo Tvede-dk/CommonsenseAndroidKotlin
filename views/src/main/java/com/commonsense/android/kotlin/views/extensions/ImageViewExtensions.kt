@@ -62,6 +62,6 @@ private fun <T, U> validateIdWith(ourIndex: Int, index: AtomicInteger, action: s
     }
 }
 
-private val imageViewCounterTag = "ImageView.counterTag"
+private const val imageViewCounterTag = "ImageView.counterTag"
 private val ImageView.counterTag
     get() = getTagOr(imageViewCounterTag, { AtomicInteger(0) })

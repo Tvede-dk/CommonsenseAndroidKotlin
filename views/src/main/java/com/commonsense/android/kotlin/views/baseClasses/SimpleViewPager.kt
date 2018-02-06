@@ -7,6 +7,7 @@ import android.view.MotionEvent
 
 /**
  * Created by kasper on 17/07/2017.
+ * TODO expand this.
  */
 class SimpleViewPager : ViewPager {
 

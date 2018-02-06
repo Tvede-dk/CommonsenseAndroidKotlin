@@ -17,7 +17,7 @@ class ReferenceCountingMap {
             throw RuntimeException("Disallowed to add an element to an already existing index;" +
                     " did you mean increment ?")
         }
-        map.put(forKey, ReferenceItem(item, AtomicInteger(1)))
+        map[forKey] = ReferenceItem(item, AtomicInteger(1))
     }
 
     fun addOrIncrement(item: Any, forKey: String) {

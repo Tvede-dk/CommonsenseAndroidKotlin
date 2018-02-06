@@ -7,7 +7,7 @@ import android.webkit.WebView
  * Created by Kasper Tvede on 21-05-2017.
  */
 
-private val textHtmlWithCharset = "text/html;charset=UTF-8"
+private const val textHtmlWithCharset = "text/html;charset=UTF-8"
 
 /**
  * Loads the given html as an html document, with a default utf8 encoding (since java uses that for strings as well).

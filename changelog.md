@@ -1,31 +1,23 @@
 #Changelog
 
 
-##0.0.12
-in this release:
-- kotlin versions updates
-- logging updates
-- more error logging to help developers.
+##0.1.0
+in this release the focus have been to
+- correct grammar issues (breaking changes)
+- add a lot more documentation
+- move extensions around into more suitable locations ( breaking changes)
+- further refine the logging part, to now be fully controllable as well as a very simple but powerful plugin mechanism
+- a lot of smaller things (eg extensions)
+- fragments and the nullable changes in support library 27
+    - The changes in the support library have made things more safe, but far more complex, with an incredible amount of null checking / guarding required.
+    - 
+- the demo app is now composed of sections containing examples of different features. 
 
-
-
-### Updates
-- kotlin to 1.2.20
-- kotlin coroutines to 0.21.2
-
-### Additions
-
-- added error message for using focusable for ExtendedEditTextView
-### Features added / updated
-vastly improved the logging functionality
-
-- added contains multiple controls for disabling log types
-- added production log "channel" that is special since its only meant for application logs, that should be allowed in production.
-- added documentation for theses improvements
-- broke the isLoggingAllowed as it previous was a field, now its a function. 
-- added test for these additions / improvements.
-- added LoggingType
-
+###Forward
+the focus forward is trying to both stabilize the api,
+but at the same time be willing to create changes that fit better into the android and kotlin ecosystems.
+  
+(eg when the support library changes nullability, this library follows and tries to make it easier to adapt)
 
 ##0.0.11
   

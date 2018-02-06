@@ -6,8 +6,6 @@ import android.content.Intent
 import com.commonsense.android.kotlin.test.assertSize
 import org.junit.Test
 
-import org.junit.Assert.*
-
 /**
  * Created by kasper on 15/12/2017.
  */

@@ -3,6 +3,7 @@ package com.commonsense.android.kotlin.system.logging
 import android.content.ComponentCallbacks
 import android.util.Log
 import android.view.View
+import com.commonsense.android.kotlin.base.extensions.collections.invokeEachWith
 import com.commonsense.android.kotlin.base.extensions.collections.onTrue
 import com.commonsense.android.kotlin.system.logging.LoggingType.*
 
@@ -33,9 +34,9 @@ enum class LoggingType {
     Info
 }
 
-/**
-* The Basis logging function.
-*/
+        /**
+         * The Basis logging function.
+         */
 typealias LoggingFunctionType<T> = (tag: String, message: String, stackTrace: Throwable?) -> T
 
 /**
@@ -99,6 +100,20 @@ object L {
      */
     var productionLogType: LoggingType = LoggingType.Warning
 
+
+    /**
+     *
+     */
+    var debugLoggers: MutableList<LoggingFunctionType<Any>> = mutableListOf(LoggingType.Debug.getAndroidLoggerFunction())
+    /**
+     *
+     */
+    var warningLoggers: MutableList<LoggingFunctionType<Any>> = mutableListOf(LoggingType.Warning.getAndroidLoggerFunction())
+    /**
+     *
+     */
+    var errorLoggers: MutableList<LoggingFunctionType<Any>> = mutableListOf(LoggingType.Error.getAndroidLoggerFunction())
+
     /**
      * An error logging channel
      * this logs messages as the level "Error", meant for "bad things", eg application / library errors,
@@ -112,7 +127,7 @@ object L {
      *
      */
     fun error(tag: String, msg: String, exception: Throwable? = null) {
-        isErrorLoggingAllowed.onTrue { Log.e(tag, msg, exception) }
+        isErrorLoggingAllowed.onTrue { errorLoggers.invokeEachWith(tag, msg, exception) }
     }
 
     /**
@@ -170,6 +185,13 @@ fun ComponentCallbacks.logDebug(message: String, exception: Throwable? = null) {
 }
 
 /**
+ * @see L.logProd
+ */
+fun ComponentCallbacks.logProduction(message: String, exception: Throwable? = null) {
+    L.logProd(this.javaClass.simpleName, message, exception)
+}
+
+/**
  *
  * @see L.debug
  */
@@ -193,3 +215,9 @@ fun View.logError(message: String, exception: Throwable? = null) {
     L.error(this.javaClass.simpleName, message, exception)
 }
 
+/**
+ * @see L.logProd
+ */
+fun View.logProduction(message: String, exception: Throwable? = null) {
+    L.logProd(this.javaClass.simpleName, message, exception)
+}

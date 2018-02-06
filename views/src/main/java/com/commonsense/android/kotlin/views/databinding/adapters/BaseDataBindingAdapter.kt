@@ -12,6 +12,9 @@ import com.commonsense.android.kotlin.views.baseClasses.BaseAdapter
 
 /**
  * created by Kasper Tvede on 30-09-2016.
+ * //TODO avoid the viewbinding class as viewtype ? use render instead ???
+ * // TODO setAll
+ *
  */
 open class BaseDataBindingAdapter(context: Context) : BaseAdapter<BaseAdapterItemBinding<*>>(context) {
     private val viewTypes = SparseIntArray()

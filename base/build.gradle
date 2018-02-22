@@ -1,15 +1,7 @@
 apply plugin: 'com.android.library'
 apply plugin: 'kotlin-android'
 
-buildscript {
-    repositories {
-        jcenter()
-    }
-
-    dependencies {
-        classpath "org.jetbrains.dokka:dokka-android-gradle-plugin:${dokkaVersion}"
-    }
-}
+apply from: "../javadocSourceDokka.gradle"
 
 android {
     compileSdkVersion androidSdkBuildVersion
@@ -83,20 +75,21 @@ kotlin {
 //    desc = 'Base android features'
 //}
 
-apply from: "../javadocSourceDokka.gradle"
-
-task findDuplicates {
-    doLast {
-        String findMe = 'BaseTypesKt'
-        configurations.compile.files.each { file ->
-            if (file.name.endsWith('.jar')) {
-                def classMatches = zipTree(file).matching {
-                    include findMe
-                }.files
-                if (!classMatches.empty) {
-                    println "Found $findMe in $file ${classMatches.size()} time(s)"
-                }
-            }
+bintray {
+    pkg {
+        repo = project.commonsenseRepoName
+        name = 'base'
+        userOrg = project.commonsenseUserOrg
+        licenses = project.commonsenseLicense
+        vcsUrl = project.commonsenseVCS
+        desc = 'Base android features'
+        websiteUrl = project.commonsenseWebsite
+        issueTrackerUrl = project.commonsenseIssueTracker
+        publicDownloadNumbers = true
+        githubRepo = project.commonsenseGithub  //Optional Github repository
+        githubReleaseNotesFile = 'README.md' //Optional Github readme file
+        version {
+            name = project.commonsenseVersionName //Bintray logical version name
         }
     }
 }

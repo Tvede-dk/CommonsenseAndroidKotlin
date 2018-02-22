@@ -12,14 +12,18 @@ buildscript {
     ext.commonsenseUserOrg = "tvede-oss"
     ext.commonsenseGroupId = "com.commonsense.android.kotlin"
     ext.commonsenseRepoName = "Commonsense-android-kotlin"
+    ext.commonsenseGithub = "Tvede-dk/CommonsenseAndroidKotlin"
+    ext.commonsenseLicense = ["MIT"]
     ext.commonsenseWebsite = "https://github.com/Tvede-dk/CommonsenseAndroidKotlin/"
+    ext.commonsenseIssueTracker = "https://github.com/Tvede-dk/CommonsenseAndroidKotlin/issues"
+    ext.commonsenseVCS = "https://github.com/Tvede-dk/CommonsenseAndroidKotlin.git"
 
     ext.kotlin_version = '1.2.21'
     ext.supportVersion = '27.0.2'
-    ext.coroutinesVersion = '0.22'
+    ext.coroutinesVersion = '0.22.2'
     ext.leakCanaryVersion = "1.5.4"
     ext.junitVersion = "4.12"
-    ext.androidGradleVersion = "3.2.+"
+    ext.androidGradleVersion = "3.0.1"
     ext.roboElectricVersion = "3.6.1"
     ext.espressoVersion = "3.0.1"
     ext.dokkaVersion = "0.9.15"
@@ -39,28 +43,33 @@ buildscript {
 
 
 plugins {
-//    id 'com.gradle.build-scan' version '1.11'
-//    id "org.gradle.android.cache-fix" version "0.2.8"
+    id "org.gradle.android.cache-fix" version "0.3.4"
     id "io.gitlab.arturbosch.detekt" version "1.0.0.RC6-3"
+    id "com.jfrog.bintray" version "1.7.3"
 }
-
 apply plugin: 'io.gitlab.arturbosch.detekt'
-
-//buildScan {
-//    licenseAgreementUrl = 'https://gradle.com/terms-of-service'
-//    licenseAgree = 'yes'
-//}
-
 
 allprojects {
     repositories {
         jcenter()
         google()
     }
+
 }
 
 subprojects {
-//    apply plugin: "org.gradle.android.cache-fix"
+
+    buildscript {
+        repositories {
+            jcenter()
+        }
+
+        dependencies {
+            classpath "org.jetbrains.dokka:dokka-android-gradle-plugin:${dokkaVersion}"
+        }
+    }
+
+    apply plugin: "org.gradle.android.cache-fix"
 //    apply from: "../jacoco-kotlin.gradle"
 
 }
@@ -73,10 +82,6 @@ task clean(type: Delete) {
 //for CI / jenkins integration
 
 apply from: "fix-tests.gradle"
-//disable javadoc since it breaks with kotlin.
-//tasks.withType(Javadoc).all {
-//    enabled = false
-//}
 
 detekt {
     version = "1.0.0.RC6-3"

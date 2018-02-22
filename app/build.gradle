@@ -88,8 +88,6 @@ dependencies {
     implementation "com.android.support:exifinterface:$supportVersion"
     implementation "com.android.support:recyclerview-v7:$supportVersion"
     implementation "org.jetbrains.kotlin:kotlin-stdlib:$kotlin_version"
-    //UI libs
-    implementation 'com.futuremind.recyclerfastscroll:fastscroll:0.2.5'
     //time libs
     implementation 'joda-time:joda-time:2.9.9'
 
@@ -110,6 +108,10 @@ dependencies {
     implementation project(':views')
     implementation project(':base')
     testImplementation project(':test')
+    implementation project(path: ':tools')
+
+    kapt "com.android.databinding:compiler:$androidGradleVersion"
+
 }
 
 repositories {
@@ -125,4 +127,9 @@ kotlin {
     experimental {
         coroutines "enable"
     }
+}
+
+kapt {
+    useBuildCache = true
+//    mapDiagnosticLocations = true
 }

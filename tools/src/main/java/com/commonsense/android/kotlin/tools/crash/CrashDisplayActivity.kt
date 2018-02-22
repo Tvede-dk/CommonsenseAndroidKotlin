@@ -1,7 +1,7 @@
 package com.commonsense.android.kotlin.tools.crash
 
+import com.commonsense.android.kotlin.system.extensions.safeToast
 import com.commonsense.android.kotlin.tools.databinding.CrashActivityViewBinding
-import com.commonsense.android.kotlin.views.databinding.activities.BaseDatabindingActivity
 import com.commonsense.android.kotlin.views.databinding.activities.BaseDatabindingActivityWithData
 import com.commonsense.android.kotlin.views.databinding.activities.InflaterFunctionSimple
 
@@ -16,7 +16,7 @@ class CrashDisplayActivity : BaseDatabindingActivityWithData<CrashActivityViewBi
     override fun createBinding(): InflaterFunctionSimple<CrashActivityViewBinding> = CrashActivityViewBinding::inflate
 
     override fun useBinding() {
-
+        safeToast("hello!!")
     }
 
     val adapter by lazy {

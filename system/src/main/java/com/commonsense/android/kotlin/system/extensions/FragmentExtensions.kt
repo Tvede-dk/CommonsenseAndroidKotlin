@@ -5,11 +5,6 @@ import android.support.v4.app.Fragment
 import android.support.v7.app.AppCompatActivity
 import android.view.ViewGroup
 import android.view.WindowManager
-import com.commonsense.android.kotlin.system.base.BaseFragment
-import com.commonsense.android.kotlin.system.base.helpers.AsyncActivityResultCallback
-import com.commonsense.android.kotlin.system.base.helpers.BaseActivityData
-import com.commonsense.android.kotlin.system.base.startActivityWithData
-import kotlin.reflect.KClass
 
 /**
  * Created by Kasper Tvede on 10-01-2017.
@@ -53,22 +48,6 @@ fun Fragment.popToFirstFragment() {
 }
 
 
-fun <Input, T : BaseActivityData<Input>>
-        BaseFragment.startActivityWithData(activity: KClass<T>,
-                                           data: Input,
-                                           requestCode: Int,
-                                           optOnResult: AsyncActivityResultCallback?) {
-    baseActivity?.startActivityWithData(activity, data, requestCode, optOnResult)
-}
-
-
-fun <Input, T : BaseActivityData<Input>>
-        BaseFragment.startActivityWithData(activity: Class<T>,
-                                           data: Input,
-                                           requestCode: Int,
-                                           optOnResult: AsyncActivityResultCallback?) {
-    baseActivity?.startActivityWithData(activity, data, requestCode, optOnResult)
-}
 
 fun Fragment.finishActivity() {
     activity?.finish()

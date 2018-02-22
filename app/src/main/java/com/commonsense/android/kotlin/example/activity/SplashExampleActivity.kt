@@ -9,7 +9,7 @@ import com.commonsense.android.kotlin.system.base.BaseSplashActivity
  *
  */
 class SplashExampleActivity : BaseSplashActivity() {
-    val showBadSplashUsage = true
+    val showBadSplashUsage = false
     override fun onAppLoaded() {
 
         if (showBadSplashUsage) {
@@ -30,7 +30,7 @@ class SplashExampleActivity : BaseSplashActivity() {
     }
 
     fun showLoggedInActivity() {
-
+//        startActivityWithData(LoggedInActivity::class, )
     }
 
     fun showLoginActivity() {

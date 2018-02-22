@@ -7,7 +7,9 @@ import android.support.annotation.UiThread
 import com.commonsense.android.kotlin.base.Function3
 import com.commonsense.android.kotlin.base.extensions.collections.ifTrue
 import com.commonsense.android.kotlin.base.extensions.isNotNull
+import com.commonsense.android.kotlin.system.base.helpers.startActivityWithData
 import com.commonsense.android.kotlin.system.logging.L
+import com.commonsense.android.kotlin.system.logging.tryAndLog
 
 /**
  * Created by Kasper Tvede on 01-02-2018.
@@ -23,14 +25,21 @@ class CrashListener(context: Context) : Thread.UncaughtExceptionHandler {
 
     @AnyThread
     override fun uncaughtException(t: Thread?, e: Throwable?) {
-        shouldShowUi.ifTrue { openUI(t, e) }
+        tryAndLog("uncaughtExceptionHandler") {
+            shouldLogException.ifTrue { logger("", "", e) }
+            shouldShowUi.ifTrue { openUI(t, e) }
+        }
+        //rethrow.
+        val error = e ?: return
+        throw error
     }
 
     /**
      * opens the ui with the thread and throwable
      */
     private fun openUI(t: Thread?, e: Throwable?) {
-        applicationContext.startActivityWithData(CrashDisplayActivity::class, CrashDisplayData(t, e))
+        L.debug(CrashListener::class.java.simpleName, "opening ui for crash")
+//        applicationContext.startActivityWithData(CrashDisplayActivity::class, CrashDisplayData(t, e))
     }
 
     /**

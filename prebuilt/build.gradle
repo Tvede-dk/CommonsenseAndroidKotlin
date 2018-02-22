@@ -2,17 +2,6 @@ apply plugin: 'com.android.library'
 apply plugin: 'kotlin-android'
 apply plugin: 'kotlin-kapt'
 
-buildscript {
-    repositories {
-        jcenter()
-    }
-
-    dependencies {
-        classpath "org.jetbrains.dokka:dokka-android-gradle-plugin:${dokkaVersion}"
-    }
-}
-
-
 android {
     compileSdkVersion androidSdkBuildVersion
 
@@ -76,11 +65,21 @@ dependencies {
 
     implementation "com.android.support:appcompat-v7:$supportVersion"
     implementation "org.jetbrains.kotlin:kotlin-stdlib:$kotlin_version"
+    kapt "com.android.databinding:compiler:$androidGradleVersion"
+
 
 }
 repositories {
     mavenCentral()
 }
+
+kapt {
+    processors = "com.android.databinding:implementation:$androidGradleVersion"
+    useLightAnalysis true
+    useBuildCache = true
+//    mapDiagnosticLocations = true
+}
+
 
 apply from: '../resourcegroups.gradle'
 kotlin {

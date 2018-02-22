@@ -114,6 +114,7 @@ open class BaseActivity : AppCompatActivity(), ActivityResultHelperContainer {
         localJobs.onDestroy()
         activityResultHelper.clear()
         keyboardHandler.onDestroy(this)
+
         super.onDestroy()
     }
 
@@ -151,6 +152,8 @@ open class BaseActivity : AppCompatActivity(), ActivityResultHelperContainer {
         super.onBackPressed()
     }
     //</editor-fold>
+
+
 
     //<editor-fold desc="Add activity result listener">
     override fun addActivityResultListenerOnlyOk(requestCode: Int, receiver: ActivityResultCallbackOk) {
@@ -225,84 +228,6 @@ open class BaseActivity : AppCompatActivity(), ActivityResultHelperContainer {
     }
     //</editor-fold>
 
-    /**
-     * internal such that the ActivityWithData can get these.
-     */
-    internal companion object {
-        //the data intent index containing the index in the map.
-        internal const val dataIntentIndex = "baseActivity-data-index"
-
-        //shared storage.
-        internal val dataReferenceMap = ReferenceCountingMap()
-    }
-
-}
-
-//TODO should these be here ?
-
-//there are 2 cases we solve, and 2 we do not solve;
-/**
- * We solve the
- * [ctx -> Base ]
- * [base -> Base ]
- * but not the following
- * [ctx -> ctx]     } would require a generic non overriding solution which is impossible.
- * [base -> ctx]    } would mean that a generic activity or alike, would understand the data store,
- *                      which requires opening it up, but also for the user to copy +- the implementation
- *                         in BaseActivityData, which seem rather orthodox
- *
- *
- */
-
-internal fun BaseActivity.cleanUpActivityWithDataMap(index: String) {
-    BaseActivity.dataReferenceMap.decrementCounter(index)
-}
-
-fun <Input, T : BaseActivityData<Input>> Context.startActivityWithData(
-        activity: KClass<T>,
-        data: Input) {
 
 
 }
-
-fun <Input, T : BaseActivityData<Input>>
-        BaseActivity.startActivityWithData(activity: KClass<T>,
-                                           data: Input,
-                                           requestCode: Int,
-                                           optOnResult: AsyncActivityResultCallback?) {
-    startActivityWithData(activity.java, data, requestCode, optOnResult)
-}
-
-fun <Input, T : BaseActivityData<Input>>
-        BaseActivity.startActivityWithData(activity: Class<T>,
-                                           data: Input,
-                                           requestCode: Int,
-                                           optOnResult: AsyncActivityResultCallback?) {
-    val intent = Intent(this, activity)
-    val index = BaseActivity.dataReferenceMap.count.toString()
-    BaseActivity.dataReferenceMap.addItem(data, index)
-    intent.putExtra(BaseActivity.dataIntentIndex, index)
-    startActivityForResultAsync(intent, null, requestCode, { resultCode, resultIntent ->
-        BaseActivity.dataReferenceMap.decrementCounter(index)
-        optOnResult?.invoke(resultCode, resultIntent)
-    })
-}
-
-
-//TODO USE THE FOLLOWING PASSAGE FROM andorid dev doc:
-
-/*
-https://developer.android.com/guide/components/activities/activity-lifecycle.html#ondestroy
-
-onDestroy()
-Called before the activity is destroyed.
- This is the final call that the activity receives.
- The system either invokes this callback because the activity is finishing due to someone's calling finish(),
-  or because the system is temporarily destroying the process containing the activity to save space.
-   You can distinguish between these two scenarios with the isFinishing() method.
-    The system may also call this method when an orientation change occurs, and then immediately call onCreate()
-     to recreate the process (and the components that it contains) in the new orientation.
-
-The onDestroy() callback releases all resources that have not yet been released by earlier callbacks such as onStop()
-
- */

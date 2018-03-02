@@ -18,15 +18,15 @@ buildscript {
     ext.commonsenseIssueTracker = "https://github.com/Tvede-dk/CommonsenseAndroidKotlin/issues"
     ext.commonsenseVCS = "https://github.com/Tvede-dk/CommonsenseAndroidKotlin.git"
 
-    ext.kotlin_version = '1.2.21'
+    ext.kotlin_version = '1.2.30'
     ext.supportVersion = '27.0.2'
-    ext.coroutinesVersion = '0.22.2'
+    ext.coroutinesVersion = '0.22.3'
     ext.leakCanaryVersion = "1.5.4"
     ext.junitVersion = "4.12"
     ext.androidGradleVersion = "3.0.1"
-    ext.roboElectricVersion = "3.6.1"
+    ext.roboElectricVersion = "3.7.1"
     ext.espressoVersion = "3.0.1"
-    ext.dokkaVersion = "0.9.15"
+    ext.dokkaVersion = "0.9.16"
 
     repositories {
         google()
@@ -43,7 +43,7 @@ buildscript {
 
 
 plugins {
-    id "org.gradle.android.cache-fix" version "0.3.4"
+    id "org.gradle.android.cache-fix" version "0.3.5"
     id "io.gitlab.arturbosch.detekt" version "1.0.0.RC6-3"
     id "com.jfrog.bintray" version "1.7.3"
 }

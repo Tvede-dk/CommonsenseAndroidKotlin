@@ -1,5 +1,6 @@
 package com.commonsense.android.kotlin.example.views.baseActivity
 
+import com.commonsense.android.kotlin.system.base.BaseActivity
 import com.commonsense.android.kotlin.system.base.helpers.BaseActivityData
 
 /**
@@ -7,6 +8,6 @@ import com.commonsense.android.kotlin.system.base.helpers.BaseActivityData
  * Purpose:
  *
  */
-class LoggedInActivity :BaseActivityData<String>(){
+class LoggedInActivity : BaseActivity() {
 
 }

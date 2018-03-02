@@ -23,6 +23,11 @@
         </activity>
         <activity android:name=".views.dataActivity.SecondActivityWithData" />
         <activity android:name=".views.dataActivity.StartActvityData" />
+        <activity android:name=".views.baseActivity.LoggedInActivity" />
+        <activity android:name=".activity.MainActivity" />
+        <activity android:name=".activity.IntroActivity" />
+        <activity android:name=".views.tools.ToolsOverviewActivity" />
+        <activity android:name=".views.tools.ToolsAnrActivity" />
 
 
     </application>

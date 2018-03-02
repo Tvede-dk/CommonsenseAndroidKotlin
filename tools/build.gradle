@@ -67,6 +67,8 @@ dependencies {
 
 
     //KOTLIN
+    implementation "org.jetbrains.kotlinx:kotlinx-coroutines-core:$coroutinesVersion"
+    implementation "org.jetbrains.kotlinx:kotlinx-coroutines-android:$coroutinesVersion"
     implementation "org.jetbrains.kotlin:kotlin-stdlib:$kotlin_version"
 
     //leak canary libs
@@ -103,3 +105,8 @@ kapt {
 //}
 
 apply from: "../javadocSourceDokka.gradle"
+kotlin {
+    experimental {
+        coroutines "enable"
+    }
+}

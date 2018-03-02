@@ -19,6 +19,7 @@ import com.commonsense.android.kotlin.system.datastructures.TypeSection
 import com.commonsense.android.kotlin.system.logging.L
 import com.commonsense.android.kotlin.views.ViewInflatingFunction
 import java.lang.ref.WeakReference
+import kotlin.reflect.KClass
 
 /**
  * Created by kasper on 17/05/2017.
@@ -59,11 +60,17 @@ interface IRenderModelItem<T : Any, Vm : ViewDataBinding> :
 
 /**
  *  The Root of databinding render models (factors the most common stuff out)
+ *  creates a renderable model that can render it self.
  */
 abstract class BaseRenderModel<
         T : Any,
         Vm : ViewDataBinding>(val item: T, classType: Class<Vm>)
     : IRenderModelItem<T, Vm> {
+
+    /**
+     * Convenience constructor, same as original but using kotlin's classes instead.
+     */
+    constructor(item: T, classType: KClass<Vm>) : this(item, classType.java)
 
 
     override fun getValue(): T = item
@@ -77,9 +84,10 @@ abstract class BaseRenderModel<
         if (holder.viewBindingTypeValue == vmTypeValue) {
             @Suppress("UNCHECKED_CAST")
             renderFunction(holder.item as Vm, item, holder as BaseViewHolderItem<Vm>)
-            //we are now "sure" that the bi nding class is the same as ours, thus casting "should" be "ok". (we basically introduced our own type system)
+            //we are now "sure" that the binding class is the same as ours, thus casting "should" be "ok". (we basically introduced our own type system)
         } else {
-            L.debug("RenderModelItem", "unable to bind to view even though it should be correct type$vmTypeValue expected, got : ${holder.viewBindingTypeValue}")
+            L.debug("RenderModelItem",
+                    "unable to bind to view even though it should be correct type$vmTypeValue expected, got : ${holder.viewBindingTypeValue}")
         }
     }
 
@@ -119,8 +127,7 @@ open class RenderModel<
 
     override fun getTypeValue(): Int = vmTypeValue
 
-    override fun renderFunction(view: Vm, model: T, viewHolder: BaseViewHolderItem<Vm>)
-            = vmRender(view, model, viewHolder)
+    override fun renderFunction(view: Vm, model: T, viewHolder: BaseViewHolderItem<Vm>) = vmRender(view, model, viewHolder)
 
     override fun bindToViewHolder(holder: BaseViewHolderItem<*>) {
         if (holder.viewBindingTypeValue == vmTypeValue) {
@@ -146,8 +153,7 @@ abstract class DataBindingRecyclerAdapter<T>(context: Context) :
 
     override fun getItemId(position: Int): Long = RecyclerView.NO_ID
 
-    private val dataCollection: SectionLookupRep<T, InflatingFunction<*>>
-            = SectionLookupRep()
+    private val dataCollection: SectionLookupRep<T, InflatingFunction<*>> = SectionLookupRep()
 
     private val listeningRecyclers = mutableSetOf<WeakReference<RecyclerView>>()
 
@@ -259,7 +265,8 @@ abstract class DataBindingRecyclerAdapter<T>(context: Context) :
     }
 
     open fun setSection(items: List<T>, inSection: Int) = updateData {
-        val (changes, added, removed) = dataCollection.setSection(items, inSection) ?: return@updateData
+        val (changes, added, removed) = dataCollection.setSection(items, inSection)
+                ?: return@updateData
         changes?.let {
             notifyItemRangeChanged(it.inRaw.start, it.inRaw.length)
         }
@@ -271,8 +278,7 @@ abstract class DataBindingRecyclerAdapter<T>(context: Context) :
         }
     }
 
-    fun setSection(item: T, inSection: Int)
-            = setSection(listOf(item), inSection)
+    fun setSection(item: T, inSection: Int) = setSection(listOf(item), inSection)
 
     @UiThread
     fun clearSection(inSection: Int): Unit = updateData {

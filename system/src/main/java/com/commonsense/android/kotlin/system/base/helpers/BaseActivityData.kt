@@ -5,10 +5,14 @@ import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 import com.commonsense.android.kotlin.base.extensions.collections.ifTrue
+import com.commonsense.android.kotlin.system.ActivityStorage
 import com.commonsense.android.kotlin.system.base.BaseActivity
 import com.commonsense.android.kotlin.system.base.BaseFragment
+import com.commonsense.android.kotlin.system.createDeviceSettings
 import com.commonsense.android.kotlin.system.dataFlow.ReferenceCountingMap
 import com.commonsense.android.kotlin.system.logging.logError
+import kotlinx.serialization.json.JSON
+import kotlinx.serialization.serializer
 import kotlin.reflect.KClass
 
 /**
@@ -22,7 +26,7 @@ import kotlin.reflect.KClass
  * of data.
  *
  */
-open class BaseActivityData<out InputType> : BaseActivity() {
+abstract class BaseActivityData<InputType : Any> : BaseActivity() {
 
     /**
      * the data we are supplied when we got launched.
@@ -30,13 +34,22 @@ open class BaseActivityData<out InputType> : BaseActivity() {
     val data: InputType
         get() {
             val item = BaseActivityData.dataReferenceMap.getItemOr(dataIndex)
-                    ?: throw RuntimeException("Data is not in map, so this activity is " +
-                            "\"${this.javaClass.simpleName}\" referring to the data after closing." +
+                    ?: throw RuntimeException("Data is not in map, so this activity " +
+                            "\"${this.javaClass.simpleName}\" is referring to the data after closing." +
                             "\n did you use \"data\" in onDestroy ?")
             //Unfortunately we are unable to Type safe bypass the map though this. not in this generic manner
             @Suppress("UNCHECKED_CAST")
             return item as InputType
         }
+
+    private val activityStorage: ActivityStorage<BaseActivityData<InputType>> by lazy {
+        ActivityStorage<BaseActivityData<InputType>>(this, createDeviceSettings())
+    }
+
+    private val dataSerializer by lazy {
+        dataClass.serializer()
+    }
+
 
     /**
      *
@@ -50,12 +63,38 @@ open class BaseActivityData<out InputType> : BaseActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        if (!haveRequiredIndex()) { // bad start. skip it.
+        activityStorage.onCreate(savedInstanceState)
+        restoreLastStored(savedInstanceState)
+
+        if (!haveRequiredIndex() || !isDataInMap()) { // bad start. skip it.
             beforeCloseOnBadData() //hook point for users who needs to do "something" before the activity is killed.
             setResult(Activity.RESULT_CANCELED)
             finish()
+        } else {
+            onDataReady()
         }
     }
+
+    private fun restoreLastStored(savedInstanceState: Bundle?) {
+        if (savedInstanceState == null || !haveRequiredIndex()) {
+            return
+        }
+
+        savedInstanceState.getString(dataIntentIndex, null)?.let {
+            logError("restore ? = yes")
+            activityStorage.loadDataAndDelete(dataIndex)?.let {
+                logError("restore got data")
+                deserializeData(it)?.let {
+                    BaseActivityData.dataReferenceMap.addItem(it, dataIndex)
+                }
+            }
+        }
+    }
+
+
+    abstract val dataClass: KClass<InputType>
+
+    abstract fun onDataReady()
 
     /**
      * run'ed before we kill this activity
@@ -70,6 +109,25 @@ open class BaseActivityData<out InputType> : BaseActivity() {
         }
     }
 
+    override fun onSaveInstanceState(outState: Bundle?) {
+        outState?.let {
+            activityStorage.onSaveInstanceState(it)
+        }
+        super.onSaveInstanceState(outState)
+    }
+
+
+    override fun onStop() {
+        val data = data
+        activityStorage.onStop(isFinishing)
+        if (isFinishing) {
+            activityStorage.remove(dataIndex)
+        } else {
+            activityStorage.saveData(dataIndex, serializeData(data))
+        }
+        super.onStop()
+    }
+
     override fun onDestroy() {
         if (isFinishing) {
             cleanUpActivityWithDataMap(dataIndex)
@@ -78,11 +136,27 @@ open class BaseActivityData<out InputType> : BaseActivity() {
 
     }
 
+    open fun serializeData(input: InputType): String {
+        return JSON.stringify(dataSerializer, input)
+    }
+
+    open fun deserializeData(serializedData: String): InputType? {
+        logError("deserialize super")
+        return JSON.parse(dataSerializer, serializedData)
+    }
+
+
     /**
      * Verifies that we have the data we expected (the index)
      */
     private fun haveRequiredIndex(): Boolean =
             intent != null && !intent.getStringExtra(dataIntentIndex).isNullOrBlank()
+
+
+    /**
+     * Tells if we have the data in the map
+     */
+    private fun isDataInMap(): Boolean = dataReferenceMap.hasItem(dataIndex)
 
     /**
      * internal such that the ActivityWithData can get these.

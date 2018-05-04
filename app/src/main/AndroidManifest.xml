@@ -6,6 +6,7 @@
 
     <application
         android:name=".MainApplication"
+        android:usesCleartextTraffic="false"
         android:allowBackup="true"
         android:fullBackupContent="true"
         android:icon="@mipmap/ic_launcher"
@@ -22,12 +23,16 @@
             </intent-filter>
         </activity>
         <activity android:name=".views.dataActivity.SecondActivityWithData" />
-        <activity android:name=".views.dataActivity.StartActvityData" />
+        <activity android:name=".views.dataActivity.StartActivityData" />
         <activity android:name=".views.baseActivity.LoggedInActivity" />
         <activity android:name=".activity.MainActivity" />
         <activity android:name=".activity.IntroActivity" />
         <activity android:name=".views.tools.ToolsOverviewActivity" />
         <activity android:name=".views.tools.ToolsAnrActivity" />
+        <activity android:name=".views.tools.ToolsCrashListenerActivity" />
+        <activity android:name=".views.crypto.MainCryptoActivity" />
+        <activity android:name=".views.tools.ToolsPerformanceActivity" />
+        <activity android:name=".views.tools.ToolsFpsActivity" />
 
 
     </application>

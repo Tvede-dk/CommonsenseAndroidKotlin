@@ -3,6 +3,7 @@ package com.commonsense.android.kotlin.views.databinding.activities
 import android.databinding.ViewDataBinding
 import android.os.Bundle
 import android.view.LayoutInflater
+import android.view.ViewGroup
 import com.commonsense.android.kotlin.system.base.BaseActivity
 
 /**
@@ -11,10 +12,12 @@ import com.commonsense.android.kotlin.system.base.BaseActivity
 
 typealias InflaterFunctionSimple<T> = (layoutInflater: LayoutInflater) -> T
 
+typealias InflaterFunctionFull<T> = (layoutInflater: LayoutInflater, root: ViewGroup?, attachToRoot: Boolean) -> T
+
 abstract class BaseDatabindingActivity<out T : ViewDataBinding> : BaseActivity(), Databindable<T> {
 
     override val binding: T by lazy {
-        createBinding().invoke(layoutInflater)
+        createBinding().invoke(layoutInflater, null, false)
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {

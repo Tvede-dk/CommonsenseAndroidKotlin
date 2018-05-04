@@ -42,17 +42,16 @@ android {
 
 dependencies {
     //tests
-    androidTestImplementation("com.android.support.test.espresso:espresso-core:$espressoVersion", {
-        exclude group: 'com.android.support', module: 'support-annotations'
-    })
     testImplementation project(':test')
+
+    //kotlin stdlib
+    implementation "org.jetbrains.kotlin:kotlin-stdlib:$kotlin_version"
 
     //coroutines libs
     implementation "org.jetbrains.kotlinx:kotlinx-coroutines-core:$coroutinesVersion"
     implementation "org.jetbrains.kotlinx:kotlinx-coroutines-android:$coroutinesVersion"
-
-    implementation "com.android.support:appcompat-v7:$supportVersion"
-    implementation "org.jetbrains.kotlin:kotlin-stdlib:$kotlin_version"
+    // support annotations.
+    implementation "com.android.support:support-annotations:$supportVersion"
 }
 repositories {
     mavenCentral()

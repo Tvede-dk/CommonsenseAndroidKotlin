@@ -4,45 +4,80 @@ import android.os.Debug
 import android.os.Handler
 import android.os.Looper
 import com.commonsense.android.kotlin.base.EmptyFunction
-import com.commonsense.android.kotlin.base.FunctionUnit
-import com.commonsense.android.kotlin.base.extensions.collections.map
-import com.commonsense.android.kotlin.tools.NotificationType
-import com.commonsense.android.kotlin.tools.TimeUnit
-import com.commonsense.android.kotlin.tools.delay
-import kotlinx.coroutines.experimental.Job
-import kotlinx.coroutines.experimental.async
-import kotlinx.coroutines.experimental.newSingleThreadContext
+import com.commonsense.android.kotlin.base.Function2
+import com.commonsense.android.kotlin.base.extensions.map
+import com.commonsense.android.kotlin.base.extensions.measureOptAsync
+import com.commonsense.android.kotlin.base.extensions.measureOptAsyncCallback
+import com.commonsense.android.kotlin.base.extensions.weakReference
+import com.commonsense.android.kotlin.base.time.TimeUnit
+import com.commonsense.android.kotlin.system.logging.L
+import kotlinx.coroutines.experimental.*
+import kotlinx.coroutines.experimental.android.UI
+import java.lang.ref.WeakReference
+import javax.security.auth.login.LoginException
+import kotlin.coroutines.experimental.suspendCoroutine
 
 /**
  * Created by Kasper Tvede on 01-03-2018.
  * Purpose: monitoring for ANR (application not responding).
  *
  */
-class ANRWatcher(val mediumThreadsholdTime: TimeUnit,
-                 val mediumThreadsholdNotification: NotificationType,
-                 val maxThreadsholdTime: TimeUnit,
-                 val maxThreadsholdNotification: NotificationType) {
+object ANRWatcher {
 
-    companion object {
-        private var watcher: ANRWatcherThread = ANRWatcherThread("ANR watcher", {
-            listener?.invoke()
-        })
+    private var watcher: ANRWatcherThread = ANRWatcherThread("ANR watcher", {
+        listener?.invoke()
+    })
 
-        var disableOnDebugger = false
+    var timeout: TimeUnit = TimeUnit.Milliseconds(5000)
 
-        var enabled: Boolean = false
-            set(value) {
-                field = value && (disableOnDebugger && !Debug.isDebuggerConnected() || !disableOnDebugger)
-                watcher.setState(field)
-            }
+    //<editor-fold desc="Enabled ability">
+    var disableOnDebugger = false
+        set(value) {
+            field = value
+            enabled = enabled //trigger a re-evaluation of the enabled property
+        }
 
-        var timeout: TimeUnit = TimeUnit.Milliseconds(5000)
+    var enabled: Boolean = false
+        set(value) {
+            field = value && (disableOnDebugger && !Debug.isDebuggerConnected() || !disableOnDebugger)
+            watcher.setState(field)
+        }
+    //</editor-fold>
 
-        var listener: EmptyFunction? = null
-    }
+    //<editor-fold desc="Listener">
+    var listener: EmptyFunction?
+        set(value) {
+            weakListener = value?.weakReference()
+        }
+        get() = weakListener?.get()
+
+    private var weakListener: WeakReference<EmptyFunction>? = null
+    //</editor-fold>
+
+    //<editor-fold desc="Logging internally">
+    var logTimings: Boolean
+        get() = watcher.logTimings
+        set(value) {
+            watcher.logTimings = value
+        }
+
+
+    var logTimingsFunction: Function2<String, String, Unit>?
+        get() = watcher.loggerFunction
+        set(value) {
+            watcher.loggerFunction = value
+        }
+    //</editor-fold>
+
 }
 
 private class ANRWatcherThread(val name: String, val callbackOnANR: EmptyFunction) {
+
+    var logTimings: Boolean = true
+
+    var loggerFunction: Function2<String, String, Unit>? = { tag, message ->
+        L.error(tag, message)
+    }
 
     private val mainLooper by lazy {
         Handler(Looper.getMainLooper())
@@ -51,22 +86,33 @@ private class ANRWatcherThread(val name: String, val callbackOnANR: EmptyFunctio
 
     fun start() {
         job = async(newSingleThreadContext(name)) {
-
             while (this.isActive) {
-                val delta = measureOptAsync(ANRWatcher.timeout, { result ->
-                    mainLooper.post {
-                        result(System.currentTimeMillis())
-                    }
-                })
-                val haveSet = delta != null
-                val isAboveTimeout = (delta?.getMilliseconds() ?: Long.MAX_VALUE) >
-                        ANRWatcher.timeout.toMilliseconds().getMilliseconds()
+                val start = System.currentTimeMillis()
 
-                if (!haveSet || isAboveTimeout) {
-                    callbackOnANR()
+                // delay(500)
+                val end = async(UI) {
+                    System.currentTimeMillis()
+                }.await(ANRWatcher.timeout.toMilliseconds().milliSeconds - (System.currentTimeMillis() - start), null)
+
+                val delta = end?.let {
+                    TimeUnit.Milliseconds(it - start)
                 }
-
+                if (logTimings) {
+                    logTiming(delta)
+                }
+                when {
+                    delta == null -> callbackOnANR()
+                    delta.milliSeconds > ANRWatcher.timeout.toMilliseconds().milliSeconds -> callbackOnANR()
+                }
             }
+        }
+    }
+
+    private fun logTiming(delta: TimeUnit.Milliseconds?) {
+        async(UI) {
+            val message = delta.map("Ui thread response time was: $delta", "timed out, ANR detected")
+            val tag = ANRWatcherThread::class.java.simpleName
+            loggerFunction?.invoke(tag, message)
         }
     }
 
@@ -83,28 +129,5 @@ private class ANRWatcherThread(val name: String, val callbackOnANR: EmptyFunctio
     }
 }
 
-
-/**
- * Measure the time of some occurence with a timeout. the function waits (coroutine delay) until the given timeout.
- *
- * @param waitingTimeUnit
- * @param signalAsync the schedualar to measure the time
- * @return the delta time for the start of the operation to the "optional" ending,
- * if the ending have not occurred then it returns null
- */
-suspend inline fun measureOptAsync(waitingTimeUnit: TimeUnit,
-                                   crossinline signalAsync: FunctionUnit<FunctionUnit<Long>>)
-        : TimeUnit.Milliseconds? {
-    var optionalEnd: Long = 0
-    var didSet = false
-    val start = System.currentTimeMillis()
-    signalAsync({
-        optionalEnd = it
-        didSet = true
-    })
-    waitingTimeUnit.delay()
-    return didSet.map(
-            ifTrue = TimeUnit.Milliseconds(optionalEnd - start),
-            ifFalse = null)
-}
-
+suspend fun <T> Deferred<T>.await(timeout: Long, defaultValue: T) =
+        withTimeoutOrNull(timeout) { await() } ?: defaultValue

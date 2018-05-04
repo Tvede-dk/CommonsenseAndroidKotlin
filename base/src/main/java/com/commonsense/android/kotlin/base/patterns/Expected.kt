@@ -19,8 +19,8 @@ interface Expected<out Value> {
             return ExpectedSuccess(value)
         }
 
-        fun <T> failed(exception: Throwable?): Expected<T> {
-            return ExpectedFailed(exception ?: Exception("Failed with no exception"))
+        fun <T> failed(exception: Throwable = Exception("Failed with no exception")): Expected<T> {
+            return ExpectedFailed(exception)
         }
     }
 }

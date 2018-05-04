@@ -1,6 +1,48 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:orientation="vertical" android:layout_width="match_parent"
-    android:layout_height="match_parent">
+<layout>
 
-</LinearLayout>
+    <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@color/white"
+        android:orientation="vertical">
+
+        <Button
+            android:id="@+id/tools_fps_start_button"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Start showing fps in textview" />
+
+        <TextView
+            android:id="@+id/tools_fps_inline_counter"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="" />
+
+        <Button
+            android:id="@+id/tools_fps_start_notification"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="show as notification" />
+
+        <Button
+            android:id="@+id/tools_fps_start_inline_graph"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="show as inline graph" />
+
+        <Button
+            android:id="@+id/tools_fps_stop_all"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Stop all" />
+
+        <Button
+            android:id="@+id/tools_fps_stall"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Stall UI thread for 100 msec" />
+
+
+    </LinearLayout>
+</layout>

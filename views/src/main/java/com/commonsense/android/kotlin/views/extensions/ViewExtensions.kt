@@ -22,7 +22,7 @@ import com.commonsense.android.kotlin.base.extensions.collections.forEachNotNull
 import com.commonsense.android.kotlin.base.extensions.collections.ifFalse
 import com.commonsense.android.kotlin.base.extensions.collections.ifTrue
 import com.commonsense.android.kotlin.system.extensions.getTypedArrayFor
-import com.commonsense.android.kotlin.system.extensions.isApiOverOrEqualTo
+import com.commonsense.android.kotlin.system.extensions.isApiEqualOrGreater
 import com.commonsense.android.kotlin.system.logging.tryAndLog
 import com.commonsense.android.kotlin.system.logging.tryAndLogSuspend
 import kotlinx.coroutines.experimental.android.UI
@@ -109,7 +109,7 @@ fun View.getTypedArrayFor(attributeSet: AttributeSet,
 fun View.resetTransformations() {
     translationX = 0f
     @SuppressLint("NewApi")
-    if (isApiOverOrEqualTo(21)) {
+    if (isApiEqualOrGreater(21)) {
         translationZ = 0f
     }
     translationY = 0f

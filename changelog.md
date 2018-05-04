@@ -12,12 +12,24 @@ in this release the focus have been to
     - The changes in the support library have made things more safe, but far more complex, with an incredible amount of null checking / guarding required.
     - 
 - the demo app is now composed of sections containing examples of different features. 
+- Crypto
+    - The crypto in Systems is a more sensible wrapper to handle the difficulties with crypto
+    - created Aes + Hmac combo so for android before api 19, there is a encryption + integrity option
+    - 
 
-###Forward
-the focus forward is trying to both stabilize the api,
-but at the same time be willing to create changes that fit better into the android and kotlin ecosystems.
-  
-(eg when the support library changes nullability, this library follows and tries to make it easier to adapt)
+- fixes a rather large bug from earlier, according to documentation (very wildly scattered)
+    issue with "activity with data"; so long story short is that when android empties processes, the static space in java is actually purged, leaving nothing behing, 
+    this however causes havoc when relying on it; so in short, one is to save data (still not via a bundle, but instead store it ) in onStop, and then later retrive it.
+    
+    
+- Developer tools
+    - ANR 
+    - Fps tool
+    - Crash listener
+    - Performance tool
+- cleartext traffic setting helper (Extension, see eg https://koz.io/android-m-and-the-war-on-cleartext-traffic/)   
+- api level functions now works with lint, unless otherwise specified.
+
 
 ##0.0.11
   

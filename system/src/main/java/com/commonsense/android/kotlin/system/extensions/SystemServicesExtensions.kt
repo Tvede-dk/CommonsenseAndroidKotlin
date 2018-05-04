@@ -15,7 +15,7 @@ import com.commonsense.android.kotlin.system.logging.logWarning
 val Context.inputMethodManager: InputMethodManager?
     @SuppressLint("NewApi")
     get() {
-        return if (isApiOverOrEqualTo(23)) {
+        return if (isApiEqualOrGreater(23)) {
             getSystemService(InputMethodManager::class.java)
         } else {
             getSystemService(Context.INPUT_METHOD_SERVICE) as? InputMethodManager

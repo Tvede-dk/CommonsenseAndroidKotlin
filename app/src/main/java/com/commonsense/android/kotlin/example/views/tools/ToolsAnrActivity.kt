@@ -1,13 +1,15 @@
 package com.commonsense.android.kotlin.example.views.tools
 
+import com.commonsense.android.kotlin.base.time.TimeUnit
+import com.commonsense.android.kotlin.base.time.delay
 import com.commonsense.android.kotlin.example.databinding.ToolsAnrBinding
 import com.commonsense.android.kotlin.system.extensions.safeToast
-import com.commonsense.android.kotlin.tools.TimeUnit
 import com.commonsense.android.kotlin.tools.anr.ANRWatcher
 import com.commonsense.android.kotlin.views.databinding.activities.BaseDatabindingActivity
-import com.commonsense.android.kotlin.views.databinding.activities.InflaterFunctionSimple
+import com.commonsense.android.kotlin.views.databinding.activities.InflaterFunctionFull
 import com.commonsense.android.kotlin.views.extensions.setOnclickAsync
 import com.commonsense.android.kotlin.views.helpers.OnTextChangedWatcher
+import kotlinx.coroutines.experimental.runBlocking
 
 /**
  * Created by Kasper Tvede on 01-03-2018.
@@ -17,10 +19,10 @@ import com.commonsense.android.kotlin.views.helpers.OnTextChangedWatcher
 
 class ToolsAnrActivity : BaseDatabindingActivity<ToolsAnrBinding>() {
 
-    override fun createBinding(): InflaterFunctionSimple<ToolsAnrBinding> = ToolsAnrBinding::inflate
+    override fun createBinding(): InflaterFunctionFull<ToolsAnrBinding> = ToolsAnrBinding::inflate
 
     override fun useBinding() {
-        binding.toolsAnrEnableListener.setOnCheckedChangeListener { buttonView, isChecked ->
+        binding.toolsAnrEnableListener.setOnCheckedChangeListener { _, isChecked ->
             ANRWatcher.enabled = isChecked
         }
         binding.toolsAnrTimeoutField.addTextChangedListener(OnTextChangedWatcher {
@@ -28,11 +30,13 @@ class ToolsAnrActivity : BaseDatabindingActivity<ToolsAnrBinding>() {
         })
 
         binding.toolsAnrTriggerButton.setOnclickAsync {
-            Thread.sleep(ANRWatcher.timeout.toMilliseconds().getMilliseconds() + 5000)
+            runBlocking {
+                ANRWatcher.timeout.delay()
+            }
         }
 
         ANRWatcher.listener = {
-            launchInUi("") {
+            launchInUi("Anr watcher") {
                 safeToast("ANR detected")
             }
         }

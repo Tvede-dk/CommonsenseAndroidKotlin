@@ -4,14 +4,13 @@ import android.content.Context
 import android.content.SharedPreferences
 import com.commonsense.android.kotlin.system.extensions.editWith
 
-//import com.commonsense.android.kotlin.android.extensions.editWith
-
 /**
  * created by Kasper Tvede on 29-10-2016.
  */
 
 
 //todo application context or not ?
+//TODO background reading / writing, and async. ( coroutines).
 fun Context.createDeviceSettings(): DeviceSettings = DeviceSettings(this)
 
 
@@ -46,7 +45,8 @@ class DeviceSettings(context: Context, settingsName: String = "DeviceSettings") 
 
     fun loadSetting(key: String, default: Long = 0) = sharedPrefs.getLong(key, default)
 
-    inline fun <U> loadSetting(key: String, crossinline converter: (String?) -> U?, default: U?) = sharedPrefs.getString(key, null)?.let { converter(it) } ?: default
+    inline fun <U> loadSetting(key: String, crossinline converter: (String?) -> U?, default: U?) = sharedPrefs.getString(key, null)?.let { converter(it) }
+            ?: default
 
     fun haveSetting(key: String): Boolean = sharedPrefs.contains(key)
 

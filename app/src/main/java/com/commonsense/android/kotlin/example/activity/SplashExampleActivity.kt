@@ -1,7 +1,6 @@
 package com.commonsense.android.kotlin.example.activity
 
 import com.commonsense.android.kotlin.example.R
-import com.commonsense.android.kotlin.example.views.baseActivity.LoggedInActivity
 import com.commonsense.android.kotlin.system.base.BaseSplashActivity
 import com.commonsense.android.kotlin.system.extensions.startActivity
 

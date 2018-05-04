@@ -4,10 +4,14 @@ import android.app.Activity
 import android.app.Application
 import android.os.Bundle
 import android.os.StrictMode
+import android.support.multidex.MultiDex
 import android.support.v7.app.AppCompatDelegate
 import com.commonsense.android.kotlin.base.EmptyFunction
 import com.commonsense.android.kotlin.base.extensions.collections.ifTrue
 import com.commonsense.android.kotlin.base.extensions.isZero
+import com.commonsense.android.kotlin.system.extensions.applyIfApiGreater
+import com.commonsense.android.kotlin.system.extensions.ifApiIsEqualOrGreater
+import com.commonsense.android.kotlin.system.extensions.ifApiLowerThan
 import com.commonsense.android.kotlin.system.extensions.isApiLowerThan
 import com.commonsense.android.kotlin.system.logging.logDebug
 import com.commonsense.android.kotlin.system.logging.tryAndLog
@@ -38,11 +42,20 @@ abstract class BaseApplication : Application() {
 
     override fun onCreate() {
         super.onCreate()
+        // install multidexing if needed.
+        ifApiLowerThan(21) {
+            MultiDex.install(this)
+        }
+
+        //make sure that we are to bail iff required.
         if (shouldBailOnCreate() != false) {
             return
         }
+        // register the lifecycle listener
         registerActivityLifecycleCallbacks(activityCounter)
+        // setup debug tools if debug mode.
         isDebugMode().ifTrue { setupDebugTools() }
+        // patch older androids vector drawable.
         setupVectorDrawableOldAndroid()
         afterOnCreate()
     }
@@ -50,23 +63,21 @@ abstract class BaseApplication : Application() {
     /**
      * Function handling the checking if we are a special process (required for eg leak canary).
      */
-    fun shouldBailOnCreate() = tryAndLog(BaseApplication::class) {
-        if (LeakCanary.isInAnalyzerProcess(this)) {
-            logDebug("Spawning analyzer process. skipping setup")
+    private fun shouldBailOnCreate() = tryAndLog(BaseApplication::class) {
+        val isAnalyzer = LeakCanary.isInAnalyzerProcess(this)
+        return@tryAndLog isAnalyzer.ifTrue {
             // This process is dedicated to LeakCanary for heap analysis.
             // You should not init your app in this process.
-            return@tryAndLog true
+            logDebug("Spawning analyzer process. skipping setup")
         }
-        return@tryAndLog false
     }
 
     /**
      * fixes vector drawables on older androids.
      */
-    private fun setupVectorDrawableOldAndroid() {
-        if (isApiLowerThan(21)) {
-            AppCompatDelegate.setCompatVectorFromResourcesEnabled(true)
-        }
+    @Suppress("NOTHING_TO_INLINE")
+    private inline fun setupVectorDrawableOldAndroid() = ifApiLowerThan(21) {
+        AppCompatDelegate.setCompatVectorFromResourcesEnabled(true)
     }
 
     /**
@@ -86,19 +97,47 @@ abstract class BaseApplication : Application() {
         enableStrictMode()
     }
 
-    private fun enableLeakCanary() {
+    @Suppress("NOTHING_TO_INLINE")
+    private inline fun enableLeakCanary() {
         logDebug("Setting up leak canary")
         LeakCanary.install(this)
     }
 
-    private fun enableStrictMode() {
+    @Suppress("NOTHING_TO_INLINE")
+    private inline fun enableStrictMode() {
         logDebug("Setting up strictMode")
-        StrictMode.setThreadPolicy(
-                StrictMode.ThreadPolicy.Builder().detectAll().penaltyLog().penaltyFlashScreen().build())
+        StrictMode.setThreadPolicy(createStrictModeThreadPolicy())
+        StrictMode.setVmPolicy(createStrictModeVmPolicy())
 
-        StrictMode.setVmPolicy(StrictMode.VmPolicy.Builder().detectAll()
-                .penaltyLog().penaltyDeath().build())
     }
+
+
+    /**
+     * Hook point for overriding the strict mode threading policy
+     */
+    @Suppress("NOTHING_TO_INLINE")
+    protected inline fun createStrictModeThreadPolicy(): StrictMode.ThreadPolicy {
+        return StrictMode.ThreadPolicy.Builder()
+                .detectAll()
+                .penaltyLog()
+                .penaltyFlashScreen()
+                .build()
+    }
+
+    /**
+     * hook point for overriding the strict mode vm policy
+     */
+    @Suppress("NOTHING_TO_INLINE")
+    protected inline fun createStrictModeVmPolicy(): StrictMode.VmPolicy {
+        return StrictMode.VmPolicy.Builder()
+                .detectAll().apply {
+                    ifApiIsEqualOrGreater(23) {
+                        detectCleartextNetwork()
+                    }
+                }
+                .penaltyLog().penaltyDeath().build()
+    }
+
     //</editor-fold>
 }
 

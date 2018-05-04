@@ -14,4 +14,6 @@
     <string name="tools.anr.trigger">Trigger an anr (blocks mainthread)</string>
     <string name="tools.anr.notification.type">Notification type</string>
     <string name="tools.anr.enable.listener">Enable listener</string>
+    <string name="mainactivity_category_activitydata">Activity with data</string>
+    <string name="mainactivity_category_crypto">Crypto</string>
 </resources>

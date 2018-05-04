@@ -29,7 +29,6 @@ private fun Int.isGranted(): Boolean {
 
 class PermissionsHandling(val handlerRequestCode: Int = 999) {
 
-
     private val requestsInFlight = mutableListOf<PermissionRequest>()
 
     fun performActionForPermission(@DangerousPermissionString permission: String, activity: Activity, onGranted: () -> Unit, onFailed: () -> Unit) {

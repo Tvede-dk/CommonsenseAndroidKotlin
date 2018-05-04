@@ -34,9 +34,9 @@ enum class LoggingType {
     Info
 }
 
-        /**
-         * The Basis logging function.
-         */
+/**
+ * The Basis logging function.
+ */
 typealias LoggingFunctionType<T> = (tag: String, message: String, stackTrace: Throwable?) -> T
 
 /**

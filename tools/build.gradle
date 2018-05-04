@@ -1,17 +1,6 @@
 apply plugin: 'com.android.library'
 apply plugin: 'kotlin-android'
-apply plugin: "kotlin-kapt"
-
-//buildscript {
-//    repositories {
-//        jcenter()
-//    }
-//
-//    dependencies {
-//        classpath "org.jetbrains.dokka:dokka-android-gradle-plugin:${dokkaVersion}"
-//    }
-//}
-
+//apply plugin: "kotlin-kapt"
 
 android {
     compileSdkVersion androidSdkBuildVersion
@@ -65,32 +54,26 @@ dependencies {
     implementation "com.android.support:design:$supportVersion"
     implementation "com.android.support:exifinterface:$supportVersion"
 
-
     //KOTLIN
     implementation "org.jetbrains.kotlinx:kotlinx-coroutines-core:$coroutinesVersion"
     implementation "org.jetbrains.kotlinx:kotlinx-coroutines-android:$coroutinesVersion"
     implementation "org.jetbrains.kotlin:kotlin-stdlib:$kotlin_version"
 
-    //leak canary libs
-    /*debugImplementation "com.squareup.leakcanary:leakcanary-android:$leakCanaryVersion"
-    releaseImplementation "com.squareup.leakcanary:leakcanary-android-no-op:$leakCanaryVersion"
-    testImplementation "com.squareup.leakcanary:leakcanary-android-no-op:$leakCanaryVersion"*/
     implementation project(path: ':views')
     implementation project(path: ':base')
     implementation project(path: ':system')
 
-    kapt "com.android.databinding:compiler:$androidGradleVersion"
+//    kapt "com.android.databinding:compiler:$androidGradleVersion"
 
 }
 
-
-kapt {
-    processors = "com.android.databinding:implementation:$androidGradleVersion"
-    useLightAnalysis true
-    useBuildCache = true
+//
+//kapt {
+//    processors = "com.android.databinding:implementation:$androidGradleVersion"
+//    useLightAnalysis true
+//    useBuildCache = true
 //    mapDiagnosticLocations = true
-}
-
+//}
 
 //apply plugin: 'com.novoda.bintray-release' // must be applied after your artifact generating plugin (eg. java / com.android.library)
 //

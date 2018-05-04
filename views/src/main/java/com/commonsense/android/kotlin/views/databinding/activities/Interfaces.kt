@@ -9,5 +9,5 @@ import android.databinding.ViewDataBinding
 interface Databindable<out T : ViewDataBinding> {
     val binding: T
     fun useBinding()
-    fun createBinding(): InflaterFunctionSimple<T>
+    fun createBinding(): InflaterFunctionFull<T>
 }

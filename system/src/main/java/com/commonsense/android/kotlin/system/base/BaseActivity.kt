@@ -1,7 +1,6 @@
 package com.commonsense.android.kotlin.system.base
 
 import android.content.BroadcastReceiver
-import android.content.Context
 import android.content.Intent
 import android.content.IntentFilter
 import android.os.Bundle
@@ -13,13 +12,11 @@ import com.commonsense.android.kotlin.base.AsyncEmptyFunction
 import com.commonsense.android.kotlin.base.EmptyFunctionResult
 import com.commonsense.android.kotlin.system.PermissionsHandling
 import com.commonsense.android.kotlin.system.base.helpers.*
-import com.commonsense.android.kotlin.system.dataFlow.ReferenceCountingMap
 import com.commonsense.android.kotlin.system.extensions.backPressIfHome
 import com.commonsense.android.kotlin.system.logging.logWarning
 import com.commonsense.android.kotlin.system.logging.tryAndLog
 import com.commonsense.android.kotlin.system.uiAware.UiAwareJobContainer
 import kotlinx.coroutines.experimental.CommonPool
-import kotlin.reflect.KClass
 
 /**
  * created by Kasper Tvede on 29-09-2016.
@@ -31,6 +28,7 @@ open class BaseActivity : AppCompatActivity(), ActivityResultHelperContainer {
     /**
      * Handles permissions
      */
+    //TODO serialize in on stop
     val permissionHandler by lazy {
         PermissionsHandling()
     }
@@ -79,6 +77,7 @@ open class BaseActivity : AppCompatActivity(), ActivityResultHelperContainer {
         UiAwareJobContainer()
     }
 
+    //TODO serialize in on stop
     private val activityResultHelper by lazy {
         ActivityResultHelper({ logWarning(it) })
     }
@@ -229,5 +228,9 @@ open class BaseActivity : AppCompatActivity(), ActivityResultHelperContainer {
     //</editor-fold>
 
 
+
+    //On stop serialization process.
+    // See the onStop documentation
+    // and
 
 }

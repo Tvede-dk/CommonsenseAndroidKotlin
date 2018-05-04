@@ -3,7 +3,7 @@ package com.commonsense.android.kotlin.system.compat
 import android.annotation.SuppressLint
 import android.text.Html
 import android.text.Spanned
-import com.commonsense.android.kotlin.system.extensions.isApiOverOrEqualTo
+import com.commonsense.android.kotlin.system.extensions.isApiEqualOrGreater
 
 
 /**
@@ -12,7 +12,7 @@ import com.commonsense.android.kotlin.system.extensions.isApiOverOrEqualTo
 @SuppressLint("NewApi")
 @SuppressWarnings("deprecation")
 fun String.fromHtml(): Spanned {
-    (return if (isApiOverOrEqualTo(24)) {
+    (return if (isApiEqualOrGreater(24)) {
         Html.fromHtml(this, Html.FROM_HTML_MODE_LEGACY)
     } else {
         @Suppress("DEPRECATION")

@@ -2,6 +2,7 @@ package com.commonsense.android.kotlin.base.extensions.collections
 
 import com.commonsense.android.kotlin.base.AsyncEmptyFunction
 import com.commonsense.android.kotlin.base.EmptyFunction
+import com.commonsense.android.kotlin.base.EmptyFunctionResult
 import com.commonsense.android.kotlin.base.FunctionUnit
 import com.commonsense.android.kotlin.base.extensions.isNull
 
@@ -33,11 +34,20 @@ suspend fun Boolean.onTrueAsync(action: AsyncEmptyFunction): Boolean {
 /**
  * Maps a boolean into a value.
  */
-fun <T> Boolean.map(ifTrue: T, ifFalse: T): T = if (this) {
+@Suppress("NOTHING_TO_INLINE")
+inline fun <T> Boolean.map(ifTrue: T, ifFalse: T): T = if (this) {
     ifTrue
 } else {
     ifFalse
 }
+
+inline fun <T> Boolean.mapLazy(crossinline ifTrue: EmptyFunctionResult<T>,
+                               crossinline ifFalse: EmptyFunctionResult<T>): T =
+        if (this) {
+            ifTrue()
+        } else {
+            ifFalse()
+        }
 
 
 /**

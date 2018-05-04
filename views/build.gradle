@@ -1,6 +1,6 @@
 apply plugin: 'com.android.library'
 apply plugin: 'kotlin-android'
-apply plugin: "kotlin-kapt"
+//apply plugin: "kotlin-kapt"
 
 android {
     compileSdkVersion androidSdkBuildVersion
@@ -44,7 +44,7 @@ android {
 }
 
 kapt {
-    processors = "com.android.databinding:implementation:$androidGradleVersion"
+//    processors = "com.android.databinding:implementation:$androidGradleVersion"
     useLightAnalysis true
     useBuildCache = true
 //    mapDiagnosticLocations = true
@@ -52,7 +52,7 @@ kapt {
 
 
 dependencies {
-    kapt "com.android.databinding:compiler:$androidGradleVersion"
+//    kapt "com.android.databinding:compiler:$androidGradleVersion"
 
     //TESTS
     androidTestImplementation("com.android.support.test.espresso:espresso-core:$espressoVersion", {

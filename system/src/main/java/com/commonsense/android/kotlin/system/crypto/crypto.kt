@@ -60,7 +60,7 @@ object Hashes {
 /**
  *
  *
- * @see https://docs.oracle.com/javase/7/docs/api/javax/crypto/KeyGenerator.html
+ * see https://docs.oracle.com/javase/7/docs/api/javax/crypto/KeyGenerator.html
  */
 object KeyGenerators {
     /**

@@ -9,10 +9,8 @@ import android.support.v7.app.AppCompatDelegate
 import com.commonsense.android.kotlin.base.EmptyFunction
 import com.commonsense.android.kotlin.base.extensions.collections.ifTrue
 import com.commonsense.android.kotlin.base.extensions.isZero
-import com.commonsense.android.kotlin.system.extensions.applyIfApiGreater
 import com.commonsense.android.kotlin.system.extensions.ifApiIsEqualOrGreater
 import com.commonsense.android.kotlin.system.extensions.ifApiLowerThan
-import com.commonsense.android.kotlin.system.extensions.isApiLowerThan
 import com.commonsense.android.kotlin.system.logging.logDebug
 import com.commonsense.android.kotlin.system.logging.tryAndLog
 import com.squareup.leakcanary.LeakCanary

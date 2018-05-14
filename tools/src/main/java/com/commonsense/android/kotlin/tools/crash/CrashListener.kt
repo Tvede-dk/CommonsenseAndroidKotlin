@@ -7,7 +7,6 @@ import android.support.annotation.UiThread
 import com.commonsense.android.kotlin.base.Function3
 import com.commonsense.android.kotlin.base.extensions.collections.ifTrue
 import com.commonsense.android.kotlin.base.extensions.isNotNull
-import com.commonsense.android.kotlin.system.base.helpers.startActivityWithData
 import com.commonsense.android.kotlin.system.logging.L
 import com.commonsense.android.kotlin.system.logging.tryAndLog
 

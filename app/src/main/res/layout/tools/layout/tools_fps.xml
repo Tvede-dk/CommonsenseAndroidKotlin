@@ -44,5 +44,12 @@
             android:text="Stall UI thread for 100 msec" />
 
 
+        <Switch
+            android:id="@+id/tools_fps_stall_random"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Stall UI thread randomly" />
+
+
     </LinearLayout>
 </layout>

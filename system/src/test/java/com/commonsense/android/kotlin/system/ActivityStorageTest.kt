@@ -4,7 +4,6 @@ import android.app.Activity
 import android.os.Bundle
 import android.util.Base64
 import com.commonsense.android.kotlin.test.*
-import org.junit.Assert
 import org.junit.Test
 
 /**

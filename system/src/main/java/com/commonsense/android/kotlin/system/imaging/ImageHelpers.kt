@@ -27,7 +27,7 @@ data class ImageSize(val width: Int, val height: Int) {
     override fun toString(): String = "$width-$height"
 }
 
-suspend fun Uri.loadBitmapWithSampleSize(contentResolver: ContentResolver, ratio: Double, containsTransparency: Boolean = true): Deferred<Bitmap?> = async(CommonPool) {
+fun Uri.loadBitmapWithSampleSize(contentResolver: ContentResolver, ratio: Double, containsTransparency: Boolean = true): Deferred<Bitmap?> = async(CommonPool) {
     val bitmapConfig = containsTransparency.map(Bitmap.Config.ARGB_8888, Bitmap.Config.RGB_565)
     val bitmapOptions = BitmapFactory.Options().apply {
         @IntRange(from = 1)
@@ -46,7 +46,7 @@ suspend fun Uri.loadBitmapWithSampleSize(contentResolver: ContentResolver, ratio
 /**
  * Size of a bitmap
  */
-suspend fun Uri.loadBitmapSize(contentResolver: ContentResolver, bitmapConfig: Bitmap.Config = Bitmap.Config.ARGB_8888): Deferred<BitmapFactory.Options?> = async(CommonPool) {
+fun Uri.loadBitmapSize(contentResolver: ContentResolver, bitmapConfig: Bitmap.Config = Bitmap.Config.ARGB_8888): Deferred<BitmapFactory.Options?> = async(CommonPool) {
     val onlyBoundsOptions = BitmapFactory.Options().apply {
         inJustDecodeBounds = true
         inPreferredConfig = bitmapConfig//optional
@@ -65,7 +65,7 @@ suspend fun Uri.loadBitmapSize(contentResolver: ContentResolver, bitmapConfig: B
 /**
  *
  */
-suspend fun Bitmap.compress(@IntRange(from = 0L, to = 100L) compressionPercentage: Int): Deferred<Bitmap> = async(CommonPool) {
+fun Bitmap.compress(@IntRange(from = 0L, to = 100L) compressionPercentage: Int): Deferred<Bitmap> = async(CommonPool) {
     ByteArrayOutputStream().use { out ->
         this@compress.compress(Bitmap.CompressFormat.JPEG, compressionPercentage, out)
         return@async BitmapFactory.decodeStream(ByteArrayInputStream(out.toByteArray()))
@@ -129,7 +129,7 @@ suspend fun Bitmap.rotate(exifInterface: ExifInterface): Deferred<Bitmap> = asyn
 }
 
 
-suspend fun Bitmap.rotate(@FloatRange(from = 0.0, to = 360.0) degrees: Float): Deferred<Bitmap> = async(CommonPool) {
+fun Bitmap.rotate(@FloatRange(from = 0.0, to = 360.0) degrees: Float): Deferred<Bitmap> = async(CommonPool) {
     val matrix = Matrix()
     if (degrees != 0f) {
         matrix.preRotate(degrees)
@@ -145,7 +145,7 @@ suspend fun Uri.loadBitmapRotatedCorrectly(contentResolver: ContentResolver, wid
     }
 }
 
-suspend fun Uri.getExifForImage(contentResolver: ContentResolver) = async(CommonPool) {
+fun Uri.getExifForImage(contentResolver: ContentResolver) = async(CommonPool) {
     contentResolver.openInputStream(this@getExifForImage).use { input ->
         return@async ExifInterface(input)
     }

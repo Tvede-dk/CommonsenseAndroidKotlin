@@ -106,9 +106,27 @@ inline fun <T> WeakReference<T>.use(crossinline action: T.() -> Unit) {
 }
 
 /**
+ * Uses the given weak reaference if available or does the other action
+ */
+inline fun <T> WeakReference<T>.useRefOr(crossinline ifAvailable: T.() -> Unit,
+                                         crossinline ifNotAvailable: EmptyFunction) {
+    get().useOr(ifAvailable, ifNotAvailable)
+}
+
+
+inline fun <T> T?.useOr(crossinline ifNotNull: T.() -> Unit,
+                        crossinline ifNull: EmptyFunction) {
+    if (this != null) {
+        ifNotNull(this)
+    } else {
+        ifNull()
+    }
+}
+
+/**
  * invokes the function ( wrapped in a weakReference) with the input, if the weakreference is not pointing to null
  */
-fun <T> WeakReference<FunctionUnit<T>?>.use(input: T) {
+inline fun <T> WeakReference<FunctionUnit<T>?>.use(input: T) {
     get()?.let { it(input) }
 }
 

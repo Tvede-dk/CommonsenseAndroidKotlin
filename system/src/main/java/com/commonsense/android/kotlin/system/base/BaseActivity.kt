@@ -17,6 +17,7 @@ import com.commonsense.android.kotlin.system.logging.logWarning
 import com.commonsense.android.kotlin.system.logging.tryAndLog
 import com.commonsense.android.kotlin.system.uiAware.UiAwareJobContainer
 import kotlinx.coroutines.experimental.CommonPool
+import kotlinx.coroutines.experimental.Job
 
 /**
  * created by Kasper Tvede on 29-09-2016.
@@ -91,6 +92,10 @@ open class BaseActivity : AppCompatActivity(), ActivityResultHelperContainer {
         localJobs.launchInUi({ isVisible }, group, action)
     }
 
+    fun launchInUiCancelable(group: String, action: AsyncEmptyFunction): Job {
+        return localJobs.launchInUi({ isVisible }, group, action)
+    }
+
     fun launchInBackground(group: String, action: AsyncEmptyFunction) {
         localJobs.performAction(CommonPool, action, group)
     }
@@ -151,7 +156,6 @@ open class BaseActivity : AppCompatActivity(), ActivityResultHelperContainer {
         super.onBackPressed()
     }
     //</editor-fold>
-
 
 
     //<editor-fold desc="Add activity result listener">
@@ -226,7 +230,6 @@ open class BaseActivity : AppCompatActivity(), ActivityResultHelperContainer {
         }
     }
     //</editor-fold>
-
 
 
     //On stop serialization process.

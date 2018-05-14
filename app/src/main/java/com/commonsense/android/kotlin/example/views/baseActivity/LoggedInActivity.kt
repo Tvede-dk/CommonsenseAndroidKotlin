@@ -7,6 +7,4 @@ import com.commonsense.android.kotlin.system.base.BaseActivity
  * Purpose:
  *
  */
-class LoggedInActivity : BaseActivity() {
-
-}
+class LoggedInActivity : BaseActivity()

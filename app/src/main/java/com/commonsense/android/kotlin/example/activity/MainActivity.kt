@@ -2,11 +2,9 @@ package com.commonsense.android.kotlin.example.activity
 
 import android.support.annotation.StringRes
 import android.support.v7.widget.GridLayoutManager
-import android.support.v7.widget.RecyclerView
 import com.commonsense.android.kotlin.base.EmptyFunction
 import com.commonsense.android.kotlin.example.R
 import com.commonsense.android.kotlin.example.databinding.CategoryRenderViewBinding
-import com.commonsense.android.kotlin.example.databinding.CryptoActivityBinding
 import com.commonsense.android.kotlin.example.databinding.MainActivityBinding
 import com.commonsense.android.kotlin.example.views.crypto.MainCryptoActivity
 import com.commonsense.android.kotlin.example.views.dataActivity.StartActivityData
@@ -18,7 +16,6 @@ import com.commonsense.android.kotlin.views.databinding.activities.InflaterFunct
 import com.commonsense.android.kotlin.views.databinding.adapters.BaseDataBindingRecyclerAdapter
 import com.commonsense.android.kotlin.views.databinding.adapters.BaseRenderModel
 import com.commonsense.android.kotlin.views.databinding.adapters.BaseViewHolderItem
-import com.commonsense.android.kotlin.views.extensions.setOnclickAsync
 import com.commonsense.android.kotlin.views.extensions.setOnclickAsyncEmpty
 import com.commonsense.android.kotlin.views.extensions.setup
 

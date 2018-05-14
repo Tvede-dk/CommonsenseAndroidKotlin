@@ -76,7 +76,7 @@ class PictureRetriver(private val activity: BaseActivity,
         pictureUri = null
     }
 
-    @RequiresPermission(allOf = arrayOf(Manifest.permission.WRITE_EXTERNAL_STORAGE, Manifest.permission.READ_EXTERNAL_STORAGE))
+    @RequiresPermission(allOf = [(Manifest.permission.WRITE_EXTERNAL_STORAGE), (Manifest.permission.READ_EXTERNAL_STORAGE)])
     fun getImage(fromCamera: Boolean) {
         if (fromCamera) {
             useCamera()

@@ -4,10 +4,7 @@ import android.content.Context
 import android.view.Choreographer
 import com.commonsense.android.kotlin.base.FunctionUnit
 import com.commonsense.android.kotlin.base.algorithms.RunningAverageFloatCapped
-import com.commonsense.android.kotlin.base.extensions.equals
-import com.commonsense.android.kotlin.base.extensions.isNull
-import com.commonsense.android.kotlin.base.extensions.use
-import com.commonsense.android.kotlin.base.extensions.weakReference
+import com.commonsense.android.kotlin.base.extensions.*
 import com.commonsense.android.kotlin.base.time.TimeUnit
 import com.commonsense.android.kotlin.system.extensions.defaultDisplay
 import com.commonsense.android.kotlin.system.logging.L
@@ -27,9 +24,10 @@ typealias FpsWatcherCallback = (currentFps: Float,
                                 overdueTime: TimeUnit) -> Unit
 
 class FpsWatcher(context: Context,
-                 private val onFpsCallback: FpsWatcherCallback) {
+                 onFpsCallback: FpsWatcherCallback) {
 
     private val weakContext: WeakReference<Context> = context.weakReference()
+    private val weakCallback: WeakReference<FpsWatcherCallback> = onFpsCallback.weakReference()
 
     //this serves as a default, and only used if we cannot retrieve it though android;
     //since most displays are somewhere around 60 hz, we assume this is the default.
@@ -100,8 +98,15 @@ class FpsWatcher(context: Context,
      */
     private fun onTiming(timeInNs: Long) {
 
+        val callbackOnTiming = weakCallback.get()
         if (weakContext.get().isNull) {
             L.debug(FpsWatcher::class.java.simpleName, "detected context is null akk starter is dead, so we should close.")
+            stop()
+            return
+        }
+
+        if (callbackOnTiming == null) {
+            L.debug(FpsWatcher::class.java.simpleName, "callback is null so we are unable to get back in touch")
             stop()
             return
         }
@@ -122,8 +127,8 @@ class FpsWatcher(context: Context,
             lastTime = currentTime
             lastAverage = average
             async(UI) {
-                L.debug(FpsWatcher::class.java.simpleName, "fps is:$currentFps")
-                onFpsCallback(average,
+                L.error(FpsWatcher::class.java.simpleName, "fps is:$currentFps")
+                callbackOnTiming(average,
                         maxOf(expectedFps - currentFps, 0f),
                         TimeUnit.Milliseconds(missedTiming.toLong()))
             }
@@ -161,12 +166,15 @@ class FpsCallback(
         val currentLastTime = lastTime
         //if we have a time, then use it. otherwise wait for a second measurement.
         if (currentLastTime != null) {
-
             val delta = frameTimeNanos - currentLastTime
-            weakCallback.use { this(delta) }
+            weakCallback.useRefOr(ifAvailable = {
+                this(delta)
+                //reschedule our self.
+            }, ifNotAvailable = {
+                L.error(FpsCallback::class.java.simpleName, "callback from do frame is GC'ed...")
+            })
         }
         lastTime = frameTimeNanos
-        //reschedule our self.
         Choreographer.getInstance().postFrameCallback(this)
     }
 

@@ -2,12 +2,9 @@ package com.commonsense.android.base.extensions.collections
 
 import com.commonsense.android.kotlin.base.extensions.collections.toHexString
 import com.commonsense.android.kotlin.base.extensions.forEach
-import com.commonsense.android.kotlin.base.extensions.shr
-import com.commonsense.android.kotlin.base.extensions.splitIntoComponents
 import com.commonsense.android.kotlin.test.assert
 import com.commonsense.android.kotlin.test.microBench
 import org.junit.Test
-import kotlin.experimental.and
 
 /**
  * Created by Kasper Tvede on 11-04-2018.

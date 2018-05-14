@@ -1,10 +1,9 @@
 package com.commonsense.android.base.extensions
 
+import android.support.annotation.IntRange
 import com.commonsense.android.kotlin.base.extensions.negative
 import com.commonsense.android.kotlin.test.assert
 import org.junit.Test
-
-import org.junit.Assert.*
 
 /**
  * Created by Kasper Tvede on 18-04-2018.
@@ -19,4 +18,5 @@ class DoubleExtensionsKtTest {
         val negative: Double = -2.0
         negative.negative.assert(-2.0)
     }
+
 }

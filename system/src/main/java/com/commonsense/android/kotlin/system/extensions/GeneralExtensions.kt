@@ -1,9 +1,6 @@
 package com.commonsense.android.kotlin.system.extensions
 
-import android.annotation.SuppressLint
-import android.annotation.TargetApi
 import android.os.Build
-import android.support.annotation.RequiresApi
 import com.commonsense.android.kotlin.base.EmptyFunction
 import com.commonsense.android.kotlin.base.EmptyFunctionResult
 import com.commonsense.android.kotlin.base.EmptyReceiver

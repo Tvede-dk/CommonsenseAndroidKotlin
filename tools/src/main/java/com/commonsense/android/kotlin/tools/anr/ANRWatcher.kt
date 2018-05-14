@@ -6,16 +6,12 @@ import android.os.Looper
 import com.commonsense.android.kotlin.base.EmptyFunction
 import com.commonsense.android.kotlin.base.Function2
 import com.commonsense.android.kotlin.base.extensions.map
-import com.commonsense.android.kotlin.base.extensions.measureOptAsync
-import com.commonsense.android.kotlin.base.extensions.measureOptAsyncCallback
 import com.commonsense.android.kotlin.base.extensions.weakReference
 import com.commonsense.android.kotlin.base.time.TimeUnit
 import com.commonsense.android.kotlin.system.logging.L
 import kotlinx.coroutines.experimental.*
 import kotlinx.coroutines.experimental.android.UI
 import java.lang.ref.WeakReference
-import javax.security.auth.login.LoginException
-import kotlin.coroutines.experimental.suspendCoroutine
 
 /**
  * Created by Kasper Tvede on 01-03-2018.

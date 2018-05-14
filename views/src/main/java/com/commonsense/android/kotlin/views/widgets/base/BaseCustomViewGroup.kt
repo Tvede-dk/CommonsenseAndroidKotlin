@@ -87,7 +87,7 @@ abstract class BaseCustomViewGroup : ViewGroup, LateAttributes {
 
     override fun onDraw(canvas: Canvas?) {
         if (canvas != null && willDrawOwnBackground) {
-            storedBackground?.setBounds(0, 0, canvas.width, canvas.height)
+            storedBackground?.setBounds(0, 0, width, height)
             drawBackground(canvas, storedBackground)
         }
         super.onDraw(canvas)

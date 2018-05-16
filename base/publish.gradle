@@ -4,6 +4,11 @@ apply plugin: 'com.jfrog.bintray'
 version = project.commonsenseVersionName
 group = project.commonsenseGroupId
 
+final def artifactName = "base"
+final def artifactDescription = ""
+final def versionDescription = ""
+
+
 artifacts {
     archives javadocJar
     archives sourcesJar
@@ -14,14 +19,14 @@ install {
         pom.project {
             packaging 'aar'
             groupId project.commonsenseGroupId
-            name 'base'
-            artifactId 'base'
+            name artifactName
+            artifactId artifactName
             version project.commonsenseVersionName
 
             licenses {
                 license {
-                    name 'MIT'
-                    url 'http://www.apache.org/licenses/LICENSE-2.0.txt'
+                    name project.commonsenseLicense
+                    url 'https://opensource.org/licenses/MIT'
                     distribution 'repo'
                 }
             }
@@ -45,16 +50,16 @@ bintray {
     configurations = ['archives']
     override = true
     pkg {
-        repo = "Commonsense-android-kotlin"
-        name = "base"
-        userOrg = "tvede-oss"
-        desc = ""
-        licenses = "MIT"
+        repo =  project.commonsenseRepoName
+        name = artifactName
+        userOrg = project.commonsenseUserOrg
+        desc = artifactDescription
+        licenses = project.commonsenseLicense
         publish = false
         publicDownloadNumbers = true
         version {
             name = project.commonsenseVersionName
-            desc = ""
+            desc = versionDescription
         }
     }
 }

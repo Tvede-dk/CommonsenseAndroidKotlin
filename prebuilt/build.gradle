@@ -51,15 +51,10 @@ android {
     }
 
 }
-kapt {
-    processors = "com.android.databinding:implementationr:$androidGradleVersion"
+/*kapt {
+    processors = "com.android.databinding:implementation:$androidGradleVersion"
     useLightAnalysis true
-}
-
-kapt {
-    processors = "com.android.databinding:implementationr:$androidGradleVersion"
-    useLightAnalysis true
-}
+}*/
 
 dependencies {
     //Tests
@@ -84,7 +79,7 @@ dependencies {
     testImplementation "com.squareup.leakcanary:leakcanary-android-no-op:$leakCanaryVersion"
 
     implementation "com.android.support:appcompat-v7:$supportVersion"
-    kapt "com.android.databinding:compiler:$androidGradleVersion"
+   // kapt "com.android.databinding:compiler:$androidGradleVersion"
     implementation "org.jetbrains.kotlin:kotlin-stdlib:$kotlin_version"
 
 }
@@ -99,7 +94,7 @@ kotlin {
     }
 }
 
-
+/*
 apply plugin: 'com.novoda.bintray-release' // must be applied after your artifact generating plugin (eg. java / com.android.library)
 
 publish {
@@ -111,5 +106,5 @@ publish {
     artifactId = 'prebuilt'
     desc = 'Base android features'
 }
-
+*/
 apply from: "../javadocSourceDokka.gradle"

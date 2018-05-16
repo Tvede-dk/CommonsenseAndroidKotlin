@@ -52,8 +52,7 @@ open class AbstractSearchableDataBindingRecyclerAdapter<
     : DataBindingRecyclerAdapter<T>(context.applicationContext) {
 
     //<editor-fold desc="Field variables">
-    private val allDataCollection: SectionLookupRep<T, InflatingFunction<*>>
-            = SectionLookupRep()
+    private val allDataCollection: SectionLookupRep<T, InflatingFunction<*>> = SectionLookupRep()
 
     private var filterValue: F? = null
 
@@ -209,12 +208,12 @@ open class AbstractSearchableDataBindingRecyclerAdapter<
     //</editor-fold>
 
     //<editor-fold desc="recycler view integration">
-    override fun onAttachedToRecyclerView(recyclerView: RecyclerView?) {
+    override fun onAttachedToRecyclerView(recyclerView: RecyclerView) {
         filterActor.setup { filterBySuspend(it) }
         super.onAttachedToRecyclerView(recyclerView)
     }
 
-    override fun onDetachedFromRecyclerView(recyclerView: RecyclerView?) {
+    override fun onDetachedFromRecyclerView(recyclerView: RecyclerView) {
         filterActor.clear()
         super.onDetachedFromRecyclerView(recyclerView)
     }

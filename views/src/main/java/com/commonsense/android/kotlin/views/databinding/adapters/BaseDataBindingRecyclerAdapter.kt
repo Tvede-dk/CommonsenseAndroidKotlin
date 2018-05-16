@@ -119,8 +119,7 @@ open class RenderModel<
 
     override fun getTypeValue(): Int = vmTypeValue
 
-    override fun renderFunction(view: Vm, model: T, viewHolder: BaseViewHolderItem<Vm>)
-            = vmRender(view, model, viewHolder)
+    override fun renderFunction(view: Vm, model: T, viewHolder: BaseViewHolderItem<Vm>) = vmRender(view, model, viewHolder)
 
     override fun bindToViewHolder(holder: BaseViewHolderItem<*>) {
         if (holder.viewBindingTypeValue == vmTypeValue) {
@@ -146,8 +145,7 @@ abstract class DataBindingRecyclerAdapter<T>(context: Context) :
 
     override fun getItemId(position: Int): Long = RecyclerView.NO_ID
 
-    private val dataCollection: SectionLookupRep<T, InflatingFunction<*>>
-            = SectionLookupRep()
+    private val dataCollection: SectionLookupRep<T, InflatingFunction<*>> = SectionLookupRep()
 
     private val listeningRecyclers = mutableSetOf<WeakReference<RecyclerView>>()
 
@@ -159,9 +157,10 @@ abstract class DataBindingRecyclerAdapter<T>(context: Context) :
         get() = dataCollection.sectionCount
 
 
-    override fun onCreateViewHolder(parent: ViewGroup?, @IntRange(from = 0) viewType: Int): BaseViewHolderItem<*>? {
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): BaseViewHolderItem<*> {
         val rep = dataCollection.getTypeRepresentativeFromTypeValue(viewType)
         return rep?.invoke(inflater, parent, false)
+                ?: throw RuntimeException("Could not get element type $viewType")
     }
 
     override fun getItemViewType(@IntRange(from = 0) position: Int): Int {
@@ -259,7 +258,8 @@ abstract class DataBindingRecyclerAdapter<T>(context: Context) :
     }
 
     open fun setSection(items: List<T>, inSection: Int) = updateData {
-        val (changes, added, removed) = dataCollection.setSection(items, inSection) ?: return@updateData
+        val (changes, added, removed) = dataCollection.setSection(items, inSection)
+                ?: return@updateData
         changes?.let {
             notifyItemRangeChanged(it.inRaw.start, it.inRaw.length)
         }
@@ -271,8 +271,7 @@ abstract class DataBindingRecyclerAdapter<T>(context: Context) :
         }
     }
 
-    fun setSection(item: T, inSection: Int)
-            = setSection(listOf(item), inSection)
+    fun setSection(item: T, inSection: Int) = setSection(listOf(item), inSection)
 
     @UiThread
     fun clearSection(inSection: Int): Unit = updateData {
@@ -306,14 +305,12 @@ abstract class DataBindingRecyclerAdapter<T>(context: Context) :
     }
 
 
-    override fun onAttachedToRecyclerView(recyclerView: RecyclerView?) {
+    override fun onAttachedToRecyclerView(recyclerView: RecyclerView) {
         super.onAttachedToRecyclerView(recyclerView)
-        if (recyclerView != null) {
-            listeningRecyclers.add(WeakReference(recyclerView))
-        }
+        listeningRecyclers.add(WeakReference(recyclerView))
     }
 
-    override fun onDetachedFromRecyclerView(recyclerView: RecyclerView?) {
+    override fun onDetachedFromRecyclerView(recyclerView: RecyclerView) {
         super.onDetachedFromRecyclerView(recyclerView)
         listeningRecyclers.removeAll {
             it.get().isNullOrEqualTo(recyclerView)

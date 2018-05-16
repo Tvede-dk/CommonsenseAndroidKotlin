@@ -69,7 +69,7 @@ kotlin {
     }
 }
 
-
+/*
 apply plugin: 'com.novoda.bintray-release' // must be applied after your artifact generating plugin (eg. java / com.android.library)
 
 publish {
@@ -82,5 +82,5 @@ publish {
     desc = 'data aware'
 }
 
-
+*/
 apply from: "../javadocSourceDokka.gradle"

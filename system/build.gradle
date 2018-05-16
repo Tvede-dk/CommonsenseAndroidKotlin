@@ -66,7 +66,7 @@ dependencies {
     implementation "com.android.support:appcompat-v7:$supportVersion"
     implementation "org.jetbrains.kotlin:kotlin-stdlib:$kotlin_version"
 }
-
+/*
 apply plugin: 'com.novoda.bintray-release' // must be applied after your artifact generating plugin (eg. java / com.android.library)
 
 publish {
@@ -77,6 +77,6 @@ publish {
     website = project.commonsenseWebsite
     artifactId = 'system'
     desc = 'kotlin features'
-}
+}*/
 
 apply from: "../javadocSourceDokka.gradle"

@@ -1,6 +1,7 @@
 apply plugin: 'com.android.library'
 apply plugin: 'kotlin-android'
 
+
 buildscript {
     repositories {
         jcenter()
@@ -71,7 +72,7 @@ kotlin {
     }
 }
 
-apply plugin: 'com.novoda.bintray-release' // must be applied after your artifact generating plugin (eg. java / com.android.library)
+/*apply plugin: 'com.novoda.bintray-release' // must be applied after your artifact generating plugin (eg. java / com.android.library)
 
 publish {
     userOrg = project.commonsenseUserOrg
@@ -82,6 +83,6 @@ publish {
     artifactId = 'base'
     desc = 'Base android features'
 }
-
+*/
 apply from: "../javadocSourceDokka.gradle"
-
+apply from: "publish.gradle"

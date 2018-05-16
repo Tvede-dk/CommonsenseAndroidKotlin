@@ -13,8 +13,7 @@ class EditDatabindingFragment : BaseDatabindingFragment<UserExampleViewBinding>(
 
     val user = User("", "", "", "")
 
-    override fun getInflater(): InflateBinding<UserExampleViewBinding>
-            = UserExampleViewBinding::inflate
+    override fun getInflater(): InflateBinding<UserExampleViewBinding> = UserExampleViewBinding::inflate
 
     override fun useBinding() {
 //        binding.userExampleItemView?.user = user
@@ -29,7 +28,11 @@ class EditDatabindingFragment : BaseDatabindingFragment<UserExampleViewBinding>(
 }
 
 private fun UserViewModel.toModel(): User {
-    return User(this.username.get(), this.email.get(), this.password.get(), this.realName.get())
+    return User(this.username.get()
+            ?: "",
+            this.email.get() ?: "",
+            this.password.get() ?: "",
+            this.realName.get() ?: "")
 }
 
 private fun User.toViewModel(): UserViewModel {

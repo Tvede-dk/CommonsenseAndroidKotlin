@@ -12,44 +12,41 @@ buildscript {
     ext.commonsenseUserOrg = "tvede-oss"
     ext.commonsenseGroupId = "com.commonsense.android.kotlin"
     ext.commonsenseRepoName = "Commonsense-android-kotlin"
+    ext.commonsenseGithub = "Tvede-dk/CommonsenseAndroidKotlin"
+    ext.commonsenseLicense = "MIT"
+    ext.readme = "readme.md"
     ext.commonsenseWebsite = "https://github.com/Tvede-dk/CommonsenseAndroidKotlin/"
+    ext.commonsenseGit = "https://github.com/Tvede-dk/CommonsenseAndroidKotlin.git"
 
-    ext.kotlin_version = '1.2.20'
-    ext.supportVersion = '27.0.2'
-    ext.coroutinesVersion = '0.21.2'
+    ext.kotlin_version = '1.2.41'
+    ext.supportVersion = '27.1.1'
+    ext.coroutinesVersion = '0.22.5'
     ext.leakCanaryVersion = "1.5.4"
     ext.junitVersion = "4.12"
-    ext.androidGradleVersion = "3.0.1"
-    ext.roboElectricVersion = "3.6.1"
+    ext.androidGradleVersion = "3.1.2"
+    ext.roboElectricVersion = "3.8"
     ext.espressoVersion = "3.0.1"
-    ext.dokkaVersion = "0.9.15"
+    ext.dokkaVersion = "0.9.16"
 
     repositories {
         google()
         jcenter()
     }
     dependencies {
+        classpath 'com.github.dcendents:android-maven-gradle-plugin:2.1'
         classpath "com.android.tools.build:gradle:$androidGradleVersion"
         classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlin_version"
-        //for deploying to bintray
-        classpath 'com.novoda:bintray-release:0.8.0'
+        classpath 'com.jfrog.bintray.gradle:gradle-bintray-plugin:1.8.0'
 
     }
 }
 
 
 plugins {
-//    id 'com.gradle.build-scan' version '1.11'
-    id "org.gradle.android.cache-fix" version "0.2.8"
     id "io.gitlab.arturbosch.detekt" version "1.0.0.RC6-2"
 }
 
 apply plugin: 'io.gitlab.arturbosch.detekt'
-
-//buildScan {
-//    licenseAgreementUrl = 'https://gradle.com/terms-of-service'
-//    licenseAgree = 'yes'
-//}
 
 
 allprojects {
@@ -60,7 +57,6 @@ allprojects {
 }
 
 subprojects {
-    apply plugin: "org.gradle.android.cache-fix"
 //    apply from: "../jacoco-kotlin.gradle"
 
 }

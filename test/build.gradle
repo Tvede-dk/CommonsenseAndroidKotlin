@@ -57,7 +57,7 @@ dependencies {
     api "org.robolectric:robolectric:$roboElectricVersion"
 }
 
-
+/*
 apply plugin: 'com.novoda.bintray-release' // must be applied after your artifact generating plugin (eg. java / com.android.library)
 
 publish {
@@ -69,6 +69,6 @@ publish {
     artifactId = 'test'
     desc = 'test functionality'
 }
-
+*/
 
 apply from: "../javadocSourceDokka.gradle"

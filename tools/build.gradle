@@ -51,14 +51,6 @@ android {
     }
 }
 
-
-
-
-kapt {
-    processors = "com.android.databinding:implementation:$androidGradleVersion"
-    useLightAnalysis true
-}
-
 dependencies {
     //TEST LIBS
     testImplementation "junit:junit:$junitVersion"
@@ -83,7 +75,7 @@ dependencies {
 }
 
 
-
+/*
 apply plugin: 'com.novoda.bintray-release' // must be applied after your artifact generating plugin (eg. java / com.android.library)
 
 publish {
@@ -95,5 +87,5 @@ publish {
     artifactId = 'tools'
     desc = 'tools - both for dev and prod'
 }
-
+*/
 apply from: "../javadocSourceDokka.gradle"

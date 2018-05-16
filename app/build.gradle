@@ -111,7 +111,7 @@ dependencies {
     implementation project(':base')
     testImplementation project(':test')
 
-    kapt "com.android.databinding:compiler:$androidGradleVersion"
+    //kapt "com.android.databinding:compiler:$androidGradleVersion"
 }
 
 repositories {

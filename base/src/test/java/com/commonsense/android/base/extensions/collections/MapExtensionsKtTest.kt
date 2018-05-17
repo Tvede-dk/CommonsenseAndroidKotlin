@@ -13,12 +13,12 @@ import org.junit.Test
 class MapExtensionsKtTest : BaseRoboElectricTest() {
     @Test
     fun forEachIndexed() {
-        //test empty
+        // test empty
         mapOf<String, String>().forEachIndexed { _, _ ->
             failTest("should not call with empty map")
         }
 
-        //test num of callbacks
+        // test num of callbacks
         testCallbackWithSemaphore(startAquire = 2, startPermits = 0, shouldAquire = true, errorMessage = "should be called 2 times") { sem ->
             mapOf(Pair("a", "1"), Pair("b", "2")).forEachIndexed { _, _ ->
                 sem.release()
@@ -30,8 +30,6 @@ class MapExtensionsKtTest : BaseRoboElectricTest() {
             counter.assert(index, "index should be incremental")
             counter++
         }
-
-
     }
 
     @Test
@@ -65,7 +63,5 @@ class MapExtensionsKtTest : BaseRoboElectricTest() {
                 sem.release()
             }
         }
-
     }
-
 }

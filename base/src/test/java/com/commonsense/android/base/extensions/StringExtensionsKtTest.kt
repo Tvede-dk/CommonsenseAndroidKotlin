@@ -19,7 +19,6 @@ class StringExtensionsKtTest : BaseRoboElectricTest() {
         "google.com".asUrl(false).assert("https://google.com")
         "http://google.com".asUrl(false).assert("http://google.com")
         "https://google.com".asUrl(false).assert("https://google.com")
-
     }
 
 }

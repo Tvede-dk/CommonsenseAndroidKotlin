@@ -2,6 +2,8 @@ package com.commonsense.android.kotlin.base.scheduling
 
 import com.commonsense.android.kotlin.base.AsyncCoroutineFunction
 import com.commonsense.android.kotlin.base.AsyncEmptyFunction
+import com.commonsense.android.kotlin.base.extensions.asyncSimple
+import com.commonsense.android.kotlin.base.extensions.awaitAll
 import com.commonsense.android.kotlin.base.extensions.collections.set
 import kotlinx.coroutines.experimental.Job
 import kotlinx.coroutines.experimental.launch
@@ -76,9 +78,8 @@ open class JobContainer {
     fun addJob(job: Job) = addJobToLocal(job)
 
     fun performAction(context: CoroutineContext, action: AsyncEmptyFunction): Job {
-        val job = launch(context) { action() }
-        addJobToLocal(job)
-        return job
+        val scopedAction: AsyncCoroutineFunction = { action() }
+        return performAction(context, scopedAction)
     }
 
     fun performAction(context: CoroutineContext, scopedAction: AsyncCoroutineFunction): Job {
@@ -112,10 +113,11 @@ open class JobContainer {
         return job
     }
 
-    fun performAction(context: CoroutineContext, action: AsyncEmptyFunction, forGroup: String): Job {
-        val job = launch(context) { action() }
-        addJobToGroup(job, forGroup)
-        return job
+    fun performAction(context: CoroutineContext,
+                      action: AsyncEmptyFunction,
+                      forGroup: String): Job {
+        val scopedAction: AsyncCoroutineFunction = { action() }
+        return performAction(context, scopedAction, forGroup)
     }
     //</editor-fold>
 
@@ -136,7 +138,8 @@ open class JobContainer {
     }
 
 
-    private inline fun changeQueuedJob(crossinline action: Map<String, MutableList<QueuedJob>>.() -> Map<String, MutableList<QueuedJob>>)
+    private fun changeQueuedJob(
+            action: suspend Map<String, MutableList<QueuedJob>>.() -> Map<String, MutableList<QueuedJob>>)
             : Unit = runBlocking {
         queuedGroupedJobsMutex.withLock {
             val result = action(queuedGroupedJobs)
@@ -146,15 +149,26 @@ open class JobContainer {
     }
 
     //</editor-fold>
+
     /**
      * Executes all queued up actions in that group.
+     * does not wait for the response of this.
      */
-    fun executeQueue(group: String): Unit = changeQueuedJob {
-        get(group)?.let {
-            it.forEach {
-                performAction(it.first, it.second)
-            }
+    fun executeQueueBackground(group: String): Unit {
+        asyncSimple {
+            executeQueueAwaited(group)
         }
+    }
+
+    /**
+     * Executes all queued up actions in that group.
+     * waits until all jobs are "done":
+     */
+    suspend fun executeQueueAwaited(group: String) = changeQueuedJob {
+        get(group)?.let {
+            it.map { performAction(it.first, it.second) }.awaitAll()
+        }
+        //TODO performance of this should be improved drastically (O(n))
         return@changeQueuedJob this.filter { it.key != group }
     }
 

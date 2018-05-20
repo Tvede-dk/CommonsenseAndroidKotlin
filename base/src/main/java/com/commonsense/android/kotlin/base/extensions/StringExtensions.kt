@@ -6,14 +6,15 @@ import android.net.Uri
  * Created by Kasper Tvede on 23-07-2017.
  */
 
-private val httpsPrefix = "https://"
-private val httpPrefix = "http://"
+const val httpsPrefix = "https://"
+const val httpPrefix = "http://"
 
 /**
  * Makes sure that the given string would work as a url.
  * this means prefixing it with (http(s)://) if missing
  */
-fun String.asUrl(forceHttps: Boolean = true): Uri {
+@Suppress("NOTHING_TO_INLINE")
+inline fun String.asUrl(forceHttps: Boolean = true): Uri {
     val isHttp = startsWith(httpPrefix)
     val isHttps = startsWith(httpsPrefix)
 
@@ -28,11 +29,14 @@ fun String.asUrl(forceHttps: Boolean = true): Uri {
     return Uri.parse(safeUrl)
 }
 
-fun Uri.fileExtension(): String? {
+
+@Suppress("NOTHING_TO_INLINE")
+inline fun Uri.fileExtension(): String? {
     return path.fileExtension()
 }
 
-fun String.fileExtension(): String? {
+@Suppress("NOTHING_TO_INLINE")
+inline fun String.fileExtension(): String? {
     return lastIndexOf('.').let {
         if (it > 0 && it + 1 < length) {
             return substring(it + 1)
@@ -42,6 +46,11 @@ fun String.fileExtension(): String? {
     }
 }
 
-fun Uri.withoutQueryParameters(): Uri {
+/**
+ * Removes the query from a Uri.
+ *
+ */
+@Suppress("NOTHING_TO_INLINE")
+inline fun Uri.withoutQueryParameters(): Uri {
     return buildUpon().query("").build()
 }

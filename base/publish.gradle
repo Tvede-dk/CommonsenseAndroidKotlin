@@ -1,12 +1,21 @@
 apply plugin: 'com.github.dcendents.android-maven'
 apply plugin: 'com.jfrog.bintray'
 
-version = project.commonsenseVersionName
-group = project.commonsenseGroupId
+
+def setupPublish(String artifactName, String artifactDescription, String versionDescription) {
+
+}
+
 
 final def artifactName = "base"
 final def artifactDescription = ""
 final def versionDescription = ""
+
+/////// common below.
+
+
+version = project.commonsenseVersionName
+group = project.commonsenseGroupId
 
 
 artifacts {
@@ -50,7 +59,7 @@ bintray {
     configurations = ['archives']
     override = true
     pkg {
-        repo =  project.commonsenseRepoName
+        repo = project.commonsenseRepoName
         name = artifactName
         userOrg = project.commonsenseUserOrg
         desc = artifactDescription

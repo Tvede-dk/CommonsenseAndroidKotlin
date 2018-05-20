@@ -5,6 +5,7 @@ import com.commonsense.android.kotlin.base.extensions.collections.invokeEachWith
 
 /**
  * Created by kasper on 23/05/2017.
+ * TODO remove / refactor make this more useable / accessible ?
  */
 
 class ObserverPattern<T> {

@@ -1,5 +1,6 @@
 # Built application files
 *.apk
+
 # Files for the ART/Dalvik VM
 *.dex
 
@@ -30,7 +31,20 @@ captures/
 
 # Intellij
 *.iml
-.idea/
+.idea/*
+# IDEA/Android Studio Ignore exceptions
+##folders
+!/.idea/fileTemplates/
+!/.idea/inspectionProfiles/
+!/.idea/codeStyles/
+!/.idea/scopes/
+!/.idea/copyright/
+!/.idea/runConfigurations/
+##files
+!/.idea/vcs.xml
+!/.idea/codeStyleSettings.xml
+!/.idea/encodings.xml
+!/.idea/compiler.xml
 
 # Keystore files
 *.jks

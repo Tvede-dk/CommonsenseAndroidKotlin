@@ -6,7 +6,7 @@ class JavaDocSourceWithDokka implements Plugin<Project> {
 
     void applyJavaDocSourceWithDokka(Project project) {
         //add dokka android
-        project.getPlugins().apply("org.jetbrains.dokka-android")
+        project.plugins.apply("org.jetbrains.dokka-android")
         //setup dokka
         project.dokka {
             outputFormat = 'javadoc'

@@ -1,0 +1,34 @@
+afterEvaluate {
+    final def tasks = project.tasks.findAll {
+        it.name.contains("compile") &&
+                it.name.contains("UnitTestSources")
+    }
+    for (task in tasks) {
+        println("Fixing coverage for ${task.name}")
+        task.finalizedBy "copyTestClasses"
+    }
+
+    project.tasks.withType(Test) {
+        it.jvmArgs("-noverify")
+    }
+}
+
+task copyTestClasses(type: Copy) {
+    from "$buildDir/tmp/kotlin-classes/"
+    into "$buildDir/intermediates/classes/"
+}
+
+task deleteResourceFromCoverage(type: Delete) {
+//    delete fileTree("$buildDir/intermediates/classes/") {
+//        exclude "*/android/"
+//        include "**/R.class"
+//        include "**/BuildConfig.class"
+//    }
+//    delete fileTree("$buildDir/intermediates/transforms/") {
+//        exclude "*/android/"
+//        include "**/R.class"
+//        include "**/BuildConfig.class"
+//    }
+}
+
+copyTestClasses.finalizedBy deleteResourceFromCoverage

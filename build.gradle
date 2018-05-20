@@ -18,6 +18,7 @@ buildscript {
     ext.commonsenseWebsite = "https://github.com/Tvede-dk/CommonsenseAndroidKotlin/"
     ext.commonsenseGit = "https://github.com/Tvede-dk/CommonsenseAndroidKotlin.git"
 
+    //included versions.
     ext.kotlin_version = '1.2.41'
     ext.supportVersion = '27.1.1'
     ext.coroutinesVersion = '0.22.5'
@@ -37,13 +38,13 @@ buildscript {
         classpath "com.android.tools.build:gradle:$androidGradleVersion"
         classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlin_version"
         classpath 'com.jfrog.bintray.gradle:gradle-bintray-plugin:1.8.0'
-
+        classpath "de.mannodermaus.gradle.plugins:android-junit5:1.0.32"
     }
 }
 
 
 plugins {
-    id "io.gitlab.arturbosch.detekt" version "1.0.0.RC6-2"
+    id "io.gitlab.arturbosch.detekt" version "1.0.0.RC7"
 }
 
 apply plugin: 'io.gitlab.arturbosch.detekt'
@@ -58,6 +59,15 @@ allprojects {
 
 subprojects {
 //    apply from: "../jacoco-kotlin.gradle"
+    buildscript {
+        repositories {
+            google()
+            jcenter()
+        }
+        dependencies {
+            classpath "org.jetbrains.dokka:dokka-android-gradle-plugin:${dokkaVersion}"
+        }
+    }
 
 }
 
@@ -69,13 +79,9 @@ task clean(type: Delete) {
 //for CI / jenkins integration
 
 apply from: "fix-tests.gradle"
-//disable javadoc since it breaks with kotlin.
-//tasks.withType(Javadoc).all {
-//    enabled = false
-//}
 
 detekt {
-    version = "1.0.0.RC6-2"
+    version = "1.0.0.RC7"
     profile("main") {
         input = "$projectDir/src/main/java"
         config = "$projectDir/detekt.yml"

@@ -15,7 +15,7 @@ import org.robolectric.annotation.Config
  * Base class of roboeletric tests, not requiring the manifest to be the set.
  */
 @RunWith(RobolectricTestRunner::class)
-@Config(constants = BuildConfig::class, sdk = [25])
+@Config(constants = BuildConfig::class)
 abstract class BaseRoboElectricTest {
     /**
      * the context to use in roboelectric tests

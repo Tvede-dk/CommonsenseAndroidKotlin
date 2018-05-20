@@ -8,8 +8,9 @@ package com.commonsense.android.kotlin.base.extensions.collections
 /**
  * maps a progression into an array of all the values.
  */
-fun IntProgression.toIntArray(): IntArray = this.toList().toIntArray()
+@Suppress("NOTHING_TO_INLINE")
+inline fun IntProgression.toIntArray(): IntArray = this.toList().toIntArray()
 
-val IntProgression.length
+inline val IntProgression.length
     get() = ((last + step) - first) / step //+ step due to "inclusive".
 

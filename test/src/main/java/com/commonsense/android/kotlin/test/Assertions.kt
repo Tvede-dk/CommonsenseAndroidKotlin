@@ -13,7 +13,7 @@ fun Boolean.assert(value: Boolean, message: String = "") {
     Assert.assertEquals(message, value, this)
 }
 
-fun Int.assert(value: Int, message: String = "") {
+fun <T : Number> T.assert(value: T, message: String = "") {
     Assert.assertEquals(message, value, this)
 }
 
@@ -21,12 +21,33 @@ fun String.assert(value: String, message: String = "") {
     Assert.assertEquals(message, value, this)
 }
 
+fun Char.assert(value: Char, message: String = "") {
+    Assert.assertEquals(message, value, this)
+}
+
+fun Byte.assert(value: Byte, message: String = "") {
+    Assert.assertEquals(message, value, this)
+}
+
+fun String.assertContains(value: String,
+                          ignoreCase: Boolean = false,
+                          message: String = "Could not find \"$value\", in  \r\n\"$this\"") {
+    Assert.assertTrue(message, this.contains(value, ignoreCase = ignoreCase))
+}
+
+fun String.assertContainsNot(value: String,
+                             ignoreCase: Boolean = false,
+                             message: String = "") {
+    Assert.assertFalse("$message \n Reason: Could find \"$value\", in  \r\n\"$this\"", this.contains(value, ignoreCase = ignoreCase))
+}
+
+
 fun Double.assert(value: Double, delta: Double = 0.1, message: String = "") {
     Assert.assertEquals(message, value, this, delta)
 }
 
-fun Float.assert(value: Float, message: String = "") {
-    Assert.assertEquals(message, value, this)
+fun Float.assert(value: Float, delta: Float = 0.1f, message: String = "") {
+    Assert.assertEquals(message, value, this, delta)
 }
 
 fun Uri.assert(value: Uri, message: String = "") {
@@ -54,14 +75,27 @@ fun Any?.assertNull(message: String = "") {
     Assert.assertNull(message, this)
 }
 
+fun <T : Comparable<T>> T.assertNotEquals(other: T, message: String = "") {
+    Assert.assertNotEquals(message, other, this)
+}
+
 fun <T> T?.assertNotNullApply(message: String = "", action: T.() -> Unit) {
     this.assertNotNull(message)
     this?.let(action)
 }
 
-fun <T> T?.assertNotNullAndEquals(other: T?, message: String = "") {
+fun <T> T?.assertNotNullAndEquals(other: T?, message: String = "value was $this, expected $other") {
     this.assertNotNull(message)
     Assert.assertEquals(message, other, this)
+}
+
+
+fun <U : Comparable<U>> U.assertLargerOrEqualTo(i: U, optMessage: String = "") {
+    Assert.assertTrue("$this should be larger or equal to $i, but it is not.\n$optMessage", this >= i)
+}
+
+fun <U : Comparable<U>> U.assertLargerThan(i: U, optMessage: String = "") {
+    Assert.assertTrue("$this should be larger than $i, but it is not.\n$optMessage", this > i)
 }
 
 
@@ -69,17 +103,29 @@ fun kotlin.ranges.IntRange.assert(otherRange: kotlin.ranges.IntRange, message: S
     Assert.assertEquals(message, otherRange, this)
 }
 
-inline fun assertThrows(message: String = "should throw", crossinline action: () -> Unit) {
+inline fun <reified T : Exception> assertThrows(
+        message: String = "should throw",
+        messageWrongException: String = "wrong exception type",
+        crossinline action: () -> Unit) {
+
     try {
         action()
-        Assert.fail(message)
+        failTest("Expected an exception of type ${T::class.java.simpleName} but got no exceptions\r$message")
     } catch (exception: Exception) {
-        //all is good.
+        if (exception is T) {
+            //all is good / expected.
+        } else {
+            failTest("Expected an exception of type \"${T::class.java.simpleName}\" " +
+                    "but got exception of type \"${exception::class.java.simpleName}\" instead." +
+                    "\r$messageWrongException")
+        }
+
     }
 }
 
 fun <T> Any.assertAs(otherValue: T, message: String = "") {
-    @Suppress("UNCHECKED_CAST") //this is exepcted, we are just making life easier for testing, if it throws, then its "all right" for a test.
+    @Suppress("UNCHECKED_CAST") //this is expected
+    // we are just making life easier for testing, if it throws, then its "all right" for a test.
     Assert.assertEquals(message, this as? T, otherValue)
 }
 
@@ -88,13 +134,13 @@ fun failTest(message: String = "") {
 }
 
 inline fun testCallbackWithSemaphore(@IntRange(from = 0) startPermits: Int = 0,
-                                     @IntRange(from = 0) startAquire: Int = startPermits + 1,
+                                     @IntRange(from = 0) startAcquire: Int = startPermits + 1,
                                      @IntRange(from = 0) timeoutTime: Int = 50,
                                      timeoutUnit: TimeUnit = TimeUnit.MILLISECONDS,
-                                     shouldAquire: Boolean = true,
+                                     shouldAcquire: Boolean = true,
                                      errorMessage: String = "",
                                      callback: (Semaphore) -> Unit) {
     val sem = Semaphore(startPermits)
     callback(sem)
-    sem.tryAcquire(startAquire, timeoutTime.toLong(), timeoutUnit).assert(shouldAquire, errorMessage)
+    sem.tryAcquire(startAcquire, timeoutTime.toLong(), timeoutUnit).assert(shouldAcquire, errorMessage)
 }

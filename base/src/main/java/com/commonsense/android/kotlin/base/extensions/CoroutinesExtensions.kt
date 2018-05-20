@@ -1,11 +1,11 @@
 package com.commonsense.android.kotlin.base.extensions
 
 import com.commonsense.android.kotlin.base.AsyncEmptyFunction
+import com.commonsense.android.kotlin.base.AsyncFunctionUnit
 import com.commonsense.android.kotlin.base.EmptyFunction
-import kotlinx.coroutines.experimental.CoroutineStart
-import kotlinx.coroutines.experimental.Deferred
-import kotlinx.coroutines.experimental.Job
-import kotlinx.coroutines.experimental.launch
+import com.commonsense.android.kotlin.base.FunctionUnit
+import kotlinx.coroutines.experimental.*
+import kotlinx.coroutines.experimental.channels.Channel
 import kotlin.coroutines.experimental.CoroutineContext
 
 /**
@@ -42,7 +42,7 @@ fun launch(context: CoroutineContext,
     }
 }
 
-fun <T> asyncSimple(context: CoroutineContext,
+fun <T> asyncSimple(context: CoroutineContext = CommonPool,
                     start: CoroutineStart = CoroutineStart.DEFAULT,
                     block: suspend () -> T): Deferred<T> {
     return kotlinx.coroutines.experimental.async(context, start, null, {
@@ -50,7 +50,33 @@ fun <T> asyncSimple(context: CoroutineContext,
     })
 }
 
-fun <T> asyncSimple(context: CoroutineContext,
+fun <T> asyncSimple(context: CoroutineContext = CommonPool,
                     block: suspend () -> T): Deferred<T> {
     return asyncSimple(context, CoroutineStart.DEFAULT, block)
+}
+
+/**
+ * Awaits a list of deferred computations.
+ * and returns the resulting list.
+ * @return the computed results awaited.
+ */
+suspend fun <T> List<Deferred<T>>.await(): List<T> {
+    return this.map { it.await() }
+}
+
+
+suspend fun List<Job>.awaitAll() {
+    this.forEach { job: Job -> job.join() }
+}
+
+suspend inline fun <E> Channel<E>.forEach(crossinline function: FunctionUnit<E>) {
+    for (item in this) {
+        function(item)
+    }
+}
+
+suspend fun <E> Channel<E>.forEachAsync(function: AsyncFunctionUnit<E>) {
+    for (item in this) {
+        function(item)
+    }
 }

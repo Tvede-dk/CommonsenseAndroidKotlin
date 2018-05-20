@@ -15,7 +15,7 @@ import kotlin.system.measureNanoTime
  * Measure time in seconds
  * returns the time in seconds.
  */
-fun measureSecondTime(function: EmptyFunction): Long {
+inline fun measureSecondTime(crossinline function: EmptyFunction): Long {
     val time = measureNanoTime(function)
     return time / 10_00_000_00L //nano = 100 millionth of a second
 }
@@ -23,18 +23,20 @@ fun measureSecondTime(function: EmptyFunction): Long {
 /**
  * converts an immutable string to an editable edition :)
  */
-fun String.toEditable(): Editable = Editable.Factory.getInstance().newEditable(this)
+@Suppress("NOTHING_TO_INLINE")
+inline fun String.toEditable(): Editable =
+        Editable.Factory.getInstance().newEditable(this)
 
 /**
  * returns true if this is null
  */
-val Any?.isNull
+inline val Any?.isNull
     get() = this == null
 
 /**
  * returns true if this is not null.
  */
-val Any?.isNotNull
+inline val Any?.isNotNull
     get() = this != null
 
 
@@ -42,28 +44,32 @@ val Any?.isNotNull
  * returns true if this is null or equal to the given argument.
  * does not return true if we are not null but the argument is null.
  */
-fun <T> T?.isNullOrEqualTo(other: T?): Boolean = this == null || this == other
+@Suppress("NOTHING_TO_INLINE")
+inline fun <T> T?.isNullOrEqualTo(other: T?): Boolean = this == null || this == other
 
 /**
  * Creates a weak reference to this object.
  */
-fun <T> T.weakReference(): WeakReference<T> = WeakReference(this)
+@Suppress("NOTHING_TO_INLINE")
+inline fun <T> T.weakReference(): WeakReference<T> = WeakReference(this)
 
 /**
  * Will use the value if the weak reference is not pointing to null
  */
-fun <T> WeakReference<T?>.useOpt(action: T.() -> Unit) {
+inline fun <T> WeakReference<T?>.useOpt(crossinline action: T.() -> Unit) {
     get()?.let(action)
 }
 
-fun <T> WeakReference<T>.use(action: T.() -> Unit) {
+
+inline fun <T> WeakReference<T>.use(crossinline action: T.() -> Unit) {
     get()?.let(action)
 }
 
 /**
  * invokes the function ( wrapped in a weakReference) with the input, if the weakreference is not pointing to null
  */
-fun <T> WeakReference<FunctionUnit<T>?>.use(input: T) {
+@Suppress("NOTHING_TO_INLINE")
+inline fun <T> WeakReference<FunctionUnit<T>?>.use(input: T) {
     get()?.let { it(input) }
 }
 
@@ -71,7 +77,9 @@ fun <T> WeakReference<FunctionUnit<T>?>.use(input: T) {
 /**
  * Creates a weak reference, if this is not null. otherwise returns null.
  */
-fun <T> T?.weakReference(): WeakReference<T>? where T : Optional<*> = this?.let(::WeakReference)
+@Suppress("NOTHING_TO_INLINE")
+inline fun <T> T?.weakReference(): WeakReference<T>? where T : Optional<*> =
+        this?.let(::WeakReference)
 
 /**
  * Allows us to call a function iff all is not null (the sender / receiver).
@@ -83,8 +91,8 @@ fun <T> T?.parseTo(receiver: ((T) -> Unit)?): T? {
     return this
 }
 
-inline fun Int.forEach(crossinline action: EmptyFunction) {
+inline fun Int.forEach(crossinline action: FunctionUnit<Int>) {
     for (i in 0 until this) {
-        action()
+        action(i)
     }
 }

@@ -1,16 +1,6 @@
 apply plugin: 'com.android.library'
 apply plugin: 'kotlin-android'
-
-
-buildscript {
-    repositories {
-        jcenter()
-    }
-
-    dependencies {
-        classpath "org.jetbrains.dokka:dokka-android-gradle-plugin:${dokkaVersion}"
-    }
-}
+apply plugin: "de.mannodermaus.android-junit5"
 
 android {
     compileSdkVersion androidSdkBuildVersion
@@ -22,15 +12,17 @@ android {
         targetSdkVersion project.targetSdk
         versionCode project.commonsenseVersionNumber
         versionName project.commonsenseVersionName
-
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
-
     }
+
 
     buildTypes {
         release {
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+        }
+        debug {
+            testCoverageEnabled true
         }
     }
 
@@ -45,15 +37,27 @@ android {
         unitTests.all {
             forkEvery = 2
         }
+        junitPlatform {
+            jacocoOptions {
+                taskGenerationEnabled = true
+                xml {
+                    enabled true
+                }
+                html {
+                    enabled true
+                }
+                csv {
+                    enabled true
+                }
+            }
+        }
     }
+
 }
 
 
 dependencies {
     //tests
-    androidTestImplementation("com.android.support.test.espresso:espresso-core:$espressoVersion", {
-        exclude group: 'com.android.support', module: 'support-annotations'
-    })
     testImplementation project(':test')
 
     //coroutines libs
@@ -63,9 +67,7 @@ dependencies {
     implementation "com.android.support:appcompat-v7:$supportVersion"
     implementation "org.jetbrains.kotlin:kotlin-stdlib:$kotlin_version"
 }
-repositories {
-    mavenCentral()
-}
+
 kotlin {
     experimental {
         coroutines "enable"
@@ -86,3 +88,14 @@ publish {
 */
 apply from: "../javadocSourceDokka.gradle"
 apply from: "publish.gradle"
+//afterEvaluate {
+//    tasks.find { task -> task.name.contains("UnitTestSources") }.finalizedBy copyTestClasses
+//}
+//task copyTestClasses(type: Copy) {
+//    from "build/tmp/kotlin-classes/"
+//    into "build/intermediates/classes/"
+//}
+//
+//
+
+apply from: "../fixKotlinCoverage.gradle"

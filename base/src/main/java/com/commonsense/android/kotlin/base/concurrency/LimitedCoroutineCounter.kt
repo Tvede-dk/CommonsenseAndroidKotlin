@@ -15,5 +15,4 @@ class LimitedCoroutineCounter(maxCounter: Int) {
             channel.receive()
         }
     }
-
 }

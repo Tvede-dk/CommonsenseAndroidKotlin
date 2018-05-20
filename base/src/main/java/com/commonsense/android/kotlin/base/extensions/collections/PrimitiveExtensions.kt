@@ -2,6 +2,7 @@ package com.commonsense.android.kotlin.base.extensions.collections
 
 import com.commonsense.android.kotlin.base.AsyncEmptyFunction
 import com.commonsense.android.kotlin.base.EmptyFunction
+import com.commonsense.android.kotlin.base.EmptyFunctionResult
 import com.commonsense.android.kotlin.base.FunctionUnit
 import com.commonsense.android.kotlin.base.extensions.isNull
 
@@ -22,7 +23,7 @@ inline fun Boolean.onTrue(crossinline action: EmptyFunction): Boolean {
 /**
  *  performs the action if the boolean is true.
  */
-suspend fun Boolean.onTrueAsync(action: AsyncEmptyFunction): Boolean {
+suspend inline fun Boolean.onTrueAsync(crossinline action: AsyncEmptyFunction): Boolean {
     if (this) {
         action()
     }
@@ -33,12 +34,26 @@ suspend fun Boolean.onTrueAsync(action: AsyncEmptyFunction): Boolean {
 /**
  * Maps a boolean into a value.
  */
-fun <T> Boolean.map(ifTrue: T, ifFalse: T): T = if (this) {
+@Suppress("NOTHING_TO_INLINE")
+inline fun <T> Boolean.map(ifTrue: T, ifFalse: T): T = if (this) {
     ifTrue
 } else {
     ifFalse
 }
 
+/**
+ * Maps lazyly the given parameters.
+ * since its inline, then the code would be as if you wrote the "if else statement"
+ * and then only did the computation iff that branch was chosene.
+ *
+ */
+inline fun <T> Boolean.mapLazy(crossinline ifTrue: EmptyFunctionResult<T>,
+                               crossinline ifFalse: EmptyFunctionResult<T>): T =
+        if (this) {
+            ifTrue()
+        } else {
+            ifFalse()
+        }
 
 /**
  * performs the given action if we are null
@@ -62,7 +77,8 @@ inline fun Boolean.ifTrue(crossinline action: EmptyFunction): Boolean = onTrue(a
 /**
  * Makes a more "elegant" sentence for some expressions, same as "com.commonsense.android.kotlin.com.commonsense.android.kotlin.base.onTrue"
  */
-suspend fun Boolean.ifTrueAsync(action: AsyncEmptyFunction): Boolean = onTrueAsync(action)
+suspend inline fun Boolean.ifTrueAsync(crossinline action: AsyncEmptyFunction): Boolean =
+        onTrueAsync(action)
 
 /**
  * performs the action if the boolean is false.
@@ -78,7 +94,8 @@ inline fun Boolean.onFalse(crossinline action: EmptyFunction): Boolean {
 /**
  * Makes a more "elegant" sentence for some expressions, same as "com.commonsense.android.kotlin.com.commonsense.android.kotlin.base.onTrue"
  */
-inline fun Boolean.ifFalse(crossinline action: EmptyFunction): Boolean = onFalse(action)
+inline fun Boolean.ifFalse(crossinline action: EmptyFunction): Boolean =
+        onFalse(action)
 
 inline fun <reified T : kotlin.Enum<T>> enumFromOrNull(name: String?): T? {
     return enumValues<T>().find { it.name == name }
@@ -88,8 +105,8 @@ inline fun <reified T : kotlin.Enum<T>> enumFromOr(name: String?, orElse: T): T 
     return enumFromOrNull<T>(name) ?: orElse
 }
 
-val IntRange.length
+inline val IntRange.length: Int
     get() = (last - start) + 1 //+1 since start is inclusive.
 
-val IntRange.largest
+inline val IntRange.largest: Int
     get() = maxOf(last, start)

@@ -51,7 +51,7 @@ class BaseActivityTest : BaseRoboElectricTest() {
             Robolectric.flushForegroundThreadScheduler()
             delay(50)
         }
-        counter++
+        counter += 1
         act.resume()
     }
 

@@ -22,7 +22,7 @@ android {
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }
         debug {
-            testCoverageEnabled true
+//            testCoverageEnabled true
         }
     }
 
@@ -37,20 +37,20 @@ android {
         unitTests.all {
             forkEvery = 2
         }
-        junitPlatform {
-            jacocoOptions {
-                taskGenerationEnabled = true
-                xml {
-                    enabled true
-                }
-                html {
-                    enabled true
-                }
-                csv {
-                    enabled true
-                }
-            }
-        }
+//        junitPlatform {
+//            jacocoOptions {
+//                taskGenerationEnabled = true
+//                xml {
+//                    enabled true
+//                }
+//                html {
+//                    enabled true
+//                }
+//                csv {
+//                    enabled true
+//                }
+//            }
+//        }
     }
 
 }

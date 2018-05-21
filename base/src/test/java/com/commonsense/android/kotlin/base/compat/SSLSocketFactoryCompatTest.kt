@@ -1,9 +1,7 @@
 package com.commonsense.android.kotlin.base.compat
 
-import com.commonsense.android.kotlin.test.assert
 import com.commonsense.android.kotlin.test.assertLargerThan
-import org.junit.Test
-import javax.net.ssl.SSLSocket
+import org.junit.jupiter.api.Test
 
 /**
  * Created by Kasper Tvede on 20-05-2018.

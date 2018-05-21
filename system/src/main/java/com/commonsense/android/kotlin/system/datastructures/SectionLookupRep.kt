@@ -422,7 +422,8 @@ class SectionLookupRep<T : TypeHashCodeLookupRepresent<Rep>, out Rep : Any> {
 
 }
 
-data class IndexPath(@IntRange(from = 0) val row: Int, @IntRange(from = 0) val section: Int)
+data class IndexPath(@IntRange(from = 0) val row: Int,
+                     @IntRange(from = 0) val section: Int)
 
 data class SectionUpdate(val inRaw: kotlin.ranges.IntRange, val inSection: kotlin.ranges.IntRange)
 

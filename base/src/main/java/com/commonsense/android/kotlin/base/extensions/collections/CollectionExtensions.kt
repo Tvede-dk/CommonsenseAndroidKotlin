@@ -61,7 +61,12 @@ inline fun <T> List<T>.repeate(repeateBy: Int): List<T> {
     return resultList
 }
 
-inline fun <reified T> List<T>.repeateToSize(size: Int): List<T> {
+@Size(min = 0)
+inline fun <reified T> List<T>.repeateToSize(
+        @android.support.annotation.IntRange(from = 0) size: Int): List<T> {
+    if (isEmpty() || size <= 0) {
+        return listOf()
+    }
     val timesToRepeate = size / count()
     val missingItemsToCopy = size % count()
     val resultList = this.repeate(timesToRepeate - 1)

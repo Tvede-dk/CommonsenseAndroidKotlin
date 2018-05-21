@@ -1,9 +1,9 @@
-package com.commonsense.android.base.extensions
+package com.commonsense.android.kotlin.base.extensions
 
 import com.commonsense.android.kotlin.base.extensions.collections.onFalse
 import com.commonsense.android.kotlin.base.extensions.collections.onTrue
 import org.junit.Assert
-import org.junit.Test
+import org.junit.jupiter.api.Test
 import java.util.concurrent.Semaphore
 import java.util.concurrent.TimeUnit
 

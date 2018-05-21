@@ -1,9 +1,8 @@
-package com.commonsense.android.base.patterns
+package com.commonsense.android.kotlin.base.patterns
 
-import com.commonsense.android.kotlin.base.patterns.*
 import com.commonsense.android.kotlin.test.*
 import kotlinx.coroutines.experimental.runBlocking
-import org.junit.Test
+import org.junit.jupiter.api.Test
 
 /**
  * Created by Kasper Tvede on 18-04-2018.

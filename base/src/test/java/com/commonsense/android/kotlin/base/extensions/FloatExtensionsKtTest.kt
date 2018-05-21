@@ -1,9 +1,8 @@
-package com.commonsense.android.base.extensions
+package com.commonsense.android.kotlin.base.extensions
 
-import com.commonsense.android.kotlin.base.extensions.isZero
-import com.commonsense.android.kotlin.base.extensions.negative
 import com.commonsense.android.kotlin.test.assert
-import org.junit.Test
+import org.junit.jupiter.api.Test
+
 
 /**
  * Created by Kasper Tvede on 18-04-2018.

@@ -46,7 +46,7 @@ class ReferenceCountingMapTest {
         map.decrementCounter(index)
         map.hasItem(index).assert(false, "decrement multiple times should have no impact.")
         map.addItem(testValue, index)
-        assertThrows("should throw error for trying to double add an item.") {
+        assertThrows<Exception>("should throw error for trying to double add an item.") {
             map.addItem(testValue, index)
         }
 

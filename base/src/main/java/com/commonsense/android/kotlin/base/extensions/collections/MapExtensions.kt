@@ -1,6 +1,5 @@
 package com.commonsense.android.kotlin.base.extensions.collections
 
-import android.support.annotation.IntRange
 import android.util.SparseArray
 import com.commonsense.android.kotlin.base.FunctionUnit
 import com.commonsense.android.kotlin.base.MapFunction

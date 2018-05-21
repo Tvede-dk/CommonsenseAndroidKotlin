@@ -1,4 +1,4 @@
-package com.commonsense.android.kotlin.test
+package com.commonsense.android.kotlin.test.benchmark
 
 /**
  * Created by Kasper Tvede on 14-04-2018.

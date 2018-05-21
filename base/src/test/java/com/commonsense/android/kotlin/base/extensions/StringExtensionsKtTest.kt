@@ -1,15 +1,11 @@
-package com.commonsense.android.base.extensions
+package com.commonsense.android.kotlin.base.extensions
 
 import android.net.Uri
-import com.commonsense.android.kotlin.base.extensions.asUrl
-import com.commonsense.android.kotlin.base.extensions.fileExtension
-import com.commonsense.android.kotlin.base.extensions.withoutQueryParameters
 import com.commonsense.android.kotlin.test.BaseRoboElectricTest
 import com.commonsense.android.kotlin.test.assert
 import com.commonsense.android.kotlin.test.assertNotNullAndEquals
 import com.commonsense.android.kotlin.test.assertNull
-
-import org.junit.Test
+import org.junit.jupiter.api.Test
 import org.robolectric.annotation.Config
 
 /**

@@ -15,11 +15,11 @@ import org.robolectric.annotation.Config
 /**
  * Created by Kasper Tvede on 07-10-2017.
  */
-@Config(sdk = intArrayOf(21))
+@Config(sdk = [21])
 class BaseActivityTest : BaseRoboElectricTest() {
     @Test
     fun launchInUiLifecycleEventsPaused() = testCallbackWithSemaphore(
-            shouldAquire = false,
+            shouldAcquire = false,
             errorMessage = "callback should not be called") { _ ->
         val act = createActivityController<BaseActivity>(R.style.Theme_AppCompat).apply {
             setup()
@@ -32,7 +32,7 @@ class BaseActivityTest : BaseRoboElectricTest() {
 
     @Test
     fun launchInUiLifecycleEventsPausedResume() = testCallbackWithSemaphore(
-            shouldAquire = true,
+            shouldAcquire = true,
             errorMessage = "callback should be called after onresume after a pause") { sem ->
         val act = createActivityController<BaseActivity>(R.style.Theme_AppCompat).apply {
             setup()
@@ -57,7 +57,7 @@ class BaseActivityTest : BaseRoboElectricTest() {
 
     @Test
     fun launchInUiLifecycleEventsPausedDestory() = testCallbackWithSemaphore(
-            shouldAquire = false,
+            shouldAcquire = false,
             errorMessage = "callback should be called after onresume after a pause") {
         val act = createActivityController<BaseActivity>(R.style.Theme_AppCompat).apply {
             setup()
@@ -83,7 +83,7 @@ class BaseActivityTest : BaseRoboElectricTest() {
 
     @Test
     fun launchInBackgroundLifecycleEventsPaused() = testCallbackWithSemaphore(
-            shouldAquire = true,
+            shouldAcquire = true,
             errorMessage = "callback should be called even when activity is paused.") { sem ->
         val act = createActivityController<BaseActivity>(R.style.Theme_AppCompat).apply {
             setup()
@@ -96,7 +96,7 @@ class BaseActivityTest : BaseRoboElectricTest() {
 
     @Test
     fun launchInUiLifecycleEventsVisible() = testCallbackWithSemaphore(
-            shouldAquire = true,
+            shouldAcquire = true,
             errorMessage = "callback should be called") { sem ->
         val act = createActivityController<BaseActivity>(R.style.Theme_AppCompat).apply {
             setup()
@@ -110,7 +110,7 @@ class BaseActivityTest : BaseRoboElectricTest() {
 
     @Test
     fun launchInBackgroundLifecycleEventsVisible() = testCallbackWithSemaphore(
-            shouldAquire = true,
+            shouldAcquire = true,
             errorMessage = "callback should be called") { sem ->
         val act = createActivityController<BaseActivity>(R.style.Theme_AppCompat).apply {
             setup()
@@ -124,7 +124,7 @@ class BaseActivityTest : BaseRoboElectricTest() {
 
     @Test
     fun addOnBackPressedListeners() = testCallbackWithSemaphore(
-            shouldAquire = true,
+            shouldAcquire = true,
             errorMessage = "callback should be called") { sem ->
         val act = createActivityController<BaseActivity>(R.style.Theme_AppCompat).apply {
             setup()
@@ -142,7 +142,7 @@ class BaseActivityTest : BaseRoboElectricTest() {
 
     @Test
     fun removeOnBackPressedListeners() = testCallbackWithSemaphore(
-            shouldAquire = false,
+            shouldAcquire = false,
             errorMessage = "callback should NOT be called") {
         val act = createActivityController<BaseActivity>(R.style.Theme_AppCompat).apply {
             setup()

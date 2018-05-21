@@ -1,5 +1,6 @@
-package com.commonsense.android.kotlin.test
+package com.commonsense.android.kotlin.test.benchmark
 
+import com.commonsense.android.kotlin.test.failTest
 import kotlin.system.measureNanoTime
 import java.util.concurrent.CountDownLatch
 import java.util.concurrent.TimeUnit

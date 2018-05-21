@@ -1,8 +1,7 @@
-package com.commonsense.android.base.patterns
+package com.commonsense.android.kotlin.base.patterns
 
-import com.commonsense.android.kotlin.base.patterns.ObserverPattern
 import com.commonsense.android.kotlin.test.assert
-import org.junit.Test
+import org.junit.jupiter.api.Test
 
 /**
  * Created by Kasper Tvede on 23-07-2017.

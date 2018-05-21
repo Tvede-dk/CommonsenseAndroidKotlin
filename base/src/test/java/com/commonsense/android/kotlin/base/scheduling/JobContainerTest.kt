@@ -1,13 +1,11 @@
-package com.commonsense.android.base.scheduling
+package com.commonsense.android.kotlin.base.scheduling
 
 import com.commonsense.android.kotlin.base.AsyncCoroutineFunction
 import com.commonsense.android.kotlin.base.AsyncEmptyFunction
 import com.commonsense.android.kotlin.base.extensions.awaitAll
-import com.commonsense.android.kotlin.base.scheduling.JobContainer
 import com.commonsense.android.kotlin.test.assert
 import kotlinx.coroutines.experimental.*
-import kotlinx.coroutines.experimental.sync.Mutex
-import org.junit.Test
+import org.junit.jupiter.api.Test
 import java.util.concurrent.Semaphore
 
 /**

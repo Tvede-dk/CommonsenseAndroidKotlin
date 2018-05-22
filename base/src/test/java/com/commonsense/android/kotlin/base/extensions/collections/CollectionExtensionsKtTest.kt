@@ -123,4 +123,24 @@ class CollectionExtensionsKtTest {
     fun forEachNotNull() {
 
     }
+
+    @Test
+    fun invokeEachWith1() {
+    }
+
+    @Test
+    fun invokeEachWith2() {
+    }
+
+    @Test
+    fun invokeEachWith3() {
+    }
+
+    @Test
+    fun invokeEachWith4() {
+    }
+
+    @Test
+    fun invokeEachWith5() {
+    }
 }

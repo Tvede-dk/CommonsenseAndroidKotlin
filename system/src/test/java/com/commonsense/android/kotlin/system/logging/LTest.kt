@@ -89,4 +89,21 @@ class LTest {
         }
     }
 
+    /**
+     * testing the state is one important thing,
+     * but testing whenever the state is obeyed is another thing
+     */
+    @Test
+    fun testLoggingContentControl() {
+        L.isLoggingAllowed(false)
+        L.warningLoggers.clear()
+
+    }
+
+    private fun removeAllLoggers() = L.apply{
+        warningLoggers.clear()
+        debugLoggers.clear()
+        errorLoggers.clear()
+    }
+
 }

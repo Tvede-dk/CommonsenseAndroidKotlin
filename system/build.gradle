@@ -80,3 +80,4 @@ publish {
 }*/
 
 apply from: "../javadocSourceDokka.gradle"
+apply from: "../fixKotlinCoverage.gradle"

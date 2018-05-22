@@ -111,7 +111,7 @@ inline fun <T, U> Expected<T>.use(crossinline action: (T) -> U): U? {
 /**
  * Use this value asynchronously iff its valid.
  */
-suspend inline fun <T, U> Expected<T>.useAsync(crossinline action: suspend (T) -> U): U? {
+suspend fun <T, U> Expected<T>.useAsync(action: suspend (T) -> U): U? {
     return if (isValid) {
         action(value)
     } else {

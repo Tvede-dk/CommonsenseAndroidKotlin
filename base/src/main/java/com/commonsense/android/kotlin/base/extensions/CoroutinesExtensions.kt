@@ -14,7 +14,8 @@ import kotlin.coroutines.experimental.CoroutineContext
 /**
  * when the job is completed, performs the given action on the given context.
  */
-inline fun Job.launchOnCompleted(context: CoroutineContext, crossinline action: EmptyFunction) {
+fun Job.launchOnCompleted(context: CoroutineContext,
+                          action: EmptyFunction) {
     invokeOnCompletion {
         launch(context) {
             action()
@@ -26,7 +27,8 @@ inline fun Job.launchOnCompleted(context: CoroutineContext, crossinline action: 
  * when the job is completed, performs the given action on the given context.
  * works with suspendable functions.
  */
-fun Job.launchOnCompletedAsync(context: CoroutineContext, action: AsyncEmptyFunction) {
+fun Job.launchOnCompletedAsync(context: CoroutineContext,
+                               action: AsyncEmptyFunction) {
     invokeOnCompletion {
         launch(context) {
             action()
@@ -34,14 +36,20 @@ fun Job.launchOnCompletedAsync(context: CoroutineContext, action: AsyncEmptyFunc
     }
 }
 
+/**
+ * Like the original launch, except without the coroutineScope 'this parameter
+ */
 fun launch(context: CoroutineContext,
            start: CoroutineStart = CoroutineStart.DEFAULT,
            block: suspend () -> Unit): Job {
-    return launch(context, start) {
+    return kotlinx.coroutines.experimental.launch(context, start) {
         block()
     }
 }
 
+/**
+ * Like the original async, except without the coroutineScope 'this parameter
+ */
 fun <T> asyncSimple(context: CoroutineContext = CommonPool,
                     start: CoroutineStart = CoroutineStart.DEFAULT,
                     block: suspend () -> T): Deferred<T> {
@@ -50,6 +58,9 @@ fun <T> asyncSimple(context: CoroutineContext = CommonPool,
     })
 }
 
+/**
+ * Like the original async, except without the coroutineScope 'this parameter
+ */
 fun <T> asyncSimple(context: CoroutineContext = CommonPool,
                     block: suspend () -> T): Deferred<T> {
     return asyncSimple(context, CoroutineStart.DEFAULT, block)
@@ -64,12 +75,14 @@ suspend fun <T> List<Deferred<T>>.await(): List<T> {
     return this.map { it.await() }
 }
 
-
+/**
+ * Waits for all the given jobs to finish.
+ */
 suspend fun List<Job>.awaitAll() {
-    this.forEach { job: Job -> job.join() }
+    this.forEach { it.join() }
 }
 
-suspend inline fun <E> Channel<E>.forEach(crossinline function: FunctionUnit<E>) {
+suspend fun <E> Channel<E>.forEach(function: FunctionUnit<E>) {
     for (item in this) {
         function(item)
     }

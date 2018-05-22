@@ -3,6 +3,7 @@ package com.commonsense.android.kotlin.system.logging
 import android.content.ComponentCallbacks
 import android.util.Log
 import android.view.View
+import com.commonsense.android.kotlin.base.extensions.collections.invokeEachWith
 import com.commonsense.android.kotlin.base.extensions.collections.onTrue
 import com.commonsense.android.kotlin.system.logging.LoggingType.*
 
@@ -34,8 +35,8 @@ enum class LoggingType {
 }
 
 /**
-* The Basis logging function.
-*/
+ * The Basis logging function.
+ */
 typealias LoggingFunctionType<T> = (tag: String, message: String, stackTrace: Throwable?) -> T
 
 /**
@@ -92,12 +93,26 @@ object L {
      * default is true
      */
     var isProductionLoggingAllowed = true
+
     /**
-     * controls what underlaying kind of logging the production logging should appear as
-     * Setting this to error, and disabling error logs while enabling production logs will STILL emit the production logs.
-     * default is warning
+     * Production level loggers; the intention here is to allow this logging in production.
+     * its controlled separate from all the other logging flags.
+     *
+     * default is the android warning logger
      */
-    var productionLogType: LoggingType = LoggingType.Warning
+    var productionLoggers: MutableList<LoggingFunctionType<Any>> = mutableListOf(LoggingType.Warning.getAndroidLoggerFunction())
+    /**
+     *
+     */
+    var debugLoggers: MutableList<LoggingFunctionType<Any>> = mutableListOf(LoggingType.Debug.getAndroidLoggerFunction())
+    /**
+     *
+     */
+    var warningLoggers: MutableList<LoggingFunctionType<Any>> = mutableListOf(LoggingType.Warning.getAndroidLoggerFunction())
+    /**
+     *
+     */
+    var errorLoggers: MutableList<LoggingFunctionType<Any>> = mutableListOf(LoggingType.Error.getAndroidLoggerFunction())
 
     /**
      * An error logging channel
@@ -112,7 +127,7 @@ object L {
      *
      */
     fun error(tag: String, msg: String, exception: Throwable? = null) {
-        isErrorLoggingAllowed.onTrue { Log.e(tag, msg, exception) }
+        isErrorLoggingAllowed.onTrue { errorLoggers.invokeEachWith(tag, msg, exception) }
     }
 
     /**
@@ -122,14 +137,14 @@ object L {
      *
      */
     fun warning(tag: String, message: String, exception: Throwable? = null) {
-        isWarningLoggingAllowed.onTrue { Log.w(tag, message, exception) }
+        isWarningLoggingAllowed.onTrue { warningLoggers.invokeEachWith(tag, message, exception) }
     }
 
     /**
      * A Debug logging
      */
-    fun debug(tag: String, msg: String, exception: Throwable? = null) {
-        isDebugLoggingAllowed.onTrue { Log.d(tag, msg, exception) }
+    fun debug(tag: String, message: String, exception: Throwable? = null) {
+        isDebugLoggingAllowed.onTrue { debugLoggers.invokeEachWith(tag, message, exception) }
     }
 
 
@@ -141,7 +156,7 @@ object L {
      *
      */
     fun logProd(tag: String, message: String, exception: Throwable? = null) {
-        isProductionLoggingAllowed.onTrue { productionLogType.getAndroidLoggerFunction().invoke(tag, message, exception) }
+        isProductionLoggingAllowed.onTrue { productionLoggers.invokeEachWith(tag, message, exception) }
     }
 }
 
@@ -170,6 +185,13 @@ fun ComponentCallbacks.logDebug(message: String, exception: Throwable? = null) {
 }
 
 /**
+ * @see L.logProd
+ */
+fun ComponentCallbacks.logProduction(message: String, exception: Throwable? = null) {
+    L.logProd(this.javaClass.simpleName, message, exception)
+}
+
+/**
  *
  * @see L.debug
  */
@@ -193,3 +215,9 @@ fun View.logError(message: String, exception: Throwable? = null) {
     L.error(this.javaClass.simpleName, message, exception)
 }
 
+/**
+ * @see L.logProd
+ */
+fun View.logProduction(message: String, exception: Throwable? = null) {
+    L.logProd(this.javaClass.simpleName, message, exception)
+}

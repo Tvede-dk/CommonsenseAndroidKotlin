@@ -2,7 +2,8 @@ package com.commonsense.android.kotlin.base.extensions.collections
 
 import android.util.SparseArray
 import com.commonsense.android.kotlin.test.*
-import org.junit.jupiter.api.Test
+import org.junit.Test
+
 
 /**
  * Created by Kasper Tvede on 08-10-2017.

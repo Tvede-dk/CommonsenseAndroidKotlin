@@ -4,6 +4,7 @@ import android.app.Activity
 import android.content.Context
 import android.support.annotation.StyleRes
 import org.junit.runner.RunWith
+
 import org.robolectric.Robolectric
 import org.robolectric.RobolectricTestRunner
 import org.robolectric.RuntimeEnvironment

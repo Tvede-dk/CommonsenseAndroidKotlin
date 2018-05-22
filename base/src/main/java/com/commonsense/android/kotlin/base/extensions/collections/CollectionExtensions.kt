@@ -1,6 +1,7 @@
 package com.commonsense.android.kotlin.base.extensions.collections
 
 import android.support.annotation.Size
+import com.commonsense.android.kotlin.base.Function1
 import com.commonsense.android.kotlin.base.FunctionResult
 import com.commonsense.android.kotlin.base.FunctionUnit
 
@@ -90,14 +91,90 @@ inline fun <T> List<T>.subList(intRange: IntRange): List<T> =
 inline fun <E> List<E>.limitToSize(size: Int): List<E> =
         subList(0, minOf(size, this.size))
 
+
+// invoke each with functionality.
+
+
+//<editor-fold desc="Invoke each with ">
 /**
- * Invokes each function with the given argument
+ * Invokes each function with the given arguments
  */
 @Suppress("NOTHING_TO_INLINE")
-inline fun <E> Iterable<FunctionUnit<E>>.invokeEachWith(element: E) =
+inline fun <I1, O> Iterable<kotlin.Function1<I1, O>>.invokeEachWith(element: I1) =
         forEach { it(element) }
 
 
+@Suppress("NOTHING_TO_INLINE")
+inline fun <I1, I2, O> Iterable<Function2<I1, I2, O>>.invokeEachWith(
+        firstElement: I1,
+        secondElement: I2) =
+        forEach { it(firstElement, secondElement) }
+
+
+@Suppress("NOTHING_TO_INLINE")
+inline fun <I1, I2, I3, O>
+        Iterable<Function3<I1, I2, I3, O>>.invokeEachWith(
+        firstElement: I1,
+        secondElement: I2,
+        thirdElement: I3) =
+        forEach {
+            it(firstElement,
+                    secondElement,
+                    thirdElement)
+        }
+
+@Suppress("NOTHING_TO_INLINE")
+inline fun <I1, I2, I3, I4, O>
+        Iterable<Function4<I1, I2, I3, I4, O>>.invokeEachWith(
+        firstElement: I1,
+        secondElement: I2,
+        thirdElement: I3,
+        forthElement: I4) =
+        forEach {
+            it(firstElement,
+                    secondElement,
+                    thirdElement,
+                    forthElement)
+        }
+
+
+@Suppress("NOTHING_TO_INLINE")
+inline fun <I1, I2, I3, I4, I5, O>
+        Iterable<Function5<I1, I2, I3, I4, I5, O>>.invokeEachWith(
+        firstElement: I1,
+        secondElement: I2,
+        thirdElement: I3,
+        forthElement: I4,
+        fifthElement: I5) =
+        forEach {
+            it(firstElement,
+                    secondElement,
+                    thirdElement,
+                    forthElement,
+                    fifthElement)
+        }
+
+@Suppress("NOTHING_TO_INLINE")
+inline fun <I1, I2, I3, I4, I5, I6, O>
+        Iterable<Function6<I1, I2, I3, I4, I5, I6, O>>.invokeEachWith(
+        firstElement: I1,
+        secondElement: I2,
+        thirdElement: I3,
+        forthElement: I4,
+        fifthElement: I5,
+        sixthElement: I6) =
+        forEach {
+            it(firstElement,
+                    secondElement,
+                    thirdElement,
+                    forthElement,
+                    fifthElement,
+                    sixthElement)
+        }
+//</editor-fold>
+
+
+@Suppress("NOTHING_TO_INLINE")
 inline fun <E> Iterable<E?>.forEachNotNull(crossinline action: FunctionUnit<E>) {
     forEach { it?.let(action) }
 }

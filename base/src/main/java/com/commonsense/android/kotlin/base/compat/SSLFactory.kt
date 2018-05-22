@@ -76,7 +76,7 @@ class SSLSocketFactoryCompat : SSLSocketFactory() {
 
 }
 
-fun Socket.setProtocolToTls12(): Socket {
+fun <T : Socket> T.setProtocolToTls12(): T {
     if (this is SSLSocket) {
         enabledProtocols = arrayOf(SSLContextProtocols.TLSv12.algorithmName)
     }

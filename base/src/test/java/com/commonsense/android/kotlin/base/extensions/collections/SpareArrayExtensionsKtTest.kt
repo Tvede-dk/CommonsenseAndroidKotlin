@@ -5,14 +5,14 @@ import android.util.SparseIntArray
 import com.commonsense.android.kotlin.test.BaseRoboElectricTest
 import com.commonsense.android.kotlin.test.assert
 import com.commonsense.android.kotlin.test.assertNotNullAndEquals
-import org.junit.jupiter.api.Test
+import org.junit.Test
 
 
 /**
  * Created by Kasper Tvede on 21-05-2018.
  * Purpose:
  */
-internal class SpareArrayExtensionsKtTest : BaseRoboElectricTest() {
+class SpareArrayExtensionsKtTest : BaseRoboElectricTest() {
 
     @Test
     fun setViaList() {

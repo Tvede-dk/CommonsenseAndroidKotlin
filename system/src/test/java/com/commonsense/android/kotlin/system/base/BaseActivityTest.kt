@@ -11,6 +11,8 @@ import kotlinx.coroutines.experimental.runBlocking
 import org.junit.Test
 import org.robolectric.Robolectric
 import org.robolectric.annotation.Config
+import java.util.concurrent.Semaphore
+import java.util.concurrent.TimeUnit
 
 /**
  * Created by Kasper Tvede on 07-10-2017.
@@ -31,9 +33,8 @@ class BaseActivityTest : BaseRoboElectricTest() {
     }
 
     @Test
-    fun launchInUiLifecycleEventsPausedResume() = testCallbackWithSemaphore(
-            shouldAcquire = true,
-            errorMessage = "callback should be called after onresume after a pause") { sem ->
+    fun launchInUiLifecycleEventsPausedResume() {
+        val sem = Semaphore(0)
         val act = createActivityController<BaseActivity>(R.style.Theme_AppCompat).apply {
             setup()
             pause()
@@ -46,13 +47,14 @@ class BaseActivityTest : BaseRoboElectricTest() {
                 sem.release()
             }
         })
-        runBlocking {
-            Robolectric.flushBackgroundThreadScheduler()
-            Robolectric.flushForegroundThreadScheduler()
-            delay(50)
-        }
         counter += 1
+        act.visible()
         act.resume()
+        act.postResume()
+        awaitAllTheading({ sem.tryAcquire() },
+                1,
+                TimeUnit.SECONDS,
+                "callback should be called after onresume after a pause")
     }
 
     @Test

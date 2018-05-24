@@ -2,6 +2,7 @@ package com.commonsense.android.kotlin.test
 
 import android.app.Activity
 import android.content.Context
+import android.support.annotation.IntRange
 import android.support.annotation.StyleRes
 import org.junit.runner.RunWith
 
@@ -10,6 +11,9 @@ import org.robolectric.RobolectricTestRunner
 import org.robolectric.RuntimeEnvironment
 import org.robolectric.android.controller.ActivityController
 import org.robolectric.annotation.Config
+import org.robolectric.shadows.ShadowLooper
+import java.util.concurrent.TimeUnit
+import kotlin.system.measureTimeMillis
 
 /**
  * Created by Kasper Tvede on 20-07-2017.
@@ -41,5 +45,25 @@ abstract class BaseRoboElectricTest {
                 }
             }
 
+    inline fun awaitAllTheading(crossinline condition: () -> Boolean,
+                                @IntRange(from = 0) timeoutTime: Long,
+                                TimeoutTimeUnit: TimeUnit,
+                                s: String) {
+
+        var remandingTimeInMs = TimeoutTimeUnit.toMillis(timeoutTime)
+        while (!condition()) {
+            val loopTime = measureTimeMillis {
+                ShadowLooper.runUiThreadTasks()
+                ShadowLooper.runUiThreadTasksIncludingDelayedTasks()
+                ShadowLooper.runMainLooperOneTask()
+                ShadowLooper.runMainLooperToNextTask()
+                //sleep / delay here ?
+            }
+            remandingTimeInMs -= loopTime
+            if (remandingTimeInMs <= 0) {
+                break
+            }
+        }
+    }
 
 }

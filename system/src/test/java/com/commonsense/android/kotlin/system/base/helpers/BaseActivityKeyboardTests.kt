@@ -1,9 +1,10 @@
-package com.commonsense.android.kotlin.system.base
+package com.commonsense.android.kotlin.system.base.helpers
 
 import android.app.Activity
 import android.widget.EditText
 import com.commonsense.android.kotlin.system.BuildConfig
 import com.commonsense.android.kotlin.system.R
+import com.commonsense.android.kotlin.system.base.BaseActivity
 import com.commonsense.android.kotlin.system.extensions.hideSoftKeyboard
 import com.commonsense.android.kotlin.system.extensions.inputMethodManager
 import com.commonsense.android.kotlin.system.extensions.requestFocusAndShowKeyboard

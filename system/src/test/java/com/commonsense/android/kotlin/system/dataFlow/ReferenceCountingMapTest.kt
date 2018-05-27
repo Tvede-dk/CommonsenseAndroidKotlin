@@ -32,6 +32,7 @@ class ReferenceCountingMapTest {
         map.getItemAs<String>(index)?.assert(testValue)
         map.decrementCounter(index)
         map.hasItem(index).assert(false, "should remove item when no references are to it.")
+        map.getItemAs<String>("missing index").assertNull("cannot find missing index")
     }
 
     @Test

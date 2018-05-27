@@ -3,6 +3,7 @@ package com.commonsense.android.kotlin.base.extensions.collections
 import com.commonsense.android.kotlin.test.assert
 import com.commonsense.android.kotlin.test.assertEmpty
 import com.commonsense.android.kotlin.test.assertSize
+import org.junit.Assert
 import org.junit.jupiter.api.Test
 
 /**
@@ -29,6 +30,13 @@ class MutableExtensionsKtTest {
 
     @Test
     fun findAndRemoveAll() {
+        val list = mutableListOf("a", "a", "b", "abc")
+        list.findAndRemoveAll { it == "a" }
+        Assert.assertEquals(list.size, 2)
+        list.findAndRemoveAll { it == "abc" }
+        Assert.assertEquals(list.size, 1)
+        list.findAndRemoveAll { it == "x" }
+        Assert.assertEquals(list.size, 1)
 
     }
 
@@ -62,6 +70,11 @@ class MutableExtensionsKtTest {
 
     @Test
     fun removeAtOr() {
-
+        val list = mutableListOf("ab", "ba")
+        Assert.assertEquals(list.removeAtOr(0, ""), "ab")
+        Assert.assertEquals(list.size, 1)
+        Assert.assertEquals(list.removeAtOr(10, "qwe"), "qwe")
+        Assert.assertEquals(list.size, 1)
     }
+
 }

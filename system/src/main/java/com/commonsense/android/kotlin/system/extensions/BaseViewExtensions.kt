@@ -6,7 +6,20 @@ import android.widget.EditText
  * Created by Kasper Tvede on 03-08-2017.
  */
 
-
-fun EditText.setSelectionAtEnd() {
+/**
+ * puts the selection at the end (no selection length though)
+ */
+@Suppress("NOTHING_TO_INLINE")
+inline fun EditText.setSelectionAtEnd() {
+    //setSelection to an index sets the selection to [index, index]
     setSelection(length())
 }
+
+/**
+ * puts the selection at the start (no selection length though)
+ */
+@Suppress("NOTHING_TO_INLINE")
+inline fun EditText.setSelectionAtStart() {
+    setSelection(0)
+}
+

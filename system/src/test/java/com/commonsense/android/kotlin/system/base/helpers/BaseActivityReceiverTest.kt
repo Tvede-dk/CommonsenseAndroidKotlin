@@ -1,8 +1,8 @@
-package com.commonsense.android.kotlin.system.base
+package com.commonsense.android.kotlin.system.base.helpers
 
 import android.content.BroadcastReceiver
 import android.content.IntentFilter
-import com.commonsense.android.kotlin.system.base.helpers.TestReceiver
+import com.commonsense.android.kotlin.system.base.BaseActivity
 import com.commonsense.android.kotlin.test.BaseRoboElectricTest
 import com.commonsense.android.kotlin.test.assertSize
 import org.junit.Test

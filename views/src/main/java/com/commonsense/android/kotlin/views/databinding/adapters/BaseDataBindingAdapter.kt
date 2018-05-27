@@ -16,7 +16,7 @@ import com.commonsense.android.kotlin.views.baseClasses.BaseAdapter
 open class BaseDataBindingAdapter(context: Context) : BaseAdapter<BaseAdapterItemBinding<*>>(context) {
     private val viewTypes = SparseIntArray()
 
-    private val layoutInflator: LayoutInflater by lazy {
+    private val layoutInflater: LayoutInflater by lazy {
         LayoutInflater.from(context)
     }
 
@@ -26,7 +26,7 @@ open class BaseDataBindingAdapter(context: Context) : BaseAdapter<BaseAdapterIte
         val binding = if (otherClass != null && otherClass::class.java == item.viewBindingClass) {
             item.useConvertedView(otherClass)
         } else {
-            item.createBinding(layoutInflator, parent)
+            item.createBinding(layoutInflater, parent)
         }
         binding.root.tag = binding
         return binding.root
@@ -87,7 +87,8 @@ open class BaseDataBindingAdapter(context: Context) : BaseAdapter<BaseAdapterIte
 
 }
 
-abstract class BaseAdapterItemBinding<T : ViewDataBinding>(val constructorFunc: (LayoutInflater, ViewGroup, Boolean) -> T, val viewBindingClass: Class<T>) {
+abstract class BaseAdapterItemBinding<T : ViewDataBinding>(
+        val constructorFunc: (LayoutInflater, ViewGroup, Boolean) -> T, val viewBindingClass: Class<T>) {
     /**
      *  assumption : this function only gets called, iff the class type of convertview.tag == viewbidingclass.
      * @param convertView

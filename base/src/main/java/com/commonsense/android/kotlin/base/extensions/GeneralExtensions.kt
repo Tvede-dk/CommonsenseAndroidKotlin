@@ -2,7 +2,9 @@ package com.commonsense.android.kotlin.base.extensions
 
 import android.text.Editable
 import com.commonsense.android.kotlin.base.EmptyFunction
+import com.commonsense.android.kotlin.base.EmptyFunctionResult
 import com.commonsense.android.kotlin.base.FunctionUnit
+import com.commonsense.android.kotlin.base.extensions.collections.map
 import java.lang.ref.WeakReference
 import java.util.*
 import kotlin.system.measureNanoTime
@@ -91,8 +93,39 @@ fun <T> T?.parseTo(receiver: ((T) -> Unit)?): T? {
     return this
 }
 
+/**
+ * Maps an optional value into another value
+ * @param ifNotNull the value if 'this' is not null
+ * @param ifNull the value if 'this' is null
+ * @return the value depending on 'this' value
+ */
+@Suppress("NOTHING_TO_INLINE")
+inline fun <U> Any?.map(ifNotNull: U, ifNull: U): U {
+    return this.isNotNull.map(ifNotNull, ifNull)
+}
+
+/**
+ * Maps an optional value into another value
+ * @param ifNotNull the value if 'this' is not null
+ * @param ifNull the value if 'this' is null
+ * @return the value depending on 'this' value
+ */
+inline fun <U> Any?.mapLazy(crossinline ifNotNull: EmptyFunctionResult<U>,
+                            crossinline ifNull: EmptyFunctionResult<U>): U {
+    return if (this.isNotNull) {
+        ifNotNull()
+    } else {
+        ifNull()
+    }
+}
+
 inline fun Int.forEach(crossinline action: FunctionUnit<Int>) {
     for (i in 0 until this) {
         action(i)
     }
 }
+
+/**
+ * Creates a safer cast than regular due to the reified type T.
+ */
+inline fun <reified T> Any.cast(): T? = this as? T

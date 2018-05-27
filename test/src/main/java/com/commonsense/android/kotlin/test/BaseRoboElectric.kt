@@ -57,7 +57,7 @@ abstract class BaseRoboElectricTest {
                 ShadowLooper.runUiThreadTasksIncludingDelayedTasks()
                 ShadowLooper.runMainLooperOneTask()
                 ShadowLooper.runMainLooperToNextTask()
-                //sleep / delay here ?
+                Thread.sleep(10)
             }
             remandingTimeInMs -= loopTime
             if (remandingTimeInMs <= 0) {

@@ -97,10 +97,11 @@ class LTest {
     fun testLoggingContentControl() {
         L.isLoggingAllowed(false)
         L.warningLoggers.clear()
+        TODO()
 
     }
 
-    private fun removeAllLoggers() = L.apply{
+    private fun removeAllLoggers() = L.apply {
         warningLoggers.clear()
         debugLoggers.clear()
         errorLoggers.clear()

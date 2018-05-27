@@ -8,6 +8,7 @@ import android.support.annotation.UiThread
 import android.support.v7.widget.RecyclerView
 import android.view.LayoutInflater
 import android.view.ViewGroup
+import com.commonsense.android.kotlin.base.extensions.cast
 import com.commonsense.android.kotlin.base.extensions.collections.ifTrue
 import com.commonsense.android.kotlin.base.extensions.collections.length
 import com.commonsense.android.kotlin.base.extensions.isNullOrEqualTo
@@ -19,6 +20,7 @@ import com.commonsense.android.kotlin.system.datastructures.TypeSection
 import com.commonsense.android.kotlin.system.logging.L
 import com.commonsense.android.kotlin.views.ViewInflatingFunction
 import java.lang.ref.WeakReference
+import kotlin.reflect.KClass
 
 /**
  * Created by kasper on 17/05/2017.
@@ -59,11 +61,17 @@ interface IRenderModelItem<T : Any, Vm : ViewDataBinding> :
 
 /**
  *  The Root of databinding render models (factors the most common stuff out)
+ *  creates a renderable model that can render it self.
  */
 abstract class BaseRenderModel<
         T : Any,
         Vm : ViewDataBinding>(val item: T, classType: Class<Vm>)
     : IRenderModelItem<T, Vm> {
+
+    /**
+     * Convenience constructor, same as original but using kotlin's classes instead.
+     */
+    constructor(item: T, classType: KClass<Vm>) : this(item, classType.java)
 
 
     override fun getValue(): T = item
@@ -74,12 +82,13 @@ abstract class BaseRenderModel<
     }
 
     override fun bindToViewHolder(holder: BaseViewHolderItem<*>) {
-        if (holder.viewBindingTypeValue == vmTypeValue) {
-            @Suppress("UNCHECKED_CAST")
-            renderFunction(holder.item as Vm, item, holder as BaseViewHolderItem<Vm>)
-            //we are now "sure" that the bi nding class is the same as ours, thus casting "should" be "ok". (we basically introduced our own type system)
+        val casted = holder.cast<BaseViewHolderItem<Vm>>()
+        if (casted != null) {
+            renderFunction(casted.item, item, casted)
+            //we are now "sure" that the binding class is the same as ours, thus casting "should" be "ok". (we basically introduced our own type system)
         } else {
-            L.debug("RenderModelItem", "unable to bind to view even though it should be correct type$vmTypeValue expected, got : ${holder.viewBindingTypeValue}")
+            L.debug("RenderModelItem",
+                    "unable to bind to view even though it should be correct type$vmTypeValue expected, got : ${holder.viewBindingTypeValue}")
         }
     }
 
@@ -122,9 +131,10 @@ open class RenderModel<
     override fun renderFunction(view: Vm, model: T, viewHolder: BaseViewHolderItem<Vm>) = vmRender(view, model, viewHolder)
 
     override fun bindToViewHolder(holder: BaseViewHolderItem<*>) {
-        if (holder.viewBindingTypeValue == vmTypeValue) {
+        val casted = holder.cast<BaseViewHolderItem<Vm>>()
+        if (casted != null) {
             @Suppress("UNCHECKED_CAST")
-            renderFunction(holder.item as Vm, item, holder as BaseViewHolderItem<Vm>)
+            renderFunction(casted.item, item, casted)
             //we are now "sure" that the binding class is the same as ours, thus casting "should" be "ok". (we basically introduced our own type system)
         } else {
             L.debug("RenderModelItem", "unable to bind to view even though it should be correct type$vmTypeValue expected, got : ${holder.viewBindingTypeValue}")
@@ -157,10 +167,9 @@ abstract class DataBindingRecyclerAdapter<T>(context: Context) :
         get() = dataCollection.sectionCount
 
 
-    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): BaseViewHolderItem<*> {
+    override fun onCreateViewHolder(parent: ViewGroup, @IntRange(from = 0) viewType: Int): BaseViewHolderItem<*> {
         val rep = dataCollection.getTypeRepresentativeFromTypeValue(viewType)
-        return rep?.invoke(inflater, parent, false)
-                ?: throw RuntimeException("Could not get element type $viewType")
+        return rep?.invoke(inflater, parent, false) ?: throw RuntimeException("")
     }
 
     override fun getItemViewType(@IntRange(from = 0) position: Int): Int {
@@ -307,6 +316,7 @@ abstract class DataBindingRecyclerAdapter<T>(context: Context) :
 
     override fun onAttachedToRecyclerView(recyclerView: RecyclerView) {
         super.onAttachedToRecyclerView(recyclerView)
+
         listeningRecyclers.add(WeakReference(recyclerView))
     }
 

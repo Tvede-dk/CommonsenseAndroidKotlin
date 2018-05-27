@@ -5,6 +5,7 @@ import android.util.SparseIntArray
 import com.commonsense.android.kotlin.test.BaseRoboElectricTest
 import com.commonsense.android.kotlin.test.assert
 import com.commonsense.android.kotlin.test.assertNotNullAndEquals
+import org.junit.Assert
 import org.junit.Test
 
 
@@ -73,6 +74,7 @@ class SpareArrayExtensionsKtTest : BaseRoboElectricTest() {
                 value.assert(50)
             }
         }
-
     }
+
+
 }

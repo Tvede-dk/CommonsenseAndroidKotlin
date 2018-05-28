@@ -1,6 +1,10 @@
 package com.commonsense.android.kotlin.system.logging
 
+import com.commonsense.android.kotlin.base.FunctionUnit
+import com.commonsense.android.kotlin.base.extensions.collections.set
 import com.commonsense.android.kotlin.test.assert
+import com.commonsense.android.kotlin.test.assertNotNullAndEquals
+import com.commonsense.android.kotlin.test.assertNull
 import org.junit.Test
 
 /**
@@ -96,15 +100,68 @@ class LTest {
     @Test
     fun testLoggingContentControl() {
         L.isLoggingAllowed(false)
-        L.warningLoggers.clear()
-        TODO()
-
+        testLoggingPassThough(
+                { L.isDebugLoggingAllowed = it },
+                { L.debugLoggers.set(it) },
+                L::debug,
+                "Debugtag",
+                "messageDebug",
+                RuntimeException("someDebug")
+        )
+        testLoggingPassThough(
+                { L.isWarningLoggingAllowed = it },
+                { L.warningLoggers.set(it) },
+                L::warning,
+                "tagwarning\r\n",
+                "wmessage",
+                RuntimeException("warning ")
+        )
+        testLoggingPassThough(
+                { L.isErrorLoggingAllowed = it },
+                { L.errorLoggers.set(it) },
+                L::error,
+                "tagError",
+                "EmessageRror",
+                RuntimeException("warningtoError")
+        )
+        testLoggingPassThough(
+                { L.isProductionLoggingAllowed = it },
+                { L.productionLoggers.set(it) },
+                L::logProd,
+                "prod",
+                "very usuable message",
+                IllegalAccessError("prod not allowed on test")
+        )
     }
 
-    private fun removeAllLoggers() = L.apply {
-        warningLoggers.clear()
-        debugLoggers.clear()
-        errorLoggers.clear()
-    }
+    private inline fun testLoggingPassThough(
+            controlLoggingMethod: FunctionUnit<Boolean>,
+            setLoggerMethod: FunctionUnit<LoggingFunctionType<Unit>>,
+            loggerMethod: LoggingFunctionType<Unit>,
+            tagToUse: String,
+            messageToUse: String,
+            exceptionToUse: Throwable) {
+        var outerTag = ""
+        var outerMessage = ""
+        var outerThrowable: Throwable? = null
+        setLoggerMethod { tag: String,
+                          message: String,
+                          stackTrace: Throwable? ->
+            outerTag = tag
+            outerMessage = message
+            outerThrowable = stackTrace
+        }
+        controlLoggingMethod(false)
+        loggerMethod(tagToUse, messageToUse, exceptionToUse)
+        outerTag.assert("", "not allowed to run logger at this time")
+        outerMessage.assert("", "not allowed to run logger at this time")
+        outerThrowable.assertNull("not allowed to run logger at this time")
 
+        controlLoggingMethod(true)
+        loggerMethod(tagToUse, messageToUse, exceptionToUse)
+        outerTag.assert(tagToUse, "supplied tag should get passed")
+        outerMessage.assert(messageToUse, "supplied message should get passed")
+        outerThrowable.assertNotNullAndEquals(exceptionToUse, "supplied exception should get passed")
+
+    }
 }

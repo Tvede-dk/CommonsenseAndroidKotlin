@@ -12,7 +12,7 @@ import com.commonsense.android.kotlin.system.logging.logWarning
  * Created by Kasper Tvede on 21-05-2017.
  */
 
-val Context.inputMethodManager: InputMethodManager?
+inline val Context.inputMethodManager: InputMethodManager?
     @SuppressLint("NewApi")
     get() {
         return if (isApiOverOrEqualTo(23)) {
@@ -22,23 +22,26 @@ val Context.inputMethodManager: InputMethodManager?
         }
     }
 
-fun Context.hideSoftKeyboardFrom(editText: EditText) {
+@Suppress("NOTHING_TO_INLINE")
+inline fun Context.hideSoftKeyboardFrom(editText: EditText) {
     inputMethodManager?.hideSoftInputFromWindow(editText.windowToken, 0)
 }
 
-fun Activity.hideSoftKeyboard() {
+@Suppress("NOTHING_TO_INLINE")
+inline fun Activity.hideSoftKeyboard() {
     val view = currentFocus ?: rootView
     if (view == null) {
         logWarning("no view in focus or root view")
         return
     }
-    inputMethodManager?.hideSoftInputFromInputMethod(view.windowToken, 0)
+    inputMethodManager?.hideSoftInputFromWindow(view.windowToken, 0)
 }
 
-val Activity.rootView: View?
+inline val Activity.rootView: View?
     get() = window?.decorView?.rootView ?: findViewById(android.R.id.content)
 
-fun EditText.requestFocusAndShowKeyboard() {
+@Suppress("NOTHING_TO_INLINE")
+inline fun EditText.requestFocusAndShowKeyboard() {
     requestFocus()
     context.inputMethodManager?.toggleSoftInput(InputMethodManager.SHOW_FORCED, InputMethodManager.HIDE_IMPLICIT_ONLY)
     postDelayed(this::setSelectionAtEnd, 16 * 2) //apprently android does this partially async /the above,

@@ -1,6 +1,7 @@
 package com.commonsense.android.kotlin.system.base.helpers
 
 import android.app.Activity
+import android.view.View
 import android.widget.EditText
 import com.commonsense.android.kotlin.system.BuildConfig
 import com.commonsense.android.kotlin.system.R
@@ -25,7 +26,7 @@ class BaseActivityKeyboardTests : BaseRoboElectricTest() {
 
 
     @Test
-    @Ignore
+    // @Ignore
     fun testHideKeyboard() {
         val helper = createActivityController<BaseActivity>(R.style.Theme_AppCompat).create()
         val act = helper.get()
@@ -62,4 +63,7 @@ class BaseActivityKeyboardTests : BaseRoboElectricTest() {
         Shadows.shadowOf(activity.inputMethodManager).isSoftInputVisible.assert(true)
     }
 
+    private fun omg(activity: Activity, view: View) {
+        Shadows.shadowOf(activity.inputMethodManager).showSoftInput(view, 0)
+    }
 }

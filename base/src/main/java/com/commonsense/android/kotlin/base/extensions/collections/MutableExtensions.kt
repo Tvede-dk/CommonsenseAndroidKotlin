@@ -27,10 +27,20 @@ fun <T> MutableList<T>.replace(item: T, @IntRange(from = 0) position: Int) {
     }
 }
 
-
+/**
+ * Clears the collection and add's the given collection
+ */
 fun <E> MutableCollection<E>.set(collection: Collection<E>) {
     clear()
     addAll(collection)
+}
+
+/**
+ * Clears the collection and add's the given element
+ */
+fun <E> MutableCollection<E>.set(item: E) : Unit {
+    clear()
+    add(item)
 }
 
 /**

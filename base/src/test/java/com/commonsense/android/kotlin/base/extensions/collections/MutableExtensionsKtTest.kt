@@ -64,6 +64,19 @@ class MutableExtensionsKtTest {
     }
 
     @Test
+    fun setSingle() {
+        val list = mutableListOf<String>()
+        list.add("test")
+        list.add("test2")
+        list.set("nope")
+        list.assertSize(1,"setting a single item should give 1 item")
+        list.first().assert("nope","should have set item")
+        list.set("test23")
+        list.assertSize(1)
+        list.first().assert("test23")
+    }
+
+    @Test
     fun removeAll() {
 
     }

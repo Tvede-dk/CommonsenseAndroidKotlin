@@ -1,6 +1,8 @@
 apply plugin: 'com.android.library'
 apply plugin: 'kotlin-android'
 
+archivesBaseName = 'csense-android-system'
+
 buildscript {
     repositories {
         jcenter()
@@ -10,7 +12,6 @@ buildscript {
         classpath "org.jetbrains.dokka:dokka-android-gradle-plugin:${dokkaVersion}"
     }
 }
-
 android {
     compileSdkVersion androidSdkBuildVersion
 

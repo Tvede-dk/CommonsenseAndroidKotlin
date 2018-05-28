@@ -5,18 +5,18 @@ package com.commonsense.android.kotlin.system.extensions
  */
 
 
-fun isApiOverOrEqualTo(level: Int): Boolean {
+inline fun isApiOverOrEqualTo(level: Int): Boolean {
     return getSdkLevel() >= level
 }
 
-fun isApiOver(level: Int): Boolean {
+inline fun isApiOver(level: Int): Boolean {
     return getSdkLevel() > level
 }
 
-fun isApiLowerThan(level: Int): Boolean {
+inline fun isApiLowerThan(level: Int): Boolean {
     return getSdkLevel() < level
 }
 
-fun getSdkLevel(): Int {
+inline fun getSdkLevel(): Int {
     return android.os.Build.VERSION.SDK_INT
 }

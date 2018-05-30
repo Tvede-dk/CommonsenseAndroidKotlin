@@ -13,7 +13,8 @@ import android.support.v7.content.res.AppCompatResources
  */
 
 @Suppress("NOTHING_TO_INLINE")
-inline fun TypedArray.getDrawableSafe(@StyleableRes style: Int, context: Context): Drawable? {
+inline fun TypedArray.getDrawableSafe(@StyleableRes style: Int,
+                                      context: Context): Drawable? {
     if (isApiOverOrEqualTo(21)) {
         return ifHaveOrNull(style, { getDrawable(style) })
     }

@@ -599,8 +599,8 @@ class SectionLookupRepTest : BaseRoboElectricTest() {
     fun testInsertAll() {
         val a = SectionLookupRep<TestData, String>()
         val all = listOf(TestData("1234"), TestData("5678"))
-        a.add(TestData("test"),0)
-        a.add(TestData("test"),1)
+        a.add(TestData("test"), 0)
+        a.add(TestData("test"), 1)
         a.insertAll(all, 0, 0)
         a.insertAll(all, 0, 1)
 
@@ -629,11 +629,13 @@ class SectionLookupRepTest : BaseRoboElectricTest() {
 
     @Test
     fun testGetSectionLocation() {
+        val a = SectionLookupRep<TestData, String>()
 
     }
 
     @Test
     fun testSetAllSections() {
+        val a = SectionLookupRep<TestData, String>()
 
     }
 }

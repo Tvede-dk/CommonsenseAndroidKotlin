@@ -31,7 +31,11 @@ fun Uri.copyTo(other: Uri, resolver: ContentResolver) = async(CommonPool) {
 
 }
 
-
+/**
+ * Tells if a given Uri exists;
+ * this is for files on the device.
+ * so Uri's that starts with "file://"
+ */
 fun Uri.exists(contentResolver: ContentResolver): Boolean {
     try {
         contentResolver.openAssetFileDescriptor(this, "r").use {

@@ -32,12 +32,12 @@ class UiAwareJobContainer : JobContainer() {
         cleanJobs()
     }
 
-    /**
-     * Redirect the UI event "onStop" here to, with the additional information "isFinalizing".
-     */
-    fun onStop(isFinializing: Boolean): Unit {
-        isFinializing.ifTrue(::cleanJobs)
-    }
+//    /**
+//     * Redirect the UI event "onStop" here to, with the additional information "isFinalizing".
+//     */
+//    fun onStop(isFinializing: Boolean): Unit {
+//        isFinializing.ifTrue(::cleanJobs)
+//    }
 
     /**
      * Launch a job in the UI when the ui is accessible / visible.

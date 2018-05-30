@@ -158,6 +158,17 @@ class SectionLookupRepTest : BaseRoboElectricTest() {
 
         }
     }
+//
+//    @Test
+//    fun testInsertNewSection() {
+//        val a = SectionLookupRep<TestData, String>()
+//        a.insert(TestData("test"), 0, 0)
+//        a.sectionCount.assert(1, "should have inserted element, thus creating the section")
+//        a.sectionAt(0).assertNotNullApply {
+//            size.assert(1)
+//        }
+//
+//    }
 
     @Test
     fun testRemoveSimple() {
@@ -582,8 +593,50 @@ class SectionLookupRepTest : BaseRoboElectricTest() {
         }
         a.assertSizeAndSections(20 * 50, 20)
     }
-}
 
+
+    @Test
+    fun testInsertAll() {
+        val a = SectionLookupRep<TestData, String>()
+        val all = listOf(TestData("1234"), TestData("5678"))
+        a.add(TestData("test"),0)
+        a.add(TestData("test"),1)
+        a.insertAll(all, 0, 0)
+        a.insertAll(all, 0, 1)
+
+        a.sectionCount.assert(2, "should have inserted into different sections")
+        a.sectionAt(0).assertNotNullApply {
+            size.assert(3, "should have added 2 items to the 0'th section")
+        }
+
+        a.sectionAt(1).assertNotNullApply {
+            size.assert(3, "should have added 2 items to the 1'th section")
+        }
+        //TODO insert nothing as well
+    }
+
+    @Test
+    fun testIndexOf() {
+        val a = SectionLookupRep<TestData, String>()
+        val toTestFor = TestData("test")
+        a.indexOf(TestData(""), 0).assertNull()
+        a.add(toTestFor, 0)
+        a.indexOf(TestData(""), 0).assertNull()
+        a.indexOf(toTestFor, 0).assertNotNull("should find equal parts")
+        a.indexOf(TestData("test"), 0).assertNotNull("should find equal parts")
+
+    }
+
+    @Test
+    fun testGetSectionLocation() {
+
+    }
+
+    @Test
+    fun testSetAllSections() {
+
+    }
+}
 
 
 fun SectionLookupRep<*, *>.assertSizeAndSections(totalSize: Int, sections: Int, message: String = "") {

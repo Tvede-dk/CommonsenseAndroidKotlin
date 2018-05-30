@@ -12,8 +12,8 @@ import android.support.v7.content.res.AppCompatResources
  * Created by kasper on 29/05/2017.
  */
 
-
-fun TypedArray.getDrawableSafe(@StyleableRes style: Int, context: Context): Drawable? {
+@Suppress("NOTHING_TO_INLINE")
+inline fun TypedArray.getDrawableSafe(@StyleableRes style: Int, context: Context): Drawable? {
     if (isApiOverOrEqualTo(21)) {
         return ifHaveOrNull(style, { getDrawable(style) })
     }
@@ -29,28 +29,36 @@ fun TypedArray.getDrawableSafe(@StyleableRes style: Int, context: Context): Draw
     }
 }
 
-fun TypedArray.getTextSafe(@StyleableRes style: Int): CharSequence? {
+@Suppress("NOTHING_TO_INLINE")
+inline fun TypedArray.getTextSafe(@StyleableRes style: Int): CharSequence? {
     return ifHaveOrNull(style) {
         return@ifHaveOrNull getText(style)
     }
 }
 
-fun TypedArray.getTextSafe(@StyleableRes style: Int, defaultValue: CharSequence?): CharSequence? {
+@Suppress("NOTHING_TO_INLINE")
+inline fun TypedArray.getTextSafe(@StyleableRes style: Int,
+                                  defaultValue: CharSequence?): CharSequence? {
     return getTextSafe(style) ?: defaultValue
 }
 
-fun TypedArray.getColorSafe(@StyleableRes style: Int): Int? {
+@Suppress("NOTHING_TO_INLINE")
+@ColorInt
+inline fun TypedArray.getColorSafe(@StyleableRes style: Int): Int? {
     return ifHaveOrNull(style) {
         getColorStateList(style)?.defaultColor
     }
 }
 
+@Suppress("NOTHING_TO_INLINE")
 @ColorInt
-fun TypedArray.getColorSafe(@StyleableRes style: Int, @ColorInt defaultColor: Int): Int {
+inline fun TypedArray.getColorSafe(@StyleableRes style: Int,
+                                   @ColorInt defaultColor: Int): Int {
     return getColorSafe(style) ?: defaultColor
 }
 
-inline fun <T> TypedArray.ifHaveOrNull(@StyleableRes style: Int, crossinline actionIf: () -> T?): T? {
+inline fun <T> TypedArray.ifHaveOrNull(@StyleableRes style: Int,
+                                       crossinline actionIf: () -> T?): T? {
     if (hasValue(style)) {
         return actionIf()
     }

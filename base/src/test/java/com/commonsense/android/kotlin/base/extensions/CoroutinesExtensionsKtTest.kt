@@ -3,6 +3,7 @@ package com.commonsense.android.kotlin.base.extensions
 import com.commonsense.android.kotlin.test.assert
 import com.commonsense.android.kotlin.test.assertSize
 import kotlinx.coroutines.experimental.*
+import kotlinx.coroutines.experimental.channels.Channel
 import org.junit.jupiter.api.Test
 import java.util.concurrent.Semaphore
 
@@ -121,11 +122,45 @@ class CoroutinesExtensionsKtTest {
     }
 
     @Test
-    fun forEachSync() {
-        
+    fun forEachSync() = runBlocking {
+        var combinedResult = 0
+        val semaphore = Semaphore(0)
+        val channel = Channel<Int>()
+        async {
+            channel.forEach {
+                combinedResult += it
+                semaphore.release()
+            }
+        }
+
+        channel.send(1)
+        channel.send(2)
+        channel.send(3)
+        channel.send(4)
+        channel.close()
+        semaphore.acquire(4)
+        combinedResult.assert(4 + 3 + 2 + 1)
     }
 
-    fun forEachAsync() {
+    @Test
+    fun forEachAsync() = runBlocking {
+        var combinedResult = 0
+        val semaphore = Semaphore(0)
+        val channel = Channel<Int>()
+        async {
+            channel.forEachAsync {
+                combinedResult += it
+                semaphore.release()
+            }
+        }
 
+        channel.send(1)
+        channel.send(2)
+        channel.send(3)
+        channel.send(4)
+        channel.close()
+        semaphore.acquire(4)
+        combinedResult.assert(4 + 3 + 2 + 1)
     }
 }
+

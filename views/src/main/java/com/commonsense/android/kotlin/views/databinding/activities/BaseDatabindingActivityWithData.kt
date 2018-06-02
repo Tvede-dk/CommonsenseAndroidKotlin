@@ -14,12 +14,12 @@ abstract class BaseDatabindingActivityWithData<out view : ViewDataBinding, out I
         createBinding().invoke(layoutInflater)
     }
 
-    override fun onCreate(savedInstanceState: Bundle?) {
+    /**
+     * if we have all required data then we can setup the view and use the binding :)
+     */
+    override fun onSafeData() {
         setContentView(binding.root)
-        super.onCreate(savedInstanceState)
         binding.executePendingBindings()
         useBinding()
     }
-
-
 }

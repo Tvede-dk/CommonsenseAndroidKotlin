@@ -4,6 +4,7 @@ import android.content.Intent
 import android.os.Bundle
 import android.widget.Button
 import com.CommonSenseAndroidKotlin.example.R
+import com.commonsense.android.kotlin.system.base.BaseActivity
 import com.commonsense.android.kotlin.system.base.helpers.BaseActivityData
 import com.commonsense.android.kotlin.system.extensions.safeToast
 import com.commonsense.android.kotlin.views.extensions.setOnclickAsyncEmpty
@@ -16,8 +17,8 @@ data class LargeDataActivityData(val randomNumbers: List<Int>)
 
 class LargeDataActivity : BaseActivityData<LargeDataActivityData>() {
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
+
+    override fun onSafeData() {
         setContentView(R.layout.large_data_activity)
         safeToast("got items: ${data.randomNumbers.size}")
         findViewById<Button>(R.id.large_data_activity_main_click).setOnclickAsyncEmpty(this::onMainActivityClicked)
@@ -44,4 +45,6 @@ class LargeDataActivity : BaseActivityData<LargeDataActivityData>() {
         }
     }
 }
+
+
 

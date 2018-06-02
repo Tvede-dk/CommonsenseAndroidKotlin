@@ -1,10 +1,15 @@
 package com.commonsense.android.kotlin.system.base.helpers
 
 import android.app.Activity
+import android.content.Intent
 import android.os.Bundle
+import android.support.annotation.VisibleForTesting
 import com.commonsense.android.kotlin.base.extensions.collections.ifTrue
 import com.commonsense.android.kotlin.system.base.BaseActivity
+import com.commonsense.android.kotlin.system.base.BaseFragment
+import com.commonsense.android.kotlin.system.dataFlow.ReferenceCountingMap
 import com.commonsense.android.kotlin.system.logging.logError
+import kotlin.reflect.KClass
 
 /**
  * Created by Kasper Tvede on 23-07-2017.
@@ -17,7 +22,7 @@ import com.commonsense.android.kotlin.system.logging.logError
  * of data.
  *
  */
-open class BaseActivityData<out InputType> : BaseActivity() {
+abstract class BaseActivityData<out InputType> : BaseActivity() {
 
     /**
      * Unfortunately we are unable to Type safe bypass the map though this. not in this generic manner
@@ -28,7 +33,7 @@ open class BaseActivityData<out InputType> : BaseActivity() {
             val safeIntent = intent ?: throw RuntimeException("intent is null")
             val intentIndex = safeIntent.getStringExtra(dataIntentIndex)
                     ?: throw RuntimeException("Intent content not presented; extra is: ${safeIntent.extras}")
-            val item = BaseActivity.dataReferenceMap.getItemOr(intentIndex)
+            val item = BaseActivityData.dataReferenceMap.getItemOr(intentIndex)
                     ?: throw RuntimeException("Data is not in map, so this activity is " +
                             "\"${this.javaClass.simpleName}\" referring to the data after closing.")
             return item as InputType
@@ -40,8 +45,16 @@ open class BaseActivityData<out InputType> : BaseActivity() {
             beforeCloseOnBadData() //hookpoint for users who needs to do "something" before the activity is killed.
             setResult(Activity.RESULT_CANCELED)
             finish()
+        } else {
+            onSafeData()
         }
     }
+
+    /**
+     * This will be called after oncreate, iff and only iff the data is valid and accessible.
+     *
+     */
+    abstract fun onSafeData()
 
     /**
      * run'ed before we kill this activity
@@ -61,6 +74,62 @@ open class BaseActivityData<out InputType> : BaseActivity() {
     /**
      * Verifies that we have the data we expected (the index)
      */
-    private fun haveRequiredIndex(): Boolean =
-            intent != null && !intent.getStringExtra(dataIntentIndex).isNullOrBlank()
+    private fun haveRequiredIndex(): Boolean {
+        val index = dataIndex ?: return false
+        return BaseActivityData.dataReferenceMap.hasItem(index)
+    }
+
+
+    private inline val dataIndex: String?
+        get() = intent?.getStringExtra(dataIntentIndex)
+
+
+    internal companion object {
+        internal val dataIntentIndex = "baseActivity-data-index"
+        internal val dataReferenceMap = ReferenceCountingMap()
+    }
+
 }
+
+
+fun <Input, T : BaseActivityData<Input>>
+        BaseActivity.startActivityWithData(activity: KClass<T>,
+                                           data: Input,
+                                           requestCode: Int,
+                                           optOnResult: AsyncActivityResultCallback?) {
+    startActivityWithData(activity.java, data, requestCode, optOnResult)
+}
+
+fun <Input, T : BaseActivityData<Input>>
+        BaseActivity.startActivityWithData(activity: Class<T>,
+                                           data: Input,
+                                           requestCode: Int,
+                                           optOnResult: AsyncActivityResultCallback?) {
+    val intent = Intent(this, activity)
+    val index = BaseActivityData.dataReferenceMap.count.toString()
+    BaseActivityData.dataReferenceMap.addItem(data, index)
+    intent.putExtra(BaseActivityData.dataIntentIndex, index)
+    startActivityForResultAsync(intent, null, requestCode, { resultCode, resultIntent ->
+        BaseActivityData.dataReferenceMap.decrementCounter(index)
+        optOnResult?.invoke(resultCode, resultIntent)
+    })
+}
+
+
+fun <Input, T : BaseActivityData<Input>>
+        BaseFragment.startActivityWithData(activity: KClass<T>,
+                                           data: Input,
+                                           requestCode: Int,
+                                           optOnResult: AsyncActivityResultCallback?) {
+    baseActivity?.startActivityWithData(activity, data, requestCode, optOnResult)
+}
+
+
+fun <Input, T : BaseActivityData<Input>>
+        BaseFragment.startActivityWithData(activity: Class<T>,
+                                           data: Input,
+                                           requestCode: Int,
+                                           optOnResult: AsyncActivityResultCallback?) {
+    baseActivity?.startActivityWithData(activity, data, requestCode, optOnResult)
+}
+

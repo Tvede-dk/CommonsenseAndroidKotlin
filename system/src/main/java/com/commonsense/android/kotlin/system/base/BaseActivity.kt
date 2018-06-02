@@ -6,6 +6,7 @@ import android.content.IntentFilter
 import android.os.Bundle
 import android.os.Handler
 import android.support.annotation.IntRange
+import android.support.annotation.VisibleForTesting
 import android.support.v7.app.AppCompatActivity
 import android.view.MenuItem
 import com.commonsense.android.kotlin.base.AsyncEmptyFunction
@@ -223,36 +224,6 @@ open class BaseActivity : AppCompatActivity(), ActivityResultHelperContainer {
         }
     }
     //</editor-fold>
-    /**
-     * Protected such that the ActivityWithData can get these.
-     */
-    internal companion object {
-        internal val dataIntentIndex = "baseActivity-data-index"
-        internal val dataReferenceMap = ReferenceCountingMap()
-    }
+
 
 }
-
-fun <Input, T : BaseActivityData<Input>>
-        BaseActivity.startActivityWithData(activity: KClass<T>,
-                                           data: Input,
-                                           requestCode: Int,
-                                           optOnResult: AsyncActivityResultCallback?) {
-    startActivityWithData(activity.java, data, requestCode, optOnResult)
-}
-
-fun <Input, T : BaseActivityData<Input>>
-        BaseActivity.startActivityWithData(activity: Class<T>,
-                                           data: Input,
-                                           requestCode: Int,
-                                           optOnResult: AsyncActivityResultCallback?) {
-    val intent = Intent(this, activity)
-    val index = BaseActivity.dataReferenceMap.count.toString()
-    BaseActivity.dataReferenceMap.addItem(data, index)
-    intent.putExtra(BaseActivity.dataIntentIndex, index)
-    startActivityForResultAsync(intent, null, requestCode, { resultCode, resultIntent ->
-        BaseActivity.dataReferenceMap.decrementCounter(index)
-        optOnResult?.invoke(resultCode, resultIntent)
-    })
-}
-

@@ -15,10 +15,6 @@ import android.support.v7.app.AppCompatActivity
 import android.support.v7.widget.Toolbar
 import kotlin.reflect.KClass
 
-/**
- * Created by Kasper Tvede on 30-10-2016.
- */
-
 
 fun AppCompatActivity.setupToolbarAppDrawer(drawer: DrawerLayout, toolbar: Toolbar, @StringRes openTitle: Int, @StringRes closeTitle: Int): ActionBarDrawerToggle {
     setSupportActionBar(toolbar)

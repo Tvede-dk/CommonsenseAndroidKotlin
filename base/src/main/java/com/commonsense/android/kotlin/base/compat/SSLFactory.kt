@@ -36,18 +36,25 @@ enum class SSLContextProtocols(val algorithmName: String) {
 /**
  * Enables TLS 1.2 for old androids (android api 16 ~ 20 )
  */
-class SSLSocketFactoryCompat : SSLSocketFactory() {
-    private val factory: SSLSocketFactory
+class SSLSocketFactoryCompat : SSLSocketFactory {
 
-    init {
+    constructor() : super() {
         val optFactory = SSLContextProtocols.TLSv12.createSocketFactory()
         factory = optFactory ?: throw RuntimeException("Cannot work with SSL / TLS when its not available.")
     }
 
+    internal constructor(factory: SSLSocketFactory) : super() {
+        this.factory = factory
+    }
+
+    private val factory: SSLSocketFactory
 
     override fun getSupportedCipherSuites(): Array<out String> = factory.supportedCipherSuites
 
     override fun getDefaultCipherSuites(): Array<out String> = factory.defaultCipherSuites
+
+    override fun createSocket(): Socket =
+            factory.createSocket().setProtocolToTls12()
 
     override fun createSocket(socket: Socket?,
                               host: String?,

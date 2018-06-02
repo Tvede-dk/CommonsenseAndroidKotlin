@@ -3,7 +3,7 @@ package com.CommonSenseAndroidKotlin.example.activity
 
 import android.content.Intent
 import com.CommonSenseAndroidKotlin.example.databinding.ActivityMainBinding
-import com.commonsense.android.kotlin.system.base.startActivityWithData
+import com.commonsense.android.kotlin.system.base.helpers.startActivityWithData
 import com.commonsense.android.kotlin.views.databinding.activities.BaseDatabindingActivity
 import com.commonsense.android.kotlin.views.databinding.activities.InflaterFunctionSimple
 import com.commonsense.android.kotlin.views.extensions.setOnClick

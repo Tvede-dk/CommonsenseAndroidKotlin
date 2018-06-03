@@ -9,6 +9,7 @@ import android.net.Uri
 import android.provider.MediaStore
 import android.support.annotation.RequiresPermission
 import com.commonsense.android.kotlin.base.EmptyFunction
+import com.commonsense.android.kotlin.base.extensions.asyncSimple
 import com.commonsense.android.kotlin.system.PermissionEnum
 import com.commonsense.android.kotlin.system.askAndUsePermission
 import com.commonsense.android.kotlin.system.base.BaseActivity
@@ -31,16 +32,23 @@ class PictureRetriver(private val activity: BaseActivity,
     private var pictureUri: Uri? = null
 
     fun useCamera() = activity.askAndUsePermission(PermissionEnum.WriteExternalStorage) {
-        val takePictureIntent = Intent(MediaStore.ACTION_IMAGE_CAPTURE)
-        takePictureIntent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION or Intent.FLAG_GRANT_WRITE_URI_PERMISSION)
+        //lets use the background since the contentresolver is using disk access, which
+        //violates the UI thread on file access principle; then only when we are ready,
+        // use the main thread.
+        activity.launchInBackground("useCamera") {
+            val takePictureIntent = Intent(MediaStore.ACTION_IMAGE_CAPTURE)
+            takePictureIntent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION or Intent.FLAG_GRANT_WRITE_URI_PERMISSION)
 
-        val values = ContentValues(1)
-        values.put(MediaStore.Images.Media.MIME_TYPE, "image/jpg")
-        pictureUri = activity.contentResolver
-                .insert(MediaStore.Images.Media.EXTERNAL_CONTENT_URI, values)
-        takePictureIntent.putExtra(MediaStore.EXTRA_OUTPUT, pictureUri)
-        if (takePictureIntent.resolveActivity(activity.packageManager) != null) {
-            activity.startActivityForResult(takePictureIntent, null, requestCode, this::onActivityResult)
+            val values = ContentValues(1)
+            values.put(MediaStore.Images.Media.MIME_TYPE, "image/jpg")
+            pictureUri = activity.contentResolver
+                    .insert(MediaStore.Images.Media.EXTERNAL_CONTENT_URI, values)
+            takePictureIntent.putExtra(MediaStore.EXTRA_OUTPUT, pictureUri)
+            if (takePictureIntent.resolveActivity(activity.packageManager) != null) {
+                activity.launchInUi("useCamera") {
+                    activity.startActivityForResult(takePictureIntent, null, requestCode, this::onActivityResult)
+                }
+            }
         }
     }
 
@@ -76,7 +84,7 @@ class PictureRetriver(private val activity: BaseActivity,
         pictureUri = null
     }
 
-    @RequiresPermission(allOf = arrayOf(Manifest.permission.WRITE_EXTERNAL_STORAGE, Manifest.permission.READ_EXTERNAL_STORAGE))
+    @RequiresPermission(allOf = [(Manifest.permission.WRITE_EXTERNAL_STORAGE), (Manifest.permission.READ_EXTERNAL_STORAGE)])
     fun getImage(fromCamera: Boolean) {
         if (fromCamera) {
             useCamera()

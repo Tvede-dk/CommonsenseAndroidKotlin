@@ -49,12 +49,12 @@ android {
             forkEvery = 2
         }
     }
+    sourceSets {
+        main.java.srcDirs += 'src/main/kotlin'
+        test.java.srcDirs += 'src/test/kotlin'
+    }
 
 }
-/*kapt {
-    processors = "com.android.databinding:implementation:$androidGradleVersion"
-    useLightAnalysis true
-}*/
 
 dependencies {
     //Tests
@@ -79,7 +79,7 @@ dependencies {
     testImplementation "com.squareup.leakcanary:leakcanary-android-no-op:$leakCanaryVersion"
 
     implementation "com.android.support:appcompat-v7:$supportVersion"
-   // kapt "com.android.databinding:compiler:$androidGradleVersion"
+    // kapt "com.android.databinding:compiler:$androidGradleVersion"
     implementation "org.jetbrains.kotlin:kotlin-stdlib:$kotlin_version"
 
 }

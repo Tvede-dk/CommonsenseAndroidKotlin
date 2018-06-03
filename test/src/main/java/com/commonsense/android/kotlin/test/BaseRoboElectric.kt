@@ -48,7 +48,7 @@ abstract class BaseRoboElectricTest {
     inline fun awaitAllTheading(crossinline condition: () -> Boolean,
                                 @IntRange(from = 0) timeoutTime: Long,
                                 TimeoutTimeUnit: TimeUnit,
-                                s: String) {
+                                message: String = "awaiting condition failed") {
 
         var remandingTimeInMs = TimeoutTimeUnit.toMillis(timeoutTime)
         while (!condition()) {
@@ -61,6 +61,7 @@ abstract class BaseRoboElectricTest {
             }
             remandingTimeInMs -= loopTime
             if (remandingTimeInMs <= 0) {
+                failTest(message)
                 break
             }
         }

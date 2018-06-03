@@ -1,10 +1,14 @@
 package com.commonsense.android.kotlin.views.databinding.adapters
 
 import android.databinding.ViewDataBinding
+import android.support.v7.widget.RecyclerView
+import com.commonsense.android.kotlin.system.logging.L
+import com.commonsense.android.kotlin.system.logging.PrintLogger
 import com.commonsense.android.kotlin.test.*
-import org.junit.Ignore
+import org.junit.BeforeClass
 import org.junit.Test
 import org.robolectric.annotation.Config
+import java.util.concurrent.TimeUnit
 
 /**
  * Created by Kasper Tvede on 28-07-2017.
@@ -19,6 +23,15 @@ class TestRender(value: String)
 
 @Config(manifest = Config.NONE)
 class AbstractSearchableDataBindingRecyclerAdapterTest : BaseRoboElectricTest() {
+
+    companion object {
+        @BeforeClass
+        @JvmStatic
+        fun loggers() {
+            PrintLogger.addToAllLoggers()
+        }
+    }
+
 
     @Test
     fun testAddData() {
@@ -297,12 +310,26 @@ class AbstractSearchableDataBindingRecyclerAdapterTest : BaseRoboElectricTest() 
     }
 
     @Test
-    @Ignore
     fun testFilterAsync() {
+        val recycler = RecyclerView(context)
+        val adapter = createAdapter()
+        recycler.adapter = adapter
+        val itemsSize = 10
+        addItems(adapter, itemsSize, 4)
 
-        //TODO
-        //this requiers a dataobserver that "unlocks" us (thus we are to make "changes" )
+        adapter.filterBy("1")
 
+        awaitAllTheading({
+            adapter.itemCount != itemsSize
+        }, 5, TimeUnit.SECONDS)
+
+        adapter.itemCount.assert(1)
+
+        adapter.filterOrClearBy(null)
+        awaitAllTheading({
+            adapter.itemCount != 1
+        }, 5, TimeUnit.SECONDS)
+        adapter.itemCount.assert(itemsSize)
     }
 
 

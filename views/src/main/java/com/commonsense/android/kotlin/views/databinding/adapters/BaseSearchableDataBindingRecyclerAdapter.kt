@@ -4,6 +4,7 @@ import android.content.Context
 import android.databinding.ViewDataBinding
 import android.support.v7.widget.RecyclerView
 import com.commonsense.android.kotlin.base.FunctionUnit
+import com.commonsense.android.kotlin.base.exceptions.StackTraceException
 import com.commonsense.android.kotlin.system.datastructures.SectionLookupRep
 import com.commonsense.android.kotlin.system.datastructures.TypeSection
 import com.commonsense.android.kotlin.system.logging.L
@@ -56,7 +57,8 @@ open class AbstractSearchableDataBindingRecyclerAdapter<
 
     private var filterValue: F? = null
 
-    //the "gatekeeper" for our filter function. will restrict acces so only one gets in. thus if we spam the filter, we should only use the latest filter.
+    //the "gatekeeper" for our filter function. will restrict accesses so only one gets in.
+    // thus if we spam the filter, we should only use the latest filter.
     private val filterActor: ConflatedActorHelper<F> = ConflatedActorHelper()
     //</editor-fold>
 
@@ -66,12 +68,12 @@ open class AbstractSearchableDataBindingRecyclerAdapter<
             if (filter != filterValue) {
                 return
             }
-            L.error("filter", "on " + allDataCollection.size)
+//            L.error("filter", "on " + allDataCollection.size)
             val items = allDataCollection.mapAll {
                 it.filterByOurFilter()
             }
 
-            L.error("filter", "resulted in " + items.size)
+//            L.error("filter", "resulted in " + items.size)
             updateVisibly(items)
         } catch (exception: Exception) {
             L.error("fatal", "", exception)
@@ -258,14 +260,21 @@ open class AbstractSearchableDataBindingRecyclerAdapter<
 }
 
 /**
- * Creates a single edtion of the conflator (so multiple calls to setup results in only 1 been made).
+ * Creates a single edition of the conflator (so multiple calls to setup results in only 1 been made).
  */
 private class ConflatedActorHelper<F> {
 
     private var eventActor: SendChannel<F?>? = null
 
     fun offer(filter: F?) {
-        eventActor?.offer(filter)
+        val actor = eventActor
+        if (actor != null) {
+            actor.offer(filter)
+        } else {
+            L.error(ConflatedActorHelper::class.java.simpleName, "the actor is null ," +
+                    "thus the recycler adapter does not have a view attached to it." +
+                    "A view is needed to filter", StackTraceException())
+        }
     }
 
     fun setup(callback: suspend (F?) -> Unit) {

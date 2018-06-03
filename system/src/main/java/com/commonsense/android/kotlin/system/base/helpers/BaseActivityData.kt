@@ -1,6 +1,7 @@
 package com.commonsense.android.kotlin.system.base.helpers
 
 import android.app.Activity
+import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 import android.support.annotation.VisibleForTesting
@@ -84,13 +85,31 @@ abstract class BaseActivityData<out InputType> : BaseActivity() {
         get() = intent?.getStringExtra(dataIntentIndex)
 
 
-    internal companion object {
+    companion object {
         internal val dataIntentIndex = "baseActivity-data-index"
         internal val dataReferenceMap = ReferenceCountingMap()
-    }
 
+        fun <Input, T : BaseActivityData<Input>> createDataActivityIntent(context: Context,
+                                                                          activity: KClass<T>,
+                                                                          data: Input)
+                : IntentAndDataIndex =
+                createDataActivityIntent(context, activity.java, data)
+
+        fun <Input, T : BaseActivityData<Input>> createDataActivityIntent(context: Context,
+                                                                          activityToStart: Class<T>,
+                                                                          data: Input)
+                : IntentAndDataIndex {
+            val index = BaseActivityData.dataReferenceMap.count.toString()
+            val intent = Intent(context, activityToStart).apply {
+                BaseActivityData.dataReferenceMap.addItem(data, index)
+                putExtra(BaseActivityData.dataIntentIndex, index)
+            }
+            return IntentAndDataIndex(intent, index)
+        }
+    }
 }
 
+data class IntentAndDataIndex(val intent: Intent, val index: String)
 
 fun <Input, T : BaseActivityData<Input>>
         BaseActivity.startActivityWithData(activity: KClass<T>,
@@ -105,14 +124,19 @@ fun <Input, T : BaseActivityData<Input>>
                                            data: Input,
                                            requestCode: Int,
                                            optOnResult: AsyncActivityResultCallback?) {
-    val intent = Intent(this, activity)
-    val index = BaseActivityData.dataReferenceMap.count.toString()
-    BaseActivityData.dataReferenceMap.addItem(data, index)
-    intent.putExtra(BaseActivityData.dataIntentIndex, index)
-    startActivityForResultAsync(intent, null, requestCode, { resultCode, resultIntent ->
-        BaseActivityData.dataReferenceMap.decrementCounter(index)
-        optOnResult?.invoke(resultCode, resultIntent)
-    })
+
+    val intentAndDataIndex = BaseActivityData.createDataActivityIntent(
+            this,
+            activity,
+            data)
+    startActivityForResultAsync(
+            intentAndDataIndex.intent,
+            null,
+            requestCode,
+            { resultCode: Int, resultIntent: Intent? ->
+                BaseActivityData.dataReferenceMap.decrementCounter(intentAndDataIndex.index)
+                optOnResult?.invoke(resultCode, resultIntent)
+            })
 }
 
 

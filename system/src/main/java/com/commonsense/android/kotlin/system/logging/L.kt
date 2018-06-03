@@ -37,7 +37,7 @@ enum class LoggingType {
 /**
  * The Basis logging function.
  */
-typealias LoggingFunctionType<T> = (tag: String, message: String, stackTrace: Throwable?) -> T
+typealias LoggingFunctionType<T> = (tag: String, message: String, throwable: Throwable?) -> T
 
 /**
  * gets the corresponding logging function (android) for the logging type

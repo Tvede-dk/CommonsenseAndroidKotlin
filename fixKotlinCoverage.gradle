@@ -1,11 +1,22 @@
 afterEvaluate {
+
+//    final def taskToCleanBefore = project.tasks.findAll {
+//        it.name.contains("PrepareIntermediateJars")
+//    }
+//
+//    for (cleanTask in taskToCleanBefore) {
+//        println("will clean before running ${cleanTask.name}")
+//        task.dependsOn ""
+//    }
+
     final def tasks = project.tasks.findAll {
-        it.name.contains("compile") &&
-                it.name.contains("UnitTestSources")
+        it.name.contains("transformClassesAndResourcesWithPrepareIntermediateJars") //&&
+//                it.name.contains("UnitTestSources")
     }
     for (task in tasks) {
         println("Fixing coverage for ${task.name}")
         task.finalizedBy "copyTestClasses"
+        task.dependsOn "removeOldTestCopy"
     }
 
     project.tasks.withType(Test) {
@@ -14,21 +25,31 @@ afterEvaluate {
 }
 
 task copyTestClasses(type: Copy) {
-    from "$buildDir/tmp/kotlin-classes/"
+    from("$buildDir/tmp/kotlin-classes/") {
+        include "**/*.class"
+    }
     into "$buildDir/intermediates/classes/"
+    includeEmptyDirs true
+    duplicatesStrategy DuplicatesStrategy.EXCLUDE
 }
 
-task deleteResourceFromCoverage(type: Delete) {
-//    delete fileTree("$buildDir/intermediates/classes/") {
-//        exclude "*/android/"
-//        include "**/R.class"
-//        include "**/BuildConfig.class"
-//    }
-//    delete fileTree("$buildDir/intermediates/transforms/") {
-//        exclude "*/android/"
-//        include "**/R.class"
-//        include "**/BuildConfig.class"
-//    }
+task removeOldTestCopy(type: Delete) {
+    delete "$buildDir/intermediates/classes/"
 }
 
-copyTestClasses.finalizedBy deleteResourceFromCoverage
+task cleanOldCopyTestClasses
+
+//task deleteResourceFromCoverage(type: Delete) {
+////    delete fileTree("$buildDir/intermediates/classes/") {
+////        exclude "*/android/"
+////        include "**/R.class"
+////        include "**/BuildConfig.class"
+////    }
+////    delete fileTree("$buildDir/intermediates/transforms/") {
+////        exclude "*/android/"
+////        include "**/R.class"
+////        include "**/BuildConfig.class"
+////    }
+//}
+
+//copyTestClasses.finalizedBy deleteResourceFromCoverage

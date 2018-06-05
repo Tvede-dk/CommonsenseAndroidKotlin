@@ -2,17 +2,6 @@ apply plugin: 'com.android.library'
 apply plugin: 'kotlin-android'
 apply plugin: "de.mannodermaus.android-junit5"
 
-buildscript {
-    repositories {
-        jcenter()
-    }
-
-    dependencies {
-        classpath "org.jetbrains.dokka:dokka-android-gradle-plugin:${dokkaVersion}"
-    }
-}
-
-
 android {
     compileSdkVersion androidSdkBuildVersion
 

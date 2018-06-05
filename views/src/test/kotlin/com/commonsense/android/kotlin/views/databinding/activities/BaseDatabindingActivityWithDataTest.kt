@@ -16,9 +16,11 @@ import org.mockito.Mockito.mock
 
 class BaseDatabindingActivityWithDataTest : BaseRoboElectricTest() {
 
-    @BeforeClass
-    fun loggers() {
-        PrintLogger.addToAllLoggers()
+    companion object {
+        @BeforeClass
+        fun loggers() {
+            PrintLogger.addToAllLoggers()
+        }
     }
 
 

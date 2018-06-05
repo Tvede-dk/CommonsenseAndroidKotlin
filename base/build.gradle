@@ -2,7 +2,6 @@ apply plugin: 'com.android.library'
 apply plugin: 'kotlin-android'
 apply plugin: "de.mannodermaus.android-junit5"
 
-archivesBaseName = 'csense-android-base'
 
 android {
     compileSdkVersion androidSdkBuildVersion
@@ -22,9 +21,6 @@ android {
         release {
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
-        }
-        debug {
-//            testCoverageEnabled true
         }
     }
 
@@ -80,31 +76,8 @@ kotlin {
     }
 }
 
-kapt {
-    useBuildCache = true
-}
-/*apply plugin: 'com.novoda.bintray-release' // must be applied after your artifact generating plugin (eg. java / com.android.library)
-
-publish {
-    userOrg = project.commonsenseUserOrg
-    groupId = project.commonsenseGroupId
-    publishVersion = project.commonsenseVersionName
-    repoName = project.commonsenseRepoName
-    website = project.commonsenseWebsite
-    artifactId = 'base'
-    desc = 'Base android features'
-}
-*/
 apply from: "../javadocSourceDokka.gradle"
 apply from: "publish.gradle"
-//afterEvaluate {
-//    tasks.find { task -> task.name.contains("UnitTestSources") }.finalizedBy copyTestClasses
-//}
-//task copyTestClasses(type: Copy) {
-//    from "build/tmp/kotlin-classes/"
-//    into "build/intermediates/classes/"
-//}
-//
-//
-
-apply from: "../fixKotlinCoverage.gradle"
+//only uncomment when prepared to spend the enoumus amount of time required fixing the stupid android vs kotlin coverage bug;
+//this will make builds slow as hell.
+// apply from: "../fixKotlinCoverage.gradle"

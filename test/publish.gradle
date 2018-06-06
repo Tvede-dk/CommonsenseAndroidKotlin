@@ -1,7 +1,7 @@
 apply plugin: 'com.github.dcendents.android-maven'
 apply plugin: 'com.jfrog.bintray'
 
-final def artifactName = "base"
+final def artifactName = "test"
 final def artifactDescription = ""
 final def versionDescription = ""
 

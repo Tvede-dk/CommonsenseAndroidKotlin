@@ -95,3 +95,4 @@ publish {
 }
 */
 apply from: "../javadocSourceDokka.gradle"
+apply from: "publish.gradle"

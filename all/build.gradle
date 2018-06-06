@@ -27,18 +27,5 @@ dependencies {
     api project(":tools")
     api project(":views")
 }
-/*
-
-apply plugin: 'com.novoda.bintray-release' // must be applied after your artifact generating plugin (eg. java / com.android.library)
-
-publish {
-    userOrg = project.commonsenseUserOrg
-    groupId = project.commonsenseGroupId
-    publishVersion = project.commonsenseVersionName
-    repoName = project.commonsenseRepoName
-    website = project.commonsenseWebsite
-    artifactId = 'all'
-    desc = 'combining all sub projects'
-}
-
-*/
+apply from: "../javadocSourceDokka.gradle"
+apply from: "publish.gradle"

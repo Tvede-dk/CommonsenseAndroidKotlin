@@ -59,7 +59,7 @@ dependencies {
 
 
     implementation project(':system')
-    implementation project(':views')
+    implementation project(':widgets')
     implementation project(':base')
 
     //leak canary libs

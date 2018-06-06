@@ -111,7 +111,7 @@ dependencies {
     implementation "org.jetbrains.kotlin:kotlin-stdlib:$kotlin_version"
     implementation project(':prebuilt')
     implementation project(':system')
-    implementation project(':views')
+    implementation project(':widgets')
     implementation project(':base')
     testImplementation project(':test')
 

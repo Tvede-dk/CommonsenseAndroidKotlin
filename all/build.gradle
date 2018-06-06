@@ -25,7 +25,7 @@ dependencies {
     api project(':prebuilt')
     api project(":system")
     api project(":tools")
-    api project(":views")
+    api project(':widgets')
 }
 apply from: "../javadocSourceDokka.gradle"
 apply from: "publish.gradle"

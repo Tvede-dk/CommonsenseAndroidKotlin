@@ -1,10 +1,10 @@
 buildscript {
-    ext.androidSdkBuildVersion = 27
+    ext.androidSdkBuildVersion = 28
     ext.androidBuildToolsVersion = "27.0.3"
 
     //Lib version and sdks
-    ext.commonsenseVersionName = "0.0.12"
-    ext.commonsenseVersionNumber = 12
+    ext.commonsenseVersionName = "0.0.13"
+    ext.commonsenseVersionNumber = 13
     ext.minSdk = 16
     ext.targetSdk = 27
 
@@ -21,13 +21,13 @@ buildscript {
     //included versions.
     ext.kotlin_version = '1.2.41'
     ext.supportVersion = '27.1.1'
-    ext.coroutinesVersion = '0.22.5'
+    ext.coroutinesVersion = '0.23.0'
     ext.leakCanaryVersion = "1.5.4"
     ext.junitVersion = "4.12"
-    ext.androidGradleVersion = "3.1.2"
+    ext.androidGradleVersion = "3.1.3"
     ext.roboElectricVersion = "3.8"
     ext.espressoVersion = "3.0.1"
-    ext.dokkaVersion = "0.9.16"
+    ext.dokkaVersion = "0.9.17"
 
     repositories {
         google()
@@ -44,7 +44,7 @@ buildscript {
 
 
 plugins {
-    id "io.gitlab.arturbosch.detekt" version "1.0.0.RC7"
+    id "io.gitlab.arturbosch.detekt" version "1.0.0.RC7-2"
 }
 
 apply plugin: 'io.gitlab.arturbosch.detekt'
@@ -81,7 +81,7 @@ task clean(type: Delete) {
 apply from: "fix-tests.gradle"
 
 detekt {
-    version = "1.0.0.RC7"
+    version = "1.0.0.RC7-2"
     profile("main") {
         input = "$projectDir/src/main/java"
         config = "$projectDir/detekt.yml"

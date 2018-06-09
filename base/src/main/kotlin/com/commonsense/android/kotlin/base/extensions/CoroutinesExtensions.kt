@@ -53,9 +53,12 @@ fun launch(context: CoroutineContext,
 fun <T> asyncSimple(context: CoroutineContext = CommonPool,
                     start: CoroutineStart = CoroutineStart.DEFAULT,
                     block: suspend () -> T): Deferred<T> {
-    return kotlinx.coroutines.experimental.async(context, start, null, {
-        block()
-    })
+    return kotlinx.coroutines.experimental.async(
+            context,
+            start,
+            null,
+            null,
+            { block() })
 }
 
 /**

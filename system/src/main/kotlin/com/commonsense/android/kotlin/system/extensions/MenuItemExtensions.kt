@@ -19,7 +19,8 @@ fun MenuItem?.backPressIfHome(fragment: Fragment): Boolean {
     return this?.backPressIfHome(fragment::onBackPressed) ?: false
 }
 
-fun MenuItem?.backPressIfHome(fragment: android.app.Fragment): Boolean {
+fun MenuItem?.backPressIfHome(@Suppress("DEPRECATION")
+                              fragment: android.app.Fragment): Boolean {
     return this?.backPressIfHome(fragment::onBackPressed) ?: false
 }
 

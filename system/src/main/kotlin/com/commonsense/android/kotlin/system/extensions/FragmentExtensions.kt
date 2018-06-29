@@ -35,6 +35,8 @@ fun Fragment.onBackPressed() {
     activity?.onBackPressed()
 }
 
+
+@Suppress("DEPRECATION")
 fun android.app.Fragment.onBackPressed() {
     activity?.onBackPressed()
 }

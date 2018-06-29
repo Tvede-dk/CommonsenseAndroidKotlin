@@ -1,5 +1,13 @@
 #Changelog
 
+##0.0.13 
+micro update
+
+### Updates
+- kotlin to 1.2.50
+- coroutines to 0.23.4
+- gradle to 4.8.1
+- gradle-bintray-plugin to 1.8.1
 
 ##0.0.12
 in this release:

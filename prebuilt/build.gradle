@@ -4,17 +4,13 @@ apply plugin: 'kotlin-kapt'
 
 android {
     compileSdkVersion androidSdkBuildVersion
-
     buildToolsVersion "$androidBuildToolsVersion"
-
 
     defaultConfig {
         minSdkVersion project.minSdk
         targetSdkVersion project.targetSdk
         versionCode project.commonsenseVersionNumber
         versionName project.commonsenseVersionName
-
-
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
 
     }
@@ -24,23 +20,8 @@ android {
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }
     }
-    lintOptions {
-        abortOnError false
-    }
     dataBinding {
         enabled true
-    }
-    testOptions {
-        unitTests {
-            includeAndroidResources = true
-        }
-        unitTests.all {
-            forkEvery = 2
-        }
-    }
-    sourceSets {
-        main.java.srcDirs += 'src/main/kotlin'
-        test.java.srcDirs += 'src/test/kotlin'
     }
 
 }
@@ -72,16 +53,13 @@ dependencies {
     implementation "org.jetbrains.kotlin:kotlin-stdlib:$kotlin_version"
 
 }
-repositories {
-    mavenCentral()
-}
 
 apply from: '../resourcegroups.gradle'
-kotlin {
-    experimental {
-        coroutines "enable"
-    }
-}
 
 apply from: "../javadocSourceDokka.gradle"
-apply from: "publish.gradle"
+
+ext.artifactName = "prebuilt"
+ext.artifactDescription = ""
+ext.versionDescription = ""
+
+apply from: "../publish.gradle"

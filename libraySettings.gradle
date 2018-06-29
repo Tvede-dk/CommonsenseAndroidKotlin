@@ -1,0 +1,43 @@
+ext.setupProject = { it ->
+    it.extensions.findByName("kotlin")?.with {
+        println "Enabling coroutines"
+        it.experimental.coroutines "enable"
+    }
+    it.extensions.findByName("kapt")?.with {
+        println "Enabling kapt cache"
+        it.useBuildCache = true
+    }
+    it.extensions.findByName("android")?.with {
+
+        println "Enabling default setup for android(defaultConfig, test,lint, sourcesets)"
+
+        it.compileSdkVersion androidSdkBuildVersion
+        it.buildToolsVersion androidBuildToolsVersion
+
+        it.defaultConfig {
+            minSdkVersion project.minSdk
+            targetSdkVersion project.targetSdk
+            versionCode project.commonsenseVersionNumber
+            versionName project.commonsenseVersionName
+            testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
+        }
+
+        it.lintOptions {
+            abortOnError false
+        }
+
+        it.testOptions {
+            unitTests {
+                includeAndroidResources = true
+            }
+            unitTests.all {
+                forkEvery = 2
+            }
+        }
+
+        it.sourceSets {
+            main.java.srcDirs += 'src/main/kotlin'
+            test.java.srcDirs += 'src/test/kotlin'
+        }
+    }
+}

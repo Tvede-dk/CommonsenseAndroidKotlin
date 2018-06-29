@@ -12,11 +12,6 @@ android {
         versionName project.commonsenseVersionName
 
     }
-
-    lintOptions {
-        abortOnError false
-    }
-
 }
 
 dependencies {
@@ -28,4 +23,7 @@ dependencies {
     api project(':widgets')
 }
 apply from: "../javadocSourceDokka.gradle"
-apply from: "publish.gradle"
+ext.artifactName = "all"
+ext.artifactDescription = ""
+ext.versionDescription = ""
+apply from: "../publish.gradle"

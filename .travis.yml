@@ -6,8 +6,8 @@ android:
     - tools
     - platform-tools
      # The BuildTools version used by your project
-    - build-tools-27.0.3
-    - android-27
+    - build-tools-28.0.0
+    - android-28
     - extra
 
     #simulators
@@ -35,17 +35,18 @@ before_install:
   - echo no | avdmanager create avd --force -n test -k "system-images;android-18;default;armeabi-v7a"
   - $ANDROID_HOME/emulator/emulator -avd test -no-audio -no-window > /dev/null 2>&1 &
 
-
-before_cache:
-  - rm -f  $HOME/.gradle/caches/modules-2/modules-2.lock
-  - rm -fr $HOME/.gradle/caches/*/plugin-resolution/
-
 before_script:
 - chmod +x gradlew
 
 script:
 - ./gradlew clean test
 
+
+before_cache:
+  - rm -f  $HOME/.gradle/caches/modules-2/modules-2.lock
+  - rm -fr $HOME/.gradle/caches/*/plugin-resolution/
 cache:
   directories:
-  - $HOME/.gradle
+    - $HOME/.gradle/caches/
+    - $HOME/.gradle/wrapper/
+    - $HOME/.android/build-cache

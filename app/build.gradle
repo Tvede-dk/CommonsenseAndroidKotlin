@@ -3,24 +3,11 @@ apply plugin: 'kotlin-android'
 apply plugin: 'kotlin-kapt'
 
 android {
-//    buildTypeMatching 'proguard', 'debug'
-
-    compileSdkVersion androidSdkBuildVersion
-
-    buildToolsVersion "$androidBuildToolsVersion"
     defaultConfig {
-        applicationId "com.commonsense.androidkotlin.example"
-
-        minSdkVersion project.minSdk
-        targetSdkVersion project.targetSdk
-        versionCode project.commonsenseVersionNumber
-        versionName project.commonsenseVersionName
-
+        applicationId "csense.android.kotlin.exampleApp"
         vectorDrawables.useSupportLibrary = true
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
         multiDexEnabled true
-        //flavorSelection 'sdkRequirements', 'fastDev'
-
     }
 
     dataBinding {
@@ -28,35 +15,13 @@ android {
     }
 
     buildTypes {
-
-//        proguard {
-//            initWith debug
-//            useProguard true
-//            minifyEnabled true
-//            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
-//
-//        }
-
         release {
-            testCoverageEnabled = true
-            //shrinkResources true
-            //minifyEnabled true
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
         }
-        debug {
-//            testCoverageEnabled = true
-//            minifyEnabled   true
-
-            //useProguard false
-            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
-        }
-
     }
-
     flavorDimensions "sdkRequirements"
 
     productFlavors {
-
         regular {
             minSdkVersion 16
             dimension "sdkRequirements"
@@ -65,22 +30,9 @@ android {
         fastDev {
             minSdkVersion 25
             dimension "sdkRequirements"
-            resConfigs("en", "xxhdpi")
+            resConfigs("en", "xhdpi")
         }
     }
-
-    lintOptions {
-        abortOnError false
-    }
-
-    dexOptions {
-        maxProcessCount 20
-    }
-    sourceSets {
-        main.java.srcDirs += 'src/main/kotlin'
-        test.java.srcDirs += 'src/test/kotlin'
-    }
-
 }
 
 dependencies {
@@ -92,10 +44,6 @@ dependencies {
     implementation "com.android.support:exifinterface:$supportVersion"
     implementation "com.android.support:recyclerview-v7:$supportVersion"
     implementation "org.jetbrains.kotlin:kotlin-stdlib:$kotlin_version"
-    //UI libs
-    implementation 'com.futuremind.recyclerfastscroll:fastscroll:0.2.5'
-    //time libs
-    implementation 'joda-time:joda-time:2.9.9'
 
     //support libs
     implementation "com.android.support:appcompat-v7:$supportVersion"
@@ -115,20 +63,6 @@ dependencies {
     implementation project(':base')
     testImplementation project(':test')
 
-    //kapt "com.android.databinding:compiler:$androidGradleVersion"
 }
-
-repositories {
-    mavenCentral()
-    maven {
-        url "https://maven.google.com"
-    }
-}
-
 
 apply from: "../resourcegroups.gradle"
-kotlin {
-    experimental {
-        coroutines "enable"
-    }
-}

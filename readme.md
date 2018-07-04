@@ -205,7 +205,7 @@ Or Just toggling it
 ```kotlin
     val view : View = ...
     val bool = ...
-    view.visibleOrGone(bool)
+    view.toggleVisibilityGone(bool)
 ```
 
 Making a view disabled / enabled

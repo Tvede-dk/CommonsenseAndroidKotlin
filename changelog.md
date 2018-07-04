@@ -1,6 +1,9 @@
-#Changelog
+# Changelog
 
-##0.0.14
+## 0.0.15
+- in progress
+
+## 0.0.14
 micro update
 
 ### Updates
@@ -10,11 +13,11 @@ micro update
 - coroutines to 0.23.4 
 - mockito core to 2.19.0
 
-###Other
+### Other
 cleanup in build.gradle scripts
  
 
-##0.0.13 
+## 0.0.13
 micro update
 
 ### Updates
@@ -23,7 +26,7 @@ micro update
 - gradle to 4.8.1
 - gradle-bintray-plugin to 1.8.1
 
-##0.0.12
+## 0.0.12
 in this release:
 - kotlin versions updates
 - logging updates
@@ -49,12 +52,12 @@ vastly improved the logging functionality
 - added LoggingType
 
 
-##0.0.11
+## 0.0.11
   
-###bugs
+### Bugs
 - fixed last issues with JobContainer
 
-##0.0.10
+## 0.0.10
 
 ### Bugs
 - issues with concurrent modification in JobContainer

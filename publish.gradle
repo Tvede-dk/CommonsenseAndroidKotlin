@@ -41,13 +41,14 @@ install {
 }
 
 bintray {
-
     Properties properties = new Properties()
-    properties.load(project.rootProject.file('local.properties').newDataInputStream())
-    user = properties.getProperty('bintrayUser')
-    key = properties.getProperty('bintrayApiKey')
-
-
+    try {
+        properties.load(project.rootProject.file('local.properties').newDataInputStream())
+        user = properties.getProperty('bintrayUser')
+        key = properties.getProperty('bintrayApiKey')
+    } catch (Exception ignored) {
+        print "could not read local.properties"
+    }
     configurations = ['archives']
     override = true
     pkg {

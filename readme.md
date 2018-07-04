@@ -1,9 +1,16 @@
 # Introduction
 This library is a layer upon the android platform, trying to lift out bad design design decisions, and other annoyances. including the tremendous boilerplate code that is required in android programming.
 
+# Why then use this library ?
+
+The point about this library is that google is developing android as a platform, which means to allow developers to create everything, which does not necessarily translate to "easy to program for"
+
+That is what this library tries to do, gap the difference between the platform and the common sense expectation about using it.
+
+## Examples
 
 
-# Why use this library ?
+
 
 
 

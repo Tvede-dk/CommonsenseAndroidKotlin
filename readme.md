@@ -1,7 +1,7 @@
 # Introduction
 This library is a layer upon the android platform, trying to lift out bad design design decisions, and other annoyances. including the tremendous boilerplate code that is required in android programming.
 
-# Why then use this library ?
+# Why use this library?
 
 The point about this library is that google is developing android as a platform, which means to allow developers to create everything, which does not necessarily translate to "easy to program for"
 
@@ -130,7 +130,106 @@ In the case of using kotlin coroutines / suspend
      })
 ```
 
-###
+### Common view operations
+
+Making a view visible / invisible or gone
+
+*Vanilla*
+```kotlin
+    val view : View = ...
+    view.visibility = View.GONE
+    view.visibility = View.VISIBLE
+    view.visibility = View.INVISIBLE
+```
+
+*With Csense*
+```kotlin
+    val view : View = ...
+    view.gone()
+    view.visible()
+    view.invisible()
+```
+
+Querying for the visibility of a view
+
+*Vanilla*
+```kotlin
+    val view : View = ...
+    val isGone = view.visibility == View.GONE
+    val isInvisible = view.visibility == View.VISIBLE
+    val isInvisible = view.visibility == View.INVISIBLE
+```
+
+*With Csense*
+```kotlin
+    val view : View = ...
+    val isGone = view.isGone
+    val isVisible = view.isVisible
+    val isInvisible = view.isisInvisible
+```
+
+Change visibility based on boolean
+
+*Vanilla*
+```kotlin
+    val view : View = ...
+    val bool = ...
+    if (bool) {
+        view.visibility = View.VISIBLE
+    } else {
+        view.visibility = View.GONE
+    }
+```
+
+*With Csense*
+```kotlin
+    val view : View = ...
+    val bool = ...
+    view.visibleOrGone(bool)
+```
+
+Or Just toggling it
+
+*Vanilla*
+```kotlin
+    val view : View = ...
+    val bool = view.visibility == View.GONE
+    if (bool) {
+        view.visibility = View.VISIBLE
+    } else {
+        view.visibility = View.GONE
+    }
+```
+
+*With Csense*
+```kotlin
+    val view : View = ...
+    val bool = ...
+    view.visibleOrGone(bool)
+```
+
+Making a view disabled / enabled
+
+*Vanilla*
+```kotlin
+    val view : View = ...
+    //enable
+    view.isEnabled = true
+    view.isClickable = true
+    //disable
+    view.isEnabled = false
+    view.isClickable = false
+```
+
+
+*With Csense*
+```kotlin
+    val view : View = ...
+    view.enable()
+    view.disable()
+```
+Where even ViewGroups are handled (in Csense), where as the vanilla example does not handle ViewGroups at all.
+
 
 
 # Installation

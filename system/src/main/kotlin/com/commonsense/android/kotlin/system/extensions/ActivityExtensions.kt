@@ -16,7 +16,11 @@ import android.support.v7.widget.Toolbar
 import kotlin.reflect.KClass
 
 
-fun AppCompatActivity.setupToolbarAppDrawer(drawer: DrawerLayout, toolbar: Toolbar, @StringRes openTitle: Int, @StringRes closeTitle: Int): ActionBarDrawerToggle {
+@UiThread
+fun AppCompatActivity.setupToolbarAppDrawer(drawer: DrawerLayout,
+                                            toolbar: Toolbar,
+                                            @StringRes openTitle: Int,
+                                            @StringRes closeTitle: Int): ActionBarDrawerToggle {
     setSupportActionBar(toolbar)
     val toggle = ActionBarDrawerToggle(this, drawer, toolbar, openTitle, closeTitle)
     drawer.addDrawerListener(toggle)
@@ -25,16 +29,20 @@ fun AppCompatActivity.setupToolbarAppDrawer(drawer: DrawerLayout, toolbar: Toolb
     return toggle
 }
 
+@UiThread
 fun <T : Activity> Activity.startActivity(toStart: Class<T>) {
     startActivity(Intent(this, toStart))
 }
 
+@UiThread
 fun <T : Activity> Activity.startActivity(toStart: KClass<T>) {
     startActivity(Intent(this, toStart.java))
 }
 
 
-inline fun AppCompatActivity.setSupportActionBarAndApply(toolbar: Toolbar, crossinline actionToApply: (ActionBar.() -> Unit)) {
+@UiThread
+inline fun AppCompatActivity.setSupportActionBarAndApply(toolbar: Toolbar,
+                                                         crossinline actionToApply: (ActionBar.() -> Unit)) {
     setSupportActionBar(toolbar)
     supportActionBar?.apply(actionToApply)
 }
@@ -43,6 +51,7 @@ inline fun AppCompatActivity.setSupportActionBarAndApply(toolbar: Toolbar, cross
  * Pops all fragments from the current FragmentManager, except the bottom fragment
  * Logs if the operation fails (does not throw)
  */
+@AnyThread
 fun FragmentActivity.popToFirstFragment() = runOnUiThread {
     supportFragmentManager?.popToFirstFragment()
 }
@@ -62,5 +71,8 @@ fun FragmentActivity.pushNewFragmentsTo(@IdRes container: Int, fragments: List<F
     supportFragmentManager?.pushNewFragmentsTo(container, fragments)
 }
 
+/**
+ * Safe finish call, so wrapping it in runOnUiThread is not required.
+ */
 @AnyThread
 fun Activity.safeFinish() = runOnUiThread(this::finish)

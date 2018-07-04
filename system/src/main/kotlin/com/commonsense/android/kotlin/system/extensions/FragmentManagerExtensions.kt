@@ -1,12 +1,8 @@
 package com.commonsense.android.kotlin.system.extensions
 
-import android.annotation.SuppressLint
-import android.support.annotation.IdRes
-import android.support.annotation.UiThread
-import android.support.v4.app.Fragment
-import android.support.v4.app.FragmentManager
-import android.support.v4.app.FragmentTransaction
-import com.commonsense.android.kotlin.system.logging.tryAndLog
+import android.support.annotation.*
+import android.support.v4.app.*
+import com.commonsense.android.kotlin.system.logging.*
 
 /**
  * Created by Kasper Tvede on 20-05-2017.
@@ -23,13 +19,11 @@ inline fun FragmentManager.transactionCommitAllowStateLoss(crossinline action: (
     beginTransaction().apply(action).commitAllowingStateLoss()
 }
 
-@SuppressLint("CommitTransaction") //AS failure,the commitnow is just as valid as commit
 @UiThread
 inline fun FragmentManager.transactionCommitNow(crossinline action: (FragmentTransaction.() -> Unit)) {
     beginTransaction().apply(action).commitNow()
 }
 
-@SuppressLint("CommitTransaction") //AS failure,the commitnow is just as valid as commit
 @UiThread
 inline fun FragmentManager.transactionCommitNowAllowStateLoss(crossinline action: (FragmentTransaction.() -> Unit)) {
     beginTransaction().apply(action).commitNowAllowingStateLoss()
@@ -48,17 +42,26 @@ fun FragmentManager.popToFirstFragment() {
 }
 
 
+/**
+ * Pushes a new fragment onto the backstack and displays it.
+ */
 @UiThread
 fun FragmentManager.pushNewFragmentTo(@IdRes container: Int, fragment: Fragment) = transactionCommit {
     replace(container, fragment)
     addToBackStack(fragment.id.toString())
 }
 
+/**
+ * Replaces the current fragment with the given (in the container)
+ */
 @UiThread
 fun FragmentManager.replaceFragment(@IdRes container: Int, fragment: Fragment) = transactionCommitNow {
     replace(container, fragment)
 }
 
+/**
+ * appends multiple fragments to the given container
+ */
 @UiThread
 fun FragmentManager.pushNewFragmentsTo(@IdRes container: Int, fragments: List<Fragment>) {
     fragments.forEach { it -> pushNewFragmentTo(container, it) }

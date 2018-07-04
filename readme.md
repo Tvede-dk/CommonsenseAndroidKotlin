@@ -45,20 +45,97 @@ class ExampleDatabindingActivity : BaseDatabindingActivity<ExampleActivityBindin
 
 ```
 
-### Launching activities
+### Activity tasks
+
+Launching activities
 
 *Vanilla*
 ```kotlin
     startActivity(Intent(this, MainActivity::class.java))
-}
-
 ```
 
 *With Csense*
 ```kotlin
-    //
     startActivity(MainActivity::class)
 ```
+
+
+Finishing an Activity safely (all kinds of Activity)
+
+*Vanilla*
+```kotlin
+    runOnUiThread{
+        finish()
+    }
+```
+
+*With Csense*
+```kotlin
+    safeFinish()
+```
+
+
+
+### Fragments
+Pushing a new fragment to the current stack (inside of a FragmentActivity)
+
+*Vanilla*
+```kotlin
+    val fragment: Fragment = ...
+    val containerId : Int = R.id.some_container_id
+
+    supportFragmentManager?.let{
+        val transaction = beginTransaction()
+        transaction.replace(containerId,fragment)
+        transaction.addToBackStack("a uniq name")
+        transaction.commit()
+    }
+```
+
+*With Csense*
+```kotlin
+    val fragment: Fragment = ...
+    val containerId : Int = R.id.some_container_id
+    pushNewFragmentTo(containerId, fragment)
+```
+
+Performing transactions of the fragment manager
+
+*Vanilla*
+```kotlin
+    //simple commit
+    supportFragmentManager?.let {
+        val transaction = beginTransaction()
+        //do the work, and remeber to call comit
+        // could span many lines.
+        transaction.commit()
+    }
+    //commitNow
+    supportFragmentManager?.let {
+        val transaction = beginTransaction()
+        //do the work, and remeber to call comit
+        // could span many lines.
+        transaction.commitNow()
+    }
+```
+
+*With Csense*
+```kotlin
+    supportFragmentManager?.transactionCommit {
+        //safe inlined call where commit will be called for us no matter what we do in here.
+    }
+    supportFragmentManager?.transactionCommitNow {
+        //safe inlined call where commitNow will be called for us no matter what we do in here.
+    }
+```
+
+
+
+
+
+
+
+
 
 ### Asking for permissions
 (see https://developer.android.com/training/permissions/requesting#make-the-request, changed to only ask for camera)

@@ -131,12 +131,6 @@ Performing transactions of the fragment manager
 
 
 
-
-
-
-
-
-
 ### Asking for permissions
 (see https://developer.android.com/training/permissions/requesting#make-the-request, changed to only ask for camera)
 *Vanilla*

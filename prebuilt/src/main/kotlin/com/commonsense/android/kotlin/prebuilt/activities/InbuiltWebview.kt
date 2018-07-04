@@ -28,6 +28,11 @@ open class InbuiltWebView : BaseActivity() {
         webView.loadUri(uri)
     }
 
+    override fun onDestroy() {
+        super.onDestroy()
+        webView.destroy()
+    }
+
     //TODO add title, potential usage of CustomTabs (google project).
     //as well as JS... ect.
     // https://developer.chrome.com/multidevice/android/customtabs

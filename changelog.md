@@ -1,11 +1,25 @@
 #Changelog
 
+##0.0.14
+micro update
+
+### Updates
+- kotlin to 1.2.51
+- gradle-bintray-plugin to 1.8.3
+- gradle to 4.9-rc1
+- coroutines to 0.23.4 
+- mockito core to 2.19.0
+
+###Other
+cleanup in build.gradle scripts
+ 
+
 ##0.0.13 
 micro update
 
 ### Updates
 - kotlin to 1.2.50
-- coroutines to 0.23.4
+- coroutines to 0.23.3
 - gradle to 4.8.1
 - gradle-bintray-plugin to 1.8.1
 

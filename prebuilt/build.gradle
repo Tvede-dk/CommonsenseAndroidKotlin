@@ -3,17 +3,6 @@ apply plugin: 'kotlin-android'
 apply plugin: 'kotlin-kapt'
 
 android {
-    compileSdkVersion androidSdkBuildVersion
-    buildToolsVersion "$androidBuildToolsVersion"
-
-    defaultConfig {
-        minSdkVersion project.minSdk
-        targetSdkVersion project.targetSdk
-        versionCode project.commonsenseVersionNumber
-        versionName project.commonsenseVersionName
-        testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
-
-    }
     buildTypes {
         release {
             minifyEnabled false
@@ -49,7 +38,6 @@ dependencies {
     testImplementation "com.squareup.leakcanary:leakcanary-android-no-op:$leakCanaryVersion"
 
     implementation "com.android.support:appcompat-v7:$supportVersion"
-    // kapt "com.android.databinding:compiler:$androidGradleVersion"
     implementation "org.jetbrains.kotlin:kotlin-stdlib:$kotlin_version"
 
 }

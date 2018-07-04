@@ -156,7 +156,7 @@ Querying for the visibility of a view
 ```kotlin
     val view : View = ...
     val isGone = view.visibility == View.GONE
-    val isInvisible = view.visibility == View.VISIBLE
+    val isVisible = view.visibility == View.VISIBLE
     val isInvisible = view.visibility == View.INVISIBLE
 ```
 
@@ -165,7 +165,7 @@ Querying for the visibility of a view
     val view : View = ...
     val isGone = view.isGone
     val isVisible = view.isVisible
-    val isInvisible = view.isisInvisible
+    val isInvisible = view.isInvisible
 ```
 
 Change visibility based on boolean

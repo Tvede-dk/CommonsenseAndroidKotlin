@@ -1,13 +1,9 @@
 package com.commonsense.android.kotlin.system.logging
 
-import android.view.View
-import com.commonsense.android.kotlin.base.FunctionUnit
-import com.commonsense.android.kotlin.base.extensions.collections.set
-import com.commonsense.android.kotlin.test.BaseRoboElectricTest
-import com.commonsense.android.kotlin.test.assert
-import com.commonsense.android.kotlin.test.assertNotNullAndEquals
-import com.commonsense.android.kotlin.test.assertNull
-import org.junit.Test
+import com.commonsense.android.kotlin.base.*
+import com.commonsense.android.kotlin.base.extensions.collections.*
+import com.commonsense.android.kotlin.test.*
+import org.junit.*
 
 /**
  * Created by Kasper Tvede on 17-01-2018.

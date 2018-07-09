@@ -5,7 +5,7 @@
 
         <variable
             name="user"
-            type="com.CommonSenseAndroidKotlin.example.models.UserViewModel" />
+            type="csense.android.exampleApp.models.UserViewModel" />
     </data>
 
 

@@ -4,7 +4,7 @@ apply plugin: 'kotlin-kapt'
 
 android {
     defaultConfig {
-        applicationId "csense.android.kotlin.exampleApp"
+        applicationId "csense.android.exampleApp"
         vectorDrawables.useSupportLibrary = true
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
         multiDexEnabled true

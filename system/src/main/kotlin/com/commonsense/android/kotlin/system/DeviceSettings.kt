@@ -1,4 +1,4 @@
-package com.commonsense.android.kotlin.android
+package com.commonsense.android.kotlin.system
 
 import android.content.Context
 import android.content.SharedPreferences

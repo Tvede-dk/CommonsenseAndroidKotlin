@@ -47,7 +47,7 @@ class MutableExtensionsKtTest {
 
     @Test
     fun set() {
-        val list = mutableListOf<Int>(
+        val list = mutableListOf(
                 42, 2, 1
         )
         list.set(listOf())

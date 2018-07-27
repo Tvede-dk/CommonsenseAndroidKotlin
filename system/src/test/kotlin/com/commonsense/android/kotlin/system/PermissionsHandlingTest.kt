@@ -24,9 +24,9 @@ class PermissionsHandlingTest : BaseRoboElectricTest() {
         val sem = Semaphore(0)
         val act = createActivity<AlwaysPermissionActivity>()
 
-        act.permissionHandler.performActionForPermission(Manifest.permission.CALL_PHONE, act, sem::release, {
+        act.permissionHandler.performActionForPermission(Manifest.permission.CALL_PHONE, act, sem::release) {
             Assert.fail("should be granted in tests")
-        })
+        }
         Assert.assertTrue(sem.tryAcquire())
     }
 

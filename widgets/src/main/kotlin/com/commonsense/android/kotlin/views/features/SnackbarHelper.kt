@@ -26,7 +26,7 @@ fun Fragment.showSnackbar(view: View,
 
     val mySnackbar = Snackbar.make(view,
             text, Snackbar.LENGTH_SHORT)
-    mySnackbar.setAction(actionText, { onAction() })
+    mySnackbar.setAction(actionText) { onAction() }
     mySnackbar.duration = durationInMs
     mySnackbar.addCallback(object : BaseTransientBottomBar.BaseCallback<Snackbar?>() {
         override fun onDismissed(transientBottomBar: Snackbar?, event: Int) {

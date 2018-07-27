@@ -7,6 +7,7 @@ import android.util.AttributeSet
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import android.widget.FrameLayout
+import com.commonsense.android.kotlin.system.extensions.*
 import com.commonsense.android.kotlin.views.datastructures.ViewVariable
 import com.commonsense.android.kotlin.views.widgets.LateAttributes
 import java.lang.ref.WeakReference
@@ -29,9 +30,9 @@ abstract class CustomDataBindingView<T : ViewDataBinding> : FrameLayout, LateAtt
         afterFinishInflate()
     }
 
-    val binding: T  by lazy {
+    val binding: T by lazy {
         val inflaterFunction = inflate()
-        inflaterFunction(LayoutInflater.from(context), this, true)
+        inflaterFunction(LayoutInflater.from(context), this@CustomDataBindingView, true)
     }
 
     constructor(context: Context) : super(context)

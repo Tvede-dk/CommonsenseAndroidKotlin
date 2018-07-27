@@ -60,7 +60,7 @@ class CoroutinesExtensionsKtTest {
     @Test
     fun launchBlock() = runBlocking {
         var counter = 0
-        val job = com.commonsense.android.kotlin.base.extensions.launch(CommonPool) {
+        val job = launchBlock(CommonPool) {
             counter += 1
         }
 

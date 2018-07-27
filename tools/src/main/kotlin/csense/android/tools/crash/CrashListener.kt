@@ -1,4 +1,4 @@
-package com.commonsense.android.kotlin.tools.crash
+package csense.android.tools.crash
 
 import android.annotation.SuppressLint
 import android.content.Context

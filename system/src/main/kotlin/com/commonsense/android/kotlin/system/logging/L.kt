@@ -6,6 +6,7 @@ import android.view.View
 import com.commonsense.android.kotlin.base.extensions.collections.invokeEachWith
 import com.commonsense.android.kotlin.base.extensions.collections.onTrue
 import com.commonsense.android.kotlin.system.logging.LoggingType.*
+import kotlin.reflect.*
 
 
 /**
@@ -73,6 +74,7 @@ object L {
         isErrorLoggingAllowed = value
     }
 
+    //region Control switches
     /**
      * Controls whenever error logging is allowed.
      * default is true
@@ -93,7 +95,9 @@ object L {
      * default is true
      */
     var isProductionLoggingAllowed = true
+    //endregion
 
+    //region Logger lists
     /**
      * Production level loggers; the intention here is to allow this logging in production.
      * its controlled separate from all the other logging flags.
@@ -113,7 +117,9 @@ object L {
      *
      */
     var errorLoggers: MutableList<LoggingFunctionType<Any>> = mutableListOf(LoggingType.Error.getAndroidLoggerFunction())
+    //endregion
 
+    //region error loggers
     /**
      * An error logging channel
      * this logs messages as the level "Error", meant for "bad things", eg application / library errors,
@@ -130,6 +136,16 @@ object L {
         isErrorLoggingAllowed.onTrue { errorLoggers.invokeEachWith(tag, msg, exception) }
     }
 
+    fun error(javaClass: Class<*>, message: String, exception: Throwable? = null) {
+        error(javaClass.simpleName, message, exception)
+    }
+
+    fun error(kClass: KClass<*>, message: String, exception: Throwable? = null) {
+        error(kClass.java, message, exception)
+    }
+    //endregion
+
+    //region warning loggers
     /**
      * A warning logging channel
      * this logs messages as the level "Warning", mean for not fatal / very bad things,
@@ -140,6 +156,16 @@ object L {
         isWarningLoggingAllowed.onTrue { warningLoggers.invokeEachWith(tag, message, exception) }
     }
 
+    fun warning(javaClass: Class<*>, message: String, throwable: Throwable? = null) {
+        warning(javaClass.simpleName, message, throwable)
+    }
+
+    fun warning(kClass: KClass<*>, message: String, throwable: Throwable? = null) {
+        warning(kClass.java, message, throwable)
+    }
+    //endregion
+
+    //region Debug loggers
     /**
      * A Debug logging
      */
@@ -147,7 +173,22 @@ object L {
         isDebugLoggingAllowed.onTrue { debugLoggers.invokeEachWith(tag, message, exception) }
     }
 
+    /**
+     * Uses the simple class name for the tag, otherwise just as the regular debug method
+     */
+    fun debug(javaClass: Class<*>, message: String, exception: Throwable? = null) {
+        debug(javaClass.simpleName, message, exception)
+    }
 
+    /**
+     * Uses the simple class name for the tag, otherwise just as the regular debug method
+     */
+    fun debug(kClass: KClass<*>, message: String, exception: Throwable? = null) {
+        debug(kClass.java, message, exception)
+    }
+    //endregion
+
+    //region Production loggers
     /**
      * A production logging channel.
      * purpose is to allow logging even in production, such as very specific errors,warnings, assertions,
@@ -158,6 +199,15 @@ object L {
     fun logProd(tag: String, message: String, exception: Throwable? = null) {
         isProductionLoggingAllowed.onTrue { productionLoggers.invokeEachWith(tag, message, exception) }
     }
+
+    fun logProd(javaClass: Class<*>, message: String, throwable: Throwable?) {
+        logProd(javaClass.simpleName, message, throwable)
+    }
+
+    fun logProd(kClass: KClass<*>, message: String, throwable: Throwable?) {
+        logProd(kClass.java, message, throwable)
+    }
+    //endregion
 }
 
 /**
@@ -165,7 +215,7 @@ object L {
  * @see L.error
  */
 fun ComponentCallbacks.logError(message: String, exception: Throwable? = null) {
-    L.error(this.javaClass.simpleName, message, exception)
+    L.error(this.javaClass, message, exception)
 }
 
 /**
@@ -173,7 +223,7 @@ fun ComponentCallbacks.logError(message: String, exception: Throwable? = null) {
  * @see L.warning
  */
 fun ComponentCallbacks.logWarning(message: String, exception: Throwable? = null) {
-    L.warning(this.javaClass.simpleName, message, exception)
+    L.warning(this.javaClass, message, exception)
 }
 
 /**
@@ -181,14 +231,14 @@ fun ComponentCallbacks.logWarning(message: String, exception: Throwable? = null)
  * @see L.debug
  */
 fun ComponentCallbacks.logDebug(message: String, exception: Throwable? = null) {
-    L.debug(this.javaClass.simpleName, message, exception)
+    L.debug(this.javaClass, message, exception)
 }
 
 /**
  * @see L.logProd
  */
 fun ComponentCallbacks.logProduction(message: String, exception: Throwable? = null) {
-    L.logProd(this.javaClass.simpleName, message, exception)
+    L.logProd(this.javaClass, message, exception)
 }
 
 /**
@@ -196,7 +246,7 @@ fun ComponentCallbacks.logProduction(message: String, exception: Throwable? = nu
  * @see L.debug
  */
 fun View.logDebug(message: String, exception: Throwable? = null) {
-    L.debug(this.javaClass.simpleName, message, exception)
+    L.debug(this.javaClass, message, exception)
 }
 
 /**
@@ -204,7 +254,7 @@ fun View.logDebug(message: String, exception: Throwable? = null) {
  * @see L.warning
  */
 fun View.logWarning(message: String, exception: Throwable? = null) {
-    L.warning(this.javaClass.simpleName, message, exception)
+    L.warning(this.javaClass, message, exception)
 }
 
 /**
@@ -212,12 +262,12 @@ fun View.logWarning(message: String, exception: Throwable? = null) {
  * @see L.error
  */
 fun View.logError(message: String, exception: Throwable? = null) {
-    L.error(this.javaClass.simpleName, message, exception)
+    L.error(this.javaClass, message, exception)
 }
 
 /**
  * @see L.logProd
  */
 fun View.logProduction(message: String, exception: Throwable? = null) {
-    L.logProd(this.javaClass.simpleName, message, exception)
+    L.logProd(this.javaClass, message, exception)
 }

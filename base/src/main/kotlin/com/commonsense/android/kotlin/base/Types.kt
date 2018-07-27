@@ -11,6 +11,7 @@ typealias EmptyReceiver<T> = T.() -> Unit
 typealias EmptyFunctionResult<T> = () -> T
 typealias AsyncEmptyFunction = suspend () -> Unit
 typealias AsyncFunctionUnit<T> = suspend (T) -> Unit
+
 typealias AsyncEmptyFunctionResult<T> = suspend () -> T
 
 /**
@@ -38,6 +39,11 @@ typealias AsyncCoroutineFunction = suspend CoroutineScope.() -> Unit
 /**
 For library functions
  */
+/**
+ * Function with 0 input and potential output
+ */
+typealias Function0<O> = () -> O
+
 /**
  * Function with 1 input and potential output
  */
@@ -68,3 +74,10 @@ typealias Function5<I1, I2, I3, O> = (I1, I2, I3) -> O
  * Function with 6 inputs and potential output
  */
 typealias Function6<I1, I2, I3, O> = (I1, I2, I3) -> O
+
+
+/**
+ * Function with 1 input and potential output
+ *
+ */
+typealias AsyncFunction1<I1, O> = suspend (I1) -> O

@@ -11,31 +11,33 @@ import com.commonsense.android.kotlin.base.extensions.collections.setExistence
  * A toggle selection (many) view handler
  * only assumption; we only have a set of values, not multiple of each.
  */
-class ToggleSelectionViewHandler<T> {
+class ToggleSelectionViewHandler<T>(callback: FunctionUnit<Set<T>>)
+    : BaseSelectionHandler<T, Set<T>, MutableSet<T>>(callback) {
 
-    private val selectedValues = mutableSetOf<T>()
-    private val viewsToWorkOn = mutableSetOf<ToggleableView<T>>()
+    override var selection: MutableSet<T> = mutableSetOf()
 
-
-    var callback: FunctionUnit<Set<T>>? = null
-
-    fun addView(view: ToggleableView<T>, preSelect: Boolean = false) {
-        view.setOnSelectionChanged(this::onSelectionChanged)
-        viewsToWorkOn.add(view)
-        view.checked = preSelect
+    override fun handleSelectionChanged(view: ToggleableView<T>, selectedValue: Boolean) {
+        selection.setExistence(view.value, selectedValue)
+        callback.invoke(selection)
     }
 
-    private fun onSelectionChanged(view: ToggleableView<T>, selection: Boolean) {
-        selectedValues.setExistence(view.value, selection)
-        callback?.invoke(selectedValues)
+    override fun isSelected(view: ToggleableView<T>): Boolean {
+        return selection.contains(view.value)
     }
 
-    operator fun plusAssign(selectionToAdd: ToggleableView<T>) {
-        addView(selectionToAdd)
+    override fun removeSelected() {
+        selection.clear()
     }
+
+
+//    fun addView(view: ToggleableView<T>, preSelect: Boolean = false) {
+//        view.setOnSelectionChanged(this::onSelectionChanged)
+//        viewsToWorkOn.add(view)
+//        view.checked = preSelect
+//    }
 
     /**
-     *
+     * Select the given values
      * Performance : assumes the set has "contains" as O(1) otherwise this will be a O(n^2) algorithm
      */
     fun selectValues(values: Set<T>) {

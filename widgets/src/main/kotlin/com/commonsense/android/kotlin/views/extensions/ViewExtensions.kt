@@ -4,8 +4,7 @@ import android.annotation.TargetApi
 import android.content.Context
 import android.content.res.TypedArray
 import android.os.Build
-import android.support.annotation.StyleableRes
-import android.support.annotation.UiThread
+import android.support.annotation.*
 import android.text.InputType
 import android.util.AttributeSet
 import android.view.View
@@ -53,7 +52,7 @@ inline fun View.measureSize(crossinline afterMeasureAction: (with: Int, height: 
 }
 
 @UiThread
-@TargetApi(Build.VERSION_CODES.JELLY_BEAN)
+@RequiresApi(Build.VERSION_CODES.JELLY_BEAN)
 fun ViewTreeObserver.removeOnGlobalLayoutListenerCompact(listener: ViewTreeObserver.OnGlobalLayoutListener) {
     removeOnGlobalLayoutListener(listener)
 }

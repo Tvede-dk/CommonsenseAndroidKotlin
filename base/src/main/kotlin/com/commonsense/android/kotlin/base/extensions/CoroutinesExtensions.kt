@@ -39,9 +39,9 @@ fun Job.launchOnCompletedAsync(context: CoroutineContext,
 /**
  * Like the original launch, except without the coroutineScope 'this parameter
  */
-fun launch(context: CoroutineContext,
-           start: CoroutineStart = CoroutineStart.DEFAULT,
-           block: suspend () -> Unit): Job {
+fun launchBlock(context: CoroutineContext,
+                start: CoroutineStart = CoroutineStart.DEFAULT,
+                block: AsyncEmptyFunction): Job {
     return kotlinx.coroutines.experimental.launch(context, start) {
         block()
     }

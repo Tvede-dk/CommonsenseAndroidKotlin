@@ -1,12 +1,11 @@
-package com.commonsense.android.kotlin.tools.anr
+package csense.android.tools.anr
 
 import android.os.Debug
 import android.os.Handler
 import android.os.Looper
 import com.commonsense.android.kotlin.base.EmptyFunction
 import com.commonsense.android.kotlin.base.Function2
-import com.commonsense.android.kotlin.base.extensions.map
-import com.commonsense.android.kotlin.base.extensions.weakReference
+import com.commonsense.android.kotlin.base.extensions.*
 import com.commonsense.android.kotlin.base.time.TimeUnit
 import com.commonsense.android.kotlin.system.logging.L
 import kotlinx.coroutines.experimental.*
@@ -24,7 +23,7 @@ object ANRWatcher {
         listener?.invoke()
     }
 
-    var timeout: TimeUnit = TimeUnit.Milliseconds(5000)
+    var timeout: TimeUnit = TimeUnit.MillisSeconds(5000)
 
     //<editor-fold desc="Enabled ability">
     var disableOnDebugger = false
@@ -88,24 +87,24 @@ private class ANRWatcherThread(val name: String, val callbackOnANR: EmptyFunctio
                 // delay(500)
                 val end = async(UI) {
                     System.currentTimeMillis()
-                }.await(ANRWatcher.timeout.toMilliseconds().milliSeconds - (System.currentTimeMillis() - start), null)
+                }.await(ANRWatcher.timeout.toMilliSeconds().value - (System.currentTimeMillis() - start), null)
 
                 val delta = end?.let {
-                    TimeUnit.Milliseconds(it - start)
+                    TimeUnit.MillisSeconds(it - start)
                 }
                 if (logTimings) {
                     logTiming(delta)
                 }
                 when {
                     delta == null -> callbackOnANR()
-                    delta.milliSeconds > ANRWatcher.timeout.toMilliseconds().milliSeconds -> callbackOnANR()
+                    delta.value > ANRWatcher.timeout.toMilliSeconds().value -> callbackOnANR()
                 }
             }
         }
     }
 
-    private fun logTiming(delta: TimeUnit.Milliseconds?) {
-        launch(UI) {
+    private fun logTiming(delta: TimeUnit.MillisSeconds?) {
+        launchBlock(UI) {
             val message = delta.map("Ui thread response time was: $delta", "timed out, ANR detected")
             val tag = ANRWatcherThread::class.java.simpleName
             loggerFunction?.invoke(tag, message)

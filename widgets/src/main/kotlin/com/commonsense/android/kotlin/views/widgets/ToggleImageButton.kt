@@ -20,6 +20,7 @@ import java.lang.ref.WeakReference
 open class ToggleImageButton : AppCompatImageView, ViewAttribute, View.OnClickListener, CheckableStatusCallback {
 
 
+
     override val attributes: MutableList<WeakReference<ViewVariable<*>>> = mutableListOf()
 
 
@@ -121,6 +122,9 @@ open class ToggleImageButton : AppCompatImageView, ViewAttribute, View.OnClickLi
         internalOnclickListener = newOnclickListener
     }
 
+    override fun clearOnSelectionChanged() {
+        this.onCheckedChanged = null
+    }
 
     fun setOnCheckedChangedListener(onCheckedChanged: (Boolean) -> Unit) {
         this.onCheckedChanged = { onCheckedChanged(this.checked) }

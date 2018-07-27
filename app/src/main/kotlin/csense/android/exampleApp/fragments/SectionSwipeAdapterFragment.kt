@@ -1,19 +1,13 @@
 package csense.android.exampleApp.fragments
 
-import android.databinding.ViewDataBinding
-import android.support.v7.widget.LinearLayoutManager
-import android.view.View
-import com.CommonSenseAndroidKotlin.example.databinding.DemoRecyclerSectionSwipeBinding
-import com.CommonSenseAndroidKotlin.example.databinding.SimpleSwipeItemBinding
-import com.commonsense.android.kotlin.views.ViewInflatingFunction
-import com.commonsense.android.kotlin.views.databinding.adapters.BaseSearchRenderModel
-import com.commonsense.android.kotlin.views.databinding.adapters.BaseSearchableDataBindingRecyclerAdapter
-import com.commonsense.android.kotlin.views.databinding.adapters.BaseViewHolderItem
-import com.commonsense.android.kotlin.views.databinding.fragments.BaseDatabindingFragment
-import com.commonsense.android.kotlin.views.databinding.fragments.InflateBinding
-import com.commonsense.android.kotlin.views.features.Direction
-import com.commonsense.android.kotlin.views.features.SwipeableItem
-import com.commonsense.android.kotlin.views.features.attachSwipeFeature
+import android.databinding.*
+import android.support.v7.widget.*
+import android.view.*
+import com.commonsense.android.kotlin.views.*
+import com.commonsense.android.kotlin.views.databinding.adapters.*
+import com.commonsense.android.kotlin.views.databinding.fragments.*
+import com.commonsense.android.kotlin.views.features.*
+import csense.android.exampleApp.databinding.*
 
 /**
  * Created by Kasper Tvede on 24-06-2017.

@@ -177,7 +177,7 @@ open class JobContainer {
      */
     fun addToQueue(context: CoroutineContext, action: AsyncEmptyFunction, group: String): Unit = changeQueuedJob {
         return@changeQueuedJob this.toMutableMap().apply {
-            getOrPut(group, { mutableListOf() }).add(Pair(context, action))
+            getOrPut(group) { mutableListOf() }.add(Pair(context, action))
         }
     }
 

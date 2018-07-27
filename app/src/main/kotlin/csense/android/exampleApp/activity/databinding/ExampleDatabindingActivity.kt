@@ -1,7 +1,7 @@
 package csense.android.exampleApp.activity.databinding
 
-import com.CommonSenseAndroidKotlin.example.databinding.*
 import com.commonsense.android.kotlin.views.databinding.activities.*
+import csense.android.exampleApp.databinding.*
 
 /**
  * Example's usage

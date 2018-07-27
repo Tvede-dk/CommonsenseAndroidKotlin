@@ -1,8 +1,7 @@
 package csense.android.exampleApp.activity
 
-import com.CommonSenseAndroidKotlin.example.activity.*
-import csense.android.exampleApp.fragments.SearchAbleRecyclerDemo
-import com.commonsense.android.kotlin.system.extensions.replaceFragment
+import com.commonsense.android.kotlin.system.extensions.*
+import csense.android.exampleApp.fragments.*
 
 /**
  * Created by kasper on 01/06/2017.

@@ -1,9 +1,9 @@
 buildscript {
     ext.androidSdkBuildVersion = 28
-    ext.androidBuildToolsVersion = "28.0.0"
+    ext.androidBuildToolsVersion = "28.0.1"
 
     //Lib version and sdks
-    ext.commonsenseVersionName = "0.0.14"
+    ext.commonsenseVersionName = "0.0.15"
     ext.commonsenseVersionNumber = 1
     ext.minSdk = 16
     ext.targetSdk = 27
@@ -29,7 +29,7 @@ buildscript {
     ext.espressoVersion = "3.0.2"
     ext.testSupportRunnerVersion = "1.0.2"
     ext.dokkaVersion = "0.9.17"
-    ext.mockitoVersion = "2.19.0"
+    ext.mockitoVersion = "2.19.1"
 
     repositories {
         google()
@@ -40,14 +40,14 @@ buildscript {
         classpath 'com.github.dcendents:android-maven-gradle-plugin:2.1'
         classpath "com.android.tools.build:gradle:$androidGradleVersion"
         classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlin_version"
-        classpath 'com.jfrog.bintray.gradle:gradle-bintray-plugin:1.8.3'
+        classpath 'com.jfrog.bintray.gradle:gradle-bintray-plugin:1.8.4'
         classpath "de.mannodermaus.gradle.plugins:android-junit5:1.0.32"
     }
 }
 
 
 plugins {
-    id "io.gitlab.arturbosch.detekt" version "1.0.0.RC7-3"
+    id "io.gitlab.arturbosch.detekt" version "1.0.0.RC8"
 }
 
 apply plugin: 'io.gitlab.arturbosch.detekt'
@@ -96,7 +96,7 @@ task clean(type: Delete) {
 apply from: "fix-tests.gradle"
 
 detekt {
-    version = "1.0.0.RC7-3"
+    version = "1.0.0.RC8"
     profile("main") {
         input = "$projectDir/src/main/java"
         config = "$projectDir/detekt.yml"

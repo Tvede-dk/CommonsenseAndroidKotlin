@@ -1,11 +1,11 @@
-package com.commonsense.android.kotlin.tools.fps
+package csense.android.tools.fps
 
 import android.content.Context
 import android.view.Choreographer
 import com.commonsense.android.kotlin.base.FunctionUnit
 import com.commonsense.android.kotlin.base.algorithms.RunningAverageFloatCapped
 import com.commonsense.android.kotlin.base.extensions.*
-import com.commonsense.android.kotlin.base.time.TimeUnit
+import com.commonsense.android.kotlin.base.time.*
 import com.commonsense.android.kotlin.system.extensions.defaultDisplay
 import com.commonsense.android.kotlin.system.logging.L
 import kotlinx.coroutines.experimental.android.UI
@@ -39,11 +39,11 @@ class FpsWatcher(context: Context,
      * try limit to fps, so we do not overload ui thread
      */
     private val backoffTimingInNs by lazy {
-        TimeUnit.Milliseconds(
-                TimeUnit.Seconds(1).toMilliseconds()
-                        .milliSeconds / defaultFps.roundToInt())
+        TimeUnit.MillisSeconds(
+                TimeUnit.Seconds(1).toMilliSeconds()
+                        .value / defaultFps.roundToInt())
                 .toNanoSeconds()
-                .nanoSeconds
+                .value
     }
 
     private var lastAverage: Float = 0f
@@ -54,8 +54,8 @@ class FpsWatcher(context: Context,
      * how many milliseconds there are in a second.
      */
     private val secondInMillisecond: Long = TimeUnit.Seconds(1)
-            .toMilliseconds()
-            .milliSeconds
+            .toMilliSeconds()
+            .value
 
 
     /**
@@ -130,7 +130,7 @@ class FpsWatcher(context: Context,
                 L.error(FpsWatcher::class.java.simpleName, "fps is:$currentFps")
                 callbackOnTiming(average,
                         maxOf(expectedFps - currentFps, 0f),
-                        TimeUnit.Milliseconds(missedTiming.toLong()))
+                        TimeUnit.MillisSeconds(missedTiming.toLong()))
             }
         }
     }

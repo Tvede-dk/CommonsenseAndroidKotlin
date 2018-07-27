@@ -93,7 +93,7 @@ class ReferenceCountingMapTest {
             }
         }
         map.hasItem(index).assert(true)
-        incJobs.forEach({ it.join() })
+        incJobs.forEach { it.join() }
         map.hasItem(index).assert(true)
 
         val decJobs = listOf(0 until maxJobs).map {
@@ -102,7 +102,7 @@ class ReferenceCountingMapTest {
             }
         }
         map.hasItem(index).assert(true)
-        decJobs.forEach({ it.join() })
+        decJobs.forEach { it.join() }
         map.hasItem(index).assert(true)
 
         //counter should no matter what be 0 here.
@@ -135,8 +135,8 @@ class ReferenceCountingMapTest {
             }
         }
         map.hasItem(index).assert(true)
-        decJobs.forEach({ it.join() })
-        incJobs.forEach({ it.join() })
+        decJobs.forEach { it.join() }
+        incJobs.forEach { it.join() }
         map.hasItem(index).assert(true)
 
         //at this point if all is ok, we should have maxsize+1 refs.

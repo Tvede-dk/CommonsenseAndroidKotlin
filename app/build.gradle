@@ -4,6 +4,8 @@ apply plugin: 'kotlin-kapt'
 
 android {
     defaultConfig {
+        compileSdkVersion androidSdkBuildVersion
+        buildToolsVersion androidBuildToolsVersion
         applicationId "csense.android.exampleApp"
         vectorDrawables.useSupportLibrary = true
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
@@ -62,6 +64,7 @@ dependencies {
     implementation project(':widgets')
     implementation project(':base')
     testImplementation project(':test')
+    implementation project(path: ':tools')
 
 }
 

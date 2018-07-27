@@ -1,10 +1,9 @@
 package csense.android.exampleApp.models
 
-import android.databinding.ObservableField
-import com.CommonSenseAndroidKotlin.example.databinding.UserViewBinding
-import com.commonsense.android.kotlin.views.ViewInflatingFunction
-import com.commonsense.android.kotlin.views.databinding.adapters.BaseSearchRenderModel
-import com.commonsense.android.kotlin.views.databinding.adapters.BaseViewHolderItem
+import android.databinding.*
+import com.commonsense.android.kotlin.views.*
+import com.commonsense.android.kotlin.views.databinding.adapters.*
+import csense.android.exampleApp.databinding.*
 
 /**
  * Created by Kasper Tvede on 11-06-2017.

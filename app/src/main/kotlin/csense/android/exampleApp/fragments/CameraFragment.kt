@@ -1,27 +1,22 @@
 package csense.android.exampleApp.fragments
 
-import android.graphics.Bitmap
-import android.net.Uri
-import android.support.v7.widget.LinearLayoutManager
-import com.CommonSenseAndroidKotlin.example.databinding.CameraFragmentDemoBinding
-import com.CommonSenseAndroidKotlin.example.databinding.SimpleImageListItemBinding
-import com.commonsense.android.kotlin.base.extensions.collections.toIntArray
-import com.commonsense.android.kotlin.system.base.BaseActivity
-import com.commonsense.android.kotlin.system.extensions.safeToast
-import com.commonsense.android.kotlin.system.imaging.PictureRetriver
-import com.commonsense.android.kotlin.system.imaging.calculateOptimalThumbnailSize
-import com.commonsense.android.kotlin.system.imaging.loadBitmapPreviews
-import com.commonsense.android.kotlin.system.logging.tryAndLogSuspend
-import com.commonsense.android.kotlin.views.ViewInflatingFunction
-import com.commonsense.android.kotlin.views.databinding.adapters.BaseDataBindingRecyclerAdapter
-import com.commonsense.android.kotlin.views.databinding.adapters.BaseRenderModel
-import com.commonsense.android.kotlin.views.databinding.adapters.BaseViewHolderItem
-import com.commonsense.android.kotlin.views.databinding.fragments.BaseDatabindingFragment
-import com.commonsense.android.kotlin.views.databinding.fragments.InflateBinding
-import com.commonsense.android.kotlin.views.extensions.setOnclickAsync
-import kotlinx.coroutines.experimental.android.UI
-import kotlinx.coroutines.experimental.launch
-import kotlin.system.measureTimeMillis
+import android.annotation.*
+import android.graphics.*
+import android.net.*
+import android.support.v7.widget.*
+import com.commonsense.android.kotlin.base.extensions.collections.*
+import com.commonsense.android.kotlin.system.base.*
+import com.commonsense.android.kotlin.system.extensions.*
+import com.commonsense.android.kotlin.system.imaging.*
+import com.commonsense.android.kotlin.system.logging.*
+import com.commonsense.android.kotlin.views.*
+import com.commonsense.android.kotlin.views.databinding.adapters.*
+import com.commonsense.android.kotlin.views.databinding.fragments.*
+import com.commonsense.android.kotlin.views.extensions.*
+import csense.android.exampleApp.databinding.*
+import kotlinx.coroutines.experimental.*
+import kotlinx.coroutines.experimental.android.*
+import kotlin.system.*
 
 /**
  * Created by Kasper Tvede on 10-07-2017.
@@ -38,6 +33,7 @@ class CameraFragment : BaseDatabindingFragment<CameraFragmentDemoBinding>() {
         context?.let { BaseDataBindingRecyclerAdapter(it) }
     }
 
+    @SuppressLint("MissingPermission")
     override fun useBinding() {
         val imageAdapter = imageAdapter ?: return
         binding.cameraFragmentImagesTake.setOnclickAsync {
@@ -51,11 +47,10 @@ class CameraFragment : BaseDatabindingFragment<CameraFragmentDemoBinding>() {
             imageAdapter.clear()
         }
 
-        binding.cameraFragmentImagesList.setupAsync(imageAdapter, LinearLayoutManager(context), {
+        binding.cameraFragmentImagesList.setupAsync(imageAdapter, LinearLayoutManager(context)) {
             launch(UI) {
-
             }
-        })
+        }
     }
 
     fun onImageSelected(imageUri: Uri) = launchInUi("bitmap") {

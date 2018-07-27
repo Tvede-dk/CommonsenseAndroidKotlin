@@ -302,6 +302,29 @@ Making a view disabled / enabled
 Where even ViewGroups are handled (in Csense), where as the vanilla example does not handle ViewGroups at all.
 
 
+### Selection handling
+whenever you want some kind of selection regarding 1 item, or you want to be able to toggle between them, then theres is the
+
+- SingleSelectionHandler (only 1 selected at a time)
+- ToggleSelectionViewHandler (every one can be selected or deselected)
+
+
+### Caching views
+To most peoples surprise calling "setContentView" with a layout id,
+ causes the main thread to go and read from the disk,parse and deinflate an xml layout, which takes quite a while. 
+However there is a possible solution, which is to use the "AsyncLayoutInflater",
+ however it does have some very weird
+  drawbacks;
+
+*Vanilla*
+
+*With Csense* 
+(inside of a BaseSplashActivity)
+
+
+
+
+
 
 # Installation
 

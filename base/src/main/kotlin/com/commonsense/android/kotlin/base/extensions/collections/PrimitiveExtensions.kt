@@ -1,9 +1,6 @@
 package com.commonsense.android.kotlin.base.extensions.collections
 
-import com.commonsense.android.kotlin.base.AsyncEmptyFunction
-import com.commonsense.android.kotlin.base.EmptyFunction
-import com.commonsense.android.kotlin.base.EmptyFunctionResult
-import com.commonsense.android.kotlin.base.FunctionUnit
+import com.commonsense.android.kotlin.base.*
 import com.commonsense.android.kotlin.base.extensions.isNull
 
 /**
@@ -42,9 +39,9 @@ inline fun <T> Boolean.map(ifTrue: T, ifFalse: T): T = if (this) {
 }
 
 /**
- * Maps lazyly the given parameters.
+ * Maps lazily the given parameters.
  * since its inline, then the code would be as if you wrote the "if else statement"
- * and then only did the computation iff that branch was chosene.
+ * and then only did the computation iff that branch was chosen.
  *
  */
 inline fun <T> Boolean.mapLazy(crossinline ifTrue: EmptyFunctionResult<T>,
@@ -54,6 +51,21 @@ inline fun <T> Boolean.mapLazy(crossinline ifTrue: EmptyFunctionResult<T>,
         } else {
             ifFalse()
         }
+
+/**
+ * Maps lazily the given parameters.
+ * since its inline, then the code would be as if you wrote the "if else statement"
+ * and then only did the computation iff that branch was chosen.
+ * Works with suspend functions
+ */
+suspend inline fun <T> Boolean.mapLazyAsync(crossinline ifTrue: AsyncEmptyFunctionResult<T>,
+                                       crossinline ifFalse: EmptyFunctionResult<T>): T =
+        if (this) {
+            ifTrue()
+        } else {
+            ifFalse()
+        }
+
 
 /**
  * performs the given action if we are null

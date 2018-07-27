@@ -62,7 +62,7 @@ open class BaseFragment : DialogFragment(), ActivityResultHelperContainer {
     }
 
     private val activityResultHelper by lazy {
-        ActivityResultHelper({ logWarning(it) })
+        ActivityResultHelper { logWarning(it) }
     }
 
     override fun dismiss() {

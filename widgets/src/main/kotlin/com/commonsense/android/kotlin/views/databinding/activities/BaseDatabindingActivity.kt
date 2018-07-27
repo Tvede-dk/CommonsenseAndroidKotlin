@@ -6,7 +6,9 @@ import android.view.LayoutInflater
 import com.commonsense.android.kotlin.system.base.BaseActivity
 
 /**
- * created by Kasper Tvede on 29-09-2016.
+ * created by Kasper Tvede
+ * The basics of a databinding activity.
+ *
  */
 
 typealias InflaterFunctionSimple<T> = (layoutInflater: LayoutInflater) -> T

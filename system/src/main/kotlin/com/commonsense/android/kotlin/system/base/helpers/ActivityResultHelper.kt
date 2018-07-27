@@ -85,9 +85,9 @@ class ActivityResultHelper(warningLogger: FunctionUnit<String>? = null) {
     }
 
     fun addForOnlyOk(@IntRange(from = 0) requestCode: Int, receiver: ActivityResultCallbackOk) {
-        addForAllResults(requestCode, { resultCode: Int, data: Intent? ->
+        addForAllResults(requestCode) { resultCode: Int, data: Intent? ->
             resultCode.isOkResult().ifTrue { receiver(data) }
-        })
+        }
     }
 
     fun addForAllResultsAsync(@IntRange(from = 0) requestCode: Int, receiver: AsyncActivityResultCallback) {

@@ -13,6 +13,7 @@ import android.support.v7.app.ActionBar
 import android.support.v7.app.ActionBarDrawerToggle
 import android.support.v7.app.AppCompatActivity
 import android.support.v7.widget.Toolbar
+import android.view.*
 import kotlin.reflect.KClass
 
 
@@ -76,3 +77,7 @@ fun FragmentActivity.pushNewFragmentsTo(@IdRes container: Int, fragments: List<F
  */
 @AnyThread
 fun Activity.safeFinish() = runOnUiThread(this::finish)
+
+
+inline val Activity.rootView: View?
+    get() = window?.decorView?.rootView ?: findViewById(android.R.id.content)

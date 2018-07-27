@@ -26,3 +26,12 @@ inline fun RecyclerView.addOnScrollWhenPastFirstItem(crossinline action: Functio
     addOnScrollListener(listener)
     return listener
 }
+//
+//fun RecyclerView.scrollToTop(){
+//
+//}
+//
+//fun RecyclerView.scrollToBottom(){
+//
+//}
+

@@ -14,8 +14,7 @@ import android.support.annotation.StyleableRes
 import android.support.v4.content.ContextCompat
 import android.support.v7.content.res.AppCompatResources
 import android.util.AttributeSet
-import android.view.Display
-import android.view.WindowManager
+import android.view.*
 import android.widget.Toast
 import com.commonsense.android.kotlin.system.DangerousPermissionString
 import com.commonsense.android.kotlin.system.logging.L

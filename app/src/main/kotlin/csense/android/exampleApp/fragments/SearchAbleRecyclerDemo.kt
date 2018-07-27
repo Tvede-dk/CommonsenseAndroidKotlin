@@ -1,18 +1,13 @@
 package csense.android.exampleApp.fragments
 
-import android.graphics.Color
-import android.support.v7.widget.LinearLayoutManager
-import android.text.Editable
-import android.text.TextWatcher
-import com.CommonSenseAndroidKotlin.example.databinding.DemoRecyclerSearchableBinding
-import com.CommonSenseAndroidKotlin.example.databinding.SimpleListItemBinding
-import com.commonsense.android.kotlin.base.extensions.collections.repeateToSize
-import com.commonsense.android.kotlin.views.databinding.adapters.BaseSearchableDataBindingRecyclerAdapter
-import com.commonsense.android.kotlin.views.databinding.adapters.IRenderModelSearchItem
-import com.commonsense.android.kotlin.views.databinding.adapters.toSearchable
-import com.commonsense.android.kotlin.views.databinding.fragments.BaseDatabindingFragment
-import com.commonsense.android.kotlin.views.databinding.fragments.InflateBinding
-import com.commonsense.android.kotlin.views.extensions.setup
+import android.graphics.*
+import android.support.v7.widget.*
+import android.text.*
+import com.commonsense.android.kotlin.base.extensions.collections.*
+import com.commonsense.android.kotlin.views.databinding.adapters.*
+import com.commonsense.android.kotlin.views.databinding.fragments.*
+import com.commonsense.android.kotlin.views.extensions.*
+import csense.android.exampleApp.databinding.*
 
 /**
  * Created by kasper on 01/06/2017.
@@ -23,8 +18,7 @@ class SearchAbleSimpleListItemRender(item: String) : SimpleListItemRender(item, 
 }
 
 class SearchAbleRecyclerDemo : BaseDatabindingFragment<DemoRecyclerSearchableBinding>() {
-    override fun getInflater(): InflateBinding<DemoRecyclerSearchableBinding>
-            = DemoRecyclerSearchableBinding::inflate
+    override fun getInflater(): InflateBinding<DemoRecyclerSearchableBinding> = DemoRecyclerSearchableBinding::inflate
 
     private val adapter by lazy {
         context?.let { BaseSearchableDataBindingRecyclerAdapter<String>(it) }

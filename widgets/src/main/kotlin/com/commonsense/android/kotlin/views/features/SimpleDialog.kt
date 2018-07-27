@@ -17,16 +17,16 @@ fun Context.showOptionsDialog(@StringRes title: Int, optClosedOnOutside: EmptyFu
     val stringOptions = options.map { getString(it.text) }.toTypedArray()
     val dialog = AlertDialog.Builder(this)
             .setTitle(title)
-            .setItems(stringOptions, { dialogInterface: DialogInterface?, index: Int ->
+            .setItems(stringOptions) { dialogInterface: DialogInterface?, index: Int ->
                 options[index].callback()
                 dialogInterface?.dismiss()
-            })
+            }
 
 
     val dialogToShow = dialog.create()
     if (optClosedOnOutside != null) {
         dialogToShow.setCanceledOnTouchOutside(true)
-        dialogToShow.setOnCancelListener({ optClosedOnOutside() })
+        dialogToShow.setOnCancelListener { optClosedOnOutside() }
     } else {
         dialogToShow.setCanceledOnTouchOutside(false)
     }

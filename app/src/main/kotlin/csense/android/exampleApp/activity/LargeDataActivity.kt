@@ -1,11 +1,11 @@
 package csense.android.exampleApp.activity
 
-import android.content.Intent
-import android.widget.Button
-import com.CommonSenseAndroidKotlin.example.R
-import com.commonsense.android.kotlin.system.base.helpers.BaseActivityData
-import com.commonsense.android.kotlin.system.extensions.safeToast
-import com.commonsense.android.kotlin.views.extensions.setOnclickAsyncEmpty
+import android.content.*
+import android.widget.*
+import com.commonsense.android.kotlin.system.base.helpers.*
+import com.commonsense.android.kotlin.system.extensions.*
+import com.commonsense.android.kotlin.views.extensions.*
+import csense.android.exampleApp.*
 
 /**
  * Created by Kasper Tvede on 23-07-2017.
@@ -32,7 +32,6 @@ class LargeDataActivity : BaseActivityData<LargeDataActivityData>() {
     }
 
     override fun beforeCloseOnBadData() {
-        super.beforeCloseOnBadData()
         safeToast("Close before bad data !??!?")
     }
 

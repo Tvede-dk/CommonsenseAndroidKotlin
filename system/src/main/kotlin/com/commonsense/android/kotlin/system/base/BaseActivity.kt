@@ -80,7 +80,7 @@ open class BaseActivity : AppCompatActivity(), ActivityResultHelperContainer {
     }
 
     private val activityResultHelper by lazy {
-        ActivityResultHelper({ logWarning(it) })
+        ActivityResultHelper { logWarning(it) }
     }
 
 

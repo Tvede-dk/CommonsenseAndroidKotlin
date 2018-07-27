@@ -1,15 +1,15 @@
 package com.commonsense.android.kotlin.base.extensions.collections
 
-import android.util.SparseArray
-import com.commonsense.android.kotlin.base.FunctionUnit
-import com.commonsense.android.kotlin.base.MapFunction
+import com.commonsense.android.kotlin.base.*
+import com.commonsense.android.kotlin.base.extensions.*
 
 /**
  * Created by Kasper Tvede on 08-10-2017.
  */
 
 
-inline fun <K, V> Map<K, V>.forEachIndexed(crossinline action: (Map.Entry<K, V>, Int) -> Unit) {
+inline fun <K, V> Map<K, V>.forEachIndexed(
+        crossinline action: (Map.Entry<K, V>, Int) -> Unit) {
     var i = 0
     forEach {
         action(it, i)
@@ -18,16 +18,16 @@ inline fun <K, V> Map<K, V>.forEachIndexed(crossinline action: (Map.Entry<K, V>,
 }
 
 /**
- * converts each element in the sparse array using the mapper
+ * inserts a new value for the given key if non exists, and or runs the useValue callback; if there is a value, it will be used for the useValue.
  */
-inline fun <E, U> SparseArray<E>.map(crossinline mapper: MapFunction<E, U>): List<U> {
-    return mutableListOf<U>().apply {
-        this@map.forEach { add(mapper(it)) }
+inline fun <reified K, reified V> MutableMap<K, V>.createOrUse(
+        key: K,
+        creator: EmptyFunctionResult<V>,
+        useValue: FunctionUnit<V>) {
+    val valueByKey = get(key)
+    val toUse = valueByKey ?: creator()
+    if (valueByKey.isNull) {
+        put(key, toUse)
     }
-}
-
-inline fun <E> SparseArray<E>.forEach(crossinline action: FunctionUnit<E>) {
-    for (i in 0 until size()) {
-        action(valueAt(i))
-    }
+    useValue(toUse)
 }

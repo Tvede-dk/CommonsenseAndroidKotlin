@@ -1,16 +1,19 @@
 package com.commonsense.android.kotlin.base.extensions
 
+import android.support.annotation.IntRange
 import android.text.Editable
 import com.commonsense.android.kotlin.base.EmptyFunction
 import com.commonsense.android.kotlin.base.EmptyFunctionResult
 import com.commonsense.android.kotlin.base.FunctionUnit
 import com.commonsense.android.kotlin.base.extensions.collections.map
+import com.commonsense.android.kotlin.base.time.*
 import java.lang.ref.WeakReference
 import java.util.*
 import kotlin.system.measureNanoTime
 
 /**
- * Created by Kasper Tvede on 05-06-2017.
+ * Created by Kasper Tvede
+ *
  */
 
 /**
@@ -18,16 +21,50 @@ import kotlin.system.measureNanoTime
  * returns the time in seconds.
  */
 inline fun measureSecondTime(crossinline function: EmptyFunction): Long {
-    val time = measureNanoTime(function)
-    return time / 10_00_000_00L //nano = 100 millionth of a second
+    return TimeUnit.NanoSeconds(measureNanoTime(function)).toSeconds().value
+}
+
+
+/**
+ * Measure the time of some occurrence with a timeout.
+ * the function waits (coroutine delay) until the given timeout.
+ *
+ * @param waitingTimeUnit the time to wait for the response to come.
+ * @param signalAsync the schedule to measure the time, supplies the time back it was called.
+ * @return the delta time for the start of the operation to the "optional" ending,
+ * if the ending have not occurred then it returns null
+ */
+suspend inline fun measureOptAsyncCallback(waitingTimeUnit: TimeUnit,
+                                           crossinline signalAsync: FunctionUnit<FunctionUnit<TimeUnit>>)
+        : TimeUnit.MillisSeconds? {
+    var optionalEnd: Long = 0
+    var didSet = false
+    val start = System.currentTimeMillis()
+    signalAsync {
+        optionalEnd = it.toMilliSeconds().value
+        didSet = true
+    }
+    waitingTimeUnit.delay()
+    return didSet.map(
+            ifTrue = TimeUnit.MillisSeconds(optionalEnd - start),
+            ifFalse = null)
 }
 
 /**
- * converts an immutable string to an editable edition :)
+ * Measure the time of some occurence with a timeout. the function waits (coroutine delay) until the given timeout.
+ *
+ * @param waitingTimeUnit the time to wait for the response to come.
+ * @param signalAsync signals that we are done /callback. time is taken when the callback is called.
+ * @return the delta time for the start of the operation to the "optional" ending,
+ * if the ending have not occurred then it returns null
  */
-@Suppress("NOTHING_TO_INLINE")
-inline fun String.toEditable(): Editable =
-        Editable.Factory.getInstance().newEditable(this)
+suspend inline fun measureOptAsync(waitingTimeUnit: TimeUnit,
+                                   crossinline signalAsync: FunctionUnit<EmptyFunction>)
+        : TimeUnit.MillisSeconds? =
+        measureOptAsyncCallback(waitingTimeUnit) { function: (TimeUnit) -> Unit ->
+            function(TimeUnit.MillisSeconds(System.currentTimeMillis()))
+        }
+
 
 /**
  * returns true if this is null
@@ -65,6 +102,24 @@ inline fun <T> WeakReference<T?>.useOpt(crossinline action: T.() -> Unit) {
 
 inline fun <T> WeakReference<T>.use(crossinline action: T.() -> Unit) {
     get()?.let(action)
+}
+
+/**
+ * Uses the given weak reaference if available or does the other action
+ */
+inline fun <T> WeakReference<T>.useRefOr(crossinline ifAvailable: T.() -> Unit,
+                                         crossinline ifNotAvailable: EmptyFunction) {
+    get().useOr(ifAvailable, ifNotAvailable)
+}
+
+
+inline fun <T> T?.useOr(crossinline ifNotNull: T.() -> Unit,
+                        crossinline ifNull: EmptyFunction) {
+    if (this != null) {
+        ifNotNull(this)
+    } else {
+        ifNull()
+    }
 }
 
 /**
@@ -129,3 +184,11 @@ inline fun Int.forEach(crossinline action: FunctionUnit<Int>) {
  * Creates a safer cast than regular due to the reified type T.
  */
 inline fun <reified T> Any.cast(): T? = this as? T
+
+/**
+ *
+ * For each value in [0; value] we create U and put that into a list
+ */
+fun <U> @receiver:IntRange(from = 1) Int.mapEach(function: Function1<Int, U>): List<U> {
+    return List(this, function)
+}

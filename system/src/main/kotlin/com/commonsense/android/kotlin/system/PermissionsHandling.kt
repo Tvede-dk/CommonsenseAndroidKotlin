@@ -12,7 +12,7 @@ import android.support.v4.app.ActivityCompat
 import android.support.v4.content.ContextCompat
 import com.commonsense.android.kotlin.base.*
 import com.commonsense.android.kotlin.base.extensions.collections.*
-import com.commonsense.android.kotlin.base.extensions.launch
+import com.commonsense.android.kotlin.base.extensions.launchBlock
 import com.commonsense.android.kotlin.system.base.BaseActivity
 import com.commonsense.android.kotlin.system.extensions.checkPermission
 import kotlinx.coroutines.experimental.Job
@@ -168,9 +168,9 @@ fun PermissionEnum.useSuspend(handler: PermissionsHandling,
                               function: AsyncEmptyFunction,
                               errorFunction: AsyncEmptyFunction) {
     handler.performActionForPermission(permissionValue, activity, {
-        launch(UI, block = function)
+        launchBlock(UI, block = function)
     }, {
-        launch(UI, block = errorFunction)
+        launchBlock(UI, block = errorFunction)
     })
 }
 
@@ -195,7 +195,7 @@ inline fun PermissionEnum.use(context: Context, crossinline usePermission: Empty
 @UiThread
 fun PermissionEnum.useSuspend(context: Context, usePermission: AsyncEmptyFunction): Job? {
     return if (havePermission(context)) {
-        launch(UI, block = usePermission)
+        launchBlock(UI, block = usePermission)
     } else {
         null
     }

@@ -1,19 +1,15 @@
 package csense.android.exampleApp.activity
 
 
-import android.content.Intent
-import com.CommonSenseAndroidKotlin.example.activity.*
-import com.CommonSenseAndroidKotlin.example.databinding.ActivityMainBinding
-import com.commonsense.android.kotlin.system.base.helpers.startActivityWithData
-import com.commonsense.android.kotlin.views.databinding.activities.BaseDatabindingActivity
-import com.commonsense.android.kotlin.views.databinding.activities.InflaterFunctionSimple
-import com.commonsense.android.kotlin.views.extensions.setOnClick
-import com.commonsense.android.kotlin.views.extensions.setOnclickAsync
+import android.content.*
+import com.commonsense.android.kotlin.system.base.helpers.*
+import com.commonsense.android.kotlin.views.databinding.activities.*
+import com.commonsense.android.kotlin.views.extensions.*
+import csense.android.exampleApp.databinding.*
 
 
 class MainActivity : BaseDatabindingActivity<ActivityMainBinding>() {
-    override fun createBinding(): InflaterFunctionSimple<ActivityMainBinding>
-            = ActivityMainBinding::inflate
+    override fun createBinding(): InflaterFunctionSimple<ActivityMainBinding> = ActivityMainBinding::inflate
 
     override fun useBinding() {
 
@@ -23,19 +19,11 @@ class MainActivity : BaseDatabindingActivity<ActivityMainBinding>() {
         binding.activityMainAdvanceRecyclerDemo.setOnClick {
             startActivity(Intent(applicationContext, Demo2Activity::class.java))
         }
-        binding.activityMainAdvanceRecyclerDemoFastScroller.setOnClick {
-            startActivity(Intent(applicationContext, Demo3Activity::class.java))
-        }
         binding.activityMainDemo4.setOnClick {
             startActivity(Intent(applicationContext, Demo4Activity::class.java))
         }
         binding.activityMainDemo5.setOnClick {
             startActivity(Intent(applicationContext, Demo5Activity::class.java))
-        }
-
-        binding.activityMainAdvanceAsyncButton.setOnclickAsync {
-            //            EditDatabindingFragment().show(supportFragmentManager, "test")
-//            startActivity(Intent(applicationContext, MainWidgetExampleActivity::class.java))
         }
 
         binding.activityMainCameraButton.setOnClick {

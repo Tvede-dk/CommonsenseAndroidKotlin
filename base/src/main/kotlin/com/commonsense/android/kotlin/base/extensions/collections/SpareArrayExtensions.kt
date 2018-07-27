@@ -3,6 +3,7 @@ package com.commonsense.android.kotlin.base.extensions.collections
 import android.support.annotation.IntRange
 import android.util.SparseArray
 import android.util.SparseIntArray
+import com.commonsense.android.kotlin.base.*
 
 /**
  * Created by Kasper Tvede on 09-07-2017.
@@ -46,4 +47,19 @@ fun <T> SparseArray<T>.toList(@IntRange(from = 1) maxKeyValue: Int = Int.MAX_VAL
     } else {
         mapped
     }.mapNotNull { key -> get(key)?.let { SparseArrayEntry(key, it) } }
+}
+
+/**
+ * converts each element in the sparse array using the mapper
+ */
+inline fun <E, U> SparseArray<E>.map(crossinline mapper: MapFunction<E, U>): List<U> {
+    return mutableListOf<U>().apply {
+        this@map.forEach { add(mapper(it)) }
+    }
+}
+
+inline fun <E> SparseArray<E>.forEach(crossinline action: FunctionUnit<E>) {
+    for (i in 0 until size()) {
+        action(valueAt(i))
+    }
 }

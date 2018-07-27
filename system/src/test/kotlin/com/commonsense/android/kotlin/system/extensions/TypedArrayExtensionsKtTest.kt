@@ -59,9 +59,9 @@ class TypedArrayExtensionsKtTest {
         `when`(typedArray.hasValue(eq(1))).thenReturn(true)
 
 
-        typedArray.ifHaveOrNull(0, { failTest("should not have 0 index as per mock") })
+        typedArray.ifHaveOrNull(0) { failTest("should not have 0 index as per mock") }
         var counter = 0
-        typedArray.ifHaveOrNull(1, { counter += 1 })
+        typedArray.ifHaveOrNull(1) { counter += 1 }
         counter.assert(1, "should have runned action since style 1 is there.")
 
 //        `when`(context.getSystemService(Context.LAYOUT_INFLATER_SERVICE))

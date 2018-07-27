@@ -1,7 +1,52 @@
 # Changelog
 
 ## 0.0.15
-- in progress
+
+### Breaking changes
+
+- Selection handling have had an overhaul, as there were missing things, such as removing views, and comments.
+    - There were changes to interfaces ToggleableView, and CheckableStatusCallback , now requiring a clearOnChangedListener function.
+
+### Changes
+
+- backported more things, and minor moving around.
+- more typealiases for functions.
+- map on boolean for suspend functions
+- gradle 4.9
+- tools backport (with newer naming schema).
+    - please note this might still be changed, and only using the feature enabling functions are recommended
+    - added lifecycle tracking
+
+- backported from base module
+    - algorithms package (running average)
+    - useOr
+    - useRefOr
+    - measureOptAsyncCallback
+    - measureOptAsync
+    - TimeUnit improved drastically. (still waiting for kotlin 1.3 to allow inline classes).
+
+- Preloading views to drastically improve loading times.
+    - this comes in various forms; the baseAsyncLayoutInflater, which is used in
+    - BaseSplashActivity.
+    - BaseActivity
+    - BaseFragment
+
+- system services extensions;
+    - now you can write "context.services.vibrator" and get the vibrator service.
+    - there is another way currently, while waiting for inline classes, to allow a 0 overhead call; that is on a context you can access the services as a variable.
+        - this will properly be removed in the future to not clutter up the Context (which is quite bloated as is already).
+
+- Demo app updated
+    - uses the preloading
+    - "working" condition; it still needs a lot of work.
+
+
+- fixed an issue with the SwipeRefreshRecyclerView accessing binding at constructor time.
+    - it also now de-attaches the listener when the view gets detached.
+
+
+- Selection handling
+    - The "asToggleable" extension now works on all compound buttons.
 
 ## 0.0.14
 micro update

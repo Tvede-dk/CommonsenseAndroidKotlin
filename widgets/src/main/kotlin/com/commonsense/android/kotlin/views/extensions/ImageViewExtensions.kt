@@ -3,6 +3,9 @@ package com.commonsense.android.kotlin.views.extensions
 import android.graphics.Bitmap
 import android.support.annotation.ColorInt
 import android.widget.ImageView
+import com.commonsense.android.kotlin.base.*
+import com.commonsense.android.kotlin.base.extensions.*
+import com.commonsense.android.kotlin.base.extensions.collections.*
 import com.commonsense.android.kotlin.system.imaging.ImageDecodingType
 import com.commonsense.android.kotlin.system.imaging.ImageLoader
 import com.commonsense.android.kotlin.system.imaging.ImageLoaderType
@@ -25,11 +28,14 @@ fun ImageView.colorOverlay(@ColorInt color: Int) {
  * This is safe for use on lists, ect, where calling it multiple times will yield only the last as the real modifier.
  * does not call "cancel" on the older action.
  */
-fun ImageView.loadAndUse(loading: ImageLoaderType, decodeScale: ImageDecodingType, afterDecoded: (ImageView, Bitmap) -> Unit) {
+fun ImageView.loadAndUse(loading: ImageLoaderType,
+                         decodeScale: ImageDecodingType,
+                         afterDecoded: Function2<ImageView, Bitmap, Unit>) {
     val index = counterTag
     val ourIndex = index.incrementAndGet()
-    launch(UI) {
 
+    launch(UI) {
+        //make sure the UI is visible TODO..
         tryAndLogSuspend("ImageView.loadAndUse") {
             val bitmap = ImageLoader.instance.loadAndScale(
                     ourIndex.toString(),
@@ -42,26 +48,21 @@ fun ImageView.loadAndUse(loading: ImageLoaderType, decodeScale: ImageDecodingTyp
     }
 }
 
-private fun <T> validateId(ourIndex: Int, index: AtomicInteger, action: suspend () -> T?): suspend () -> T? {
-    return {
-        if (ourIndex == index.get()) {
-            action()
-        } else {
-            null
-        }
-    }
+private fun <T> validateId(ourIndex: Int,
+                           index: AtomicInteger,
+                           action: AsyncEmptyFunctionResult<T?>): AsyncEmptyFunctionResult<T?> =
+        (ourIndex == index.get()).map(action, { null })
+
+private fun <T, U> validateIdWith(ourIndex: Int,
+                                  index: AtomicInteger,
+                                  action: AsyncFunction1<U, T>): suspend (U) -> T? {
+    return (ourIndex == index.get()).map(action, { null })
 }
 
-private fun <T, U> validateIdWith(ourIndex: Int, index: AtomicInteger, action: suspend (U) -> T?): suspend (U) -> T? {
-    return {
-        if (ourIndex == index.get()) {
-            action(it)
-        } else {
-            null
-        }
-    }
-}
+/**
+ * For handling the tag on the imageView
+ */
 
-private val imageViewCounterTag = "ImageView.counterTag"
+private const val imageViewCounterTag = "ImageView.counterTag"
 private val ImageView.counterTag
-    get() = getTagOr(imageViewCounterTag, { AtomicInteger(0) })
+    get() = getTagOr(imageViewCounterTag) { AtomicInteger(0) }

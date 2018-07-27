@@ -32,8 +32,14 @@ class SwipeRefreshRecyclerView : CustomDataBindingView<SwipeRefreshRecylerViewBi
     constructor(context: Context, attrs: AttributeSet) : super(context, attrs)
     constructor(context: Context, attrs: AttributeSet, defStyleAttr: Int) : super(context, attrs, defStyleAttr)
 
-    init {
+    override fun onAttachedToWindow() {
+        super.onAttachedToWindow()
         binding.swipeRefreshRecyclerSwipeRefresh.setOnRefreshListener(this)
+    }
+
+    override fun onDetachedFromWindow() {
+        super.onDetachedFromWindow()
+        binding.swipeRefreshRecyclerSwipeRefresh.setOnRefreshListener(null)
     }
 
 

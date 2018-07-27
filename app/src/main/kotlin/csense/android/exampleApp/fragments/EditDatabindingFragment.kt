@@ -1,10 +1,8 @@
 package csense.android.exampleApp.fragments
 
-import com.CommonSenseAndroidKotlin.example.databinding.UserExampleViewBinding
-import csense.android.exampleApp.models.User
-import csense.android.exampleApp.models.UserViewModel
-import com.commonsense.android.kotlin.views.databinding.fragments.BaseDatabindingFragment
-import com.commonsense.android.kotlin.views.databinding.fragments.InflateBinding
+import com.commonsense.android.kotlin.views.databinding.fragments.*
+import csense.android.exampleApp.databinding.*
+import csense.android.exampleApp.models.*
 
 /**
  * Created by Kasper Tvede on 11-06-2017.

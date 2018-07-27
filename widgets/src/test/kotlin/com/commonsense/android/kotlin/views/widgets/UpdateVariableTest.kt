@@ -11,7 +11,7 @@ class UpdateVariableTest {
 
     @Test
     fun testValue() {
-        val toTest = UpdateVariable("testValue", {})
+        val toTest = UpdateVariable("testValue") {}
         Assert.assertEquals(toTest.value, "testValue")
 
         toTest.value = "newValue"
@@ -24,7 +24,7 @@ class UpdateVariableTest {
     @Test
     fun testNotification() {
         var updatedVal = 0
-        val toTest = UpdateVariable("testValue", { updatedVal += 1 })
+        val toTest = UpdateVariable("testValue") { updatedVal += 1 }
         Assert.assertEquals(toTest.value, "testValue")
         toTest.value = "qwe"
         Assert.assertEquals(updatedVal, 1)//first update

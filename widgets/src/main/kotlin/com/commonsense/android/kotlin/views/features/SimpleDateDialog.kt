@@ -26,9 +26,9 @@ fun Context.showDatePickerDialog(
         onDateSelected(year, month, day)
     }, startYear, monthOfYear, dayOfMonth)
 
-    dialog.setButton(DatePickerDialog.BUTTON_NEUTRAL, this.getString(otherAction), { _, _ ->
+    dialog.setButton(DatePickerDialog.BUTTON_NEUTRAL, this.getString(otherAction)) { _, _ ->
         onOtherAction()
-    })
+    }
 
     minDate?.let {
         dialog.datePicker.minDate = it.time

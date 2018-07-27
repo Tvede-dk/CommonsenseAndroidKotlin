@@ -1,18 +1,17 @@
 class MultiDirRes implements Plugin<Project> {
 
     @Override
-    void apply(Project project) {
-
-        if (project.pluginManager.hasPlugin("com.android.application")) {
-            applyMultiSourceDir(project)
-        } else if (project.pluginManager.hasPlugin("com.android.library")) {
+    void apply(final Project project) {
+        //is it an android project ? if so then apply the plugin.
+        if (project.pluginManager.hasPlugin("com.android.application")
+                || project.pluginManager.hasPlugin("com.android.library")) {
             applyMultiSourceDir(project)
         } else {
             println("Not android based project, thus disabling plugin.")
         }
     }
 
-    def resDirs = [
+    final def resDirs = [
             "anim",
             "color",
             "drawable",
@@ -31,18 +30,18 @@ class MultiDirRes implements Plugin<Project> {
             project.android.sourceSets.each {
                 def rootResDir = it.res.srcDirs[0]
 
-                def srcDirs = resDirs.collect {
+                List<File> srcDirs = resDirs.collect {
                     getSubDirs(it, rootResDir)
-                }
-                it.res.srcDirs = [srcDirs, rootResDir]
+                }.flatten()
+                it.res.srcDirs += srcDirs
+                it.res.srcDirs += rootResDir
             }
         }
 
     }
-    def getSubDirs = { dirName, rootResDir ->
-
-        def resDir = new File(rootResDir, dirName)
-        def subLayoutDirs = []
+    final def getSubDirs = { final dirName, final rootResDir ->
+        final def resDir = new File(rootResDir, dirName)
+         def subLayoutDirs = []
         if (resDir.exists()) {
 
             resDir.eachDir {

@@ -1,8 +1,7 @@
 package csense.android.exampleApp.activity
 
-import com.CommonSenseAndroidKotlin.example.activity.*
-import csense.android.exampleApp.fragments.SectionSwipeAdapterFragment
-import com.commonsense.android.kotlin.system.extensions.replaceFragment
+import com.commonsense.android.kotlin.system.extensions.*
+import csense.android.exampleApp.fragments.*
 
 /**
  * Created by Kasper Tvede on 24-06-2017.

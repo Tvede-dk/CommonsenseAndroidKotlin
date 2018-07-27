@@ -41,7 +41,7 @@ dependencies {
     implementation project(path: ':system')
 
 }
-
+apply from: "../resourcegroups.gradle"
 apply from: "../javadocSourceDokka.gradle"
 
 ext.artifactName = "tools"

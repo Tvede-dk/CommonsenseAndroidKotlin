@@ -1,4 +1,4 @@
-package com.commonsense.android.kotlin.tools
+package csense.android.tools
 
 import com.commonsense.android.kotlin.base.StringList
 

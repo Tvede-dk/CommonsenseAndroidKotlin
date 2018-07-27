@@ -28,8 +28,6 @@ inline fun Activity.hideSoftKeyboard() {
     inputMethodManager?.hideSoftInputFromWindow(view.windowToken, 0)
 }
 
-inline val Activity.rootView: View?
-    get() = window?.decorView?.rootView ?: findViewById(android.R.id.content)
 
 @Suppress("NOTHING_TO_INLINE")
 inline fun EditText.requestFocusAndShowKeyboard() {

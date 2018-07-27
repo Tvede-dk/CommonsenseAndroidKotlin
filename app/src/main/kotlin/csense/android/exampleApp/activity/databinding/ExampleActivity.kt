@@ -2,7 +2,7 @@ package csense.android.exampleApp.activity.databinding
 
 import android.app.*
 import android.os.*
-import com.CommonSenseAndroidKotlin.example.databinding.*
+import csense.android.exampleApp.databinding.*
 
 /**
  * Example's usage

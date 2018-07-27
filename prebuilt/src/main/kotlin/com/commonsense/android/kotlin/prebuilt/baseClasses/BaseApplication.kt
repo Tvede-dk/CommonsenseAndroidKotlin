@@ -94,14 +94,17 @@ abstract class BaseApplication : Application() {
     private fun enableStrictMode() {
         logDebug("Setting up strictMode")
         StrictMode.setThreadPolicy(
-                StrictMode.ThreadPolicy.Builder().
-                        detectAll().
-                        penaltyLog().
-                        penaltyFlashScreen().
-                        build())
+                StrictMode.ThreadPolicy.Builder()
+                        .detectAll()
+                        .penaltyLog()
+                        .penaltyFlashScreen()
+                        .build())
 
-        StrictMode.setVmPolicy(StrictMode.VmPolicy.Builder().detectAll()
-                .penaltyLog().penaltyDeath().build())
+        StrictMode.setVmPolicy(
+                StrictMode.VmPolicy.Builder()
+                        .detectAll()
+                        .penaltyLog()
+                        .build())
     }
     //</editor-fold>
 }

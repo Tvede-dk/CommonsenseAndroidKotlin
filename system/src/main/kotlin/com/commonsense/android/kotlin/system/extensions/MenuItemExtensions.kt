@@ -1,8 +1,8 @@
 package com.commonsense.android.kotlin.system.extensions
 
 import android.app.Activity
-import android.support.v4.app.Fragment
 
+import android.support.v4.app.Fragment
 import android.view.MenuItem
 import com.commonsense.android.kotlin.base.EmptyFunction
 import com.commonsense.android.kotlin.base.extensions.collections.ifTrue

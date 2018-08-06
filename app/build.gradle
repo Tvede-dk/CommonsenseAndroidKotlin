@@ -65,6 +65,7 @@ dependencies {
     implementation project(':base')
     testImplementation project(':test')
     implementation project(path: ':tools')
+    kapt "com.android.databinding:compiler:$androidGradleVersion"
 
 }
 

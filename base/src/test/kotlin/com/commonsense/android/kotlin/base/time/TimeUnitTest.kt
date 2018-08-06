@@ -4,14 +4,12 @@ import com.commonsense.android.kotlin.base.time.TimeUnit.*
 import com.commonsense.android.kotlin.test.*
 import org.junit.jupiter.api.Test
 
-import org.junit.jupiter.api.Assertions.*
-
 class TimeUnitTest {
 
     @Test
     fun getPrefix() {
         NanoSeconds(0).prefix.assert("ns")
-        MillisSeconds(0).prefix.assert("ms")
+        MilliSeconds(0).prefix.assert("ms")
         Seconds(0).prefix.assert("s")
         Minutes(0).prefix.assert("m")
         Hours(0).prefix.assert("h")
@@ -21,7 +19,7 @@ class TimeUnitTest {
     @Test
     fun toMilliSeconds() {
         NanoSeconds(0).toMilliSeconds().value.assert(0)
-        MillisSeconds(0).toMilliSeconds().value.assert(0)
+        MilliSeconds(0).toMilliSeconds().value.assert(0)
         Seconds(0).toMilliSeconds().value.assert(0)
         Minutes(0).toMilliSeconds().value.assert(0)
         Hours(0).toMilliSeconds().value.assert(0)
@@ -32,7 +30,7 @@ class TimeUnitTest {
                 .assert(0,
                         "1 nanosecond is too small" +
                                 " to become a meaningful milliseconds (whole number)")
-        MillisSeconds(1).toMilliSeconds().value.assert(1)
+        MilliSeconds(1).toMilliSeconds().value.assert(1)
         Seconds(1).toMilliSeconds().value.assert(1000)
         Minutes(1).toMilliSeconds().value.assert(1000 * 60)
         Hours(1).toMilliSeconds().value.assert(1000 * 60 * 60)
@@ -44,7 +42,7 @@ class TimeUnitTest {
     @Test
     fun testToString() {
         NanoSeconds(0).toString().assert("0 ns")
-        MillisSeconds(0).toString().assert("0 ms")
+        MilliSeconds(0).toString().assert("0 ms")
         Seconds(0).toString().assert("0 s")
         Minutes(0).toString().assert("0 m")
         Hours(0).toString().assert("0 h")
@@ -54,7 +52,7 @@ class TimeUnitTest {
     @Test
     fun getValue() {
         NanoSeconds(0).value.assert(0)
-        MillisSeconds(0).value.assert(0)
+        MilliSeconds(0).value.assert(0)
         Seconds(0).value.assert(0)
         Minutes(0).value.assert(0)
         Hours(0).value.assert(0)

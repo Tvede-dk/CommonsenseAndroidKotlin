@@ -39,7 +39,7 @@ class FpsWatcher(context: Context,
      * try limit to fps, so we do not overload ui thread
      */
     private val backoffTimingInNs by lazy {
-        TimeUnit.MillisSeconds(
+        TimeUnit.MilliSeconds(
                 TimeUnit.Seconds(1).toMilliSeconds()
                         .value / defaultFps.roundToInt())
                 .toNanoSeconds()
@@ -130,7 +130,7 @@ class FpsWatcher(context: Context,
                 L.error(FpsWatcher::class.java.simpleName, "fps is:$currentFps")
                 callbackOnTiming(average,
                         maxOf(expectedFps - currentFps, 0f),
-                        TimeUnit.MillisSeconds(missedTiming.toLong()))
+                        TimeUnit.MilliSeconds(missedTiming.toLong()))
             }
         }
     }

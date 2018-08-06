@@ -32,6 +32,11 @@
         <activity android:name=".activity.LargeDataActivity" />
         <activity android:name=".activity.MainActivity" />
         <activity android:name=".widgetsExamples.MainWidgetExampleActivity" />
+        <activity android:name=".views.tools.ToolsFpsActivity" />
+        <activity android:name=".views.tools.ToolsOverviewActivity" />
+        <activity android:name=".views.tools.ToolsCrashListenerActivity" />
+        <activity android:name=".views.tools.ToolsPerformanceActivity" />
+        <activity android:name=".views.tools.ToolsAnrActivity" />
 
     </application>
 

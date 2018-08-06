@@ -6,20 +6,17 @@ import android.content.IntentFilter
 import android.os.Bundle
 import android.os.Handler
 import android.support.annotation.IntRange
-import android.support.annotation.VisibleForTesting
-import android.support.v7.app.AppCompatActivity
 import android.view.MenuItem
+import android.support.v7.app.AppCompatActivity
 import com.commonsense.android.kotlin.base.AsyncEmptyFunction
 import com.commonsense.android.kotlin.base.EmptyFunctionResult
 import com.commonsense.android.kotlin.system.PermissionsHandling
 import com.commonsense.android.kotlin.system.base.helpers.*
-import com.commonsense.android.kotlin.system.dataFlow.ReferenceCountingMap
 import com.commonsense.android.kotlin.system.extensions.backPressIfHome
 import com.commonsense.android.kotlin.system.logging.logWarning
 import com.commonsense.android.kotlin.system.logging.tryAndLog
 import com.commonsense.android.kotlin.system.uiAware.UiAwareJobContainer
 import kotlinx.coroutines.experimental.CommonPool
-import kotlin.reflect.KClass
 
 /**
  * created by Kasper Tvede on 29-09-2016.

@@ -15,11 +15,11 @@ data class LifeCycleTracking(val name: String,
                              var onStopped: Long = 0)
 
 
-val LifeCycleTracking.timeFromStartToDisplay: TimeUnit.MillisSeconds
+val LifeCycleTracking.timeFromStartToDisplay: TimeUnit.MilliSeconds
 //the time between onCreate and onStarted?
     get() = NanoSeconds(onResume - onCreate).toMilliSeconds()
 
-val LifeCycleTracking.timeForCreate: TimeUnit.MillisSeconds
+val LifeCycleTracking.timeForCreate: TimeUnit.MilliSeconds
     get () = NanoSeconds(onStarted - onCreate).toMilliSeconds()
 
 enum class LifeCycleState {

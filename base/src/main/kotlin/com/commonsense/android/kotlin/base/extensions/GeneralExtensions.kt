@@ -1,7 +1,6 @@
 package com.commonsense.android.kotlin.base.extensions
 
 import android.support.annotation.IntRange
-import android.text.Editable
 import com.commonsense.android.kotlin.base.EmptyFunction
 import com.commonsense.android.kotlin.base.EmptyFunctionResult
 import com.commonsense.android.kotlin.base.FunctionUnit
@@ -36,7 +35,7 @@ inline fun measureSecondTime(crossinline function: EmptyFunction): Long {
  */
 suspend inline fun measureOptAsyncCallback(waitingTimeUnit: TimeUnit,
                                            crossinline signalAsync: FunctionUnit<FunctionUnit<TimeUnit>>)
-        : TimeUnit.MillisSeconds? {
+        : TimeUnit.MilliSeconds? {
     var optionalEnd: Long = 0
     var didSet = false
     val start = System.currentTimeMillis()
@@ -46,24 +45,9 @@ suspend inline fun measureOptAsyncCallback(waitingTimeUnit: TimeUnit,
     }
     waitingTimeUnit.delay()
     return didSet.map(
-            ifTrue = TimeUnit.MillisSeconds(optionalEnd - start),
+            ifTrue = TimeUnit.MilliSeconds(optionalEnd - start),
             ifFalse = null)
 }
-
-/**
- * Measure the time of some occurence with a timeout. the function waits (coroutine delay) until the given timeout.
- *
- * @param waitingTimeUnit the time to wait for the response to come.
- * @param signalAsync signals that we are done /callback. time is taken when the callback is called.
- * @return the delta time for the start of the operation to the "optional" ending,
- * if the ending have not occurred then it returns null
- */
-suspend inline fun measureOptAsync(waitingTimeUnit: TimeUnit,
-                                   crossinline signalAsync: FunctionUnit<EmptyFunction>)
-        : TimeUnit.MillisSeconds? =
-        measureOptAsyncCallback(waitingTimeUnit) { function: (TimeUnit) -> Unit ->
-            function(TimeUnit.MillisSeconds(System.currentTimeMillis()))
-        }
 
 
 /**
@@ -112,7 +96,11 @@ inline fun <T> WeakReference<T>.useRefOr(crossinline ifAvailable: T.() -> Unit,
     get().useOr(ifAvailable, ifNotAvailable)
 }
 
-
+/**
+ * uses this value iff not null or another if it is.
+ * the first function (argument) will receive the value iff it is not null, the second is witout any parameters
+ *
+ */
 inline fun <T> T?.useOr(crossinline ifNotNull: T.() -> Unit,
                         crossinline ifNull: EmptyFunction) {
     if (this != null) {
@@ -174,6 +162,9 @@ inline fun <U> Any?.mapLazy(crossinline ifNotNull: EmptyFunctionResult<U>,
     }
 }
 
+/**
+ * Performs the given action from 0 until this value times.
+ */
 inline fun Int.forEach(crossinline action: FunctionUnit<Int>) {
     for (i in 0 until this) {
         action(i)

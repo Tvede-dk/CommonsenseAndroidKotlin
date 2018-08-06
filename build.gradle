@@ -19,7 +19,7 @@ buildscript {
     ext.commonsenseGit = "https://github.com/Tvede-dk/CommonsenseAndroidKotlin.git"
 
     //included versions.
-    ext.kotlin_version = '1.2.51'
+    ext.kotlin_version = '1.2.60'
     ext.supportVersion = '27.1.1'
     ext.coroutinesVersion = '0.23.4'
     ext.leakCanaryVersion = "1.5.4"
@@ -74,13 +74,8 @@ subprojects {
         }
     }
 
-    tasks.withType(org.jetbrains.kotlin.gradle.tasks.KotlinCompile).all {
-        kotlinOptions {
-            //allWarningsAsErrors = true
-            verbose = true
-        }
-    }
     afterEvaluate { project ->
+        setupKotlinCompile(project)
         setupProject(project)
     }
 }

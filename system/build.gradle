@@ -23,6 +23,7 @@ dependencies {
     api "com.android.support:exifinterface:$supportVersion"
     implementation project(':base')
     implementation "com.android.support:appcompat-v7:$supportVersion"
+    implementation "com.android.support:support-fragment:$supportVersion"
     implementation "org.jetbrains.kotlin:kotlin-stdlib:$kotlin_version"
 }
 

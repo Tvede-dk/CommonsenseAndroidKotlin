@@ -24,7 +24,7 @@ sealed class TimeUnit(val value: Long) {
 
     abstract val prefix: String
 
-    abstract fun toMilliSeconds(): MillisSeconds
+    abstract fun toMilliSeconds(): MilliSeconds
 
     override fun toString(): String {
         return internalString
@@ -34,30 +34,30 @@ sealed class TimeUnit(val value: Long) {
 
         override val prefix: String = "ns"
 
-        override fun toMilliSeconds(): MillisSeconds =
-                MillisSeconds(value / milliSecondsToNanoSecondsMultiplier)
+        override fun toMilliSeconds(): MilliSeconds =
+                MilliSeconds(value / milliSecondsToNanoSecondsMultiplier)
     }
 
-    class MillisSeconds(milliseconds: Long) : TimeUnit(milliseconds) {
+    class MilliSeconds(milliseconds: Long) : TimeUnit(milliseconds) {
 
         override val prefix: String = "ms"
 
-        override fun toMilliSeconds(): MillisSeconds = this
+        override fun toMilliSeconds(): MilliSeconds = this
     }
 
     class Seconds(seconds: Long) : TimeUnit(seconds) {
         override val prefix: String = "s"
 
-        override fun toMilliSeconds(): MillisSeconds =
-                MillisSeconds(value * secondsToMillisecondsMultiplier)
+        override fun toMilliSeconds(): MilliSeconds =
+                MilliSeconds(value * secondsToMillisecondsMultiplier)
     }
 
     class Minutes(minutes: Long) : TimeUnit(minutes) {
 
         override val prefix: String = "m"
 
-        override fun toMilliSeconds(): MillisSeconds {
-            return MillisSeconds(
+        override fun toMilliSeconds(): MilliSeconds {
+            return MilliSeconds(
                     value *
                             (minutesToSecondsMultiplier *
                                     secondsToMillisecondsMultiplier))
@@ -68,8 +68,8 @@ sealed class TimeUnit(val value: Long) {
 
         override val prefix: String = "h"
 
-        override fun toMilliSeconds(): MillisSeconds {
-            return MillisSeconds(
+        override fun toMilliSeconds(): MilliSeconds {
+            return MilliSeconds(
                     value *
                             (hoursToMinutesMultiplier *
                                     minutesToSecondsMultiplier *
@@ -81,8 +81,8 @@ sealed class TimeUnit(val value: Long) {
 
         override val prefix: String = "d"
 
-        override fun toMilliSeconds(): MillisSeconds {
-            return MillisSeconds(
+        override fun toMilliSeconds(): MilliSeconds {
+            return MilliSeconds(
                     value *
                             (daysToHoursMultiplier *
                                     hoursToMinutesMultiplier *
@@ -137,19 +137,19 @@ fun NanoSeconds.toDays(): Days =
 
 //region all conversions from milliseconds
 
-fun MillisSeconds.toNanoSeconds(): NanoSeconds =
+fun MilliSeconds.toNanoSeconds(): NanoSeconds =
         NanoSeconds(value * milliSecondsToNanoSecondsMultiplier)
 
-fun MillisSeconds.toSeconds(): Seconds =
+fun MilliSeconds.toSeconds(): Seconds =
         Seconds(value / secondsToMillisecondsMultiplier)
 
-fun MillisSeconds.toMinutes(): Minutes =
+fun MilliSeconds.toMinutes(): Minutes =
         toSeconds().toMinutes()
 
-fun MillisSeconds.toHours(): Hours =
+fun MilliSeconds.toHours(): Hours =
         toMinutes().toHours()
 
-fun MillisSeconds.toDays(): Days =
+fun MilliSeconds.toDays(): Days =
         toHours().toDays()
 
 
@@ -226,5 +226,5 @@ fun Days.toHours(): Hours =
  * Sleeps (coroutine) this time unit
  */
 suspend fun TimeUnit.delay() {
-    kotlinx.coroutines.experimental.delay(this.toMilliSeconds().value)
+    kotlinx.coroutines.experimental.delay(this.toMilliSeconds().value, java.util.concurrent.TimeUnit.MILLISECONDS)
 }

@@ -1,9 +1,8 @@
 package csense.android.exampleApp.activity
 
-import android.content.Intent
-import com.commonsense.android.kotlin.system.base.BaseSplashActivity
-import com.commonsense.android.kotlin.system.base.LayoutResList
-import com.commonsense.android.kotlin.system.base.resListOf
+import android.content.*
+import com.commonsense.android.kotlin.system.base.*
+import com.commonsense.android.kotlin.system.base.helpers.*
 
 /**
  * Created by Kasper Tvede on 29-07-2017.

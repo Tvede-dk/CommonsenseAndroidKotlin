@@ -46,8 +46,6 @@ dependencies {
     implementation project(':system')
     implementation project(':base')
 
-    kapt "com.android.databinding:compiler:$androidGradleVersion"
-
     //support libs
     api "com.android.support:appcompat-v7:$supportVersion"
     api "com.android.support:design:$supportVersion"

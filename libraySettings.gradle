@@ -1,15 +1,15 @@
 ext.setupProject = { it ->
     it.extensions.findByName("kotlin")?.with {
-        println "Enabling coroutines"
+        println " - Enabling coroutines"
         it.experimental.coroutines "enable"
     }
     it.extensions.findByName("kapt")?.with {
-        println "Enabling kapt cache"
+        println " - Enabling kapt cache"
         it.useBuildCache = true
     }
     it.extensions.findByName("android")?.with {
 
-        println "Enabling default setup for android(defaultConfig, test,lint, sourcesets)"
+        println " - Enabling default setup for android(defaultConfig, test,lint, sourcesets)"
 
         it.compileSdkVersion androidSdkBuildVersion
         it.buildToolsVersion androidBuildToolsVersion
@@ -38,6 +38,15 @@ ext.setupProject = { it ->
         it.sourceSets {
             main.java.srcDirs += 'src/main/kotlin'
             test.java.srcDirs += 'src/test/kotlin'
+        }
+    }
+}
+ext.setupKotlinCompile = { it ->
+    it.tasks.findByName("compileKotlin")?.with {
+        println " - Setting up default kotlin compiler options"
+        kotlinOptions {
+//            allWarningsAsErrors = true
+            verbose = true
         }
     }
 }

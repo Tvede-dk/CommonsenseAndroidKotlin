@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="intro.text">This demo app illustrates most of the commonsense libraries capabilities.</string>
+    <string name="intro.title">Introduction to demo app</string>
+    <string name="intro.proceed">Proceed to the main overview</string>
+    <string name="mainactivity.category.tools">Tools</string>
+    <string name="tools.overview.title">The \"Tools\" package functionality</string>
+    <string name="tools.overview.description">some longer description</string>
+    <string name="tools.overview.anr">ANR (application not responding ) feature</string>
+    <string name="tools.overview.crashlistener">Crash listener feature</string>
+    <string name="tools.overview.fps">Fps monitoring / display feature</string>
+    <string name="tools.overview.performance">Event /performance listener feature</string>
+    <string name="tools.anr.timeout.field">The Timeout in miliseconds</string>
+    <string name="tools.anr.trigger">Trigger an anr (blocks mainthread)</string>
+    <string name="tools.anr.notification.type">Notification type</string>
+    <string name="tools.anr.enable.listener">Enable listener</string>
+    <string name="mainactivity_category_activitydata">Activity with data</string>
+    <string name="mainactivity_category_crypto">Crypto</string>
+</resources>

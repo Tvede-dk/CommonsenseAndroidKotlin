@@ -1,19 +1,16 @@
 package com.commonsense.android.kotlin.system.imaging
 
-import android.Manifest
-import android.app.Activity
-import android.content.ContentValues
-import android.content.Intent
-import android.graphics.Bitmap
-import android.net.Uri
-import android.provider.MediaStore
-import android.support.annotation.RequiresPermission
-import com.commonsense.android.kotlin.base.EmptyFunction
-import com.commonsense.android.kotlin.base.extensions.asyncSimple
-import com.commonsense.android.kotlin.system.PermissionEnum
-import com.commonsense.android.kotlin.system.askAndUsePermission
-import com.commonsense.android.kotlin.system.base.BaseActivity
-import com.commonsense.android.kotlin.system.base.helpers.startActivityForResult
+import android.*
+import android.app.*
+import android.content.*
+import android.graphics.*
+import android.net.*
+import android.provider.*
+import android.support.annotation.*
+import com.commonsense.android.kotlin.base.*
+import com.commonsense.android.kotlin.system.*
+import com.commonsense.android.kotlin.system.base.*
+import com.commonsense.android.kotlin.system.base.helpers.*
 
 
 /**

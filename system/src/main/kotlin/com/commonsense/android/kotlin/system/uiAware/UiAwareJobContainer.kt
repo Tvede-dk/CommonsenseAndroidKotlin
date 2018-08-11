@@ -1,10 +1,9 @@
 package com.commonsense.android.kotlin.system.uiAware
 
-import com.commonsense.android.kotlin.base.AsyncEmptyFunction
-import com.commonsense.android.kotlin.base.extensions.collections.ifTrue
-import com.commonsense.android.kotlin.base.scheduling.JobContainer
-import kotlinx.coroutines.experimental.Job
-import kotlinx.coroutines.experimental.android.UI
+import com.commonsense.android.kotlin.base.*
+import com.commonsense.android.kotlin.base.scheduling.*
+import kotlinx.coroutines.experimental.*
+import kotlinx.coroutines.experimental.android.*
 
 /**
  * Created by Kasper Tvede on 08-10-2017.

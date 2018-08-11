@@ -1,9 +1,7 @@
 package com.commonsense.android.kotlin.system.logging
 
-import com.commonsense.android.kotlin.test.assert
-import org.junit.jupiter.api.Test
-
-import org.junit.jupiter.api.Assertions.*
+import com.commonsense.android.kotlin.test.*
+import org.junit.jupiter.api.*
 
 /**
  * Created by Kasper Tvede on 03-06-2018.

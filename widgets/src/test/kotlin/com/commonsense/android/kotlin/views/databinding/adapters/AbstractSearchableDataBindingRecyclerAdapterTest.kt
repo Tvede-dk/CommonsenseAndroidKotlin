@@ -1,14 +1,12 @@
 package com.commonsense.android.kotlin.views.databinding.adapters
 
-import android.databinding.ViewDataBinding
-import android.support.v7.widget.RecyclerView
-import com.commonsense.android.kotlin.system.logging.L
-import com.commonsense.android.kotlin.system.logging.PrintLogger
+import android.databinding.*
+import android.support.v7.widget.*
+import com.commonsense.android.kotlin.system.logging.*
 import com.commonsense.android.kotlin.test.*
-import org.junit.BeforeClass
-import org.junit.Test
-import org.robolectric.annotation.Config
-import java.util.concurrent.TimeUnit
+import org.junit.*
+import org.robolectric.annotation.*
+import java.util.concurrent.*
 
 /**
  * Created by Kasper Tvede on 28-07-2017.

@@ -2,6 +2,7 @@ package com.commonsense.android.kotlin.base.scheduling
 
 import com.commonsense.android.kotlin.base.AsyncCoroutineFunction
 import com.commonsense.android.kotlin.base.AsyncEmptyFunction
+import com.commonsense.android.kotlin.base.debug.*
 import com.commonsense.android.kotlin.base.extensions.asyncSimple
 import com.commonsense.android.kotlin.base.extensions.awaitAll
 import com.commonsense.android.kotlin.base.extensions.collections.set
@@ -165,9 +166,7 @@ open class JobContainer {
      * waits until all jobs are "done":
      */
     suspend fun executeQueueAwaited(group: String) = changeQueuedJob {
-        get(group)?.let {
-            it.map { performAction(it.first, it.second) }.awaitAll()
-        }
+        get(group)?.map { performAction(it.first, it.second) }?.awaitAll()
         //TODO performance of this should be improved drastically (O(n))
         return@changeQueuedJob this.filter { it.key != group }
     }
@@ -180,5 +179,25 @@ open class JobContainer {
             getOrPut(group) { mutableListOf() }.add(Pair(context, action))
         }
     }
+
+    fun toPrettyString(): String {
+        return "Job container state: " +
+                "\n\t\tLocal job mutex locked state: ${localJobMutex.isLocked}" +
+                "\n\t\tGroup job mutex lock state: ${groupJobMutex.isLocked}" +
+                "\n\t\tQueue job mutex lock state: ${queuedGroupedJobsMutex.isLocked}\n" +
+                localJobs.map { "$it" }.prettyStringContent(
+                        "\t\tlocal Jobs",
+                        "\t\tno local jobs") +
+                queuedGroupedJobs.map { "$it" }.prettyStringContent(
+                        "\t\tQueue grouped jobs:",
+                        "\t\tno queue grouped jobs") +
+                groupedJobs.map { "$it" }.prettyStringContent(
+                        "\t\tGrouped jobs",
+                        "\t\tno grouped jobs")
+
+
+    }
+
+    override fun toString() = toPrettyString()
 
 }

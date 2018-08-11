@@ -1,12 +1,8 @@
 package com.commonsense.android.kotlin.system.base.helpers
 
-import android.content.BroadcastReceiver
-import android.content.Context
-import android.content.Intent
-import com.commonsense.android.kotlin.test.assertSize
-import org.junit.Test
-
-import org.junit.Assert.*
+import android.content.*
+import com.commonsense.android.kotlin.test.*
+import org.junit.*
 
 /**
  * Created by kasper on 15/12/2017.

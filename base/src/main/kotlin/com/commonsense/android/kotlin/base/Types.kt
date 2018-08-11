@@ -35,47 +35,6 @@ typealias StringList = List<String>
  */
 typealias AsyncCoroutineFunction = suspend CoroutineScope.() -> Unit
 
-
-/**
-For library functions
- */
-/**
- * Function with 0 input and potential output
- */
-typealias Function0<O> = () -> O
-
-/**
- * Function with 1 input and potential output
- */
-typealias Function1<I1, O> = (I1) -> O
-
-
-/**
- * Function with 2 inputs and potential output
- */
-typealias Function2<I1, I2, O> = (I1, I2) -> O
-
-/**
- * Function with 3 inputs and potential output
- */
-typealias Function3<I1, I2, I3, O> = (I1, I2, I3) -> O
-
-/**
- * Function with 4 inputs and potential output
- */
-typealias Function4<I1, I2, I3, O> = (I1, I2, I3) -> O
-
-/**
- * Function with 5 inputs and potential output
- */
-typealias Function5<I1, I2, I3, O> = (I1, I2, I3) -> O
-
-/**
- * Function with 6 inputs and potential output
- */
-typealias Function6<I1, I2, I3, O> = (I1, I2, I3) -> O
-
-
 /**
  * Function with 1 input and potential output
  *

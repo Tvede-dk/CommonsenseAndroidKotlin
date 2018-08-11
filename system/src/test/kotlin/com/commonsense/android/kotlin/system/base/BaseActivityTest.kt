@@ -1,19 +1,13 @@
 package com.commonsense.android.kotlin.system.base
 
 import com.commonsense.android.kotlin.system.R
-import com.commonsense.android.kotlin.system.dataFlow.ReferenceCountingMap
-import com.commonsense.android.kotlin.system.logging.tryAndLog
-import com.commonsense.android.kotlin.test.BaseRoboElectricTest
-import com.commonsense.android.kotlin.test.assert
-import com.commonsense.android.kotlin.test.failTest
-import com.commonsense.android.kotlin.test.testCallbackWithSemaphore
-import kotlinx.coroutines.experimental.delay
-import kotlinx.coroutines.experimental.runBlocking
-import org.junit.Test
-import org.robolectric.Robolectric
-import org.robolectric.annotation.Config
-import java.util.concurrent.Semaphore
-import java.util.concurrent.TimeUnit
+import com.commonsense.android.kotlin.system.logging.*
+import com.commonsense.android.kotlin.test.*
+import kotlinx.coroutines.experimental.*
+import org.junit.*
+import org.robolectric.*
+import org.robolectric.annotation.*
+import java.util.concurrent.*
 
 /**
  * Created by Kasper Tvede on 07-10-2017.

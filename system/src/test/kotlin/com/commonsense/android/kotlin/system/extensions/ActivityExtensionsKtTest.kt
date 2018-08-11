@@ -1,8 +1,6 @@
 package com.commonsense.android.kotlin.system.extensions
 
-import org.junit.Test
-
-import org.junit.Assert.*
+import org.junit.*
 
 /**
  * Created by Kasper Tvede on 27-05-2018.

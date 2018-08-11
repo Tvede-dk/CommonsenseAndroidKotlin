@@ -5,12 +5,13 @@ import android.annotation.*
 import android.app.Activity
 import android.content.Context
 import android.content.pm.PackageManager
+import android.os.Build.*
+import android.support.annotation.*
 import android.support.annotation.IntRange
-import android.support.annotation.StringDef
-import android.support.annotation.UiThread
 import android.support.v4.app.ActivityCompat
 import android.support.v4.content.ContextCompat
 import com.commonsense.android.kotlin.base.*
+import com.commonsense.android.kotlin.base.debug.*
 import com.commonsense.android.kotlin.base.extensions.collections.*
 import com.commonsense.android.kotlin.base.extensions.launchBlock
 import com.commonsense.android.kotlin.system.base.BaseActivity
@@ -91,6 +92,20 @@ class PermissionsHandling(val handlerRequestCode: Int = 999) {
             requestPermissionFor(permission, activity, { }, { })
         }
     }
+
+    override fun toString(): String = toPrettyString()
+
+    fun toPrettyString(): String {
+        return "Permission handler state:" +
+                requestsInFlight.map {
+                    "${it.permission}," +
+                            " with onGrant: ${it.onGranted}," +
+                            " on failed: ${it.onFailed}"
+                }.prettyStringContent("Permissions in flight:",
+                        "no permissions in flight") +
+                "\r\t" +
+                "request code is $handlerRequestCode"
+    }
 }
 
 /**
@@ -126,6 +141,7 @@ enum class PermissionEnum(@DangerousPermissionString val permissionValue: String
     ProcessOutgoingCalls(Manifest.permission.PROCESS_OUTGOING_CALLS),
 
     //Sensors
+    @RequiresApi(VERSION_CODES.KITKAT_WATCH)
     BodySensors(Manifest.permission.BODY_SENSORS),
     // SMS
     SendSms(Manifest.permission.SEND_SMS),

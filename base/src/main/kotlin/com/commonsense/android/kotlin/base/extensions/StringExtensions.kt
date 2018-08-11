@@ -54,3 +54,7 @@ inline fun String.fileExtension(): String? {
 inline fun Uri.withoutQueryParameters(): Uri {
     return buildUpon().query("").build()
 }
+
+
+@Suppress("NOTHING_TO_INLINE")
+inline fun String.wrapInQuotes(): String = "\"${this}\""

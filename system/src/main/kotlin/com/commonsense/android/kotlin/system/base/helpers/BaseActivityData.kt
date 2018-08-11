@@ -1,16 +1,13 @@
 package com.commonsense.android.kotlin.system.base.helpers
 
-import android.app.Activity
-import android.content.Context
-import android.content.Intent
-import android.os.Bundle
-import android.support.annotation.VisibleForTesting
-import com.commonsense.android.kotlin.base.extensions.collections.ifTrue
-import com.commonsense.android.kotlin.system.base.BaseActivity
-import com.commonsense.android.kotlin.system.base.BaseFragment
-import com.commonsense.android.kotlin.system.dataFlow.ReferenceCountingMap
-import com.commonsense.android.kotlin.system.logging.logError
-import kotlin.reflect.KClass
+import android.app.*
+import android.content.*
+import android.os.*
+import com.commonsense.android.kotlin.base.extensions.collections.*
+import com.commonsense.android.kotlin.system.base.*
+import com.commonsense.android.kotlin.system.dataFlow.*
+import com.commonsense.android.kotlin.system.logging.*
+import kotlin.reflect.*
 
 /**
  * Created by Kasper Tvede on 23-07-2017.

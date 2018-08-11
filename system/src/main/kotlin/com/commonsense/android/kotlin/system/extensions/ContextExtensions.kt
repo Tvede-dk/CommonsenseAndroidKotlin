@@ -1,27 +1,21 @@
 package com.commonsense.android.kotlin.system.extensions
 
-import android.content.Context
-import android.content.Intent
-import android.content.pm.PackageManager
-import android.content.res.TypedArray
-import android.graphics.Point
-import android.graphics.drawable.Drawable
-import android.net.Uri
-import android.support.annotation.ColorRes
-import android.support.annotation.DrawableRes
-import android.support.annotation.StringRes
-import android.support.annotation.StyleableRes
-import android.support.v4.content.ContextCompat
-import android.support.v7.content.res.AppCompatResources
-import android.util.AttributeSet
+import android.content.*
+import android.content.pm.*
+import android.content.res.*
+import android.graphics.*
+import android.graphics.drawable.*
+import android.net.*
+import android.support.annotation.*
+import android.support.v4.content.*
+import android.support.v7.content.res.*
+import android.util.*
 import android.view.*
-import android.widget.Toast
-import com.commonsense.android.kotlin.system.DangerousPermissionString
-import com.commonsense.android.kotlin.system.logging.L
-import com.commonsense.android.kotlin.system.logging.tryAndLog
-import kotlinx.coroutines.experimental.android.UI
-import kotlinx.coroutines.experimental.launch
-import java.net.URLEncoder
+import android.widget.*
+import com.commonsense.android.kotlin.system.*
+import com.commonsense.android.kotlin.system.logging.*
+import kotlinx.coroutines.experimental.*
+import kotlinx.coroutines.experimental.android.*
 
 
 /**

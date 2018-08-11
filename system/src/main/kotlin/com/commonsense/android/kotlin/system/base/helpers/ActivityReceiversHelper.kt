@@ -3,6 +3,7 @@ package com.commonsense.android.kotlin.system.base.helpers
 import android.content.BroadcastReceiver
 import android.content.Context
 import com.commonsense.android.kotlin.base.EmptyFunction
+import com.commonsense.android.kotlin.base.debug.*
 import com.commonsense.android.kotlin.base.extensions.collections.ifFalse
 import com.commonsense.android.kotlin.base.extensions.collections.ifTrue
 import com.commonsense.android.kotlin.system.logging.tryAndLog
@@ -52,6 +53,16 @@ class ActivityReceiversHelper {
 
     private inline fun useIfEnabled(crossinline action: EmptyFunction) {
         isEnabled.ifTrue(action)
+    }
+
+    override fun toString(): String = toPrettyString()
+
+    fun toPrettyString(): String {
+        return "Activity receivers helper state" +
+                "\n\t\tis enabled: $isEnabled\n\t\t" +
+                registeredListeners.map { "$it" }.prettyStringContent(
+                        "registered broadcast receivers",
+                        "no broadcast receivers registered on this activity")
     }
 
 

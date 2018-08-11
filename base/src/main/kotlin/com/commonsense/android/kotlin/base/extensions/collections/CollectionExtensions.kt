@@ -1,9 +1,7 @@
 package com.commonsense.android.kotlin.base.extensions.collections
 
-import android.support.annotation.Size
-import com.commonsense.android.kotlin.base.Function1
-import com.commonsense.android.kotlin.base.FunctionResult
-import com.commonsense.android.kotlin.base.FunctionUnit
+import android.support.annotation.*
+import com.commonsense.android.kotlin.base.*
 
 /**
  * Created by Kasper Tvede on 30-09-2016.

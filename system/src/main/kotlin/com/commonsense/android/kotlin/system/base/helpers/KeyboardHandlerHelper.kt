@@ -34,4 +34,12 @@ class KeyboardHandlerHelper {
     private inline fun ifIsEnabled(crossinline action: EmptyFunction) {
         isEnabled.ifTrue(action)
     }
+
+    override fun toString(): String = toPrettyString()
+
+    fun toPrettyString(): String {
+        return "Keyboard handler state: " +
+                "\n\t\tis enabled: $isEnabled" +
+                "\n\t\tHide on pause: $hideOnPause"
+    }
 }

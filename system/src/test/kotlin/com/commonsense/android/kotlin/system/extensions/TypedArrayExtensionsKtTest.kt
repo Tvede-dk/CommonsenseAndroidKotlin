@@ -1,14 +1,8 @@
 package com.commonsense.android.kotlin.system.extensions
 
-import android.content.res.ColorStateList
-import android.content.res.TypedArray
-import android.graphics.Color
-import com.commonsense.android.kotlin.test.assert
-import com.commonsense.android.kotlin.test.assertNotNullAndEquals
-import com.commonsense.android.kotlin.test.assertNull
-import com.commonsense.android.kotlin.test.failTest
-import org.junit.Test
-import org.mockito.ArgumentMatchers.any
+import android.content.res.*
+import com.commonsense.android.kotlin.test.*
+import org.junit.*
 import org.mockito.ArgumentMatchers.eq
 import org.mockito.Mockito.`when`
 import org.mockito.Mockito.mock

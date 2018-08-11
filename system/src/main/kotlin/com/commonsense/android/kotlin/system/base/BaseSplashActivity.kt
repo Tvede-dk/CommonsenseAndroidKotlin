@@ -4,12 +4,13 @@ import android.app.*
 import android.os.*
 import android.support.annotation.*
 import android.view.*
+import com.commonsense.android.kotlin.base.debug.*
+import com.commonsense.android.kotlin.base.extensions.*
 import com.commonsense.android.kotlin.system.*
-import com.commonsense.android.kotlin.system.base.helpers.LayoutResList
-import com.commonsense.android.kotlin.system.base.helpers.preloadViews
+import com.commonsense.android.kotlin.system.base.helpers.*
 import com.commonsense.android.kotlin.system.extensions.*
-import com.commonsense.android.kotlin.system.resourceHandling.*
 import kotlinx.coroutines.experimental.*
+import kotlinx.coroutines.experimental.android.*
 
 
 /**
@@ -62,19 +63,30 @@ abstract class BaseSplashActivity : Activity() {
     // use the onAppLoaded hook.
     final override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        afterOnCreate()
+    }
+
+    private fun afterOnCreate() = launch(UI) {
         //start pre loading views. since we are a splash screen, we are "allowed" to take "some"
         //time, thus we can stall the loading (not the ui thread) until we have loaded all the views to preload.
-        runBlocking {
-            this@BaseSplashActivity.preloadViews(viewsToPreload)
-        }
+        preloadViews(viewsToPreload)
         //when pre loading is done, then prepare the next screen and start the app.
         onAppLoaded()
         //and close the splash screen
         safeFinish()
+
     }
 
     /**
-     * Specifies which layouts should be loaded in the background (if that fails, no pre loading will occur for that view).
+     * Specifies which layouts should be loaded in the background
+     * (if that fails, no pre loading will occur for that view).
      */
     abstract val viewsToPreload: LayoutResList
+
+    fun toPrettyString(): String {
+        return "Base splash activity - viewsToPreload" +
+                viewsToPreload.views.map { "layout id: $it" }.prettyStringContent()
+    }
+
+    override fun toString(): String = toPrettyString()
 }

@@ -1,20 +1,16 @@
 package com.commonsense.android.kotlin.views.extensions
 
-import android.graphics.Bitmap
-import android.support.annotation.ColorInt
-import android.widget.ImageView
+import android.graphics.*
+import android.support.annotation.*
+import android.widget.*
 import com.commonsense.android.kotlin.base.*
-import com.commonsense.android.kotlin.base.extensions.*
 import com.commonsense.android.kotlin.base.extensions.collections.*
-import com.commonsense.android.kotlin.system.imaging.ImageDecodingType
-import com.commonsense.android.kotlin.system.imaging.ImageLoader
-import com.commonsense.android.kotlin.system.imaging.ImageLoaderType
-import com.commonsense.android.kotlin.system.imaging.withColor
-import com.commonsense.android.kotlin.system.logging.tryAndLogSuspend
-import com.commonsense.android.kotlin.views.features.getTagOr
-import kotlinx.coroutines.experimental.android.UI
-import kotlinx.coroutines.experimental.launch
-import java.util.concurrent.atomic.AtomicInteger
+import com.commonsense.android.kotlin.system.imaging.*
+import com.commonsense.android.kotlin.system.logging.*
+import com.commonsense.android.kotlin.views.features.*
+import kotlinx.coroutines.experimental.*
+import kotlinx.coroutines.experimental.android.*
+import java.util.concurrent.atomic.*
 
 /**
  * Created by Kasper Tvede on 24-07-2017.

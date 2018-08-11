@@ -1,10 +1,7 @@
 package com.commonsense.android.kotlin.views.input.selection
 
-import com.commonsense.android.kotlin.test.assert
-import com.commonsense.android.kotlin.test.assertNotNullApply
-import com.commonsense.android.kotlin.test.assertSize
-import org.junit.Ignore
-import org.junit.Test
+import com.commonsense.android.kotlin.test.*
+import org.junit.*
 
 /**
  * Created by kasper on 25/08/2017.

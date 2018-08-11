@@ -1,17 +1,14 @@
 package csense.android.tools.anr
 
-import android.os.Debug
-import android.os.Handler
-import android.os.Looper
-import com.commonsense.android.kotlin.base.EmptyFunction
-import com.commonsense.android.kotlin.base.Function2
+import android.os.*
+import com.commonsense.android.kotlin.base.*
 import com.commonsense.android.kotlin.base.extensions.*
 import com.commonsense.android.kotlin.base.extensions.collections.mapLazy
-import com.commonsense.android.kotlin.base.time.TimeUnit
-import com.commonsense.android.kotlin.system.logging.L
+import com.commonsense.android.kotlin.base.time.*
+import com.commonsense.android.kotlin.system.logging.*
 import kotlinx.coroutines.experimental.*
-import kotlinx.coroutines.experimental.android.UI
-import java.lang.ref.WeakReference
+import kotlinx.coroutines.experimental.android.*
+import java.lang.ref.*
 
 /**
  * Created by Kasper Tvede on 01-03-2018.

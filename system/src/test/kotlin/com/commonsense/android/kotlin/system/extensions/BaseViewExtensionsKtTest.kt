@@ -1,12 +1,9 @@
 package com.commonsense.android.kotlin.system.extensions
 
-import android.widget.EditText
-import com.commonsense.android.kotlin.base.extensions.toEditable
-import com.commonsense.android.kotlin.test.BaseRoboElectricTest
-import com.commonsense.android.kotlin.test.assert
-import org.junit.Test
-
-import org.junit.Assert.*
+import android.widget.*
+import com.commonsense.android.kotlin.base.extensions.*
+import com.commonsense.android.kotlin.test.*
+import org.junit.*
 
 /**
  * Created by Kasper Tvede on 27-05-2018.

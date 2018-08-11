@@ -10,6 +10,7 @@ import android.view.MenuItem
 import android.support.v7.app.AppCompatActivity
 import com.commonsense.android.kotlin.base.AsyncEmptyFunction
 import com.commonsense.android.kotlin.base.EmptyFunctionResult
+import com.commonsense.android.kotlin.base.debug.*
 import com.commonsense.android.kotlin.system.PermissionsHandling
 import com.commonsense.android.kotlin.system.base.helpers.*
 import com.commonsense.android.kotlin.system.extensions.backPressIfHome
@@ -222,5 +223,21 @@ open class BaseActivity : AppCompatActivity(), ActivityResultHelperContainer {
     }
     //</editor-fold>
 
+    override fun toString(): String = toPrettyString()
+
+    fun toPrettyString(): String {
+        return "Base activity state: " + listOf(
+                permissionHandler.toPrettyString(),
+                onBackPressedListeners.map { "$it" }
+                        .prettyStringContent("\ton back listeners",
+                                "\tno on back listener"),
+                receiverHandler.toPrettyString(),
+                keyboardHandler.toPrettyString(),
+                localJobs.toPrettyString(),
+                activityResultHelper.toPrettyString()
+
+        ).prettyStringContent()
+
+    }
 
 }

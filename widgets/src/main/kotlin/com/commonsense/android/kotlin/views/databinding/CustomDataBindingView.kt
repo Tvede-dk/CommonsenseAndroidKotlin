@@ -1,16 +1,14 @@
 package com.commonsense.android.kotlin.views.databinding
 
-import android.content.Context
-import android.content.res.TypedArray
-import android.databinding.ViewDataBinding
-import android.util.AttributeSet
-import android.view.LayoutInflater
-import android.view.ViewGroup
-import android.widget.FrameLayout
-import com.commonsense.android.kotlin.system.extensions.*
-import com.commonsense.android.kotlin.views.datastructures.ViewVariable
-import com.commonsense.android.kotlin.views.widgets.LateAttributes
-import java.lang.ref.WeakReference
+import android.content.*
+import android.content.res.*
+import android.databinding.*
+import android.util.*
+import android.view.*
+import android.widget.*
+import com.commonsense.android.kotlin.views.datastructures.*
+import com.commonsense.android.kotlin.views.widgets.*
+import java.lang.ref.*
 
 /**
  * Created by Kasper Tvede on 13-06-2017.

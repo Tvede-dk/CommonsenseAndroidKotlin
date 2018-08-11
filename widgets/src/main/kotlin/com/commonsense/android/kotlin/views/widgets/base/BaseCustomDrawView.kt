@@ -1,16 +1,15 @@
 package com.commonsense.android.kotlin.views.widgets.base
 
-import android.content.Context
-import android.content.res.TypedArray
-import android.graphics.Canvas
-import android.graphics.drawable.Drawable
-import android.util.AttributeSet
-import android.view.View
-import com.commonsense.android.kotlin.base.extensions.collections.ifTrue
-import com.commonsense.android.kotlin.base.extensions.collections.ifTrue
-import com.commonsense.android.kotlin.views.datastructures.ViewVariable
-import com.commonsense.android.kotlin.views.widgets.LateAttributes
-import java.lang.ref.WeakReference
+import android.content.*
+import android.content.res.*
+import android.graphics.*
+import android.graphics.drawable.*
+import android.util.*
+import android.view.*
+import com.commonsense.android.kotlin.base.extensions.collections.*
+import com.commonsense.android.kotlin.views.datastructures.*
+import com.commonsense.android.kotlin.views.widgets.*
+import java.lang.ref.*
 
 /**
  * Created by kasper on 21/08/2017.

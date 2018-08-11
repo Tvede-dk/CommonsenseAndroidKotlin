@@ -1,10 +1,8 @@
 package com.commonsense.android.kotlin.test
 
-import android.net.Uri
 import android.support.annotation.IntRange
-import org.junit.Assert
-import java.util.concurrent.Semaphore
-import java.util.concurrent.TimeUnit
+import org.junit.*
+import java.util.concurrent.*
 
 /**
  * Created by Kasper Tvede on 18-07-2017.

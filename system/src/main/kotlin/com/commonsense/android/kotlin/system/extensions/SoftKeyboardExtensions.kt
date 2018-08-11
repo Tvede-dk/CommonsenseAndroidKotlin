@@ -1,11 +1,10 @@
 package com.commonsense.android.kotlin.system.extensions
 
-import android.app.Activity
-import android.content.Context
-import android.view.View
-import android.view.inputmethod.InputMethodManager
-import android.widget.EditText
-import com.commonsense.android.kotlin.system.logging.logWarning
+import android.app.*
+import android.content.*
+import android.view.inputmethod.*
+import android.widget.*
+import com.commonsense.android.kotlin.system.logging.*
 
 /**
  * Created by Kasper Tvede on 28-05-2018.

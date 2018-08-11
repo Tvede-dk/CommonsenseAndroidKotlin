@@ -4,7 +4,6 @@ import android.annotation.SuppressLint
 import android.content.Context
 import android.support.annotation.AnyThread
 import android.support.annotation.UiThread
-import com.commonsense.android.kotlin.base.Function3
 import com.commonsense.android.kotlin.base.extensions.collections.ifTrue
 import com.commonsense.android.kotlin.base.extensions.isNotNull
 import com.commonsense.android.kotlin.system.logging.L

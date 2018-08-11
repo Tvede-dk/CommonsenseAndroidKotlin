@@ -1,16 +1,7 @@
 package com.commonsense.android.kotlin.system.resourceHandling
 
-import android.net.Uri
-import android.os.Environment
-import com.commonsense.android.kotlin.test.BaseRoboElectricTest
-import com.commonsense.android.kotlin.test.assertNotNull
-import com.commonsense.android.kotlin.test.assertTrue
-import org.junit.Test
-
-import org.junit.Assert.*
-import org.robolectric.Robolectric
-import org.robolectric.Shadows.shadowOf
-import org.robolectric.shadows.ShadowContentResolver
+import com.commonsense.android.kotlin.test.*
+import org.junit.*
 
 
 /**

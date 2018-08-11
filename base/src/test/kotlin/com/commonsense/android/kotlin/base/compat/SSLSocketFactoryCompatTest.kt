@@ -1,16 +1,9 @@
 package com.commonsense.android.kotlin.base.compat
 
-import com.commonsense.android.kotlin.test.assert
-import com.commonsense.android.kotlin.test.assertLargerThan
-import com.commonsense.android.kotlin.test.assertSize
-import org.junit.jupiter.api.Test
-import org.mockito.Mockito.*
-import java.net.InetAddress
-import java.net.Socket
-import javax.net.ssl.HandshakeCompletedListener
-import javax.net.ssl.SSLSession
-import javax.net.ssl.SSLSocket
-import javax.net.ssl.SSLSocketFactory
+import com.commonsense.android.kotlin.test.*
+import org.junit.jupiter.api.*
+import java.net.*
+import javax.net.ssl.*
 
 /**
  * Created by Kasper Tvede on 20-05-2018.

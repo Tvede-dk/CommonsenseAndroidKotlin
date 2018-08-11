@@ -7,8 +7,8 @@ import android.support.annotation.IntRange
 import android.support.v4.app.ActivityCompat
 import android.util.SparseArray
 import com.commonsense.android.kotlin.base.FunctionUnit
-import com.commonsense.android.kotlin.base.extensions.collections.ifNull
-import com.commonsense.android.kotlin.base.extensions.collections.ifTrue
+import com.commonsense.android.kotlin.base.debug.*
+import com.commonsense.android.kotlin.base.extensions.collections.*
 import com.commonsense.android.kotlin.base.extensions.use
 import com.commonsense.android.kotlin.base.extensions.weakReference
 import com.commonsense.android.kotlin.system.base.BaseActivity
@@ -21,24 +21,24 @@ import kotlinx.coroutines.experimental.launch
  * Created by Kasper Tvede on 20-07-2017.
  */
 
-        /**
-         *
-         */
+/**
+ *
+ */
 typealias ActivityResultCallback = (resultCode: Int, data: Intent?) -> Unit
 
-        /**
-         *
-         */
+/**
+ *
+ */
 typealias ActivityResultCallbackOk = (data: Intent?) -> Unit
 
-        /**
-         *
-         */
+/**
+ *
+ */
 typealias AsyncActivityResultCallback = suspend (resultCode: Int, data: Intent?) -> Unit
 
-        /**
-         *
-         */
+/**
+ *
+ */
 typealias AsyncActivityResultCallbackOk = suspend (data: Intent?) -> Unit
 
 
@@ -111,6 +111,16 @@ class ActivityResultHelper(warningLogger: FunctionUnit<String>? = null) {
         }
         activityResultListeners.put(receiver.requestCode, receiver)
     }
+
+    fun toPrettyString(): String {
+        return "Activity Result helper state:\n\t" +
+                activityResultListeners.map { "${it.requestCode} => $it" }
+                        .prettyStringContent(
+                                "\tActivity result listeners:",
+                                "\tThere are no listeners.")
+    }
+
+    override fun toString() = toPrettyString()
 
 }
 

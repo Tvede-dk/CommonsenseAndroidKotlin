@@ -1,20 +1,14 @@
 package csense.android.exampleApp.views.tools
 
-import com.commonsense.android.kotlin.base.time.TimeUnit
-import com.commonsense.android.kotlin.base.time.delay
-
-import com.commonsense.android.kotlin.system.extensions.safeToast
-
-import com.commonsense.android.kotlin.views.databinding.activities.BaseDatabindingActivity
-import com.commonsense.android.kotlin.views.databinding.activities.InflaterFunctionSimple
-import com.commonsense.android.kotlin.views.extensions.setOnclickAsync
-import com.commonsense.android.kotlin.views.helpers.OnTextChangedWatcher
-import csense.android.exampleApp.databinding.ToolsAnrBinding
-import csense.android.tools.anr.ANRWatcher
-import kotlinx.coroutines.experimental.android.UI
-import kotlinx.coroutines.experimental.async
-import kotlinx.coroutines.experimental.launch
-import kotlinx.coroutines.experimental.runBlocking
+import com.commonsense.android.kotlin.base.time.*
+import com.commonsense.android.kotlin.system.extensions.*
+import com.commonsense.android.kotlin.views.databinding.activities.*
+import com.commonsense.android.kotlin.views.extensions.*
+import com.commonsense.android.kotlin.views.helpers.*
+import csense.android.exampleApp.databinding.*
+import csense.android.tools.anr.*
+import kotlinx.coroutines.experimental.*
+import kotlinx.coroutines.experimental.android.*
 
 /**
  * Created by Kasper Tvede on 01-03-2018.

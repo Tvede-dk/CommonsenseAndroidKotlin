@@ -1,11 +1,8 @@
 package com.commonsense.android.kotlin.system.compat
 
-import com.commonsense.android.kotlin.test.BaseRoboElectricTest
-import com.commonsense.android.kotlin.test.assert
-import com.commonsense.android.kotlin.test.assertLargerOrEqualTo
-import com.commonsense.android.kotlin.test.assertLargerThan
-import org.junit.Test
-import org.robolectric.annotation.Config
+import com.commonsense.android.kotlin.test.*
+import org.junit.*
+import org.robolectric.annotation.*
 
 
 /**

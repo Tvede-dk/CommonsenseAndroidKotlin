@@ -1,8 +1,7 @@
 package com.commonsense.android.kotlin.views.databinding.activities
 
-import android.databinding.ViewDataBinding
-import android.os.Bundle
-import com.commonsense.android.kotlin.system.base.helpers.BaseActivityData
+import android.databinding.*
+import com.commonsense.android.kotlin.system.base.helpers.*
 
 /**
  * Created by kasper on 25/07/2017.

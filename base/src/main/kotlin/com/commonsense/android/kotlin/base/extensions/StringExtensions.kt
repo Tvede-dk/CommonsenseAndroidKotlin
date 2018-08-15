@@ -32,7 +32,7 @@ inline fun String.asUrl(forceHttps: Boolean = true): Uri {
 
 @Suppress("NOTHING_TO_INLINE")
 inline fun Uri.fileExtension(): String? {
-    return path.fileExtension()
+    return path?.fileExtension()
 }
 
 @Suppress("NOTHING_TO_INLINE")

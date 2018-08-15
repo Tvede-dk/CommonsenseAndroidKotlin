@@ -9,6 +9,7 @@ import android.net.Uri
 import android.support.annotation.FloatRange
 import android.support.annotation.IntRange
 import android.support.media.ExifInterface
+import com.commonsense.android.kotlin.base.extensions.*
 import com.commonsense.android.kotlin.base.extensions.collections.map
 import com.commonsense.android.kotlin.system.extensions.getVirtualScreenSize
 import com.commonsense.android.kotlin.system.logging.tryAndLogSuspend
@@ -74,9 +75,9 @@ suspend fun Bitmap.compress(@IntRange(from = 0L, to = 100L) compressionPercentag
 
 suspend fun Uri.loadBitmapPreviews(scalePreviewsPercentages: IntArray,
                                    width: Int,
-                                   contentResolver: ContentResolver): Deferred<List<Bitmap>?>
-        = async(CommonPool) {
-    val bitmap = this@loadBitmapPreviews.loadBitmapRotatedCorrectly(contentResolver, width).await() ?: return@async null
+                                   contentResolver: ContentResolver): Deferred<List<Bitmap>?> = async(CommonPool) {
+    val bitmap = this@loadBitmapPreviews.loadBitmapRotatedCorrectly(contentResolver, width).await()
+            ?: return@async null
     val compressSizes = scalePreviewsPercentages.map {
         bitmap.compress(it)
     }
@@ -141,12 +142,16 @@ suspend fun Uri.loadBitmapRotatedCorrectly(contentResolver: ContentResolver, wid
     tryAndLogSuspend("loadImage") {
         val exif = getExifForImage(contentResolver).await()
         val bitmap = loadBitmapScaled(contentResolver, width).await()
-        return@tryAndLogSuspend bitmap?.rotate(exif)?.await()
+        if (exif != null) {
+            bitmap?.rotate(exif)?.await()
+        } else {
+            bitmap
+        }
     }
 }
 
 suspend fun Uri.getExifForImage(contentResolver: ContentResolver) = async(CommonPool) {
-    contentResolver.openInputStream(this@getExifForImage).use { input ->
+    contentResolver.openInputStream(this@getExifForImage)?.use { input ->
         return@async ExifInterface(input)
     }
 }
@@ -162,7 +167,7 @@ fun Bitmap.outputTo(outputStream: OutputStream, @IntRange(from = 0, to = 100) qu
  */
 fun Bitmap.saveTo(path: Uri, contentResolver: ContentResolver, @IntRange(from = 0, to = 100) quality: Int,
                   format: Bitmap.CompressFormat) = async(CommonPool) {
-    contentResolver.openOutputStream(path).use {
+    contentResolver.openOutputStream(path)?.use {
         this@saveTo.outputTo(it, quality, format)
     }
 }

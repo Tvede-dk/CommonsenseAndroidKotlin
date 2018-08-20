@@ -4,11 +4,13 @@ import android.app.Activity
 import android.app.Application
 import android.os.Bundle
 import android.os.StrictMode
+import android.os.strictmode.*
+import android.support.annotation.*
 import android.support.v7.app.AppCompatDelegate
 import com.commonsense.android.kotlin.base.EmptyFunction
 import com.commonsense.android.kotlin.base.extensions.collections.ifTrue
 import com.commonsense.android.kotlin.base.extensions.isZero
-import com.commonsense.android.kotlin.system.extensions.isApiLowerThan
+import com.commonsense.android.kotlin.system.extensions.*
 import com.commonsense.android.kotlin.system.logging.logDebug
 import com.commonsense.android.kotlin.system.logging.tryAndLog
 import com.squareup.leakcanary.LeakCanary
@@ -27,14 +29,21 @@ abstract class BaseApplication : Application() {
         }
     }
 
-
+    /**
+     * when the "application" is visible / resumed, which means at least one activity is visible
+     */
     open fun onApplicationResumed() {
 
     }
 
+    /**
+     * when the "application" is invisible / paused, which means at no activity is visible at this time / point.
+     * It could be a "re-config". / orientation
+     */
     open fun onApplicationPaused() {
 
     }
+
 
     override fun onCreate() {
         super.onCreate()
@@ -93,18 +102,49 @@ abstract class BaseApplication : Application() {
 
     private fun enableStrictMode() {
         logDebug("Setting up strictMode")
-        StrictMode.setThreadPolicy(
-                StrictMode.ThreadPolicy.Builder()
-                        .detectAll()
-                        .penaltyLog()
-                        .penaltyFlashScreen()
-                        .build())
+        val threadPolicyBuilder = StrictMode.ThreadPolicy.Builder().apply {
+            detectAll()
+            penaltyLog()
+            penaltyFlashScreen()
+            shouldDieOnStrictModeViolation().ifTrue { penaltyDeath() }
+            ifApiIsEqualOrGreater(28) {
+                penaltyListener(mainExecutor, StrictMode.OnThreadViolationListener { onStrictModeViolationOptional(it) })
+            }
 
-        StrictMode.setVmPolicy(
-                StrictMode.VmPolicy.Builder()
-                        .detectAll()
-                        .penaltyLog()
-                        .build())
+        }
+        StrictMode.setThreadPolicy(threadPolicyBuilder.build())
+
+        val vmPolicyBuilder = StrictMode.VmPolicy.Builder().apply {
+            detectAll()
+            penaltyLog()
+            shouldDieOnStrictModeViolation().ifTrue { penaltyDeath() }
+            ifApiIsEqualOrGreater(28) {
+                penaltyListener(mainExecutor, StrictMode.OnVmViolationListener { onStrictModeViolationOptional(it) })
+            }
+        }
+        StrictMode.setVmPolicy(vmPolicyBuilder.build())
+    }
+
+    /**
+     * Will be called for each strict mode violation
+     * on api >= 28
+     */
+    @RequiresApi(28)
+    open fun onStrictModeViolation(violation: Violation) {
+    }
+
+    @RequiresApi(28)
+    private fun onStrictModeViolationOptional(violation: Violation?): Unit = violation?.let {
+        onStrictModeViolation(it)
+    } ?: Unit
+
+
+    /**
+     * if returns true, then a violation will cause "deatch"
+     * default if false,which only logs then.
+     */
+    open fun shouldDieOnStrictModeViolation(): Boolean {
+        return false
     }
     //</editor-fold>
 }

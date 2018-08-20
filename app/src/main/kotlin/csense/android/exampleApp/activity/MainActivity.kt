@@ -5,6 +5,7 @@ import android.support.annotation.StringRes
 import android.support.v7.widget.GridLayoutManager
 import com.commonsense.android.kotlin.base.EmptyFunction
 import com.commonsense.android.kotlin.system.extensions.startActivity
+import com.commonsense.android.kotlin.system.logging.*
 import com.commonsense.android.kotlin.views.ViewInflatingFunction
 import csense.android.exampleApp.views.tools.ToolsOverviewActivity
 import com.commonsense.android.kotlin.views.databinding.activities.BaseDatabindingActivity
@@ -75,6 +76,7 @@ class MainActivity : BaseDatabindingActivity<MainActivityBinding>() {
         // 3) advanced concepts
         // - activity with data
         // -
+        logError(toPrettyString())
     }
 
 }

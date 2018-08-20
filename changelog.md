@@ -6,6 +6,12 @@
 
 - Selection handling have had an overhaul, as there were missing things, such as removing views, and comments.
     - There were changes to interfaces ToggleableView, and CheckableStatusCallback , now requiring a clearOnChangedListener function.
+- (BaseActivity) use (permission) and askAndUsePermission
+    are now changed to simply "usePermission"
+- (BaseActivity) addOnbackPressedListener and the remove are now propperly renamed to
+    addOnBackPressedListener / removeOnBackPressedListener
+
+
 
 ### Changes
 
@@ -16,6 +22,7 @@
 - tools backport (with newer naming schema).
     - please note this might still be changed, and only using the feature enabling functions are recommended
     - added lifecycle tracking
+    - added activity tracker
 
 - backported from base module
     - algorithms package (running average)

@@ -29,7 +29,7 @@ open class BaseActivity : AppCompatActivity(), ActivityResultHelperContainer {
     /**
      * Handles permissions
      */
-    val permissionHandler by lazy {
+    internal val permissionHandler by lazy {
         PermissionsHandling()
     }
 
@@ -61,14 +61,14 @@ open class BaseActivity : AppCompatActivity(), ActivityResultHelperContainer {
      * if it returns true then the event is not propagated further and the
      * activity does not call on back pressed on super
      */
-    fun addOnbackPressedListener(listener: EmptyFunctionResult<Boolean>) {
-        onBackPressedListeners.add(listener)
+    fun addOnBackPressedListener(listener: EmptyFunctionResult<Boolean>) {
+        this.onBackPressedListeners.add(listener)
     }
 
     /**
      * Removes a listener, if registered.
      */
-    fun removeOnbackPressedListener(listener: EmptyFunctionResult<Boolean>) {
+    fun removeOnBackPressedListener(listener: EmptyFunctionResult<Boolean>) {
         onBackPressedListeners.remove(listener)
     }
     //</editor-fold>

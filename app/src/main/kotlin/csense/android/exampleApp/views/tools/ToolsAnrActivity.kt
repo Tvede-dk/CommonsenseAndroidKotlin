@@ -29,12 +29,8 @@ class ToolsAnrActivity : BaseDatabindingActivity<ToolsAnrBinding>() {
             ANRWatcher.timeout = TimeUnit.MilliSeconds(it.toString().toLongOrNull() ?: 5000)
         })
 
-        binding.toolsAnrTriggerButton.setOnclickAsync {
-            async(UI) {
-                runBlocking {
-                    ANRWatcher.timeout.delay()
-                }
-            }
+        binding.toolsAnrTriggerButton.setOnclickAsyncSuspend {
+            ANRWatcher.timeout.delay()
         }
 
         ANRWatcher.listener = {

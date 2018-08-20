@@ -50,7 +50,7 @@ class ToolsFpsActivity : BaseDatabindingActivity<ToolsFpsBinding>() {
 
         }
 
-        binding.toolsFpsStallRandom.setOnCheckedChangeListener { buttonView, isChecked ->
+        binding.toolsFpsStallRandom.setOnCheckedChangeListener { _, isChecked ->
             if (isChecked) {
 //                randomJunkJob = launchInUiCancelable(""){
 //

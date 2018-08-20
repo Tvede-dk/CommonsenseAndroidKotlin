@@ -132,7 +132,7 @@ class BaseActivityTest : BaseRoboElectricTest() {
             true
         }
         act.get().apply {
-            addOnbackPressedListener(listerner)
+            addOnBackPressedListener(listerner)
         }
         act.get().onBackPressed()
     }
@@ -150,8 +150,8 @@ class BaseActivityTest : BaseRoboElectricTest() {
             true
         }
         act.get().apply {
-            addOnbackPressedListener(listerner)
-            removeOnbackPressedListener(listerner)
+            addOnBackPressedListener(listerner)
+            removeOnBackPressedListener(listerner)
         }
         act.get().onBackPressed()
     }

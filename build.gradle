@@ -1,6 +1,6 @@
 buildscript {
     ext.androidSdkBuildVersion = 28
-    ext.androidBuildToolsVersion = "28.0.1"
+    ext.androidBuildToolsVersion = "28.0.2"
 
     //Lib version and sdks
     ext.commonsenseVersionName = "0.0.15"
@@ -19,7 +19,7 @@ buildscript {
     ext.commonsenseGit = "https://github.com/Tvede-dk/CommonsenseAndroidKotlin.git"
 
     //included versions.
-    ext.kotlin_version = '1.2.60'
+    ext.kotlin_version = '1.2.61'
     ext.supportVersion = '27.1.1'
     ext.coroutinesVersion = '0.24.0'
     ext.leakCanaryVersion = "1.6.1"
@@ -41,7 +41,7 @@ buildscript {
         classpath "com.android.tools.build:gradle:$androidGradleVersion"
         classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlin_version"
         classpath 'com.jfrog.bintray.gradle:gradle-bintray-plugin:1.8.4'
-        classpath "de.mannodermaus.gradle.plugins:android-junit5:1.0.32"
+        classpath "de.mannodermaus.gradle.plugins:android-junit5:1.2.0.0"
     }
 }
 

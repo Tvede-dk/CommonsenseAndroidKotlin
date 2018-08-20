@@ -37,7 +37,7 @@ class CrashListener(context: Context) : Thread.UncaughtExceptionHandler {
      */
     private fun openUI(t: Thread?, e: Throwable?) {
         L.debug(CrashListener::class.java.simpleName, "opening ui for crash")
-//        applicationContext.startActivityWithData(CrashDisplayActivity::class, CrashDisplayData(t, e))
+        //applicationContext.startActivityWithData(CrashDisplayActivity::class, CrashDisplayData(t, e))
     }
 
     /**

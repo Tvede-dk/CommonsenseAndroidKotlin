@@ -87,24 +87,29 @@ open class BaseDataBindingAdapter(context: Context) : BaseAdapter<BaseAdapterIte
 
 }
 
+/**
+ * Defines the base class for using databinding items in a list.
+ * @param T : ViewDataBinding the type of view (the viewbinding)
+ * @property constructorFunc Function3<LayoutInflater, ViewGroup, Boolean, T> the inflater function (akk the layoutinflater method signature)
+ * @property viewBindingClass Class<T> the view type class.
+ * @constructor
+ */
 abstract class BaseAdapterItemBinding<T : ViewDataBinding>(
-        val constructorFunc: (LayoutInflater, ViewGroup, Boolean) -> T, val viewBindingClass: Class<T>) {
+        val constructorFunc: Function3<LayoutInflater, ViewGroup, Boolean, T>,
+        val viewBindingClass: Class<T>) {
     /**
      *  assumption : this function only gets called, iff the class type of convertview.tag == viewbidingclass.
      * @param convertView
      */
     fun useConvertedView(convertView: ViewDataBinding): T {
-        val binding = viewBindingClass.cast(convertView)
-        useBinding(binding)
-        return binding
+        val binding: T = viewBindingClass.cast(convertView)
+                ?: throw RuntimeException("Somehow we got a convertview that could not be casted to ${viewBindingClass.simpleName}")
+        return binding.apply(::useBinding)
     }
 
-    fun createBinding(inflator: LayoutInflater, parent: ViewGroup): T {
-        val binding = constructorFunc(inflator, parent, false)
-        useBinding(binding)
-        return binding
+    fun createBinding(inflater: LayoutInflater, parent: ViewGroup): T {
+        return constructorFunc(inflater, parent, false).apply(::useBinding)
     }
-
 
     abstract fun useBinding(binding: T)
 

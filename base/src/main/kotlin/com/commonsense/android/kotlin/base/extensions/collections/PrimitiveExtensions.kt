@@ -59,7 +59,7 @@ inline fun <T> Boolean.mapLazy(crossinline ifTrue: EmptyFunctionResult<T>,
  * Works with suspend functions
  */
 suspend inline fun <T> Boolean.mapLazyAsync(crossinline ifTrue: AsyncEmptyFunctionResult<T>,
-                                       crossinline ifFalse: EmptyFunctionResult<T>): T =
+                                            crossinline ifFalse: EmptyFunctionResult<T>): T =
         if (this) {
             ifTrue()
         } else {

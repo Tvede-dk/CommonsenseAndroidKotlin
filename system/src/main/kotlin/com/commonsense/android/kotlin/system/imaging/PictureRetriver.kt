@@ -28,7 +28,7 @@ class PictureRetriver(private val activity: BaseActivity,
 
     private var pictureUri: Uri? = null
 
-    fun useCamera() = activity.askAndUsePermission(PermissionEnum.WriteExternalStorage) {
+    fun useCamera() = activity.usePermission(PermissionEnum.WriteExternalStorage, usePermission = {
         //lets use the background since the contentresolver is using disk access, which
         //violates the UI thread on file access principle; then only when we are ready,
         // use the main thread.
@@ -47,7 +47,7 @@ class PictureRetriver(private val activity: BaseActivity,
                 }
             }
         }
-    }
+    })
 
     fun useGallery() {
         val pickIntent = Intent(Intent.ACTION_PICK, android.provider.MediaStore.Images.Media.EXTERNAL_CONTENT_URI)

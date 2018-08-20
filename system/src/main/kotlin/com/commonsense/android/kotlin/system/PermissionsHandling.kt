@@ -14,7 +14,7 @@ import com.commonsense.android.kotlin.base.*
 import com.commonsense.android.kotlin.base.debug.*
 import com.commonsense.android.kotlin.base.extensions.collections.*
 import com.commonsense.android.kotlin.base.extensions.launchBlock
-import com.commonsense.android.kotlin.system.base.BaseActivity
+import com.commonsense.android.kotlin.system.base.*
 import com.commonsense.android.kotlin.system.extensions.checkPermission
 import kotlinx.coroutines.experimental.Job
 import kotlinx.coroutines.experimental.android.UI
@@ -167,10 +167,10 @@ fun PermissionEnum.useIfPermitted(context: Context,
 }
 
 @UiThread
-fun PermissionEnum.use(handler: PermissionsHandling,
-                       activity: Activity,
-                       function: EmptyFunction,
-                       errorFunction: EmptyFunction) {
+fun PermissionEnum.usePermission(handler: PermissionsHandling,
+                                 activity: Activity,
+                                 function: EmptyFunction,
+                                 errorFunction: EmptyFunction) {
     handler.performActionForPermission(
             permissionValue,
             activity,
@@ -204,7 +204,7 @@ fun PermissionEnum.useSuspend(handler: PermissionsHandling,
 
 
 @UiThread
-inline fun PermissionEnum.use(context: Context, crossinline usePermission: EmptyFunction) {
+inline fun PermissionEnum.usePermission(context: Context, crossinline usePermission: EmptyFunction) {
     havePermission(context).ifTrue(usePermission)
 }
 
@@ -230,25 +230,63 @@ fun PermissionEnum.havePermission(context: Context): Boolean {
     return ContextCompat.checkSelfPermission(context, permissionValue).isGranted()
 }
 
+
+/**
+ * Asks iff necessary, for the use of the given permission
+ * if allowed, the usePermission callback will be called
+ * if not allowed the onFailed callback will be called
+ * NB if the activity IS NOT A BASEACTIVITY then onfailed will be called
+ */
 @UiThread
-fun BaseActivity.use(permission: PermissionEnum,
-                     usePermission: EmptyFunction,
-                     onFailed: EmptyFunction? = null) {
+fun BaseFragment.usePermission(permission: PermissionEnum,
+                               usePermission: EmptyFunction,
+                               onFailed: EmptyFunction) {
+    val baseAct = baseActivity
+    if (baseAct != null) {
+        baseAct.usePermission(
+                permission,
+                usePermission,
+                onFailed)
+    } else {
+        onFailed()
+    }
+
+}
+
+suspend fun BaseFragment.usePermissionSuspend(
+        permission: PermissionEnum,
+        usePermission: AsyncEmptyFunction,
+        onFailed: AsyncEmptyFunction) {
+    val act = baseActivity
+    if (act != null) {
+        act.usePermissionSuspend(permission, usePermission, onFailed)
+    } else {
+        onFailed()
+    }
+}
+
+suspend fun BaseActivity.usePermissionSuspend(
+        permission: PermissionEnum,
+        usePermission: AsyncEmptyFunction,
+        onFailed: AsyncEmptyFunction) {
+    permission.useSuspend(permissionHandler, this, usePermission, onFailed)
+}
+
+/**
+ * Asks iff necessary, for the use of the given permission
+ * if allowed, the usePermission callback will be called
+ * if not allowed the onFailed callback will be called
+ */
+@UiThread
+fun BaseActivity.usePermission(permission: PermissionEnum,
+                               usePermission: EmptyFunction,
+                               onFailed: EmptyFunction? = null) {
     permissionHandler.performActionForPermission(
             permission.permissionValue,
             this,
             usePermission,
             onFailed
                     ?: {})
-}
-
-@UiThread
-fun BaseActivity.askAndUsePermission(permission: PermissionEnum,
-                                     usePermission: EmptyFunction) {
-    permissionHandler.performActionForPermission(permission.permissionValue,
-            this,
-            onGranted = usePermission,
-            onFailed = {})
 }
 
 /**

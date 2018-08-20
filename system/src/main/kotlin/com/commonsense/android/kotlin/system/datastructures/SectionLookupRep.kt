@@ -205,17 +205,35 @@ class SectionLookupRep<T : TypeHashCodeLookupRepresent<Rep>, out Rep : Any> {
         var currentPosition = position
         var result: IndexPath? = null
         //TODO , mabye cache the list implementation. or something.
-        val toIterate = data.toList().filterNot { it.value.isIgnored }
-        toIterate.find {
-            if (currentPosition < it.value.size) {
-                result = IndexPath(currentPosition, it.value.sectionIndexValue)
-                true
-            } else {
-                currentPosition -= it.value.size
-                false
+
+        data.findFirst { _: Int, value: TypeSection<T> ->
+            when {
+                //ignore ignored.
+                value.isIgnored -> false
+                //found it
+                currentPosition < value.size -> {
+                    result = IndexPath(currentPosition, value.sectionIndexValue)
+                    true
+                }
+                //subtract (continue search)
+                else -> {
+                    currentPosition -= value.size
+                    false
+                }
             }
         }
         return result
+//        val toIterate = data.toList().filterNot { it.value.isIgnored }
+//        toIterate.find {
+//            if (currentPosition < it.value.size) {
+//                result = IndexPath(currentPosition, it.value.sectionIndexValue)
+//                true
+//            } else {
+//                currentPosition -= it.value.size
+//                false
+//            }
+//        }
+//        return result
     }
 
     private fun indexPathIsValid(@IntRange(from = 0) atRow: Int, @IntRange(from = 0) inSection: Int): Boolean =
@@ -332,10 +350,7 @@ class SectionLookupRep<T : TypeHashCodeLookupRepresent<Rep>, out Rep : Any> {
         updateCacheForSection(inSection) {
             data.remove(inSection)
         }
-        if (isSectionIgnored(inSection)) {
-            return null
-        }
-        return location
+        return isSectionIgnored(inSection).map(ifTrue = null, ifFalse = location)
     }
 
 
@@ -432,4 +447,5 @@ data class SectionLocation(val rawRow: Int, val inSection: Int)
 data class SectionUpdates(val changes: SectionUpdate?,
                           val optAdded: SectionUpdate?,
                           val optRemoved: SectionUpdate?)
+
 

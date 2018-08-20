@@ -1,8 +1,9 @@
 package com.commonsense.android.kotlin.base.extensions.collections
 
-import android.util.*
+import android.util.SparseArray
+import android.util.SparseIntArray
 import com.commonsense.android.kotlin.test.*
-import org.junit.*
+import org.junit.Test
 
 
 /**
@@ -72,5 +73,40 @@ class SpareArrayExtensionsKtTest : BaseRoboElectricTest() {
         }
     }
 
+    @Test
+    fun findFirst() {
+
+        val arr = SparseArray<Int>()
+        arr.findFirst { key, item -> true }
+                .assertNull("should not be able to find anything in empty array")
+
+
+        arr.append(0, 20)
+        arr.findFirst { key, item ->
+            key == 0
+        }.assertNotNullApply {
+            this.key.assert(0)
+            this.value.assert(20)
+        }
+
+        arr.append(1000, 20)
+        arr.findFirst { key, item -> key == 1000 }.assertNotNullApply {
+            key.assert(1000)
+            value.assert(20)
+        }
+
+        arr.append(500, 200)
+
+        arr.findFirst { key, item -> item == 200 }.assertNotNullApply {
+            key.assert(500)
+            value.assert(200)
+        }
+
+        arr.findFirst { key, item -> key == 1001 }.assertNull()
+
+        arr.findFirst { key, item -> key == item }.assertNull("no key is the same as item")
+
+
+    }
 
 }

@@ -1,7 +1,5 @@
 package com.commonsense.android.kotlin.test
 
-import junit.framework.Assert
-
 /**
  * Created by Kasper Tvede on 21-05-2018.
  * Purpose:
@@ -25,5 +23,5 @@ fun List<*>.assertEmpty(message: String = "") {
 }
 
 fun List<*>.assertSize(size: Int, message: String = "") {
-    Assert.assertEquals(message, this.size, size)
+    this.size.assert(size, message)
 }

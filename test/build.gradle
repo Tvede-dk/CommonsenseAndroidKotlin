@@ -15,8 +15,13 @@ dependencies {
     androidTestImplementation("com.android.support.test.espresso:espresso-core:$espressoVersion", {
         exclude group: 'com.android.support', module: 'support-annotations'
     })
-    api junit5.unitTests()
-    api junit5.parameterized()
+    api "org.junit.jupiter:junit-jupiter-api:5.2.0"
+    api "org.junit.jupiter:junit-jupiter-engine:5.2.0"
+    api "org.junit.jupiter:junit-jupiter-engine:5.2.0"
+
+    api "junit:junit:4.12"
+    api "org.junit.vintage:junit-vintage-engine:5.2.0"
+
     api "org.robolectric:robolectric:$roboElectricVersion"
     api "com.android.support.test:runner:$testSupportRunnerVersion"
     api "org.mockito:mockito-core:$mockitoVersion"

@@ -15,10 +15,14 @@ import com.commonsense.android.kotlin.system.uiAware.UiAwareJobContainer
 import kotlinx.coroutines.experimental.CommonPool
 import kotlinx.coroutines.experimental.Job
 
-/**
- * created by Kasper Tvede on 29-09-2016.
- */
 
+/**
+ * Base class for smarter fragments.
+ * it handles various things, such as scheduling on the ui thread when visible (as opposed to the regular scheduling that just runs on the ui tread)
+ * it also handles dismissing the keyboard between screen changes.
+ * Some of the features depend on the activity being a BaseActivity
+ *
+ */
 open class BaseFragment : DialogFragment(), ActivityResultHelperContainer {
 
     /**
@@ -26,7 +30,7 @@ open class BaseFragment : DialogFragment(), ActivityResultHelperContainer {
      * This requires the hosting activity to be a BaseActivity
      * if the parent is not a BaseActivity or not there an error will be logged.
      */
-    val permissionHandler: PermissionsHandling?
+    internal val permissionHandler: PermissionsHandling?
         get() {
             if (baseActivity == null) {
                 logError("The activity is either not a base activity or its not there;" +
@@ -35,13 +39,13 @@ open class BaseFragment : DialogFragment(), ActivityResultHelperContainer {
             return baseActivity?.permissionHandler
         }
     /**
-     *
+     * returns the activity as the base activity; if the activity is not a base activity then null is returned regardless.
      */
     val baseActivity: BaseActivity?
         get() = activity as? BaseActivity
 
     /**
-     *
+     * a safe way to retrive the activity since its not annotated nullable.
      */
     val safeActivity: Activity?
         get() = activity
@@ -55,16 +59,20 @@ open class BaseFragment : DialogFragment(), ActivityResultHelperContainer {
     }
 
     /**
-     *
+     * The keyboard handler, responsible for handling keyboard interactions.
      */
     val keyboardHandler by lazy {
         KeyboardHandlerHelper()
     }
 
+
     private val activityResultHelper by lazy {
         ActivityResultHelper { logWarning(it) }
     }
 
+    /**
+     * rescheduals on the ui thread to be dismissed, and removes all local jobs (cleanup)
+     */
     override fun dismiss() {
         localJobs.cleanJobs()
         launchInUi("dismiss") {
@@ -76,9 +84,8 @@ open class BaseFragment : DialogFragment(), ActivityResultHelperContainer {
      * in case you have something else than a regular "launch" / async style, then you can still
      * add the jobs manually. eg some api composing of async / launch api'
      */
-    fun addLocalJob(group: String, job: Job) {
-        localJobs.addJob(job, group)
-    }
+    fun addLocalJob(group: String, job: Job): Unit =
+            localJobs.addJob(job, group)
 
     fun launchInBackground(group: String, action: suspend () -> Unit): Job =
             localJobs.performAction(CommonPool, action, group)
@@ -104,6 +111,7 @@ open class BaseFragment : DialogFragment(), ActivityResultHelperContainer {
         super.onDestroy()
     }
 
+
     override fun onOptionsItemSelected(item: MenuItem?): Boolean {
         return if (item?.itemId == android.R.id.home) {
             onBackPressed()
@@ -113,30 +121,34 @@ open class BaseFragment : DialogFragment(), ActivityResultHelperContainer {
         }
     }
 
-    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+    override fun onActivityResult(@IntRange(from = 0) requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
         activityResultHelper.handle(requestCode, resultCode, data)
     }
 
     //<editor-fold desc="Add activity result listener">
-    override fun addActivityResultListenerOnlyOk(requestCode: Int, receiver: ActivityResultCallbackOk) {
-        activityResultHelper.addForOnlyOk(requestCode, receiver)
-    }
+    override fun addActivityResultListenerOnlyOk(
+            @IntRange(from = 0) requestCode: Int,
+            receiver: ActivityResultCallbackOk) =
+            activityResultHelper.addForOnlyOk(requestCode, receiver)
 
-    override fun addActivityResultListener(requestCode: Int, receiver: ActivityResultCallback) {
-        activityResultHelper.addForAllResults(requestCode, receiver)
-    }
+    override fun addActivityResultListener(
+            @IntRange(from = 0) requestCode: Int,
+            receiver: ActivityResultCallback) =
+            activityResultHelper.addForAllResults(requestCode, receiver)
 
-    override fun removeActivityResultListener(@IntRange(from = 0) requestCode: Int) {
-        activityResultHelper.remove(requestCode)
-    }
+    override fun removeActivityResultListener(
+            @IntRange(from = 0) requestCode: Int) =
+            activityResultHelper.remove(requestCode)
 
-    override fun addActivityResultListenerOnlyOkAsync(requestCode: Int, receiver: AsyncActivityResultCallbackOk) {
-        activityResultHelper.addForOnlyOkAsync(requestCode, receiver)
-    }
+    override fun addActivityResultListenerOnlyOkAsync(
+            @IntRange(from = 0) requestCode: Int,
+            receiver: AsyncActivityResultCallbackOk) =
+            activityResultHelper.addForOnlyOkAsync(requestCode, receiver)
 
-    override fun addActivityResultListenerAsync(requestCode: Int, receiver: AsyncActivityResultCallback) {
-        activityResultHelper.addForAllResultsAsync(requestCode, receiver)
-    }
+    override fun addActivityResultListenerAsync(
+            @IntRange(from = 0) requestCode: Int,
+            receiver: AsyncActivityResultCallback) =
+            activityResultHelper.addForAllResultsAsync(requestCode, receiver)
     //</editor-fold>
 }

@@ -5,10 +5,7 @@ import android.util.SparseArray
 import android.util.SparseIntArray
 import com.commonsense.android.kotlin.base.*
 
-/**
- * Created by Kasper Tvede on 09-07-2017.
- */
-
+typealias SparseArrayEntryMapper<T, O> = (key: Int, item: T) -> O
 
 /**
  * sets the content to the given list of pairs (unwraps the pair into (first  -> second)
@@ -36,10 +33,13 @@ data class SparseArrayEntry<out T>(@IntRange(from = 0) val key: Int, val value: 
 
 /**
  * Converts a spareArray to a list. it will convert all keys, unless a max key is specified.
+ * @receiver SparseArray<T>
+ * @param maxKeyValue Int
+ * @return List<SparseArrayEntry<T>>
  */
-//@Suppress("NOTHING_TO_INLINE")
-//TODO cannot inline as that causes a crash in the kotlin compiler.
-fun <T> SparseArray<T>.toList(@IntRange(from = 1) maxKeyValue: Int = Int.MAX_VALUE): List<SparseArrayEntry<T>> {
+@Suppress("NOTHING_TO_INLINE")
+inline fun <T> SparseArray<T>.toList(
+        @IntRange(from = 1) maxKeyValue: Int = Int.MAX_VALUE): List<SparseArrayEntry<T>> {
     val mapped = (0 until size())
             .map(this::keyAt)
     return if (maxKeyValue < Int.MAX_VALUE) {
@@ -50,6 +50,28 @@ fun <T> SparseArray<T>.toList(@IntRange(from = 1) maxKeyValue: Int = Int.MAX_VAL
 }
 
 /**
+ * finds the element that firstly satisfy a given condition.
+ * @receiver SparseArray<T>
+ * @param condition Function2<Int,T, Boolean> (int is the key, T is the value)
+ * @return T?
+ */
+inline fun <T> SparseArray<T>.findFirst(
+        crossinline condition: SparseArrayEntryMapper<T, Boolean>): SparseArrayEntry<T>? {
+    val size = size()
+    for (i in 0 until size) {
+        val key = keyAt(i)
+        val item = get(key)
+        //never found something that fulfilled the condition so return that
+        if (condition(key, item)) {
+            return SparseArrayEntry(key, item)
+        }
+    }
+    //we never found anything that fulfilled the condition
+    return null
+}
+
+
+/**
  * converts each element in the sparse array using the mapper
  */
 inline fun <E, U> SparseArray<E>.map(crossinline mapper: MapFunction<E, U>): List<U> {
@@ -58,6 +80,11 @@ inline fun <E, U> SparseArray<E>.map(crossinline mapper: MapFunction<E, U>): Lis
     }
 }
 
+/**
+ *
+ * @receiver SparseArray<E>
+ * @param action FunctionUnit<E>
+ */
 inline fun <E> SparseArray<E>.forEach(crossinline action: FunctionUnit<E>) {
     for (i in 0 until size()) {
         action(valueAt(i))

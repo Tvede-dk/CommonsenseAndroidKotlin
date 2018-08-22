@@ -2,7 +2,13 @@ package com.commonsense.android.kotlin.system.datastructures
 
 import android.support.annotation.IntRange
 import android.util.SparseArray
+import com.commonsense.android.kotlin.base.algorithms.Comparing
 import com.commonsense.android.kotlin.base.extensions.collections.*
+import com.commonsense.android.kotlin.base.extensions.compareToRange
+import com.commonsense.android.kotlin.base.extensions.forEach
+import com.commonsense.android.kotlin.system.logging.L
+import kotlin.system.measureNanoTime
+import kotlin.system.measureTimeMillis
 
 /**
  * Created by kasper on 05/07/2017.
@@ -53,7 +59,17 @@ class SectionLookupRep<T : TypeHashCodeLookupRepresent<Rep>, out Rep : Any> {
     val sectionCount
         @IntRange(from = 0)
         get () = data.size()
+
     //</editor-fold>
+
+
+    /**
+     * Its a "mapping" / lookup list of absolute sizes
+     * should make queries from raw position to IndexPath's a simple O(log_2(sectionsCount)
+     * works by computing the start of a given section (in raw)
+     */
+    private var preComputedLookup: IntArray = intArrayOf()
+    private var isPrecomputedUpToDate = false
 
 
     //<editor-fold desc="Add functions">
@@ -196,44 +212,40 @@ class SectionLookupRep<T : TypeHashCodeLookupRepresent<Rep>, out Rep : Any> {
     }
 
 
-    //this is btw O(Section) which is bad with many sections. can be optimized to O(log_2(sections)) then, even a million sections would be "good". (Log_2(10^6) ~ 20
-    //the idea; keep a sparseArray of "accumulated" sizes; then we can binary search that.
-    // the Accumulated calculation will be "O(section)" amortised but as the bright person have observed, that is the same speed as it is now...
-    //TODO hmm, convert this ?
     fun indexToPath(@IntRange(from = 0) position: Int): IndexPath? {
-        //naive implementation
-        var currentPosition = position
-        var result: IndexPath? = null
-        //TODO , mabye cache the list implementation. or something.
+        computeLookup()
 
-        data.findFirst { _: Int, value: TypeSection<T> ->
-            when {
-                //ignore ignored.
-                value.isIgnored -> false
-                //found it
-                currentPosition < value.size -> {
-                    result = IndexPath(currentPosition, value.sectionIndexValue)
-                    true
-                }
-                //subtract (continue search)
-                else -> {
-                    currentPosition -= value.size
-                    false
-                }
-            }
+        val index = preComputedLookup.binarySearch { item: Int, index: Int ->
+            val from = preComputedLookup.previousValueOr(index, 0)
+            position.compareToRange(from, item - 1)
         }
-        return result
-//        val toIterate = data.toList().filterNot { it.value.isIgnored }
-//        toIterate.find {
-//            if (currentPosition < it.value.size) {
-//                result = IndexPath(currentPosition, it.value.sectionIndexValue)
-//                true
-//            } else {
-//                currentPosition -= it.value.size
-//                false
-//            }
-//        }
-//        return result
+        return index?.let {
+            val from = preComputedLookup.previousValueOr(it, 0)
+            val key = data.keyAt(it)
+            IndexPath(position - from, key)
+        }
+    }
+
+    private fun computeLookup() {
+        if (isPrecomputedUpToDate) {
+            return
+        }
+        //TODO only map visible sections ??
+        var counter = 0
+        val size = data.size()
+        //do not allocate more than necessarily. so if we have the right size, then use that.
+        val newLookup = if (preComputedLookup.size == size) {
+            preComputedLookup
+        } else {
+            IntArray(size)
+        }
+        size.forEach {
+            val key = data.keyAt(it)
+            counter += data[key].visibleCount
+            newLookup[it] = counter
+        }
+        preComputedLookup = newLookup
+        isPrecomputedUpToDate = true
     }
 
     private fun indexPathIsValid(@IntRange(from = 0) atRow: Int, @IntRange(from = 0) inSection: Int): Boolean =
@@ -287,9 +299,9 @@ class SectionLookupRep<T : TypeHashCodeLookupRepresent<Rep>, out Rep : Any> {
             ignoreSection(sectionIndex)
         }
     }
-    //</editor-fold>
+//</editor-fold>
 
-    //<editor-fold desc="Section opertations">
+//<editor-fold desc="Section opertations">
 
     /**
      * returns what have changed. (the diff).
@@ -378,16 +390,16 @@ class SectionLookupRep<T : TypeHashCodeLookupRepresent<Rep>, out Rep : Any> {
     fun sectionAt(sectionIndex: Int): TypeSection<T>? = data[sectionIndex]
 
     private fun sectionExists(sectionIndex: Int): Boolean = data[sectionIndex, null] != null
-    //</editor-fold>
+//</editor-fold>
 
-    //<editor-fold desc="Operators">
+//<editor-fold desc="Operators">
 
     /**  */
     operator fun get(@IntRange(from = 0) atRow: Int, @IntRange(from = 0) inSection: Int): T? = getItem(atRow, inSection)
 
     /**  */
     operator fun get(index: IndexPath): T? = getItem(index.row, index.section)
-    //</editor-fold>
+//</editor-fold>
 
     //<editor-fold desc="cache handling">
     private inline fun <T> updateCacheForSection(sectionIndex: Int, crossinline action: () -> T): T {
@@ -398,9 +410,13 @@ class SectionLookupRep<T : TypeHashCodeLookupRepresent<Rep>, out Rep : Any> {
         if (sizeAfter == 0 && sectionAt(sectionIndex)?.isIgnored != true) {
             data.remove(sectionIndex)
         }
+
+        //todo move this around into something like "onChanged" and then set this variable there instead.
+        isPrecomputedUpToDate = false
+
         return actionResult
     }
-    //</editor-fold>
+//</editor-fold>
 
     //<editor-fold desc="Map functions">
     fun <U> mapNoIgnored(converter: (List<T>) -> List<U>): List<TypeSection<U>> =
@@ -411,9 +427,9 @@ class SectionLookupRep<T : TypeHashCodeLookupRepresent<Rep>, out Rep : Any> {
                 TypeSection(it.key, it.value.isIgnored, it.value.collection.let(converter)
                         .toMutableList())
             }
-    //</editor-fold>
+//</editor-fold>
 
-    //<editor-fold desc="location calculations">
+//<editor-fold desc="location calculations">
 
     private fun addSectionIfMissing(@IntRange(from = 0) inSection: Int): SectionUpdate {
         if (!sectionExists(inSection)) {
@@ -422,6 +438,7 @@ class SectionLookupRep<T : TypeHashCodeLookupRepresent<Rep>, out Rep : Any> {
         return calculateSectionLocation(inSection) ?: SectionUpdate(0 until 0, 0 until 0)
     }
 
+    //TODO verify this performance wise after adding the preComputedLookup
     private fun calculateSectionLocation(sectionIndex: Int): SectionUpdate? {
         if (!sectionExists(sectionIndex)) {
             return null
@@ -433,7 +450,7 @@ class SectionLookupRep<T : TypeHashCodeLookupRepresent<Rep>, out Rep : Any> {
         return SectionUpdate(start until end, 0 until collectionSize)
     }
 
-    //</editor-fold>
+//</editor-fold>
 
 }
 

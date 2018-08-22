@@ -21,6 +21,7 @@ import com.commonsense.android.kotlin.system.logging.L
 import com.commonsense.android.kotlin.views.ViewInflatingFunction
 import java.lang.ref.WeakReference
 import kotlin.reflect.KClass
+import kotlin.system.measureNanoTime
 
 /**
  * Created by kasper on 17/05/2017.
@@ -169,7 +170,8 @@ abstract class DataBindingRecyclerAdapter<T>(context: Context) :
 
     override fun onCreateViewHolder(parent: ViewGroup, @IntRange(from = 0) viewType: Int): BaseViewHolderItem<*> {
         val rep = dataCollection.getTypeRepresentativeFromTypeValue(viewType)
-        return rep?.invoke(inflater, parent, false) ?: throw RuntimeException("")
+        return rep?.invoke(inflater, parent, false)
+                ?: throw RuntimeException("could not find item, even though we expected it, for viewtype: $viewType")
     }
 
     override fun getItemViewType(@IntRange(from = 0) position: Int): Int {
@@ -409,6 +411,22 @@ abstract class DataBindingRecyclerAdapter<T>(context: Context) :
     }
 
 }
+
+/**
+ *
+ * @receiver BaseDataBindingRecyclerAdapter
+ * @param sections IntArray
+ */
+fun BaseDataBindingRecyclerAdapter.hideSections(vararg sections: Int) =
+        sections.forEach(this::hideSection)
+
+/**
+ *
+ * @receiver BaseDataBindingRecyclerAdapter
+ * @param sections IntArray
+ */
+fun BaseDataBindingRecyclerAdapter.showSections(vararg sections: Int) =
+        sections.forEach(this::showSection)
 
 /**  */
 open class BaseDataBindingRecyclerAdapter(context: Context) :

@@ -153,10 +153,10 @@ inline fun <U> Any?.map(ifNotNull: U, ifNull: U): U {
  * @param ifNull the value if 'this' is null
  * @return the value depending on 'this' value
  */
-inline fun <U> Any?.mapLazy(crossinline ifNotNull: EmptyFunctionResult<U>,
-                            crossinline ifNull: EmptyFunctionResult<U>): U {
-    return if (this.isNotNull) {
-        ifNotNull()
+inline fun <U, T : Any> T?.mapLazy(crossinline ifNotNull: Function1<T, U>,
+                                   crossinline ifNull: EmptyFunctionResult<U>): U {
+    return if (this != null) {
+        ifNotNull(this)
     } else {
         ifNull()
     }
@@ -175,6 +175,14 @@ inline fun Int.forEach(crossinline action: FunctionUnit<Int>) {
  * Creates a safer cast than regular due to the reified type T.
  */
 inline fun <reified T> Any.cast(): T? = this as? T
+
+
+/**
+ * gets the class type of a given type.
+ * this can replace "mytype::class" with a simple "type()", which also makes it possible to
+ * refactor and a lot without ever depending on the type.
+ */
+inline fun <reified T> type(): Class<T> = T::class.java
 
 /**
  *

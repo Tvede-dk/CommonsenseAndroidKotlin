@@ -4,6 +4,7 @@ import android.support.annotation.IntRange
 import android.util.SparseArray
 import android.util.SparseIntArray
 import com.commonsense.android.kotlin.base.*
+import com.commonsense.android.kotlin.base.algorithms.Comparing
 
 typealias SparseArrayEntryMapper<T, O> = (key: Int, item: T) -> O
 
@@ -89,4 +90,21 @@ inline fun <E> SparseArray<E>.forEach(crossinline action: FunctionUnit<E>) {
     for (i in 0 until size()) {
         action(valueAt(i))
     }
+}
+
+inline fun <E> SparseArray<E>.binarySearch(crossinline comparere: Function2<E, Int, Comparing>): SparseArrayEntry<E>? {
+    var start = 0
+    var end = size()
+    while (start < end) {
+        val mid = start + (end - start) / 2
+        val key = keyAt(mid)
+        val item = valueAt(key)
+        val compResult = comparere(item, mid)
+        when (compResult) {
+            Comparing.LargerThan -> start = mid + 1
+            Comparing.LessThan -> end = mid
+            Comparing.Equal -> return SparseArrayEntry<E>(key, item)
+        }
+    }
+    return null
 }

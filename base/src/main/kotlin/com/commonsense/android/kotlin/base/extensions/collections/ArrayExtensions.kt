@@ -1,5 +1,7 @@
 package com.commonsense.android.kotlin.base.extensions.collections
 
+import com.commonsense.android.kotlin.base.algorithms.Comparing
+
 /**
  * Created by Kasper Tvede on 11-07-2017.
  */
@@ -19,3 +21,28 @@ inline fun IntProgression.toIntArray(): IntArray = this.toList().toIntArray()
 inline val IntProgression.length
     get() = ((last + step) - first) / step //+ step due to "inclusive".
 
+
+@Suppress("NOTHING_TO_INLINE")
+inline fun IntArray.previousValueOr(index: Int, orElse: Int): Int {
+    if (index <= 0 || index >= size) {
+        return orElse
+    }
+    return get(index - 1)
+}
+
+
+inline fun IntArray.binarySearch(crossinline comparere: Function2<Int, Int, Comparing>): Int? {
+    var start = 0
+    var end = size
+    while (start < end) {
+        val mid = start + (end - start) / 2
+        val item = get(mid)
+        val compResult = comparere(item, mid)
+        when (compResult) {
+            Comparing.LargerThan -> start = mid + 1
+            Comparing.LessThan -> end = mid
+            Comparing.Equal -> return mid
+        }
+    }
+    return null
+}

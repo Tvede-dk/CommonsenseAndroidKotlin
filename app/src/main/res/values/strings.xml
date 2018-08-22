@@ -3,4 +3,5 @@
     <string name="mainactivity_category_adapter"><![CDATA[Recyclerview & listview]]></string>
     <string name="mainactivity_category_base_activity">Base activity and alike</string>
     <string name="mainactivity_category_base_fragment"><![CDATA[Base fragment & a like]]></string>
+    <string name="mainactivity_category_widgets">Widgets</string>
 </resources>

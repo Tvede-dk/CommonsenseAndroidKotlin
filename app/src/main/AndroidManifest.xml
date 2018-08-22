@@ -37,6 +37,8 @@
         <activity android:name=".views.tools.ToolsCrashListenerActivity" />
         <activity android:name=".views.tools.ToolsPerformanceActivity" />
         <activity android:name=".views.tools.ToolsAnrActivity" />
+        <activity android:name=".views.widgets.WidgetsOverviewActivity" />
+        <activity android:name=".views.widgets.WidgetsRecyclerExampleActivity" />
 
     </application>
 

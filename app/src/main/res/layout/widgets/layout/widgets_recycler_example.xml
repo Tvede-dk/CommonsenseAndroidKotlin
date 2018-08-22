@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout>
+
+    <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@color/white"
+        android:orientation="vertical">
+
+
+        <Button
+            android:id="@+id/widgets_recycler_example_add_1000"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="add 1000 elements" />
+
+        <Button
+            android:id="@+id/widgets_recycler_example_add_10000"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="add 10000 elements" />
+
+        <Button
+            android:id="@+id/widgets_recycler_example_remove_1000"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="remove 1000 elements" />
+
+        <Button
+            android:id="@+id/widgets_recycler_example_remove_10000"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="remove 10000 elements" />
+
+        <Button
+            android:id="@+id/widgets_recycler_example_clear"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="clear" />
+
+        <com.commonsense.android.kotlin.views.widgets.SwipeRefreshRecyclerView
+            android:id="@+id/widgets_recycler_example_recycler"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent" />
+
+    </LinearLayout>
+</layout>

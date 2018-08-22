@@ -11,6 +11,9 @@
 - (BaseActivity) addOnbackPressedListener and the remove are now propperly renamed to
     addOnBackPressedListener / removeOnBackPressedListener
 
+- mapLazy now gives the argument that were optional in the "nonNull" case.
+
+
 
 
 ### Changes
@@ -18,7 +21,7 @@
 - backported more things, and minor moving around.
 - more typealiases for functions.
 - map on boolean for suspend functions
-- gradle 4.9
+- gradle 4.10 (rc so far wip)
 - tools backport (with newer naming schema).
     - please note this might still be changed, and only using the feature enabling functions are recommended
     - added lifecycle tracking
@@ -46,6 +49,15 @@
 - Demo app updated
     - uses the preloading
     - "working" condition; it still needs a lot of work.
+    - added widgets section.
+    
+
+- Pretty printing
+    - core things such as base activity and base fragment and ect have a "prettyprint" /which is also the toString method.
+    it allows to print the internal state of the object in a pretty way.
+    So now introspection (via debugger or via logger) is now super simple for these more complex objects.
+    - This will be added to more objects as time goes on
+
 
 
 - fixed an issue with the SwipeRefreshRecyclerView accessing binding at constructor time.
@@ -54,6 +66,32 @@
 
 - Selection handling
     - The "asToggleable" extension now works on all compound buttons.
+    
+- BaseDataBinding recycler adapter
+    - drastically improved the lookup performance.
+     in case of a lot sections this went from multiple ms to below 1000'th of a ms
+     in the minor (with few sections) it went till around the same if not still lower than the original algorithm
+     (since it gets called quite a lot this improve properly more than lab tests shows)
+     
+- Logging is now available from / for all classes via "logClassX" (where X is either debug,warning, error or production)
+    - this should make it much simpler and to avoid writing stuff like "logWarning(this::class,"message")"
+    
+
+- added binary search as an algorithm
+    -  hereto added a "comparison" enum which acts as the old "less than, greater than , equal to".
+    - added binary search for regular lists, and for sparse arrays as well as int arrays.
+    
+- added a very generic but simple "type()" function that will give a desired class type back
+    - so for example in the case of BaseRenders where the constructor takes a class type, you had to write
+       ````kotlin
+          MySuperLongViewBinding::class
+        ````
+        but now that is
+        ````kotlin
+          type()
+        ````
+        
+                 
 
 ## 0.0.14
 micro update

@@ -18,6 +18,7 @@ import com.commonsense.android.kotlin.views.extensions.setup
 import csense.android.exampleApp.R
 import csense.android.exampleApp.databinding.CategoryRenderViewBinding
 import csense.android.exampleApp.databinding.MainActivityBinding
+import csense.android.exampleApp.views.widgets.WidgetsOverviewActivity
 
 
 class MainActivity : BaseDatabindingActivity<MainActivityBinding>() {
@@ -48,6 +49,10 @@ class MainActivity : BaseDatabindingActivity<MainActivityBinding>() {
 
         adapter.add(CategoryRecyclerRender(R.string.mainactivity_category_base_fragment) {
             startActivity(ToolsOverviewActivity::class)
+        }, 0)
+
+        adapter.add(CategoryRecyclerRender(R.string.mainactivity_category_widgets) {
+            startActivity(WidgetsOverviewActivity::class)
         }, 0)
 
 

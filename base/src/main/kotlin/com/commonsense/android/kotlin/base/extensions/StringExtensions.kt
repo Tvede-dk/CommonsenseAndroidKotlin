@@ -114,13 +114,3 @@ inline fun String.foreach2(action: Function2Unit<Char, Char>) =
 inline fun String.foreach2Indexed(action: Function2IndexedUnit<Char, Char>) =
         GenericExtensions.forEach2Indexed(length, this::get, action)
 
-
-@Suppress("NOTHING_TO_INLINE")
-inline fun <T> String.mapEach2(mapper: (first: Char, second: Char) -> T): List<T> {
-
-}
-
-@Suppress("NOTHING_TO_INLINE")
-inline fun <T> String.mapEach2Indexed(mapper: (index: Int, first: Char, second: Char) -> T) {
-
-}

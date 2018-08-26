@@ -1,6 +1,5 @@
 package com.commonsense.android.kotlin.base.extensions
 
-import android.support.annotation.IntRange
 import com.commonsense.android.kotlin.base.algorithms.Comparing
 
 /**
@@ -19,17 +18,24 @@ inline val Int.negative: Int
  *  if this int is not 0 => returns true. false otherwise
  */
 inline val Int.isNotZero: Boolean
-    get() {
-        return !isZero
-    }
+    get() = !isZero
 
 /**
  *  if this int is 0 => returns true. false otherwise
  */
 inline val Int.isZero: Boolean
-    get() {
-        return this == 0
-    }
+    get() = this == 0
+
+/**
+ *
+ */
+inline val Int.isEven: Boolean
+    get() = this % 2 == 0
+/**
+ *
+ */
+inline val Int.isOdd: Boolean
+    get() = this % 2 == 1
 
 
 /**
@@ -51,3 +57,4 @@ inline fun Int.compareToRange(from: Int, to: Int): Comparing {
         else -> Comparing.LessThan
     }
 }
+

@@ -98,11 +98,11 @@ class GeneralExtensionsKtTest {
     @Test
     fun mapLazy() {
         val optString: String? = ""
-        optString.mapLazy({ 42 }, { 0 }).assert(42, "value is not null")
+        optString.mapNullLazy({ 42 }, { 0 }).assert(42, "value is not null")
         val testme: String = ""
-        testme.mapLazy({ 100 }, { 0 }).assert(100, "should not treat correctly typed variables wrong")
+        testme.mapNullLazy({ 100 }, { 0 }).assert(100, "should not treat correctly typed variables wrong")
         val nullOpt: String? = null
-        nullOpt.mapLazy({ -3 }, { 12 }).assert(12, "should map null into ifNull branch")
+        nullOpt.mapNullLazy({ -3 }, { 12 }).assert(12, "should map null into ifNull branch")
     }
 
     @Test

@@ -153,8 +153,8 @@ inline fun <U> Any?.map(ifNotNull: U, ifNull: U): U {
  * @param ifNull the value if 'this' is null
  * @return the value depending on 'this' value
  */
-inline fun <U, T : Any> T?.mapLazy(crossinline ifNotNull: Function1<T, U>,
-                                   crossinline ifNull: EmptyFunctionResult<U>): U {
+inline fun <U, T : Any> T?.mapNullLazy(crossinline ifNotNull: Function1<T, U>,
+                                       crossinline ifNull: EmptyFunctionResult<U>): U {
     return if (this != null) {
         ifNotNull(this)
     } else {

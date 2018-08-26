@@ -1,6 +1,8 @@
 package com.commonsense.android.kotlin.base.extensions
 
 import android.net.Uri
+import com.commonsense.android.kotlin.base.extensions.collections.mapLazy
+import com.commonsense.android.kotlin.base.extensions.generic.*
 
 /**
  * Created by Kasper Tvede on 23-07-2017.
@@ -58,3 +60,67 @@ inline fun Uri.withoutQueryParameters(): Uri {
 
 @Suppress("NOTHING_TO_INLINE")
 inline fun String.wrapInQuotes(): String = "\"${this}\""
+
+
+/**
+ * The opposite of ByteArray.toHexString , so takes a hex string (eg "0x20") and converts it to a byte array of that
+ * @receiver String
+ * @param haveHexPrefix Boolean if we have a prefix (0x..)
+ * @return ByteArray
+ */
+@Suppress("NOTHING_TO_INLINE")
+inline fun String.fromHexStringToByteArray(): ShortArray? {
+    //strip prefix iff asked to
+    if (length.isOdd || isEmpty()) {
+        return null
+    }
+    //we have the hex prefix iff it starts with "0x". strip that iff necessary
+    val string = skipStartsWith("0x", true)
+    val result = ShortArray(string.length / 2)
+    string.foreach2Indexed { index: Int, first: Char, second: Char ->
+        val shortValue = hexCharsToByte(first, second) ?: return@fromHexStringToByteArray null
+        result[index / 2] = shortValue
+    }
+    return result
+}
+
+
+/**
+ * Skips the given part if it starts with it.
+ * @receiver String
+ * @param prefix String the prefix we are looking for (and the part that will be skipped iff there.
+ * @param ignoreCase Boolean how we should compare prefix with this string
+ * @return String the resulting string, either the original or substring by the prefix length
+ */
+@Suppress("NOTHING_TO_INLINE")
+inline fun String.skipStartsWith(prefix: String, ignoreCase: Boolean = false): String {
+    val startsWith = startsWith(prefix, ignoreCase)
+    return startsWith.mapLazy(ifTrue = { substring(prefix.length) }, ifFalse = { this })
+}
+
+/**
+ *
+ * @receiver String
+ * @param action (first: Char, second: Char) -> Unit
+ */
+inline fun String.foreach2(action: Function2Unit<Char, Char>) =
+        GenericExtensions.forEach2(length, this::get, action)
+
+/**
+ *
+ * @receiver String
+ * @param action (first: Char, second: Char) -> Unit
+ */
+inline fun String.foreach2Indexed(action: Function2IndexedUnit<Char, Char>) =
+        GenericExtensions.forEach2Indexed(length, this::get, action)
+
+
+@Suppress("NOTHING_TO_INLINE")
+inline fun <T> String.mapEach2(mapper: (first: Char, second: Char) -> T): List<T> {
+
+}
+
+@Suppress("NOTHING_TO_INLINE")
+inline fun <T> String.mapEach2Indexed(mapper: (index: Int, first: Char, second: Char) -> T) {
+
+}

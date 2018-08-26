@@ -12,6 +12,11 @@
     addOnBackPressedListener / removeOnBackPressedListener
 
 - mapLazy now gives the argument that were optional in the "nonNull" case.
+- mapLazy for null / not null and "map" for null/ not null is now named
+    -mapNull
+    -mapNullLazy
+    so the "boolean" map is never confused. 
+    
 
 
 

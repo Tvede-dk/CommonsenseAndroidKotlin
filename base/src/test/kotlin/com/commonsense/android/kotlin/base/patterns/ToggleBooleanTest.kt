@@ -2,8 +2,7 @@ package com.commonsense.android.kotlin.base.patterns
 
 import com.commonsense.android.kotlin.test.BaseRoboElectricTest
 import com.commonsense.android.kotlin.test.assert
-import org.junit.Assert
-import org.junit.Test
+import org.junit.*
 
 
 /**
@@ -36,6 +35,16 @@ class ToggleBooleanTest : BaseRoboElectricTest() {
             Assert.fail("should not stay true.")
         }
 
+    }
+
+    @Ignore
+    @Test
+    fun ifTrue() {
+    }
+
+    @Ignore
+    @Test
+    fun ifFalse() {
     }
 
 }

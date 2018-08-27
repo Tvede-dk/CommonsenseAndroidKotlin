@@ -2,7 +2,7 @@ package com.commonsense.android.kotlin.views.input.selection
 
 import com.commonsense.android.kotlin.test.assert
 import com.commonsense.android.kotlin.test.assertNotNullAndEquals
-import org.junit.Test
+import org.junit.*
 
 /**
  * Created by kasper on 25/08/2017.
@@ -13,7 +13,7 @@ class SingleSelectionHandlerTest {
     @Test
     fun testSelectionStrategy() {
 
-        val selectionHandler = SingleSelectionHandler<String>()
+        val selectionHandler = SingleSelectionHandler<String> {}
         val toggle1 = MockedToggleableViewNoCallback("1234")
         selectionHandler.addView(toggle1)
         toggle1.checked.assert(false, "should not be marked by default")
@@ -50,7 +50,7 @@ class SingleSelectionHandlerTest {
 
     @Test
     fun testCallbackFeature() {
-        val selectionHandler = SingleSelectionHandler<String>()
+        val selectionHandler = SingleSelectionHandler<String> {}
         val toggle1 = MockedToggleableViewWithCallback("1234")
         selectionHandler.addView(toggle1)
         toggle1.checked.assert(false, "should not be marked by default")
@@ -109,16 +109,13 @@ class SingleSelectionHandlerTest {
 
     @Test
     fun testCallback() {
-        val selectionHandler = SingleSelectionHandler<String>()
+        var ourValue: String? = null
+        val selectionHandler = SingleSelectionHandler<String> {
+            ourValue = it
+        }
         val toggle1 = MockedToggleableViewWithCallback("1234")
         selectionHandler.addView(toggle1)
         toggle1.checked.assert(false)
-
-        var ourValue: String? = null
-
-        selectionHandler.callback = {
-            ourValue = it
-        }
 
         toggle1.checked = true
         "1234".assert(ourValue ?: "")
@@ -135,15 +132,12 @@ class SingleSelectionHandlerTest {
 
     @Test
     fun testDeselection() {
-        val selectionHandler = SingleSelectionHandler<String>()
-        val toggle1 = MockedToggleableViewWithCallback("1234")
-        selectionHandler += toggle1
-
         var ourValue: String? = null
-
-        selectionHandler.callback = {
+        val selectionHandler = SingleSelectionHandler<String> {
             ourValue = it
         }
+        val toggle1 = MockedToggleableViewWithCallback("1234")
+        selectionHandler += toggle1
         toggle1.checked = true
         "1234".assertNotNullAndEquals(ourValue)
         toggle1.checked = false
@@ -171,9 +165,48 @@ class SingleSelectionHandlerTest {
         toggle2.checked.assert(false)
     }
 
+    @Ignore
+    @Test
+    fun getSelection() {
+    }
+
+    @Ignore
+    @Test
+    fun setSelection() {
+    }
+
+    @Ignore
+    @Test
+    fun allowDeselection() {
+    }
+
+    @Ignore
+    @Test
+    fun setSelectedValue() {
+    }
+
+    @Ignore
+    @Test
+    fun handleSelectionChanged() {
+    }
+
+    @Ignore
+    @Test
+    fun isSelected() {
+    }
+
+    @Ignore
+    @Test
+    fun removeSelected() {
+    }
+
 }
 
 private class MockedToggleableViewNoCallback(myStr: String) : ToggleableView<String> {
+    override fun clearOnSelectionChanged() {
+
+    }
+
     override var checked: Boolean = false
     override val value = myStr
 
@@ -184,6 +217,10 @@ private class MockedToggleableViewNoCallback(myStr: String) : ToggleableView<Str
 }
 
 private class MockedToggleableViewWithCallback(myStr: String) : ToggleableView<String> {
+    override fun clearOnSelectionChanged() {
+
+    }
+
     private var _checked: Boolean = false
     override var checked: Boolean
         get() = _checked

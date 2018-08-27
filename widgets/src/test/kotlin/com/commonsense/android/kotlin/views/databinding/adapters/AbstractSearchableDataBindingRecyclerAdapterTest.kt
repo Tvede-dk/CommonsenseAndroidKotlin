@@ -432,4 +432,113 @@ class AbstractSearchableDataBindingRecyclerAdapterTest : BaseRoboElectricTest() 
     private fun createAdapter() = BaseSearchableDataBindingRecyclerAdapter<String>(context)
 
     private fun renderWith(value: String): RenderSearchableModelItem<String, ViewDataBinding, String> = TestRender(value).toSearchable(String::equals)
+    @Ignore
+    @Test
+    fun add() {
+    }
+
+    @Ignore
+    @Test
+    fun addAll() {
+    }
+
+    @Ignore
+    @Test
+    fun addAll1() {
+    }
+
+    @Ignore
+    @Test
+    fun remove() {
+    }
+
+    @Ignore
+    @Test
+    fun removeAt() {
+    }
+
+    @Ignore
+    @Test
+    fun removeIn() {
+    }
+
+    @Ignore
+    @Test
+    fun removeAll() {
+    }
+
+    @Ignore
+    @Test
+    fun insert() {
+    }
+
+    @Ignore
+    @Test
+    fun insertAll() {
+    }
+
+    @Ignore
+    @Test
+    fun insertAll1() {
+    }
+
+    @Ignore
+    @Test
+    fun replace() {
+    }
+
+    @Ignore
+    @Test
+    fun clear() {
+    }
+
+    @Ignore
+    @Test
+    fun filterOrClearBy() {
+    }
+
+    @Ignore
+    @Test
+    fun filterBy() {
+    }
+
+    @Ignore
+    @Test
+    fun removeFilter() {
+    }
+
+    @Ignore
+    @Test
+    fun getFilter() {
+    }
+
+    @Ignore
+    @Test
+    fun onAttachedToRecyclerView() {
+    }
+
+    @Ignore
+    @Test
+    fun onDetachedFromRecyclerView() {
+    }
+
+    @Ignore
+    @Test
+    fun setSection() {
+    }
+
+    @Ignore
+    @Test
+    fun removeSection() {
+    }
+
+    @Ignore
+    @Test
+    fun hideSection() {
+    }
+
+    @Ignore
+    @Test
+    fun showSection() {
+    }
 }

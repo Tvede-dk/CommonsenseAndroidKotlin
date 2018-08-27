@@ -5,6 +5,7 @@ import com.commonsense.android.kotlin.base.AsyncEmptyFunction
 import com.commonsense.android.kotlin.base.extensions.awaitAll
 import com.commonsense.android.kotlin.test.assert
 import kotlinx.coroutines.experimental.*
+import org.junit.*
 import org.junit.jupiter.api.Test
 import java.util.concurrent.Semaphore
 
@@ -196,4 +197,68 @@ class JobContainerTest {
         scopedCounter.assert(0, "should have canceled the previous running group item.")
     }
 
+    @Ignore
+    @Test
+    fun removeDoneJobs() {
+    }
+
+    @Ignore
+    @Test
+    fun cleanJobs() {
+    }
+
+    @Ignore
+    @Test
+    fun addJob() {
+    }
+
+    @Ignore
+    @Test
+    fun performAction1() {
+    }
+
+    @Ignore
+    @Test
+    fun getRemainingJobs() {
+    }
+
+    @Ignore
+    @Test
+    fun getRemainingGroupedJobs() {
+    }
+
+    @Ignore
+    @Test
+    fun addJob1() {
+    }
+
+    @Ignore
+    @Test
+    fun performAction2() {
+    }
+
+    @Ignore
+    @Test
+    fun performAction3() {
+    }
+
+    @Ignore
+    @Test
+    fun executeQueueBackground() {
+    }
+
+    @Ignore
+    @Test
+    fun executeQueueAwaited() {
+    }
+
+    @Ignore
+    @Test
+    fun addToQueue() {
+    }
+
+    @Ignore
+    @Test
+    fun toPrettyString() {
+    }
 }

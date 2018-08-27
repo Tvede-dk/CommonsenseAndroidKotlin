@@ -4,6 +4,7 @@ import com.commonsense.android.kotlin.test.assert
 import com.commonsense.android.kotlin.test.assertSize
 import kotlinx.coroutines.experimental.*
 import kotlinx.coroutines.experimental.channels.Channel
+import org.junit.*
 import org.junit.jupiter.api.Test
 import java.util.concurrent.Semaphore
 
@@ -57,6 +58,7 @@ class CoroutinesExtensionsKtTest {
         counter.assert(13, "should have done the onCompleted")
     }
 
+    @Ignore
     @Test
     fun launchBlock() = runBlocking {
         var counter = 0
@@ -161,6 +163,11 @@ class CoroutinesExtensionsKtTest {
         channel.close()
         semaphore.acquire(4)
         combinedResult.assert(4 + 3 + 2 + 1)
+    }
+
+    @Ignore
+    @Test
+    fun forEach() {
     }
 }
 

@@ -7,7 +7,7 @@ import com.commonsense.android.kotlin.test.assertThrows
 import kotlinx.coroutines.experimental.CommonPool
 import kotlinx.coroutines.experimental.async
 import kotlinx.coroutines.experimental.runBlocking
-import org.junit.Test
+import org.junit.*
 
 /**
  * Created by Kasper Tvede on 23-07-2017.
@@ -145,6 +145,41 @@ class ReferenceCountingMapTest {
         decrementFunction(0)
         map.hasItem(index).assert(false)
 
+    }
+
+    @Ignore
+    @Test
+    fun addItem() {
+    }
+
+    @Ignore
+    @Test
+    fun addOrIncrement() {
+    }
+
+    @Ignore
+    @Test
+    fun incrementCounter() {
+    }
+
+    @Ignore
+    @Test
+    fun decrementCounter() {
+    }
+
+    @Ignore
+    @Test
+    fun hasItem() {
+    }
+
+    @Ignore
+    @Test
+    fun getItemOr() {
+    }
+
+    @Ignore
+    @Test
+    fun getCount() {
     }
 
 

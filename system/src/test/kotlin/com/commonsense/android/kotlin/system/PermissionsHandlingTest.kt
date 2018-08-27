@@ -6,8 +6,7 @@ import android.os.Bundle
 import com.commonsense.android.kotlin.system.base.BaseActivity
 import com.commonsense.android.kotlin.test.BaseRoboElectricTest
 import com.commonsense.android.kotlin.test.testCallbackWithSemaphore
-import org.junit.Assert
-import org.junit.Test
+import org.junit.*
 import org.robolectric.annotation.Config
 import java.util.concurrent.Semaphore
 
@@ -15,7 +14,7 @@ import java.util.concurrent.Semaphore
  * Created by Kasper Tvede on 27-05-2017.
  */
 
-@Config(sdk  = [23])
+@Config(sdk = [23])
 class PermissionsHandlingTest : BaseRoboElectricTest() {
 
 
@@ -105,6 +104,31 @@ class PermissionsHandlingTest : BaseRoboElectricTest() {
             PackageManager.PERMISSION_DENIED
         }
         handler.onRequestPermissionResult(handler.handlerRequestCode, arrayOf(permission), intArrayOf(managerValue))
+    }
+
+    @Ignore
+    @Test
+    fun performActionForPermission() {
+    }
+
+    @Ignore
+    @Test
+    fun onRequestPermissionResult() {
+    }
+
+    @Ignore
+    @Test
+    fun requestPermissions() {
+    }
+
+    @Ignore
+    @Test
+    fun toPrettyString() {
+    }
+
+    @Ignore
+    @Test
+    fun getHandlerRequestCode() {
     }
 
 

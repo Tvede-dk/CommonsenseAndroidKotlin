@@ -1,7 +1,9 @@
 package com.commonsense.android.kotlin.base.compat
 
 import com.commonsense.android.kotlin.test.*
+import org.junit.*
 import org.junit.jupiter.api.*
+import org.junit.jupiter.api.Test
 import java.net.*
 import javax.net.ssl.*
 
@@ -58,11 +60,30 @@ internal class SSLSocketFactoryCompatTest {
                 21).assertTlsV12()
     }
 
+
+    @Ignore
     @Test
-    fun setProtocolToTls12() {
-        val testSocket: TestSSLSocket = TestSSLSocket().setProtocolToTls12()
-        testSocket.enabledProtocols.assertSize(1, "should only have tls 1.2")
-        testSocket.enabledProtocols.first().assert(SSLContextProtocols.TLSv12.algorithmName)
+    fun createSocket1() {
+    }
+
+    @Ignore
+    @Test
+    fun createSocket2() {
+    }
+
+    @Ignore
+    @Test
+    fun createSocket3() {
+    }
+
+    @Ignore
+    @Test
+    fun createSocket4() {
+    }
+
+    @Ignore
+    @Test
+    fun createSocket5() {
     }
 
 

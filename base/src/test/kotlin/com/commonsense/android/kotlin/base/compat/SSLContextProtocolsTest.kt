@@ -1,6 +1,7 @@
 package com.commonsense.android.kotlin.base.compat
 
 import com.commonsense.android.kotlin.test.assertNotNull
+import org.junit.*
 import org.junit.jupiter.api.Test
 
 /**
@@ -30,5 +31,10 @@ internal class SSLContextProtocolsTest {
     fun createSocketFactory() {
         SSLContextProtocols.TLSv12.createSocketFactory().assertNotNull("tls1.2 should exist in jvm")
         SSLContextProtocols.TLSv11.createSocketFactory().assertNotNull("tls1.1 should exist in jvm")
+    }
+
+    @Ignore
+    @Test
+    fun getAlgorithmName() {
     }
 }

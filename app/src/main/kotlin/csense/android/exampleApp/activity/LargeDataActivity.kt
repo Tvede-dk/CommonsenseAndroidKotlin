@@ -2,7 +2,7 @@ package csense.android.exampleApp.activity
 
 import android.content.*
 import android.widget.*
-import com.commonsense.android.kotlin.system.base.helpers.*
+import com.commonsense.android.kotlin.system.base.*
 import com.commonsense.android.kotlin.system.extensions.*
 import com.commonsense.android.kotlin.views.extensions.*
 import csense.android.exampleApp.*

@@ -2,7 +2,7 @@ package com.commonsense.android.kotlin.base.extensions
 
 import android.net.Uri
 import com.commonsense.android.kotlin.test.*
-import org.junit.Test
+import org.junit.*
 import org.robolectric.annotation.Config
 
 /**
@@ -164,6 +164,16 @@ class StringExtensionsKtTest : BaseRoboElectricTest() {
         }
         counterAbAb.assert(4)
 
+    }
+
+    @Ignore
+    @Test
+    fun fileExtension1() {
+    }
+
+    @Ignore
+    @Test
+    fun skipStartsWith() {
     }
 
 }

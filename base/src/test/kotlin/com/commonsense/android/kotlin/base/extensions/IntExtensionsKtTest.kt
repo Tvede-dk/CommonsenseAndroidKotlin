@@ -1,6 +1,7 @@
 package com.commonsense.android.kotlin.base.extensions
 
 import com.commonsense.android.kotlin.test.assert
+import org.junit.*
 import org.junit.jupiter.api.Test
 
 
@@ -11,8 +12,16 @@ import org.junit.jupiter.api.Test
  */
 class IntExtensionsKtTest {
 
+
     @Test
-    fun testIsNotZero() {
+    fun getNegative() {
+        0.negative.assert(0)
+        (-1).negative.assert(-1)
+        1.negative.assert(-1)
+    }
+
+    @Test
+    fun isNotZero() {
         0.isNotZero.assert(false, "zero is \"not zero\"")
         1.isNotZero.assert(true)
         (-1).isNotZero.assert(true)
@@ -21,7 +30,7 @@ class IntExtensionsKtTest {
     }
 
     @Test
-    fun testIsZero() {
+    fun isZero() {
         0.isZero.assert(true, "zero is 0")
         1.isZero.assert(false)
         (-1).isZero.assert(false)
@@ -29,11 +38,19 @@ class IntExtensionsKtTest {
         Int.MIN_VALUE.isZero.assert(false)
     }
 
+    @Ignore
     @Test
-    fun testNegative() {
-        0.negative.assert(0)
-        (-1).negative.assert(-1)
-        1.negative.assert(-1)
+    fun isEven() {
+    }
+
+    @Ignore
+    @Test
+    fun isOdd() {
+    }
+
+    @Ignore
+    @Test
+    fun compareToRange() {
     }
 
 }

@@ -3,7 +3,7 @@ package com.commonsense.android.kotlin.base.extensions.collections
 import android.util.SparseArray
 import android.util.SparseIntArray
 import com.commonsense.android.kotlin.test.*
-import org.junit.Test
+import org.junit.*
 
 
 /**
@@ -107,6 +107,30 @@ class SpareArrayExtensionsKtTest : BaseRoboElectricTest() {
         arr.findFirst { key, item -> key == item }.assertNull("no key is the same as item")
 
 
+    }
+    @Ignore
+    @Test
+    fun set() {
+    }
+
+    @Ignore
+    @Test
+    fun set1() {
+    }
+
+    @Ignore
+    @Test
+    fun map() {
+    }
+
+    @Ignore
+    @Test
+    fun forEach() {
+    }
+
+    @Ignore
+    @Test
+    fun binarySearch() {
     }
 
 }

@@ -2,6 +2,7 @@ package com.commonsense.android.kotlin.base.patterns
 
 import com.commonsense.android.kotlin.test.*
 import kotlinx.coroutines.experimental.runBlocking
+import org.junit.*
 import org.junit.jupiter.api.Test
 
 /**
@@ -76,4 +77,26 @@ class ExpectedTest {
 
 
     }
+
+    @Ignore
+    @Test
+    fun isError() {
+    }
+
+    @Ignore
+    @Test
+    fun getValue() {
+    }
+
+    @Ignore
+    @Test
+    fun getError() {
+    }
+
+    @Ignore
+    @Test
+    fun isValid() {
+    }
+
+
 }

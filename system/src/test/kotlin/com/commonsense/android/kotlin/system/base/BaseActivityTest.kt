@@ -164,4 +164,159 @@ class BaseActivityTest : BaseRoboElectricTest() {
             
 
      }*/
+    @Ignore
+    @Test
+    fun `getPermissionHandler$system_debug`() {
+    }
+
+    @Ignore
+    @Test
+    fun getReceiverHandler() {
+    }
+
+    @Ignore
+    @Test
+    fun getKeyboardHandler() {
+    }
+
+    @Ignore
+    @Test
+    fun addOnBackPressedListener() {
+    }
+
+    @Ignore
+    @Test
+    fun removeOnBackPressedListener() {
+    }
+
+    @Ignore
+    @Test
+    fun launchInUi() {
+    }
+
+    @Ignore
+    @Test
+    fun launchInBackground() {
+    }
+
+    @Ignore
+    @Test
+    fun onCreate() {
+    }
+
+    @Ignore
+    @Test
+    fun onRequestPermissionsResult() {
+    }
+
+    @Ignore
+    @Test
+    fun onDestroy() {
+    }
+
+    @Ignore
+    @Test
+    fun onOptionsItemSelected() {
+    }
+
+    @Ignore
+    @Test
+    fun onActivityResult() {
+    }
+
+    @Ignore
+    @Test
+    fun onResume() {
+    }
+
+    @Ignore
+
+    @Test
+    fun onPostResume() {
+    }
+
+    @Ignore
+    @Test
+    fun onPause() {
+    }
+
+    @Ignore
+    @Test
+    fun onBackPressed() {
+    }
+
+    @Ignore
+    @Test
+    fun addActivityResultListenerOnlyOk() {
+    }
+
+    @Ignore
+    @Test
+    fun addActivityResultListener() {
+    }
+
+    @Ignore
+    @Test
+    fun addActivityResultListenerOnlyOkAsync() {
+    }
+
+    @Ignore
+    @Test
+    fun addActivityResultListenerAsync() {
+    }
+
+    @Ignore
+    @Test
+    fun removeActivityResultListener() {
+    }
+
+    @Ignore
+    @Test
+    fun isPaused() {
+    }
+
+    @Ignore
+    @Test
+    fun isVisible() {
+    }
+
+    @Ignore
+    @Test
+    fun getMIsPaused() {
+    }
+
+    @Ignore
+    @Test
+    fun setMIsPaused() {
+    }
+
+    @Ignore
+    @Test
+    fun registerReceiver() {
+    }
+
+    @Ignore
+    @Test
+    fun registerReceiver1() {
+    }
+
+    @Ignore
+    @Test
+    fun registerReceiver2() {
+    }
+
+    @Ignore
+    @Test
+    fun registerReceiver3() {
+    }
+
+    @Ignore
+    @Test
+    fun unregisterReceiver() {
+    }
+
+    @Ignore
+    @Test
+    fun toPrettyString() {
+    }
 }

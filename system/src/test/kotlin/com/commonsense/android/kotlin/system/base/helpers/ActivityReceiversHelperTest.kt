@@ -60,6 +60,7 @@ class ActivityReceiversHelperTest {
 
     }
 
+    @Ignore
     @Test
     fun testDestroyAfterAddRemove() {
 
@@ -77,6 +78,31 @@ class ActivityReceiversHelperTest {
         helper.unregisterReceiver(test1)
         helper.isEnabled = true
 
+    }
+
+    @Ignore
+    @Test
+    fun isEnabled() {
+    }
+
+    @Ignore
+    @Test
+    fun setEnabled() {
+    }
+
+    @Ignore
+    @Test
+    fun unregisterReceiver() {
+    }
+
+    @Ignore
+    @Test
+    fun listReceivers() {
+    }
+
+    @Ignore
+    @Test
+    fun toPrettyString() {
     }
 
 }

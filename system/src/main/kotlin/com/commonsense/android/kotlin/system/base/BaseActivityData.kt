@@ -1,10 +1,10 @@
-package com.commonsense.android.kotlin.system.base.helpers
+package com.commonsense.android.kotlin.system.base
 
 import android.app.*
 import android.content.*
 import android.os.*
 import com.commonsense.android.kotlin.base.extensions.collections.*
-import com.commonsense.android.kotlin.system.base.*
+import com.commonsense.android.kotlin.system.base.helpers.*
 import com.commonsense.android.kotlin.system.dataFlow.*
 import com.commonsense.android.kotlin.system.logging.*
 import kotlin.reflect.*
@@ -31,7 +31,7 @@ abstract class BaseActivityData<out InputType> : BaseActivity() {
             val safeIntent = intent ?: throw RuntimeException("intent is null")
             val intentIndex = safeIntent.getStringExtra(dataIntentIndex)
                     ?: throw RuntimeException("Intent content not presented; extra is: ${safeIntent.extras}")
-            val item = BaseActivityData.dataReferenceMap.getItemOr(intentIndex)
+            val item = dataReferenceMap.getItemOr(intentIndex)
                     ?: throw RuntimeException("Data is not in map, so this activity is " +
                             "\"${this.javaClass.simpleName}\" referring to the data after closing.")
             return item as InputType
@@ -74,7 +74,7 @@ abstract class BaseActivityData<out InputType> : BaseActivity() {
      */
     private fun haveRequiredIndex(): Boolean {
         val index = dataIndex ?: return false
-        return BaseActivityData.dataReferenceMap.hasItem(index)
+        return dataReferenceMap.hasItem(index)
     }
 
 
@@ -87,19 +87,19 @@ abstract class BaseActivityData<out InputType> : BaseActivity() {
         internal val dataReferenceMap = ReferenceCountingMap()
 
         fun <Input, T : BaseActivityData<Input>> createDataActivityIntent(context: Context,
-                                                                          activity: KClass<T>,
-                                                                          data: Input)
+                                                                                                                     activity: KClass<T>,
+                                                                                                                     data: Input)
                 : IntentAndDataIndex =
                 createDataActivityIntent(context, activity.java, data)
 
         fun <Input, T : BaseActivityData<Input>> createDataActivityIntent(context: Context,
-                                                                          activityToStart: Class<T>,
-                                                                          data: Input)
+                                                                                                                     activityToStart: Class<T>,
+                                                                                                                     data: Input)
                 : IntentAndDataIndex {
-            val index = BaseActivityData.dataReferenceMap.count.toString()
+            val index = dataReferenceMap.count.toString()
             val intent = Intent(context, activityToStart).apply {
-                BaseActivityData.dataReferenceMap.addItem(data, index)
-                putExtra(BaseActivityData.dataIntentIndex, index)
+                dataReferenceMap.addItem(data, index)
+                putExtra(dataIntentIndex, index)
             }
             return IntentAndDataIndex(intent, index)
         }

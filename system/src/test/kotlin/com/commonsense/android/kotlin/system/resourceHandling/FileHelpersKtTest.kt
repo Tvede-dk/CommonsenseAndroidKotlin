@@ -9,7 +9,7 @@ import org.junit.*
  * Purpose:
  */
 class FileHelpersKtTest : BaseRoboElectricTest() {
-
+    @Ignore
     @Test
     fun copyTo() {
 //        val uri = Uri.parse("content://test")
@@ -20,7 +20,7 @@ class FileHelpersKtTest : BaseRoboElectricTest() {
 //        uri.exists(context.contentResolver).assertTrue("written file should exists")
 //        context.contentResolver.openInputStream(uri).assertNotNull()
     }
-
+    @Ignore
     @Test
     fun exists() {
 

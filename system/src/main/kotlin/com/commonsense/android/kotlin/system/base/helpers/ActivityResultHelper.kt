@@ -291,12 +291,12 @@ fun BaseFragment?.startActivityForResult(intent: Intent,
 //</editor-fold>
 
 private fun logBadActivity() {
-    L.error(BaseFragment::class.java.name,
+    L.error(BaseFragment::class,
             "Could not start activity for result, as the activity is properly not a BaseActivity",
-            RuntimeException())
+            Exception())
 }
 
 private fun logBadFragment() {
-    L.error(BaseFragment::class.java.name, "Could not start activity for result, as the caller is null",
-            RuntimeException())
+    L.error(BaseFragment::class, "Could not start activity for result, as the caller is null",
+            Exception())
 }

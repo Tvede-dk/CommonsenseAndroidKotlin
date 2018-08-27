@@ -4,7 +4,7 @@ import android.widget.EditText
 import com.commonsense.android.kotlin.base.extensions.toEditable
 import com.commonsense.android.kotlin.test.BaseRoboElectricTest
 import com.commonsense.android.kotlin.test.assert
-import org.junit.Test
+import org.junit.*
 import java.util.concurrent.Semaphore
 import java.util.concurrent.TimeUnit
 
@@ -80,6 +80,11 @@ class InputValidatorTest : BaseRoboElectricTest() {
         isValid.assert(false, "")
         sem.tryAcquire(2, 10, TimeUnit.SECONDS).assert(true)
 
+    }
+
+    @Ignore
+    @Test
+    fun validate() {
     }
 
 

@@ -1,6 +1,7 @@
 package com.commonsense.android.kotlin.base.extensions
 
 import com.commonsense.android.kotlin.test.assert
+import org.junit.*
 import org.junit.jupiter.api.Test
 
 /**
@@ -19,5 +20,15 @@ class CharExtensionsKtTest {
 
         '0'.toCase(true).assert('0')
         '0'.toCase(false).assert('0')
+    }
+
+    @Ignore
+    @Test
+    fun hexCharsToByte() {
+    }
+
+    @Ignore
+    @Test
+    fun mapFromHexValue() {
     }
 }

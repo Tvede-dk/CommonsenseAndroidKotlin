@@ -3,7 +3,7 @@ package com.commonsense.android.kotlin.system.datastructures
 import com.commonsense.android.kotlin.base.extensions.collections.length
 import com.commonsense.android.kotlin.base.extensions.collections.toIntArray
 import com.commonsense.android.kotlin.test.*
-import org.junit.Test
+import org.junit.*
 import org.robolectric.annotation.Config
 
 /**
@@ -627,16 +627,163 @@ class SectionLookupRepTest : BaseRoboElectricTest() {
 
     }
 
+    @Ignore
     @Test
     fun testGetSectionLocation() {
         val a = SectionLookupRep<TestData, String>()
 
     }
 
+    @Ignore
     @Test
     fun testSetAllSections() {
         val a = SectionLookupRep<TestData, String>()
 
+    }
+
+    @Ignore
+    @Test
+    fun getSize() {
+    }
+
+    @Ignore
+    @Test
+    fun getSectionCount() {
+    }
+
+    @Ignore
+    @Test
+    fun add() {
+    }
+
+    @Ignore
+    @Test
+    fun insert() {
+    }
+
+    @Ignore
+    @Test
+    fun addAll() {
+    }
+
+    @Ignore
+    @Test
+    fun insertAll() {
+    }
+
+    @Ignore
+    @Test
+    fun removeItem() {
+    }
+
+    @Ignore
+    @Test
+    fun removeAt() {
+    }
+
+    @Ignore
+    @Test
+    fun removeItems() {
+    }
+
+    @Ignore
+    @Test
+    fun removeInRange() {
+    }
+
+    @Ignore
+    @Test
+    fun replace() {
+    }
+
+    @Ignore
+    @Test
+    fun getTypeRepresentativeFromTypeValue() {
+    }
+
+    @Ignore
+    @Test
+    fun clear() {
+    }
+
+    @Ignore
+    @Test
+    fun indexToPath() {
+    }
+
+    @Ignore
+    @Test
+    fun indexOf() {
+    }
+
+    @Ignore
+    @Test
+    fun ignoreSection() {
+    }
+
+    @Ignore
+    @Test
+    fun acceptSection() {
+    }
+
+    @Ignore
+    @Test
+    fun toggleSectionVisibility() {
+    }
+
+    @Ignore
+    @Test
+    fun setSectionVisibility() {
+    }
+
+    @Ignore
+    @Test
+    fun setSection() {
+    }
+
+    @Ignore
+    @Test
+    fun getSectionLocation() {
+    }
+
+    @Ignore
+    @Test
+    fun clearSection() {
+    }
+
+    @Ignore
+    @Test
+    fun setAllSections() {
+    }
+
+    @Ignore
+    @Test
+    fun removeSection() {
+    }
+
+    @Ignore
+    @Test
+    fun sectionAt() {
+    }
+
+    @Ignore
+    @Test
+    fun get() {
+    }
+
+    @Ignore
+    @Test
+    fun get1() {
+    }
+
+    @Ignore
+    @Test
+    fun mapNoIgnored() {
+    }
+
+    @Ignore
+    @Test
+    fun mapAll() {
     }
 }
 

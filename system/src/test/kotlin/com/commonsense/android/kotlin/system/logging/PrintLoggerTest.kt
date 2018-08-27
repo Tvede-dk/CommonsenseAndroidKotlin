@@ -1,7 +1,9 @@
 package com.commonsense.android.kotlin.system.logging
 
 import com.commonsense.android.kotlin.test.*
+import org.junit.*
 import org.junit.jupiter.api.*
+import org.junit.jupiter.api.Test
 
 /**
  * Created by Kasper Tvede on 03-06-2018.
@@ -22,5 +24,9 @@ internal class PrintLoggerTest {
         L.errorLoggers.size.assert(prevSizeErrorSize + 1, "should have added error logger")
         L.productionLoggers.size.assert(prevSizeProductionSize, "should NOT have added production logger")
 
+    }
+    @Ignore
+    @Test
+    fun printLog() {
     }
 }

@@ -7,7 +7,7 @@ import org.junit.*
  * Purpose:
  */
 class SharedPreferencesExtensionsKtTest {
-
+    @Ignore
     @Test
     fun editWith() {
     }

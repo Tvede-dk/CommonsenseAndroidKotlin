@@ -2,6 +2,7 @@ package com.commonsense.android.kotlin.base.extensions.collections
 
 import com.commonsense.android.kotlin.base.extensions.forEach
 import com.commonsense.android.kotlin.test.*
+import org.junit.*
 import org.junit.jupiter.api.Test
 
 /**
@@ -62,16 +63,19 @@ class CollectionExtensionsKtTest {
 
     }
 
+    @Ignore
     @Test
     fun categorizeInto() {
 
     }
 
+    @Ignore
     @Test
     fun categorize() {
 
     }
 
+    @Ignore
     @Test
     fun repeate() {
 
@@ -99,47 +103,57 @@ class CollectionExtensionsKtTest {
 
     }
 
+    @Ignore
     @Test
     fun isRangeValid() {
 
     }
 
+    @Ignore
     @Test
     fun subList() {
 
     }
 
+    @Ignore
     @Test
     fun limitToSize() {
 
     }
 
+    @Ignore
     @Test
     fun invokeEachWith() {
 
     }
 
+    @Ignore
     @Test
     fun forEachNotNull() {
 
     }
 
+    @Ignore
     @Test
     fun invokeEachWith1() {
     }
 
+    @Ignore
     @Test
     fun invokeEachWith2() {
     }
 
+    @Ignore
     @Test
     fun invokeEachWith3() {
     }
 
+    @Ignore
     @Test
     fun invokeEachWith4() {
     }
 
+    @Ignore
     @Test
     fun invokeEachWith5() {
     }

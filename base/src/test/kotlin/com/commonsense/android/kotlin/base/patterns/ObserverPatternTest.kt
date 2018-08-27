@@ -1,6 +1,7 @@
 package com.commonsense.android.kotlin.base.patterns
 
 import com.commonsense.android.kotlin.test.assert
+import org.junit.*
 import org.junit.jupiter.api.Test
 
 /**
@@ -72,5 +73,22 @@ class ObserverPatternTest {
         counter3.assert(42, "should not be called after clear listeners")
 
     }
+
+    @Ignore
+    @Test
+    fun addListener() {
+    }
+
+    @Ignore
+    @Test
+    fun removeListener() {
+    }
+
+    @Ignore
+    @Test
+    fun clearListeners() {
+    }
+
+
 
 }

@@ -132,6 +132,7 @@ class LTest : BaseRoboElectricTest() {
         )
     }
 
+    @Ignore
     @Test
     fun testViewLogging() {
 
@@ -168,6 +169,150 @@ class LTest : BaseRoboElectricTest() {
 
     }
 
+    @Ignore
+    @Test
+    fun isLoggingAllowed() {
+    }
+
+    @Ignore
+    @Test
+    fun isErrorLoggingAllowed() {
+    }
+
+    @Ignore
+    @Test
+    fun setErrorLoggingAllowed() {
+    }
+
+    @Ignore
+    @Test
+    fun isWarningLoggingAllowed() {
+    }
+
+    @Ignore
+    @Test
+    fun setWarningLoggingAllowed() {
+    }
+
+    @Ignore
+    @Test
+    fun isDebugLoggingAllowed() {
+    }
+
+    @Ignore
+    @Test
+    fun setDebugLoggingAllowed() {
+    }
+
+    @Ignore
+    @Test
+    fun isProductionLoggingAllowed() {
+    }
+
+    @Ignore
+    @Test
+    fun setProductionLoggingAllowed() {
+    }
+
+    @Ignore
+    @Test
+    fun getProductionLoggers() {
+    }
+
+    @Ignore
+    @Test
+    fun setProductionLoggers() {
+    }
+
+    @Ignore
+    @Test
+    fun getDebugLoggers() {
+    }
+
+    @Ignore
+    @Test
+    fun setDebugLoggers() {
+    }
+
+    @Ignore
+    @Test
+    fun getWarningLoggers() {
+    }
+
+    @Ignore
+    @Test
+    fun setWarningLoggers() {
+    }
+
+    @Ignore
+    @Test
+    fun getErrorLoggers() {
+    }
+
+    @Ignore
+    @Test
+    fun setErrorLoggers() {
+    }
+
+    @Ignore
+    @Test
+    fun error() {
+    }
+
+    @Ignore
+    @Test
+    fun error1() {
+    }
+
+    @Ignore
+    @Test
+    fun error2() {
+    }
+
+    @Ignore
+    @Test
+    fun warning() {
+    }
+
+    @Ignore
+    @Test
+    fun warning1() {
+    }
+
+    @Ignore
+    @Test
+    fun warning2() {
+    }
+
+    @Ignore
+    @Test
+    fun debug() {
+    }
+
+    @Ignore
+    @Test
+    fun debug1() {
+    }
+
+    @Ignore
+    @Test
+    fun debug2() {
+    }
+
+    @Ignore
+    @Test
+    fun logProd() {
+    }
+
+    @Ignore
+    @Test
+    fun logProd1() {
+    }
+
+    @Ignore
+    @Test
+    fun logProd2() {
+    }
 
 
 }

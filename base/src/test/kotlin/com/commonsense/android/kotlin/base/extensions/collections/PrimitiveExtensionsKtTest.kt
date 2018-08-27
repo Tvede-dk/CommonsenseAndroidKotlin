@@ -2,6 +2,7 @@ package com.commonsense.android.kotlin.base.extensions.collections
 
 import com.commonsense.android.kotlin.test.assert
 import com.commonsense.android.kotlin.test.failTest
+import org.junit.*
 import org.junit.jupiter.api.Test
 
 
@@ -94,7 +95,7 @@ internal class PrimitiveExtensionsKtTest {
 
 
     @Test
-    fun intRangeLength() {
+    fun getLength() {
         val range = 0 until 20
         range.length.assert(20)
 
@@ -107,7 +108,7 @@ internal class PrimitiveExtensionsKtTest {
     }
 
     @Test
-    fun intRangeLargest() {
+    fun getLargest() {
         val range = 0 until 20
         range.largest.assert(19, "largest element is 20 - 1 = 19(due to until )")
 
@@ -118,7 +119,6 @@ internal class PrimitiveExtensionsKtTest {
         wrongRange.largest.assert(20)
 
     }
-
 
 
 }

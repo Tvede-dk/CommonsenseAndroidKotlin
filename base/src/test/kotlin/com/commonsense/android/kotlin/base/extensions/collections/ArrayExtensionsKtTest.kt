@@ -1,6 +1,7 @@
 package com.commonsense.android.kotlin.base.extensions.collections
 
 import com.commonsense.android.kotlin.test.assert
+import org.junit.*
 import org.junit.jupiter.api.Test
 
 /**
@@ -37,5 +38,25 @@ class ArrayExtensionsKtTest {
         IntProgression.fromClosedRange(0, 9, 1).length.assert(10)
         IntProgression.fromClosedRange(0, 9, 4).length.assert(3)
         IntProgression.fromClosedRange(0, 9, 10).length.assert(1)
+    }
+
+
+    @Test
+    fun toIntArray() {
+    }
+
+    @Ignore
+    @Test
+    fun getLength() {
+    }
+
+    @Ignore
+    @Test
+    fun previousValueOr() {
+    }
+
+    @Ignore
+    @Test
+    fun binarySearch() {
     }
 }

@@ -50,30 +50,38 @@ class GeneralExtensionsKtTest {
         opt.isNullOrEqualTo("test2").assert(true, "is still null")
     }
 
+    @Ignore
     @Test
     fun weakReference() {
 
     }
 
+    @Ignore
+    @Test
+    fun weakReference1() {
+
+    }
+
+
+    @Ignore
     @Test
     fun useOpt() {
 
     }
 
+    @Ignore
     @Test
     fun use() {
 
     }
 
+    @Ignore
     @Test
     fun use1() {
 
     }
 
-    @Test
-    fun weakReference1() {
 
-    }
 
 
     @Test
@@ -151,5 +159,20 @@ class GeneralExtensionsKtTest {
         val stringValue: String? = "magic test"
         stringValue.useOr({ stringCounter += length }, { failTest("magic test is not null") })
         stringCounter.assert(stringValue?.length ?: 0, "should get the right string back.")
+    }
+
+    @Ignore
+    @Test
+    fun measureSecondTime() {
+    }
+
+    @Ignore
+    @Test
+    fun mapNullLazy() {
+    }
+
+    @Ignore
+    @Test
+    fun mapEach() {
     }
 }

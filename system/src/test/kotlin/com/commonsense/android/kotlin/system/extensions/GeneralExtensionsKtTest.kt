@@ -7,43 +7,52 @@ import org.junit.*
  * Purpose:
  */
 class GeneralExtensionsKtTest {
-
+    @Ignore
     @Test
     fun isApiOverOrEqualTo() {
     }
 
+    @Ignore
     @Test
     fun isApiGreaterThan() {
     }
 
+    @Ignore
     @Test
     fun isApiLowerThan() {
     }
 
+    @Ignore
     @Test
     fun getApiLevel() {
     }
 
+    @Ignore
     @Test
     fun ifApiOver() {
     }
 
+    @Ignore
     @Test
     fun ifApiLowerThan() {
     }
 
+    @Ignore
     @Test
     fun ifApiIsEqualOrGreater() {
     }
 
+    @Ignore
     @Test
     fun applyIfApiGreater() {
     }
 
+    @Ignore
     @Test
     fun applyIfApiLowerThan() {
     }
 
+    @Ignore
     @Test
     fun applyIfApiEqualOrGreater() {
     }

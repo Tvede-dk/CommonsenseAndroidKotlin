@@ -13,15 +13,17 @@ import org.mockito.Mockito.mock
  * Purpose:
  */
 class TypedArrayExtensionsKtTest {
-
+    @Ignore
     @Test
     fun getDrawableSafe() {
     }
 
+    @Ignore
     @Test
     fun getTextSafe() {
     }
 
+    @Ignore
     @Test
     fun getTextSafe1() {
     }
@@ -42,6 +44,7 @@ class TypedArrayExtensionsKtTest {
 
     }
 
+    @Ignore
     @Test
     fun getColorSafe1() {
     }

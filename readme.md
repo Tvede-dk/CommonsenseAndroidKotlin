@@ -323,7 +323,68 @@ However there is a possible solution, which is to use the "AsyncLayoutInflater",
 
 
 
+### Logging
+Commonsense ships with a very flexible, simple logging component called "L".
 
+The extensions for views, activities ect are all using this logging, and for good reason.
+It supports removing all logging functions (functions that does something with the log statements)
+It supports customizing logging functions (say you want to send the logs to a server)
+It supports disabling all logging no matter what 
+It supports a special "production" logging channel, so some logging can be done even if production apps turn off logging
+It does not require a tag in most cases , since the classname is already there (reduces boilerplate)
+
+The internal library uses it. 
+
+The are a lot of extensions for using it, both from views, activities and so on. 
+These extensions are called "logDebug", "logWarning" , "logError", "logProduction" and does not take a tag, because that is the calling objects true code name.
+
+So for an activity this would look like
+
+*Vanilla*
+````kotlin
+class MyActivity : Activity {
+    fun test() {
+        Log.d(TAG,"my message")
+    }
+
+    companion object {
+        val TAG = "MyActivity"
+    }
+}
+````
+*With Csense* 
+````kotlin
+class MyActivity : Activity {
+    fun test() {
+        logDebug("my message")
+    }
+}
+````
+
+
+Turning off logging 
+
+*Vanilla*
+- Not supported out of the box (hacks via proguard exists but have sideeffects)
+
+*With Csense*
+````kotlin
+L.isLoggingAllowed(false)
+````
+
+
+Piping Logging (to eg a server)
+
+*Vanilla* 
+- not supported out of the box 
+
+*With Csense*
+````kotlin
+//add a new listener for the debug "channel"
+L.debugLoggers.add{ tag: String, message:String, throwable : Throwable? -> 
+    ///handling logging here.
+}
+````
 
 
 # Installation
@@ -344,11 +405,14 @@ Then you can start importing each of the sub modules. a full list is:
     implementation "com.commonsense.android.kotlin:widgets:$commonsenseVersion"
     implementation "com.commonsense.android.kotlin:tools:$commonsenseVersion"
     implementation "com.commonsense.android.kotlin:prebuilt:$commonsenseVersion"
+    //for tests
+    testImplementation "com.commonsense.android.kotlin:test:$commonsenseVersion"
 ```
 If you want to use all modules, then there is an "all" which contains all the submodules; in gradle:
 ```gradle
     implementation "com.commonsense.android.kotlin:all:$commonsenseVersion"
 ```
+You will still have to add the test manually. 
 
 The artifacts can be viewed at: https://bintray.com/tvede-oss/Commonsense-android-kotlin
 

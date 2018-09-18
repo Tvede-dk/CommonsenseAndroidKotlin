@@ -17,10 +17,6 @@
     -mapNullLazy
     so the "boolean" map is never confused. 
     
-
-
-
-
 ### Changes
 
 - a whack ton of documentation

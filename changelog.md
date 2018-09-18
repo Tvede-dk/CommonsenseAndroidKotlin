@@ -22,8 +22,9 @@
 - a whack ton of documentation
 - backported more things, and minor moving around.
 - more typealiases for functions.
+- added flags parameter to multiple functions regarding intents 
 - map on boolean for suspend functions
-- gradle 4.10 
+- gradle 4.10.1 
 - tools backport (with newer naming schema).
     - please note this might still be changed, and only using the feature enabling functions are recommended
     - added lifecycle tracking
@@ -95,7 +96,8 @@
         ````kotlin
           type()
         ````
-        
+
+- added functions regading "startActivityAndFinish"        
                  
 
 ## 0.0.14

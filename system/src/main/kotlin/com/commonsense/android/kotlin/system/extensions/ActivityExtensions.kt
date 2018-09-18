@@ -14,9 +14,19 @@ import android.support.v7.app.ActionBarDrawerToggle
 import android.support.v7.app.AppCompatActivity
 import android.support.v7.widget.Toolbar
 import android.view.*
+import com.commonsense.android.kotlin.base.EmptyFunction
 import kotlin.reflect.KClass
 
 
+/**
+ *
+ * @receiver AppCompatActivity
+ * @param drawer DrawerLayout
+ * @param toolbar Toolbar
+ * @param openTitle Int
+ * @param closeTitle Int
+ * @return ActionBarDrawerToggle
+ */
 @UiThread
 fun AppCompatActivity.setupToolbarAppDrawer(drawer: DrawerLayout,
                                             toolbar: Toolbar,
@@ -30,17 +40,38 @@ fun AppCompatActivity.setupToolbarAppDrawer(drawer: DrawerLayout,
     return toggle
 }
 
+/**
+ *
+ * @receiver Activity
+ * @param toStart Class<T>
+ * @param flags Int?
+ */
 @UiThread
-fun <T : Activity> Activity.startActivity(toStart: Class<T>) {
-    startActivity(Intent(this, toStart))
+fun <T : Activity> Activity.startActivity(toStart: Class<T>, flags: Int? = null) {
+    startActivity(Intent(this, toStart).apply {
+        if (flags != null) {
+            this.flags = flags
+        }
+    })
 }
 
+/**
+ *
+ * @receiver Activity
+ * @param toStart KClass<T>
+ * @param flags Int?
+ */
 @UiThread
-fun <T : Activity> Activity.startActivity(toStart: KClass<T>) {
-    startActivity(Intent(this, toStart.java))
+fun <T : Activity> Activity.startActivity(toStart: KClass<T>, flags: Int? = null) {
+    startActivity(toStart.java, flags)
 }
 
-
+/**
+ *
+ * @receiver AppCompatActivity
+ * @param toolbar Toolbar
+ * @param actionToApply (ActionBar.() -> Unit)
+ */
 @UiThread
 inline fun AppCompatActivity.setSupportActionBarAndApply(toolbar: Toolbar,
                                                          crossinline actionToApply: (ActionBar.() -> Unit)) {
@@ -48,11 +79,13 @@ inline fun AppCompatActivity.setSupportActionBarAndApply(toolbar: Toolbar,
     supportActionBar?.apply(actionToApply)
 }
 
+
 /**
  * Pops all fragments from the current FragmentManager, except the bottom fragment
  * Logs if the operation fails (does not throw)
+ * @receiver FragmentActivity
  */
-@AnyThread
+@UiThread
 fun FragmentActivity.popToFirstFragment() = runOnUiThread {
     supportFragmentManager?.popToFirstFragment()
 }
@@ -78,6 +111,42 @@ fun FragmentActivity.pushNewFragmentsTo(@IdRes container: Int, fragments: List<F
 @AnyThread
 fun Activity.safeFinish() = runOnUiThread(this::finish)
 
+/**
+ * starts the given intent and finishes this activity
+ * @receiver Activity
+ * @param intent Intent
+ */
+@AnyThread
+fun Activity.startAndFinish(intent: Intent) = actionAndFinish {
+    startActivity(intent)
+}
 
+@AnyThread
+fun Activity.startAndFinish(kClass: KClass<Activity>, flags: Int? = null) = actionAndFinish {
+    startActivity(kClass, flags)
+}
+
+
+@AnyThread
+fun Activity.startAndFinish(jClass: Class<Activity>, flags: Int? = null) = actionAndFinish {
+    startActivity(jClass, flags)
+}
+
+
+/**
+ *
+ * @receiver Activity
+ */
+@Suppress("NOTHING_TO_INLINE")
+@AnyThread
+private inline fun Activity.actionAndFinish(crossinline action: EmptyFunction) = runOnUiThread {
+    action()
+    finish()
+}
+
+/**
+ * The root view of an activity
+ */
 inline val Activity.rootView: View?
+    @UiThread
     get() = window?.decorView?.rootView ?: findViewById(android.R.id.content)

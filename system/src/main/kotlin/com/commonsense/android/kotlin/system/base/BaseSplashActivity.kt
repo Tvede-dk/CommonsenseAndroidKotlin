@@ -21,7 +21,10 @@ import kotlinx.coroutines.experimental.android.*
  *
  */
 abstract class BaseSplashActivity : Activity() {
-
+    /**
+     * The text should say enough.
+     * Its the full blown description of what you / the user did wrong.
+     */
     private val basicDescriptionString = "\n\nAccessing / using the view as/ in a splash screen is wrong\n" +
             "The splash screen should only present the next activity after the app has loaded\n" +
             "this means that you are properly trying to make the splash screen in code;\n" +
@@ -66,7 +69,7 @@ abstract class BaseSplashActivity : Activity() {
         afterOnCreate()
     }
 
-    private fun afterOnCreate() = launch(UI) {
+    private fun afterOnCreate() = GlobalScope.launch(Dispatchers.Main, CoroutineStart.DEFAULT, null, {
         //start pre loading views. since we are a splash screen, we are "allowed" to take "some"
         //time, thus we can stall the loading (not the ui thread) until we have loaded all the views to preload.
         preloadViews(viewsToPreload)
@@ -75,7 +78,7 @@ abstract class BaseSplashActivity : Activity() {
         //and close the splash screen
         safeFinish()
 
-    }
+    })
 
     /**
      * Specifies which layouts should be loaded in the background

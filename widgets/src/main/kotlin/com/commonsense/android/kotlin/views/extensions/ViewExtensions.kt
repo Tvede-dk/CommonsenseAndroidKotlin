@@ -1,31 +1,52 @@
 package com.commonsense.android.kotlin.views.extensions
 
-import android.content.*
-import android.content.res.*
-import android.os.*
-import android.support.annotation.*
-import android.text.*
-import android.util.*
-import android.view.*
-import android.view.inputmethod.*
-import android.widget.*
-import com.commonsense.android.kotlin.base.*
-import com.commonsense.android.kotlin.base.extensions.collections.*
-import com.commonsense.android.kotlin.system.extensions.*
-import com.commonsense.android.kotlin.system.logging.*
-import kotlinx.coroutines.experimental.android.*
-import kotlinx.coroutines.experimental.channels.*
+import android.content.Context
+import android.content.res.TypedArray
+import android.os.Build
+import android.support.annotation.RequiresApi
+import android.support.annotation.StyleableRes
+import android.support.annotation.UiThread
+import android.text.InputType
+import android.util.AttributeSet
+import android.view.View
+import android.view.ViewGroup
+import android.view.ViewTreeObserver
+import android.view.inputmethod.EditorInfo
+import android.widget.EditText
+import com.commonsense.android.kotlin.base.AsyncEmptyFunction
+import com.commonsense.android.kotlin.base.AsyncFunctionUnit
+import com.commonsense.android.kotlin.base.EmptyFunction
+import com.commonsense.android.kotlin.base.FunctionUnit
+import com.commonsense.android.kotlin.base.extensions.collections.forEachNotNull
+import com.commonsense.android.kotlin.base.extensions.collections.ifFalse
+import com.commonsense.android.kotlin.base.extensions.collections.ifTrue
+import com.commonsense.android.kotlin.system.extensions.getTypedArrayFor
+import com.commonsense.android.kotlin.system.extensions.isApiOverOrEqualTo
+import com.commonsense.android.kotlin.system.logging.tryAndLog
+import com.commonsense.android.kotlin.system.logging.tryAndLogSuspend
+import kotlinx.coroutines.experimental.android.UI
+import kotlinx.coroutines.experimental.channels.Channel
+import kotlinx.coroutines.experimental.channels.actor
+import kotlinx.coroutines.experimental.channels.consumeEach
 
 
 /**
- * Created by Kasper Tvede on 29-10-2016.
+ * Unsafely sets the onclick listener
+ * possibility of dual calling.
+ * @receiver View the view to set the on click listener for
+ * @param listener EmptyFunction the function to call when getting clicked
  */
-
 @UiThread
 inline fun View.setOnClick(crossinline listener: EmptyFunction) {
     setOnClickListener { listener() }
 }
 
+/**
+ * measures this views size and calls the given method with the result.
+ *
+ * @receiver View the view to measure
+ * @param afterMeasureAction (with: Int, height: Int) -> Unit the callback getting called once the view have been layed out
+ */
 @UiThread
 inline fun View.measureSize(crossinline afterMeasureAction: (with: Int, height: Int) -> Unit) {
     if (!viewTreeObserver.isAlive) {
@@ -33,17 +54,12 @@ inline fun View.measureSize(crossinline afterMeasureAction: (with: Int, height: 
     }
     viewTreeObserver.addOnGlobalLayoutListener(object : ViewTreeObserver.OnGlobalLayoutListener {
         override fun onGlobalLayout() {
-            viewTreeObserver.removeOnGlobalLayoutListenerCompact(this)
+            viewTreeObserver.removeOnGlobalLayoutListener(this)
             afterMeasureAction(width, height)
         }
     })
 }
 
-@UiThread
-@RequiresApi(Build.VERSION_CODES.JELLY_BEAN)
-fun ViewTreeObserver.removeOnGlobalLayoutListenerCompact(listener: ViewTreeObserver.OnGlobalLayoutListener) {
-    removeOnGlobalLayoutListener(listener)
-}
 
 @UiThread
 fun View.setOnclickAsyncSuspend(action: AsyncFunctionUnit<Context>) {
@@ -90,7 +106,8 @@ fun View.getTypedArrayFor(attributeSet: AttributeSet,
 
 
 /**
- * resets all transformations on a view (x, y, z)
+ * resets all transformations on a view (x, y, z) to 0f.
+ * @receiver View
  */
 @UiThread
 fun View.resetTransformations() {
@@ -104,6 +121,8 @@ fun View.resetTransformations() {
 
 /**
  * Toggles between visible and gone.
+ * so if this view is visible then after calling it will be gone
+ * and vice versa
  */
 @UiThread
 fun View.toggleVisibilityGone() {
@@ -113,7 +132,6 @@ fun View.toggleVisibilityGone() {
 /**
  * Returns true iff its visible, false otherwise.
  */
-
 val View.isVisible: Boolean
     @UiThread
     get() = visibility == View.VISIBLE
@@ -134,6 +152,7 @@ val View.isInvisible: Boolean
 
 /**
  * makes the view completely gone.
+ * @receiver View
  */
 @UiThread
 fun View.gone() {
@@ -142,6 +161,7 @@ fun View.gone() {
 
 /**
  * makes the view visible
+ * @receiver View
  */
 @UiThread
 fun View.visible() {
@@ -150,6 +170,7 @@ fun View.visible() {
 
 /**
  * makes the view invisible in android terms
+ * @receiver View
  */
 @UiThread
 fun View.invisible() {
@@ -158,6 +179,8 @@ fun View.invisible() {
 
 /**
  * If true, the view is made visible, if false its made gone
+ * @receiver View
+ * @param condition Boolean if true the view is made visible, gone otherwise
  */
 @UiThread
 fun View.visibleOrGone(condition: Boolean) {
@@ -170,43 +193,58 @@ fun View.visibleOrGone(condition: Boolean) {
 
 /**
  * Makes the supplied array of (optional) views gone.
+ * @receiver Array<View?>
  */
 @UiThread
-fun Array<View?>.goneViews() {
-    ViewHelper.goneViews(*this)
-}
+fun Array<View?>.goneViews() = ViewHelper.goneViews(*this)
+
 
 /**
  * Makes the supplied list of (optional) views gone
+ * @receiver List<View?>
  */
 @UiThread
-fun List<View?>.goneViews() {
-    ViewHelper.goneViews(this)
-}
+fun List<View?>.goneViews() = ViewHelper.goneViews(this)
 
 /**
  * Makes the supplied list of (optional) views visible
+ * @receiver List<View?>
  */
 @UiThread
-fun List<View?>.visibleViews() {
-    ViewHelper.showViews(this)
-}
+fun List<View?>.visibleViews() = ViewHelper.showViews(this)
 
 @UiThread
 object ViewHelper {
+    /**
+     * Marks all the given views as gone.
+     * @param views Array<out View?>
+     */
     fun goneViews(vararg views: View?) {
         views.forEach { it?.gone() }
     }
 
+    /**
+     * Marks all of the given views as gone
+     * @param views Iterable<View?>
+     */
     fun goneViews(views: Iterable<View?>) {
         views.forEachNotNull(View::gone)
     }
 
+    /**
+     * Shows and gone's the given views
+     * @param toShow View? the view to show
+     * @param toGone View? the view to gone
+     */
     fun showGoneView(toShow: View?, toGone: View?) {
         toShow?.visible()
         toGone?.gone()
     }
 
+    /**
+     * Shows the given views.
+     * @param views Iterable<View?>
+     */
     fun showViews(views: Iterable<View?>) {
         views.forEachNotNull(View::visible)
     }
@@ -244,6 +282,7 @@ val ViewGroup.visibleChildrenCount: Int
 /**
  * disables this view (isEnabled = false, isClickable = false)
  * if it is a ViewGroup, then all children will be disabled as well
+ * @receiver View
  */
 @UiThread
 fun View.disable() {
@@ -252,9 +291,11 @@ fun View.disable() {
     (this as? ViewGroup)?.children?.forEach(View::disable)
 }
 
+
 /**
  * Enables this view (isEnabled = true, isClickable = true)
  * if it is a ViewGroup, then all children will be enabled as well
+ * @receiver View
  */
 @UiThread
 fun View.enable() {
@@ -265,6 +306,7 @@ fun View.enable() {
 
 /**
  * Marks an EditText to be the "last one" akk the one with the ime done action button on the keyboard.
+ * @receiver EditText
  */
 @UiThread
 fun EditText.imeDone() {

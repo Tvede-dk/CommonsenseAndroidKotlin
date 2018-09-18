@@ -6,6 +6,7 @@ import com.commonsense.android.kotlin.base.debug.*
 import com.commonsense.android.kotlin.base.extensions.asyncSimple
 import com.commonsense.android.kotlin.base.extensions.awaitAll
 import com.commonsense.android.kotlin.base.extensions.collections.set
+import kotlinx.coroutines.experimental.GlobalScope
 import kotlinx.coroutines.experimental.Job
 import kotlinx.coroutines.experimental.launch
 import kotlinx.coroutines.experimental.runBlocking
@@ -84,7 +85,7 @@ open class JobContainer {
     }
 
     fun performAction(context: CoroutineContext, scopedAction: AsyncCoroutineFunction): Job {
-        val job = launch(context, block = scopedAction)
+        val job = GlobalScope.launch(context, block = scopedAction)
         addJobToLocal(job)
         return job
     }
@@ -109,7 +110,7 @@ open class JobContainer {
     fun performAction(context: CoroutineContext,
                       scopedAction: AsyncCoroutineFunction,
                       forGroup: String): Job {
-        val job = launch(context, block = scopedAction)
+        val job = GlobalScope.launch(context, block = scopedAction)
         addJobToGroup(job, forGroup)
         return job
     }

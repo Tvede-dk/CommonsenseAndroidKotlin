@@ -11,8 +11,18 @@ import com.commonsense.android.kotlin.system.base.BaseActivity
  *
  */
 
+/**
+ *
+ */
 typealias InflaterFunctionSimple<T> = (layoutInflater: LayoutInflater) -> T
 
+/**
+ * Base of a databinded activity
+ * Wraps the databinding of an Activity
+ * handles setup and the acccess to the binding
+ * @param out T : ViewDataBinding the view binding
+ * @property binding T the view binding.
+ */
 abstract class BaseDatabindingActivity<out T : ViewDataBinding> : BaseActivity(), Databindable<T> {
 
     override val binding: T by lazy {

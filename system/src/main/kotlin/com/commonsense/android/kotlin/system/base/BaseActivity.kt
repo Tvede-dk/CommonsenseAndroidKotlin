@@ -6,18 +6,18 @@ import android.content.IntentFilter
 import android.os.Bundle
 import android.os.Handler
 import android.support.annotation.IntRange
-import android.view.MenuItem
 import android.support.v7.app.AppCompatActivity
+import android.view.MenuItem
 import com.commonsense.android.kotlin.base.AsyncEmptyFunction
 import com.commonsense.android.kotlin.base.EmptyFunctionResult
-import com.commonsense.android.kotlin.base.debug.*
+import com.commonsense.android.kotlin.base.debug.prettyStringContent
 import com.commonsense.android.kotlin.system.PermissionsHandling
 import com.commonsense.android.kotlin.system.base.helpers.*
 import com.commonsense.android.kotlin.system.extensions.backPressIfHome
 import com.commonsense.android.kotlin.system.logging.logWarning
 import com.commonsense.android.kotlin.system.logging.tryAndLog
 import com.commonsense.android.kotlin.system.uiAware.UiAwareJobContainer
-import kotlinx.coroutines.experimental.CommonPool
+import kotlinx.coroutines.experimental.Dispatchers
 
 /**
  * created by Kasper Tvede on 29-09-2016.
@@ -34,6 +34,9 @@ open class BaseActivity : AppCompatActivity(), ActivityResultHelperContainer {
     }
 
     //<editor-fold desc="on back press listener">
+    /**
+     * All on back listeners
+     */
     private val onBackPressedListeners by lazy {
         mutableListOf<EmptyFunctionResult<Boolean>>()
     }
@@ -85,13 +88,20 @@ open class BaseActivity : AppCompatActivity(), ActivityResultHelperContainer {
     /**
      * a safe callback, that verifies the lifecycle, and also disallows multiple concurrent events of the same group.
      * Meant for updating the ui, or handling clicks'n events.
+     * @param group String
+     * @param action AsyncEmptyFunction
      */
     fun launchInUi(group: String, action: AsyncEmptyFunction) {
         localJobs.launchInUi({ isVisible }, group, action)
     }
 
+    /**
+     * Launches the given action
+     * @param group String the group name (So that no duplicates of this action can be schedualed at the same time)
+     * @param action AsyncEmptyFunction the action to perform in the background
+     */
     fun launchInBackground(group: String, action: AsyncEmptyFunction) {
-        localJobs.performAction(CommonPool, action, group)
+        localJobs.performAction(Dispatchers.Default, action, group)
     }
 
 
@@ -174,9 +184,15 @@ open class BaseActivity : AppCompatActivity(), ActivityResultHelperContainer {
 
 
     //<editor-fold desc="On paused ">
+    /**
+     * If this activity is paused
+     */
     val isPaused: Boolean
         get () = mIsPaused
 
+    /**
+     * If this activity is visible, opposite of isPaused
+     */
     val isVisible: Boolean
         get() = !isPaused
 
@@ -216,7 +232,7 @@ open class BaseActivity : AppCompatActivity(), ActivityResultHelperContainer {
     }
 
     override fun unregisterReceiver(receiver: BroadcastReceiver?) {
-        tryAndLog(BaseActivity::class.java.simpleName) {
+        tryAndLog(BaseActivity::class) {
             receiverHandler.unregisterReceiver(receiver)
             super.unregisterReceiver(receiver)
         }
@@ -224,7 +240,10 @@ open class BaseActivity : AppCompatActivity(), ActivityResultHelperContainer {
     //</editor-fold>
 
     override fun toString(): String = toPrettyString()
-
+    /**
+     * Creates a pretty string representation of this internal state
+     * @return String
+     */
     fun toPrettyString(): String {
         return "Base activity state: " + listOf(
                 permissionHandler.toPrettyString(),

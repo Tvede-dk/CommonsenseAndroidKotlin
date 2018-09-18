@@ -23,10 +23,11 @@
 
 ### Changes
 
+- a whack ton of documentation
 - backported more things, and minor moving around.
 - more typealiases for functions.
 - map on boolean for suspend functions
-- gradle 4.10 (rc so far wip)
+- gradle 4.10 
 - tools backport (with newer naming schema).
     - please note this might still be changed, and only using the feature enabling functions are recommended
     - added lifecycle tracking
@@ -77,6 +78,9 @@
      in case of a lot sections this went from multiple ms to below 1000'th of a ms
      in the minor (with few sections) it went till around the same if not still lower than the original algorithm
      (since it gets called quite a lot this improve properly more than lab tests shows)
+    - added reload section
+    - added reload all
+    
      
 - Logging is now available from / for all classes via "logClassX" (where X is either debug,warning, error or production)
     - this should make it much simpler and to avoid writing stuff like "logWarning(this::class,"message")"

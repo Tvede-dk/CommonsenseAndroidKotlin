@@ -9,6 +9,16 @@ import android.view.MenuItem
 /**
  * Created by Kasper Tvede on 01-11-2016.
  */
+
+/**
+ * A Databinded activity with a toolbar
+ * required methods delegate to this as well.
+ *
+ * @see BaseDatabindingActivity
+ * @param out T : ViewDataBinding
+ * @property drawerToggle ActionBarDrawerToggle the toolbar
+ *
+ */
 abstract class BaseDatabindingActivityToolbar<out T : ViewDataBinding> : BaseDatabindingActivity<T>() {
 
 

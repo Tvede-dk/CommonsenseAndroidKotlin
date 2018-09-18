@@ -6,10 +6,6 @@ import android.view.View
 import android.view.ViewGroup
 
 /**
- * Created by Kasper Tvede on 27-08-2017.
- */
-
-/**
  * The width inside (after subtracting the padding).
  */
 val ViewGroup.contentWidth
@@ -29,14 +25,19 @@ fun ViewGroup.contentSize(rectToUse: Rect) {
 }
 
 /**
- *
+ * Adds all the given views to this viewgroup
+ * @receiver ViewGroup the view to append all the given views to
+ * @param views List<View> the views to add / append
  */
 fun ViewGroup.addViews(views: List<View>) {
     views.forEach(this::addView)
 }
 
 /**
- *
+ * Adds / inserts the given views into this viewgroup.
+ * @receiver ViewGroup the ViewGroup to insert into
+ * @param views List<View> the views to insert
+ * @param atIndex Int where to perform the insert must be 0 or greater
  */
 fun ViewGroup.addViews(views: List<View>, @IntRange(from = 0) atIndex: Int) {
     views.forEachIndexed { index, view ->

@@ -30,7 +30,7 @@ open class BaseDataBindingAdapter(context: Context) : BaseAdapter<BaseAdapterIte
         }
         binding.root.tag = binding
         return binding.root
-    }
+}
 
     override fun getItemViewType(position: Int): Int {
         val item = getItem(position)?.let { it::class.java.hashCode() } ?: 0

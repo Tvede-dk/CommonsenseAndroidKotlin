@@ -7,7 +7,6 @@ import android.os.*
 /**
  *
  */
-
 interface BaseActivityLifecycleCallbacks : ActivityLifecycleCallbacks {
     override fun onActivityPaused(activity: Activity?) {
 

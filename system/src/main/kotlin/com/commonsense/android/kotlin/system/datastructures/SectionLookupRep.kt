@@ -10,17 +10,20 @@ import com.commonsense.android.kotlin.system.logging.L
 import kotlin.system.measureNanoTime
 import kotlin.system.measureTimeMillis
 
+
 /**
- * Created by kasper on 05/07/2017.
+ * A typed section and all the properties associated with a section
+ * @param T The containing type.
  */
-
-
 data class TypeSection<T>(
         val sectionIndexValue: Int,
         /**
          * if this section is to be ignored. (in ui terms, hidden for example)
          */
         var isIgnored: Boolean = false,
+        /**
+         *  The content of this section
+         */
         val collection: MutableList<T> = mutableListOf()) {
 
     /**
@@ -37,25 +40,41 @@ data class TypeSection<T>(
 }
 
 /**
- *
- *
+ * A container for having sections with very complex types that can represent" a feature
+ * @param T : TypeHashCodeLookupRepresent<Rep>
+ * @param out Rep : Any
  */
 class SectionLookupRep<T : TypeHashCodeLookupRepresent<Rep>, out Rep : Any> {
 
     //<editor-fold desc="Internal data">
+    /**
+     * The mapper for the type representatives.
+     */
     private val lookup = TypeRepresentative<T, Rep>()
 
+    /**
+     * The raw underlying data structure
+     */
     private val data: SparseArray<TypeSection<T>> = SparseArray()
 
+    /**
+     * The total number of items in this, cached
+     */
     @IntRange(from = 0)
     private var cachedSize: Int = 0
     //</editor-fold>
 
     //<editor-fold desc="Sizes">
+    /**
+     * The total number of items in this
+     */
     val size
         @IntRange(from = 0)
         get() = cachedSize
 
+    /**
+     * The total number of sections in this
+     */
     val sectionCount
         @IntRange(from = 0)
         get () = data.size()
@@ -69,10 +88,19 @@ class SectionLookupRep<T : TypeHashCodeLookupRepresent<Rep>, out Rep : Any> {
      * works by computing the start of a given section (in raw)
      */
     private var preComputedLookup: IntArray = intArrayOf()
+    /**
+     * Tells if the precomputed lookup is up to date.
+     */
     private var isPrecomputedUpToDate = false
 
 
     //<editor-fold desc="Add functions">
+    /**
+     * Adds the given item tot he given section
+     * @param item T the item to add / append
+     * @param inSection Int into this section (sparse index)
+     * @return SectionLocation? the resulting update if any was there (if this section is ignored then this becomes null)
+     */
     fun add(item: T, @IntRange(from = 0) inSection: Int): SectionLocation? {
         val sectionUpdate = addSectionIfMissing(inSection)
         updateCacheForSection(inSection) {
@@ -230,7 +258,6 @@ class SectionLookupRep<T : TypeHashCodeLookupRepresent<Rep>, out Rep : Any> {
         if (isPrecomputedUpToDate) {
             return
         }
-        //TODO only map visible sections ??
         var counter = 0
         val size = data.size()
         //do not allocate more than necessarily. so if we have the right size, then use that.
@@ -454,13 +481,34 @@ class SectionLookupRep<T : TypeHashCodeLookupRepresent<Rep>, out Rep : Any> {
 
 }
 
+/**
+ * An index path (the location of an item) in a sectionized container
+ * @property row Int the row index in the given section
+ * @property section Int the section index (sparse)
+ */
 data class IndexPath(@IntRange(from = 0) val row: Int,
                      @IntRange(from = 0) val section: Int)
 
+/**
+ * Describes an update, both in "mapped" / sparse and raw terms.
+ * @property inRaw IntRange the raw (no section concept)
+ * @property inSection IntRange the section concept (section -> row)
+ */
 data class SectionUpdate(val inRaw: kotlin.ranges.IntRange, val inSection: kotlin.ranges.IntRange)
 
+/**
+ * A location inside of a section
+ * @property rawRow Int the raw row index (not sparse / mapped)
+ * @property inSection Int the section this is in.
+ */
 data class SectionLocation(val rawRow: Int, val inSection: Int)
 
+/**
+ * Describes changes, additions, and removed in a given section operation.
+ * @property changes SectionUpdate? contains all the changed ranges
+ * @property optAdded SectionUpdate? contains all the added items ranges
+ * @property optRemoved SectionUpdate? contains all the removed items ranges
+ */
 data class SectionUpdates(val changes: SectionUpdate?,
                           val optAdded: SectionUpdate?,
                           val optRemoved: SectionUpdate?)

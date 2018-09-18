@@ -2,14 +2,12 @@ package com.commonsense.android.kotlin.views.extensions
 
 import android.widget.ListView
 
-/**
- * Created by Kasper Tvede on 1/27/2018.
- * Purpose:
- *
- */
+
 
 /**
  * Scrolls this listView to the first visible item (the top).
+ * animated / smoothly
+ * @receiver ListView
  */
 fun ListView.scrollToTop() {
     smoothScrollToPositionFromTop(firstVisiblePosition, 0)
@@ -17,6 +15,8 @@ fun ListView.scrollToTop() {
 
 /**
  * Scrolls this listView to the last visible position (item)
+ * animated / smoothly
+ * @receiver ListView
  */
 fun ListView.scrollToBottom() {
     smoothScrollToPosition(lastVisiblePosition)

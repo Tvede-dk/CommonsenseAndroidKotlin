@@ -24,12 +24,12 @@ inline val IntProgression.length
 
 @Suppress("NOTHING_TO_INLINE")
 inline fun IntArray.previousValueOr(index: Int, orElse: Int): Int {
+    val test = ""
     if (index <= 0 || index >= size) {
         return orElse
     }
     return get(index - 1)
 }
-
 
 inline fun IntArray.binarySearch(crossinline comparere: Function2<Int, Int, Comparing>): Int? {
     var start = 0

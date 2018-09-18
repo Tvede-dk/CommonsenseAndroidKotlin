@@ -45,7 +45,7 @@ open class BaseFragment : DialogFragment(), ActivityResultHelperContainer {
         get() = activity as? BaseActivity
 
     /**
-     * a safe way to retrive the activity since its not annotated nullable.
+     * a safe way to retrieve the activity since its not annotated nullable.
      */
     val safeActivity: Activity?
         get() = activity
@@ -71,7 +71,7 @@ open class BaseFragment : DialogFragment(), ActivityResultHelperContainer {
     }
 
     /**
-     * rescheduals on the ui thread to be dismissed, and removes all local jobs (cleanup)
+     * reschedules on the ui thread to be dismissed, and removes all local jobs (cleanup)
      */
     override fun dismiss() {
         localJobs.cleanJobs()
@@ -83,14 +83,29 @@ open class BaseFragment : DialogFragment(), ActivityResultHelperContainer {
     /**
      * in case you have something else than a regular "launch" / async style, then you can still
      * add the jobs manually. eg some api composing of async / launch api'
+     * @param group String
+     * @param job Job
+     * @return Unit
      */
     fun addLocalJob(group: String, job: Job): Unit =
             localJobs.addJob(job, group)
 
+    /**
+     *
+     * @param group String
+     * @param action suspend () -> Unit
+     * @return Job
+     */
     fun launchInBackground(group: String, action: suspend () -> Unit): Job =
             localJobs.performAction(CommonPool, action, group)
 
 
+    /**
+     *
+     * @param group String
+     * @param action suspend () -> Unit
+     * @return Job
+     */
     fun launchInUi(group: String, action: suspend () -> Unit): Job =
             localJobs.launchInUi({ isAdded && !this.isHidden && isResumed }, group, action)
 

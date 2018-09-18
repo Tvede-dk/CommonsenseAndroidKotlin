@@ -19,9 +19,9 @@ buildscript {
     ext.commonsenseGit = "https://github.com/Tvede-dk/CommonsenseAndroidKotlin.git"
 
     //included versions.
-    ext.kotlin_version = '1.2.61'
+    ext.kotlin_version = '1.2.70'
     ext.supportVersion = '27.1.1'
-    ext.coroutinesVersion = '0.24.0'
+    ext.coroutinesVersion = '0.26.0'
     ext.leakCanaryVersion = "1.6.1"
     ext.junitVersion = "4.12"
     ext.androidGradleVersion = "3.1.4"

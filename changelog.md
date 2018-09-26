@@ -24,7 +24,7 @@
 - more typealiases for functions.
 - added flags parameter to multiple functions regarding intents 
 - map on boolean for suspend functions
-- gradle 4.10.1 
+- gradle 4.10.12
 - tools backport (with newer naming schema).
     - please note this might still be changed, and only using the feature enabling functions are recommended
     - added lifecycle tracking
@@ -98,7 +98,8 @@
         ````
 
 - added functions regading "startActivityAndFinish"        
-                 
+- kotlin version 1.2.71
+- coroutines version 0.26.1                  
 
 ## 0.0.14
 micro update

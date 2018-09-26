@@ -123,46 +123,48 @@ class CoroutinesExtensionsKtTest {
         counter.assert(3, "should have done all combinations of jobs before reaching here.")
     }
 
+    @Ignore
     @Test
     fun forEachSync() = runBlocking {
-        var combinedResult = 0
-        val semaphore = Semaphore(0)
-        val channel = Channel<Int>()
-        async {
-            channel.forEach {
-                combinedResult += it
-                semaphore.release()
-            }
-        }
-
-        channel.send(1)
-        channel.send(2)
-        channel.send(3)
-        channel.send(4)
-        channel.close()
-        semaphore.acquire(4)
-        combinedResult.assert(4 + 3 + 2 + 1)
+//        var combinedResult = 0
+//        val semaphore = Semaphore(0)
+//        val channel = Channel<Int>()
+//        async {
+//            channel.forEach {
+//                combinedResult += it
+//                semaphore.release()
+//            }
+//        }
+//
+//        channel.send(1)
+//        channel.send(2)
+//        channel.send(3)
+//        channel.send(4)
+//        channel.close()
+//        semaphore.acquire(4)
+//        combinedResult.assert(4 + 3 + 2 + 1)
     }
 
+    @Ignore
     @Test
     fun forEachAsync() = runBlocking {
-        var combinedResult = 0
-        val semaphore = Semaphore(0)
-        val channel = Channel<Int>()
-        async {
-            channel.forEachAsync {
-                combinedResult += it
-                semaphore.release()
-            }
-        }
-
-        channel.send(1)
-        channel.send(2)
-        channel.send(3)
-        channel.send(4)
-        channel.close()
-        semaphore.acquire(4)
-        combinedResult.assert(4 + 3 + 2 + 1)
+//        var combinedResult = 0
+//        val semaphore = Semaphore(0)
+//        val channel = Channel<Int>()
+//        async {
+//            channel.forEachAsync {
+//                combinedResult += it
+//                semaphore.release()
+//            }
+//        }
+//
+//        channel.send(1)
+//        channel.send(2)
+//        channel.send(3)
+//        channel.send(4)
+//        channel.close()
+//        semaphore.acquire(4)
+//        combinedResult.assert(4 + 3 + 2 + 1)
     }
 
     @Ignore

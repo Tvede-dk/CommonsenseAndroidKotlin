@@ -42,7 +42,7 @@ inline fun <T> List<T>.categorize(
     forEach {
         val key = categorizer(it)
         if (result[key] == null) {
-            result.put(key, mutableListOf(it))
+            result[key] = mutableListOf(it)
         } else {
             result[key]?.add(it)
         }

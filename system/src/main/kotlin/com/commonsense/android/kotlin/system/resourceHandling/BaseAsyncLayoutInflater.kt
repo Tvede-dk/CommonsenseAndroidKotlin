@@ -13,15 +13,15 @@ import kotlinx.coroutines.experimental.*
 import kotlinx.coroutines.experimental.android.*
 import kotlinx.coroutines.experimental.sync.*
 
-//
-///**
-// *
-// * Inspiration
-// * https://android.googlesource.com/platform/frameworks/support/+/master/core-ui/src/main/java/android/support/v4/view/AsyncLayoutInflater.java
-// * or just simply
-// * AsyncLayoutInflater
-// * its however not limited to one thread only, unless specified
-// */
+
+/**
+ *
+ * Inspiration
+ * https://android.googlesource.com/platform/frameworks/support/+/master/core-ui/src/main/java/android/support/v4/view/AsyncLayoutInflater.java
+ * or just simply
+ * AsyncLayoutInflater
+ * its however not limited to one thread only, unless specified
+ */
 class BaseAsyncLayoutInflater(val context: Context,
                               maxThreads: Int = 4) {
 

@@ -9,8 +9,15 @@ class JavaDocSourceWithDokka implements Plugin<Project> {
         project.plugins.apply("org.jetbrains.dokka-android")
         //setup dokka
         project.dokka {
+            includeNonPublic = false
+            skipEmptyPackages = true // Do not create index pages for empty packages
+            impliedPlatforms = ["JVM"] // See platforms section of documentation
+            cacheRoot = 'default'
             outputFormat = 'javadoc'
             outputDirectory = "${project.buildDir}/javadoc"
+            packageOptions {
+                suppress = true
+            }
         }
         project.task("dokkaJavadoc", type: project.dokka.class) {
             outputFormat = 'javadoc'

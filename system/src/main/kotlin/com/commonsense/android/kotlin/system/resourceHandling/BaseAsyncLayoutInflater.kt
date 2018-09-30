@@ -13,15 +13,15 @@ import kotlinx.coroutines.experimental.*
 import kotlinx.coroutines.experimental.android.*
 import kotlinx.coroutines.experimental.sync.*
 
-/**
- *
- * Inspiration
- * https://android.googlesource.com/platform/frameworks/support/+/master/core-ui/src/main/java/android/support/v4/view/AsyncLayoutInflater.java
- * or just simply
- * AsyncLayoutInflater
- * its however not limited to one thread only, unless specified
- */
-
+//
+///**
+// *
+// * Inspiration
+// * https://android.googlesource.com/platform/frameworks/support/+/master/core-ui/src/main/java/android/support/v4/view/AsyncLayoutInflater.java
+// * or just simply
+// * AsyncLayoutInflater
+// * its however not limited to one thread only, unless specified
+// */
 class BaseAsyncLayoutInflater(val context: Context,
                               maxThreads: Int = 4) {
 
@@ -34,7 +34,8 @@ class BaseAsyncLayoutInflater(val context: Context,
         LockableInflater(context)
     }
 
-    @Throws
+
+    @Throws(Throwable::class)
     @UiThread
     suspend fun inflate(@LayoutRes id: Int,
                         parent: ViewGroup? = null)
@@ -61,7 +62,7 @@ class BaseAsyncLayoutInflater(val context: Context,
         }
     }
 
-    @Throws
+    @Throws(Throwable::class)
     private suspend fun inflateViewInUIThread(id: Int, parent: ViewGroup?): View {
         val view = withContext(Dispatchers.Main) {
             inflateViewViaInflaters(id, parent)
@@ -125,7 +126,9 @@ internal class BaseLayoutInflater(context: Context) : LayoutInflater(
 
 internal class LayoutInflaterCache {
 
-
+    /**
+     *
+     */
     private val foundMap: MutableMap<String, String?> = mutableMapOf(
             "Button" to widgetPackage,
             "LinearLayout" to widgetPackage,
@@ -165,6 +168,9 @@ internal class LayoutInflaterCache {
         return null
     }
 
+    /**
+     *
+     */
     companion object {
         const val widgetPackage = "android.widget."
         const val webkitPackage = "android.webkit."
@@ -178,7 +184,12 @@ internal class LayoutInflaterCache {
 
 }
 
-
+/**
+ *
+ * @property mutex Mutex
+ * @property inflater BaseLayoutInflater
+ * @constructor
+ */
 internal class LockableInflater(context: Context) {
     val mutex = Mutex(false)
     val inflater by lazy { BaseLayoutInflater(context) }

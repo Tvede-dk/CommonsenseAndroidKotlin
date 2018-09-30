@@ -9,11 +9,6 @@ import kotlinx.coroutines.experimental.*
 import java.io.*
 
 /**
- * Created by Kasper Tvede
- *
- */
-
-/**
  *
  * @receiver Uri
  * @param other Uri

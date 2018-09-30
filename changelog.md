@@ -26,7 +26,7 @@
 - more typealiases for functions.
 - added flags parameter to multiple functions regarding intents 
 - map on boolean for suspend functions
-- gradle 4.10.1 
+
 - tools backport (with newer naming schema).
     - please note this might still be changed, and only using the feature enabling functions are recommended
     - added lifecycle tracking
@@ -43,8 +43,6 @@
 - Preloading views to drastically improve loading times.
     - this comes in various forms; the baseAsyncLayoutInflater, which is used in
     - BaseSplashActivity.
-    - BaseActivity
-    - BaseFragment
 
 - system services extensions;
     - now you can write "context.services.vibrator" and get the vibrator service.
@@ -52,7 +50,7 @@
         - this will properly be removed in the future to not clutter up the Context (which is quite bloated as is already).
 
 - Demo app updated
-    - uses the preloading
+    - uses the preloading (splash screen)
     - "working" condition; it still needs a lot of work.
     - added widgets section.
     
@@ -99,8 +97,13 @@
           type()
         ````
 
-- added functions regading "startActivityAndFinish"        
-                 
+- added functions regading "startActivityAndFinish"
+
+- kotlin version 1.2.71
+- coroutines version 0.30.0
+- andorid support lib 28
+- android gradle 3.2.0
+- gradle 4.10.2
 
 ## 0.0.14
 micro update

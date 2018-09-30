@@ -1,9 +1,7 @@
 package com.commonsense.android.kotlin.base.extensions.collections
 
-import com.commonsense.android.kotlin.test.assert
-import com.commonsense.android.kotlin.test.failTest
-import org.junit.*
-import org.junit.jupiter.api.Test
+import com.commonsense.android.kotlin.test.*
+import org.junit.jupiter.api.*
 
 
 /**

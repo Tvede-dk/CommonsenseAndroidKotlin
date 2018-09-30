@@ -1,3 +1,5 @@
+@file:Suppress("unused", "NOTHING_TO_INLINE", "MemberVisibilityCanBePrivate")
+
 package com.commonsense.android.kotlin.base.exceptions
 
 /**
@@ -6,14 +8,9 @@ package com.commonsense.android.kotlin.base.exceptions
  * An exception that returns the callers stacktrace; this is intended for some kind of error
  * where the developer who sees the error need to know the stack trace (eventually)
  */
-class StackTraceException : Exception {
+class StackTraceException : Exception() {
 
-    private val callingStackTrace: Array<StackTraceElement>
-
-    constructor() : super() {
-        //drops this constructor call
-        callingStackTrace = Thread.currentThread().stackTrace.drop(1).toTypedArray()
-    }
+    private val callingStackTrace: Array<StackTraceElement> = Thread.currentThread().stackTrace.drop(1).toTypedArray()
 
     override fun getLocalizedMessage(): String {
         return "Stacktrace"

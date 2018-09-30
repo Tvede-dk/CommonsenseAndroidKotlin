@@ -1,8 +1,9 @@
+@file:Suppress("unused", "NOTHING_TO_INLINE", "MemberVisibilityCanBePrivate")
+
 package com.commonsense.android.kotlin.system
 
-import android.content.Context
-import android.content.SharedPreferences
-import com.commonsense.android.kotlin.system.extensions.editWith
+import android.content.*
+import com.commonsense.android.kotlin.system.extensions.*
 
 //import com.commonsense.android.kotlin.android.extensions.editWith
 
@@ -46,7 +47,8 @@ class DeviceSettings(context: Context, settingsName: String = "DeviceSettings") 
 
     fun loadSetting(key: String, default: Long = 0) = sharedPrefs.getLong(key, default)
 
-    inline fun <U> loadSetting(key: String, crossinline converter: (String?) -> U?, default: U?) = sharedPrefs.getString(key, null)?.let { converter(it) } ?: default
+    inline fun <U> loadSetting(key: String, crossinline converter: (String?) -> U?, default: U?) = sharedPrefs.getString(key, null)?.let { converter(it) }
+            ?: default
 
     fun haveSetting(key: String): Boolean = sharedPrefs.contains(key)
 

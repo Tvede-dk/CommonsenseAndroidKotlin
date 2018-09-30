@@ -1,9 +1,9 @@
 package com.commonsense.android.kotlin.base.extensions
 
-import android.net.Uri
+import android.net.*
 import com.commonsense.android.kotlin.test.*
 import org.junit.*
-import org.robolectric.annotation.Config
+import org.robolectric.annotation.*
 
 /**
  * Created by Kasper Tvede on 23-07-2017.

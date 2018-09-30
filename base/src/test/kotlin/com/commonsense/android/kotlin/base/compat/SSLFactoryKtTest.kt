@@ -1,10 +1,7 @@
 package com.commonsense.android.kotlin.base.compat
 
 import com.commonsense.android.kotlin.test.*
-import org.junit.*
-import org.junit.jupiter.api.Test
-
-import org.junit.jupiter.api.Assertions.*
+import org.junit.jupiter.api.*
 
 /**
  *

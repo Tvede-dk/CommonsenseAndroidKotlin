@@ -2,8 +2,7 @@ package com.commonsense.android.kotlin.base.time
 
 import com.commonsense.android.kotlin.base.time.TimeUnit.*
 import com.commonsense.android.kotlin.test.*
-import org.junit.*
-import org.junit.jupiter.api.Test
+import org.junit.jupiter.api.*
 
 class TimeUnitTest {
 

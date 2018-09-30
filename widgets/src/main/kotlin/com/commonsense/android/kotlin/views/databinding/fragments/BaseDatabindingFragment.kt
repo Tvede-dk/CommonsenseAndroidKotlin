@@ -1,19 +1,15 @@
+@file:Suppress("unused", "NOTHING_TO_INLINE", "MemberVisibilityCanBePrivate")
+
 package com.commonsense.android.kotlin.views.databinding.fragments
 
-import android.app.AlertDialog
-import android.app.Dialog
-import android.databinding.ViewDataBinding
-import android.os.Bundle
+import android.app.*
+import android.databinding.*
+import android.os.*
 import android.support.v4.app.Fragment
-import android.view.LayoutInflater
-import android.view.View
-import android.view.ViewGroup
-import com.commonsense.android.kotlin.system.base.BaseFragment
-import com.commonsense.android.kotlin.system.extensions.dialogFillParentView
-import com.commonsense.android.kotlin.system.extensions.getParrentContainerId
-import com.commonsense.android.kotlin.system.extensions.pushNewFragmentTo
-import com.commonsense.android.kotlin.system.extensions.replaceFragment
-import com.commonsense.android.kotlin.views.R
+import android.view.*
+import com.commonsense.android.kotlin.system.base.*
+import com.commonsense.android.kotlin.system.extensions.*
+import com.commonsense.android.kotlin.views.*
 
 typealias InflateBinding<T> = (inflater: LayoutInflater, parent: ViewGroup?, attach: Boolean) -> T
 
@@ -66,11 +62,10 @@ abstract class BaseDatabindingFragment<out T : ViewDataBinding> : BaseFragment()
 
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
         val builder = AlertDialog.Builder(context, R.style.TransperantDialog)
-        val res = builder
+        return builder
                 .setCustomTitle(null)
                 .setView(binding.root)
                 .create()
-        return res
     }
 
     override fun onResume() {

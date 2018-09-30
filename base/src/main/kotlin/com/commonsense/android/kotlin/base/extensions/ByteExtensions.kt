@@ -1,6 +1,8 @@
+@file:Suppress("unused", "NOTHING_TO_INLINE", "MemberVisibilityCanBePrivate")
+
 package com.commonsense.android.kotlin.base.extensions
 
-import kotlin.experimental.and
+import kotlin.experimental.*
 
 /**
  * Created by Kasper Tvede on 11-04-2018.
@@ -9,11 +11,8 @@ import kotlin.experimental.and
  */
 
 
-
-@Suppress("NOTHING_TO_INLINE")
 inline infix fun Byte.shl(shift: Int): Byte = (this.toInt() shl shift).toByte()
 
-@Suppress("NOTHING_TO_INLINE")
 inline infix fun Byte.shr(shift: Int): Byte = (this.toInt() shr shift).toByte()
 
 
@@ -22,7 +21,6 @@ inline fun <T> Byte.toChars(crossinline action: (upperChar: Char, lowerChar: Cha
             action(hexCharsAsString[upperByte.toInt()], hexCharsAsString[lowerByte.toInt()])
         }
 
-@Suppress("NOTHING_TO_INLINE")
 inline fun Byte.toHexString(): String =
         this.toChars { upperChar, lowerChar ->
             String(kotlin.charArrayOf(upperChar, lowerChar))

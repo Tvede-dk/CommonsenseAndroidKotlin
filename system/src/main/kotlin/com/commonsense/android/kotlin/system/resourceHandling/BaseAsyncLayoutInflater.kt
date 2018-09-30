@@ -1,10 +1,11 @@
+@file:Suppress("unused", "NOTHING_TO_INLINE", "MemberVisibilityCanBePrivate")
+
 package com.commonsense.android.kotlin.system.resourceHandling
 
 import android.content.*
 import android.support.annotation.*
 import android.util.*
 import android.view.*
-import com.commonsense.android.kotlin.base.*
 import com.commonsense.android.kotlin.base.extensions.*
 import com.commonsense.android.kotlin.system.extensions.*
 import com.commonsense.android.kotlin.system.logging.*
@@ -26,7 +27,7 @@ class BaseAsyncLayoutInflater(val context: Context,
 
     private val tag = BaseAsyncLayoutInflater::class.java.simpleName
 
-    private val inflaterQueue: ThreadPoolDispatcher =
+    private val inflaterQueue: ExecutorCoroutineDispatcher =
             newFixedThreadPoolContext(maxThreads, "asyncLayoutInflaterPool")
 
     private val inflaters = maxThreads.mapEach {
@@ -37,7 +38,7 @@ class BaseAsyncLayoutInflater(val context: Context,
     @UiThread
     suspend fun inflate(@LayoutRes id: Int,
                         parent: ViewGroup? = null)
-            : Deferred<View> = async(inflaterQueue, block = {
+            : Deferred<View> = GlobalScope.async(inflaterQueue, block = {
         backgroundInflateView(id, parent)
                 ?: inflateViewInUIThread(id, parent)
     })
@@ -45,14 +46,14 @@ class BaseAsyncLayoutInflater(val context: Context,
     @UiThread
     suspend fun inflateNoFallback(@LayoutRes id: Int,
                                   parent: ViewGroup? = null)
-            : Deferred<View?> = async(inflaterQueue, block = {
+            : Deferred<View?> = GlobalScope.async(inflaterQueue, block = {
         backgroundInflateView(id, parent)
     })
 
 
     @UiThread
     fun inflateLayoutFrom(infFunc: Function1<LayoutInflater, View?>)
-            : Deferred<View?> = async(inflaterQueue) {
+            : Deferred<View?> = GlobalScope.async(inflaterQueue) {
         tryAndLogSuspend(tag) {
             inflateViewViaInflaters {
                 infFunc(it.inflater)
@@ -62,7 +63,7 @@ class BaseAsyncLayoutInflater(val context: Context,
 
     @Throws
     private suspend fun inflateViewInUIThread(id: Int, parent: ViewGroup?): View {
-        val view = withContext(UI) {
+        val view = withContext(Dispatchers.Main) {
             inflateViewViaInflaters(id, parent)
         }
         L.warning(tag, "Inflating via ui Thread, for layout id : $id")
@@ -104,14 +105,12 @@ internal suspend fun <U> LockableInflater.use(action: LockableInflater.() -> U):
         mutex.withLock { action() }
 
 
-internal class BaseLayoutInflater : LayoutInflater {
+internal class BaseLayoutInflater(context: Context) : LayoutInflater(
+        context.layoutInflater?.cloneInContext(context) ?: from(context), context) {
 
     private val cache by lazy {
         LayoutInflaterCache()
     }
-
-    constructor(context: Context) : super(
-            context.layoutInflater?.cloneInContext(context) ?: from(context), context)
 
     override fun cloneInContext(context: Context?): LayoutInflater {
         val safeContext = context ?: throw IllegalArgumentException("given context is null.")
@@ -167,9 +166,9 @@ internal class LayoutInflaterCache {
     }
 
     companion object {
-        val widgetPackage = "android.widget."
-        val webkitPackage = "android.webkit."
-        val viewPackage = "android.view."
+        const val widgetPackage = "android.widget."
+        const val webkitPackage = "android.webkit."
+        const val viewPackage = "android.view."
         val predefinedPrefixes = listOf(
                 widgetPackage,
                 viewPackage,

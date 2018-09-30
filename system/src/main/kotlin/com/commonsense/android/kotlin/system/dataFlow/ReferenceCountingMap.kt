@@ -1,7 +1,9 @@
+@file:Suppress("unused", "NOTHING_TO_INLINE", "MemberVisibilityCanBePrivate")
+
 package com.commonsense.android.kotlin.system.dataFlow
 
-import com.commonsense.android.kotlin.base.FunctionUnit
-import java.util.concurrent.atomic.AtomicInteger
+import com.commonsense.android.kotlin.base.*
+import java.util.concurrent.atomic.*
 
 /**
  * Created by Kasper Tvede on 23-07-2017.
@@ -17,7 +19,7 @@ class ReferenceCountingMap {
             throw RuntimeException("Disallowed to add an element to an already existing index;" +
                     " did you mean increment ?")
         }
-        map.put(forKey, ReferenceItem(item, AtomicInteger(1)))
+        map[forKey] = ReferenceItem(item, AtomicInteger(1))
     }
 
     fun addOrIncrement(item: Any, forKey: String) {

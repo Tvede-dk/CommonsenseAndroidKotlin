@@ -1,9 +1,11 @@
+@file:Suppress("unused", "NOTHING_TO_INLINE", "MemberVisibilityCanBePrivate")
+
 package com.commonsense.android.kotlin.views.baseClasses
 
 
-import android.support.v4.view.ViewPager
-import android.view.KeyEvent
-import android.view.MotionEvent
+import android.annotation.*
+import android.support.v4.view.*
+import android.view.*
 
 /**
  * Created by kasper on 17/07/2017.
@@ -32,6 +34,7 @@ class SimpleViewPager : ViewPager {
         return super.onInterceptTouchEvent(ev)
     }
 
+    @SuppressLint("ClickableViewAccessibility")
     override fun onTouchEvent(ev: MotionEvent?): Boolean {
         if (!isSwipeAllowed) {
             return false

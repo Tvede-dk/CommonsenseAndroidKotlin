@@ -1,10 +1,9 @@
 package com.commonsense.android.kotlin.system.datastructures
 
-import com.commonsense.android.kotlin.base.extensions.collections.length
-import com.commonsense.android.kotlin.base.extensions.collections.toIntArray
+import com.commonsense.android.kotlin.base.extensions.collections.*
 import com.commonsense.android.kotlin.test.*
 import org.junit.*
-import org.robolectric.annotation.Config
+import org.robolectric.annotation.*
 
 /**
  * Created by Kasper Tvede on 15-07-2017.

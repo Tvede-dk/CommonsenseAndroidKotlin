@@ -1,26 +1,23 @@
+@file:Suppress("unused", "NOTHING_TO_INLINE", "MemberVisibilityCanBePrivate")
+
 package com.commonsense.android.kotlin.system.extensions
 
-import android.os.Build
-import com.commonsense.android.kotlin.base.EmptyFunction
-import com.commonsense.android.kotlin.base.EmptyFunctionResult
-import com.commonsense.android.kotlin.base.EmptyReceiver
+import android.os.*
+import com.commonsense.android.kotlin.base.*
 
 /**
  * Created by Kasper Tvede on 30-05-2017.
  */
 
 
-@Suppress("NOTHING_TO_INLINE")
 inline fun isApiOverOrEqualTo(level: Int): Boolean {
     return Build.VERSION.SDK_INT >= level
 }
 
-@Suppress("NOTHING_TO_INLINE")
 inline fun isApiGreaterThan(level: Int): Boolean {
     return Build.VERSION.SDK_INT > level
 }
 
-@Suppress("NOTHING_TO_INLINE")
 inline fun isApiLowerThan(level: Int): Boolean {
     return Build.VERSION.SDK_INT < level
 }
@@ -29,7 +26,6 @@ inline fun isApiLowerThan(level: Int): Boolean {
  * The api level of this device.
  * This however is incompatible with lint......
  */
-@Suppress("NOTHING_TO_INLINE")
 inline val apiLevel: Int
     get () = Build.VERSION.SDK_INT
 

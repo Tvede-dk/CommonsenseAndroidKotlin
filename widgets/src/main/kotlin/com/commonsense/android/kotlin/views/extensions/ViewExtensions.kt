@@ -1,33 +1,22 @@
+@file:Suppress("unused", "NOTHING_TO_INLINE", "MemberVisibilityCanBePrivate")
+
 package com.commonsense.android.kotlin.views.extensions
 
-import android.content.Context
-import android.content.res.TypedArray
-import android.os.Build
-import android.support.annotation.RequiresApi
-import android.support.annotation.StyleableRes
-import android.support.annotation.UiThread
-import android.text.InputType
-import android.util.AttributeSet
-import android.view.View
-import android.view.ViewGroup
-import android.view.ViewTreeObserver
-import android.view.inputmethod.EditorInfo
-import android.widget.EditText
-import com.commonsense.android.kotlin.base.AsyncEmptyFunction
-import com.commonsense.android.kotlin.base.AsyncFunctionUnit
-import com.commonsense.android.kotlin.base.EmptyFunction
-import com.commonsense.android.kotlin.base.FunctionUnit
-import com.commonsense.android.kotlin.base.extensions.collections.forEachNotNull
-import com.commonsense.android.kotlin.base.extensions.collections.ifFalse
-import com.commonsense.android.kotlin.base.extensions.collections.ifTrue
-import com.commonsense.android.kotlin.system.extensions.getTypedArrayFor
-import com.commonsense.android.kotlin.system.extensions.isApiOverOrEqualTo
-import com.commonsense.android.kotlin.system.logging.tryAndLog
-import com.commonsense.android.kotlin.system.logging.tryAndLogSuspend
-import kotlinx.coroutines.experimental.android.UI
-import kotlinx.coroutines.experimental.channels.Channel
-import kotlinx.coroutines.experimental.channels.actor
-import kotlinx.coroutines.experimental.channels.consumeEach
+import android.content.*
+import android.content.res.*
+import android.support.annotation.*
+import android.text.*
+import android.util.*
+import android.view.*
+import android.view.inputmethod.*
+import android.widget.*
+import com.commonsense.android.kotlin.base.*
+import com.commonsense.android.kotlin.base.extensions.collections.*
+import com.commonsense.android.kotlin.system.extensions.*
+import com.commonsense.android.kotlin.system.logging.*
+import kotlinx.coroutines.experimental.*
+import kotlinx.coroutines.experimental.android.*
+import kotlinx.coroutines.experimental.channels.*
 
 
 /**
@@ -63,7 +52,7 @@ inline fun View.measureSize(crossinline afterMeasureAction: (with: Int, height: 
 
 @UiThread
 fun View.setOnclickAsyncSuspend(action: AsyncFunctionUnit<Context>) {
-    val eventActor = actor<Unit>(UI, capacity = Channel.CONFLATED) {
+    val eventActor = GlobalScope.actor<Unit>(Dispatchers.Main, capacity = Channel.CONFLATED) {
         channel.consumeEach {
             val cont = context ?: return@actor
             tryAndLogSuspend("onclickAsyncSuspend") {
@@ -81,7 +70,7 @@ fun View.setOnclickAsyncSuspendEmpty(action: AsyncEmptyFunction) {
 
 @UiThread
 fun View.setOnclickAsync(action: FunctionUnit<Context>) {
-    val eventActor = actor<Unit>(UI, capacity = Channel.CONFLATED) {
+    val eventActor = GlobalScope.actor<Unit>(Dispatchers.Main, capacity = Channel.CONFLATED) {
         channel.consumeEach {
             val cont = context ?: return@actor
             tryAndLog("onclickAsync") {

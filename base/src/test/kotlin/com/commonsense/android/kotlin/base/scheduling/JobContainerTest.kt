@@ -1,13 +1,14 @@
+@file:Suppress("unused", "NOTHING_TO_INLINE", "MemberVisibilityCanBePrivate")
+
 package com.commonsense.android.kotlin.base.scheduling
 
-import com.commonsense.android.kotlin.base.AsyncCoroutineFunction
-import com.commonsense.android.kotlin.base.AsyncEmptyFunction
-import com.commonsense.android.kotlin.base.extensions.awaitAll
-import com.commonsense.android.kotlin.test.assert
+import com.commonsense.android.kotlin.base.*
+import com.commonsense.android.kotlin.base.extensions.*
+import com.commonsense.android.kotlin.test.*
 import kotlinx.coroutines.experimental.*
 import org.junit.*
 import org.junit.jupiter.api.Test
-import java.util.concurrent.Semaphore
+import java.util.concurrent.*
 
 /**
  * Created by Kasper Tvede on 20-07-2017.
@@ -22,19 +23,19 @@ class JobContainerTest {
         val jobContainer = JobContainer()
         val jobs = mutableListOf<Job>()
         for (i in 0 until 1000) {
-            jobs += launch(CommonPool) {
-                jobContainer.performAction(CommonPool, action = { })
+            jobs += GlobalScope.launch {
+                jobContainer.performAction(Dispatchers.Default, action = { })
             }
-            jobs += launch(CommonPool) {
-                jobContainer.performAction(CommonPool, scopedAction = { })
+            jobs += GlobalScope.launch {
+                jobContainer.performAction(Dispatchers.Default, scopedAction = { })
             }
-            jobs += launch(CommonPool) {
+            jobs += GlobalScope.launch {
                 jobContainer.removeDoneJobs()
             }
         }
 
         jobs.forEach { it.join() }
-        jobContainer.performAction(CommonPool, action = { })
+        jobContainer.performAction(Dispatchers.Default, action = { })
         jobContainer.removeDoneJobs()
         delay(100)
         jobContainer.getRemainingJobs().assert(0)
@@ -44,7 +45,7 @@ class JobContainerTest {
     @Test
     fun testLaunchDelay() = runBlocking {
         val container = JobContainer()
-        val slowJob = launch(CommonPool) {
+        val slowJob = GlobalScope.launch {
             delay(200)
         }
         container.addJob(slowJob, "test")
@@ -58,13 +59,13 @@ class JobContainerTest {
     @Test
     fun testLaunchDelayAdvanced() = runBlocking {
         val container = JobContainer()
-        val slowJob = launch(CommonPool) {
+        val slowJob = GlobalScope.launch {
             delay(300)
         }
-        val slowJob2 = launch(CommonPool) {
+        val slowJob2 = GlobalScope.launch {
             delay(500)
         }
-        val slowJob3 = launch(CommonPool) {
+        val slowJob3 = GlobalScope.launch {
             delay(100)
         }
         container.addJob(slowJob, "test")
@@ -83,10 +84,10 @@ class JobContainerTest {
     @Test
     fun testDuplicatedGroups() = runBlocking {
         val container = JobContainer()
-        val slowJob = launch(CommonPool) {
+        val slowJob = GlobalScope.launch {
             delay(200)
         }
-        val slowJob2 = launch(CommonPool) {
+        val slowJob2 = GlobalScope.launch {
             delay(400)
         }
         container.addJob(slowJob, "test")
@@ -103,9 +104,9 @@ class JobContainerTest {
     fun testQueuingAwaited() = runBlocking {
         val container = JobContainer()
         var counter = 0
-        container.addToQueue(CommonPool, { counter += 1 }, "test")
-        container.addToQueue(CommonPool, { counter += 1 }, "test")
-        container.addToQueue(CommonPool, { counter += 1 }, "test")
+        container.addToQueue(Dispatchers.Default, { counter += 1 }, "test")
+        container.addToQueue(Dispatchers.Default, { counter += 1 }, "test")
+        container.addToQueue(Dispatchers.Default, { counter += 1 }, "test")
         counter.assert(0, " no jobs should run before ready.")
 
         container.executeQueueAwaited("test")
@@ -116,7 +117,7 @@ class JobContainerTest {
     fun testQueueingBackground() = runBlocking {
         val container = JobContainer()
         var counter = 1
-        container.addToQueue(CommonPool, { counter -= 1 }, "test")
+        container.addToQueue(Dispatchers.Default, { counter -= 1 }, "test")
         container.executeQueueBackground("test")
         delay(50)
         counter.assert(0, "should have executed test even from the background")
@@ -137,8 +138,8 @@ class JobContainerTest {
             sem.acquire()
             scopedCounter -= 1
         }
-        val simpleJob = container.performAction(CommonPool, simple)
-        val scopedJob = container.performAction(CommonPool, scoped)
+        val simpleJob = container.performAction(Dispatchers.Default, simple)
+        val scopedJob = container.performAction(Dispatchers.Default, scoped)
         container.getRemainingJobs()
                 .assert(2, "jobs that are not done should not be counted as")
         sem.release(2)
@@ -181,8 +182,8 @@ class JobContainerTest {
             }
             scopedCounter -= 1
         }
-        val simpleJob = container.performAction(CommonPool, simple, "A")
-        val scopedJob = container.performAction(CommonPool, scoped, "A")
+        val simpleJob = container.performAction(Dispatchers.Default, simple, "A")
+        val scopedJob = container.performAction(Dispatchers.Default, scoped, "A")
         presetupSem.acquire(2)
         container.getRemainingGroupedJobs()
                 .assert(1, "there should only be one job for a group. the last one always wins.")

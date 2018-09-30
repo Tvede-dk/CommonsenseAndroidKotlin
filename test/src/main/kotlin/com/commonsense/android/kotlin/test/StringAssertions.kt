@@ -1,6 +1,8 @@
+@file:Suppress("unused", "NOTHING_TO_INLINE", "MemberVisibilityCanBePrivate")
+
 package com.commonsense.android.kotlin.test
 
-import org.junit.Assert
+import org.junit.*
 
 /**
  * Created by Kasper Tvede on 21-05-2018.

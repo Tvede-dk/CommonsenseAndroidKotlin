@@ -1,6 +1,8 @@
+@file:Suppress("unused", "NOTHING_TO_INLINE", "MemberVisibilityCanBePrivate")
+
 package com.commonsense.android.kotlin.views.widgets
 
-import android.support.v7.widget.AppCompatImageView
+import android.support.v7.widget.*
 
 /**
  * Created by kasper on 29/05/2017.
@@ -20,7 +22,5 @@ class RoundCornersImageView : AppCompatImageView {
 
     }
 
-    override fun onDraw(canvas: android.graphics.Canvas?) {
-        super.onDraw(canvas)
-    }
+
 }

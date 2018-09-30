@@ -1,6 +1,6 @@
 package com.commonsense.android.kotlin.views.input.selection
 
-import android.view.View
+import android.view.*
 import android.widget.*
 import com.commonsense.android.kotlin.base.*
 

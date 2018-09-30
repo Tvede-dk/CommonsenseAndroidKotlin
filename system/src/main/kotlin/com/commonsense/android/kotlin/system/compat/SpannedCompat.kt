@@ -1,9 +1,8 @@
 package com.commonsense.android.kotlin.system.compat
 
-import android.annotation.SuppressLint
-import android.text.Html
-import android.text.Spanned
-import com.commonsense.android.kotlin.system.extensions.isApiOverOrEqualTo
+import android.annotation.*
+import android.text.*
+import com.commonsense.android.kotlin.system.extensions.*
 
 
 /**

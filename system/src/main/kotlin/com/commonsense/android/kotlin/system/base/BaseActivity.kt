@@ -1,23 +1,20 @@
+@file:Suppress("unused", "NOTHING_TO_INLINE", "MemberVisibilityCanBePrivate")
+
 package com.commonsense.android.kotlin.system.base
 
-import android.content.BroadcastReceiver
-import android.content.Intent
-import android.content.IntentFilter
-import android.os.Bundle
-import android.os.Handler
+import android.content.*
+import android.os.*
 import android.support.annotation.IntRange
-import android.support.v7.app.AppCompatActivity
-import android.view.MenuItem
-import com.commonsense.android.kotlin.base.AsyncEmptyFunction
-import com.commonsense.android.kotlin.base.EmptyFunctionResult
-import com.commonsense.android.kotlin.base.debug.prettyStringContent
-import com.commonsense.android.kotlin.system.PermissionsHandling
+import android.support.v7.app.*
+import android.view.*
+import com.commonsense.android.kotlin.base.*
+import com.commonsense.android.kotlin.base.debug.*
+import com.commonsense.android.kotlin.system.*
 import com.commonsense.android.kotlin.system.base.helpers.*
-import com.commonsense.android.kotlin.system.extensions.backPressIfHome
-import com.commonsense.android.kotlin.system.logging.logWarning
-import com.commonsense.android.kotlin.system.logging.tryAndLog
-import com.commonsense.android.kotlin.system.uiAware.UiAwareJobContainer
-import kotlinx.coroutines.experimental.Dispatchers
+import com.commonsense.android.kotlin.system.extensions.*
+import com.commonsense.android.kotlin.system.logging.*
+import com.commonsense.android.kotlin.system.uiAware.*
+import kotlinx.coroutines.experimental.*
 
 /**
  * created by Kasper Tvede on 29-09-2016.
@@ -91,8 +88,8 @@ open class BaseActivity : AppCompatActivity(), ActivityResultHelperContainer {
      * @param group String
      * @param action AsyncEmptyFunction
      */
-    fun launchInUi(group: String, action: AsyncEmptyFunction) {
-        localJobs.launchInUi({ isVisible }, group, action)
+    fun launchInUi(group: String, action: AsyncFunctionUnit<Context>) {
+        localJobs.launchInUi({ isVisible }, group, action, this)
     }
 
     /**
@@ -119,7 +116,7 @@ open class BaseActivity : AppCompatActivity(), ActivityResultHelperContainer {
 
     override fun onDestroy() {
         receiverHandler.onDestroy(this)
-        localJobs.onDestory()
+        localJobs.onDestroy()
         activityResultHelper.clear()
         keyboardHandler.onDestroy(this)
         super.onDestroy()

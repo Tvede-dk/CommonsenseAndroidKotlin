@@ -1,15 +1,12 @@
 package com.commonsense.android.kotlin.views.widgets
 
-import android.content.Context
-import android.databinding.DataBindingComponent
-import android.databinding.ViewDataBinding
-import android.view.View
-import com.commonsense.android.kotlin.test.BaseRoboElectricTest
-import com.commonsense.android.kotlin.views.databinding.adapters.BaseDataBindingRecyclerAdapter
-import com.commonsense.android.kotlin.views.databinding.adapters.RenderModel
-import org.junit.Assert
-import org.junit.Test
-import org.robolectric.annotation.Config
+import android.content.*
+import android.databinding.*
+import android.view.*
+import com.commonsense.android.kotlin.test.*
+import com.commonsense.android.kotlin.views.databinding.adapters.*
+import org.junit.*
+import org.robolectric.annotation.*
 
 /**
  * Created by Kasper Tvede on 27-05-2017.

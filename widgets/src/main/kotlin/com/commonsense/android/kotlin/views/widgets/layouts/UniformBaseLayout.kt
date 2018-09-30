@@ -1,14 +1,15 @@
+@file:Suppress("unused", "NOTHING_TO_INLINE", "MemberVisibilityCanBePrivate", "LeakingThis")
+
 package com.commonsense.android.kotlin.views.widgets.layouts
 
-import android.content.Context
-import android.graphics.Canvas
-import android.graphics.drawable.Drawable
-import android.util.AttributeSet
-import com.commonsense.android.kotlin.base.extensions.equals
-import com.commonsense.android.kotlin.views.R
-import com.commonsense.android.kotlin.views.widgets.booleanVariable
-import com.commonsense.android.kotlin.views.widgets.dimensionVariable
-import com.commonsense.android.kotlin.views.widgets.base.BaseCustomViewGroup
+import android.content.*
+import android.graphics.*
+import android.graphics.drawable.*
+import android.util.*
+import com.commonsense.android.kotlin.base.extensions.*
+import com.commonsense.android.kotlin.views.*
+import com.commonsense.android.kotlin.views.widgets.*
+import com.commonsense.android.kotlin.views.widgets.base.*
 
 /**
  * Created by Kasper Tvede on 27-08-2017.

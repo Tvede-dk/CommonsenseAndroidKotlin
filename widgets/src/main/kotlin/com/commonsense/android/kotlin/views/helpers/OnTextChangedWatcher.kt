@@ -1,7 +1,6 @@
 package com.commonsense.android.kotlin.views.helpers
 
-import android.text.Editable
-import android.text.TextWatcher
+import android.text.*
 
 /**
  * Created by Kasper Tvede on 21-05-2017.

@@ -1,10 +1,9 @@
 package csense.android.exampleApp.views.tools
 
-import com.commonsense.android.kotlin.system.extensions.startActivity
-import com.commonsense.android.kotlin.views.databinding.activities.BaseDatabindingActivity
-import com.commonsense.android.kotlin.views.databinding.activities.InflaterFunctionSimple
-import com.commonsense.android.kotlin.views.extensions.setOnclickAsync
-import csense.android.exampleApp.databinding.ToolsOverviewBinding
+import com.commonsense.android.kotlin.system.extensions.*
+import com.commonsense.android.kotlin.views.databinding.activities.*
+import com.commonsense.android.kotlin.views.extensions.*
+import csense.android.exampleApp.databinding.*
 
 /**
  * Created by Kasper Tvede on 01-03-2018.

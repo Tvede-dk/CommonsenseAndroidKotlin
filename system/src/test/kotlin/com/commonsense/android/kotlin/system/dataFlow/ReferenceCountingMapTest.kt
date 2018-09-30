@@ -1,12 +1,8 @@
 package com.commonsense.android.kotlin.system.dataFlow
 
-import com.commonsense.android.kotlin.system.base.BaseActivity
-import com.commonsense.android.kotlin.test.assert
-import com.commonsense.android.kotlin.test.assertNull
-import com.commonsense.android.kotlin.test.assertThrows
-import kotlinx.coroutines.experimental.CommonPool
-import kotlinx.coroutines.experimental.async
-import kotlinx.coroutines.experimental.runBlocking
+import com.commonsense.android.kotlin.system.base.*
+import com.commonsense.android.kotlin.test.*
+import kotlinx.coroutines.experimental.*
 import org.junit.*
 
 /**

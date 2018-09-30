@@ -1,10 +1,10 @@
 package com.commonsense.android.kotlin.views.databinding.activities
 
-import android.content.res.Configuration
-import android.databinding.ViewDataBinding
-import android.os.Bundle
-import android.support.v7.app.ActionBarDrawerToggle
-import android.view.MenuItem
+import android.content.res.*
+import android.databinding.*
+import android.os.*
+import android.support.v7.app.*
+import android.view.*
 
 /**
  * Created by Kasper Tvede on 01-11-2016.
@@ -15,7 +15,7 @@ import android.view.MenuItem
  * required methods delegate to this as well.
  *
  * @see BaseDatabindingActivity
- * @param out T : ViewDataBinding
+ * @param T : ViewDataBinding
  * @property drawerToggle ActionBarDrawerToggle the toolbar
  *
  */

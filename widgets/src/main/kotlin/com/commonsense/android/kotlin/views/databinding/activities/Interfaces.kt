@@ -1,13 +1,15 @@
+@file:Suppress("unused", "NOTHING_TO_INLINE", "MemberVisibilityCanBePrivate")
+
 package com.commonsense.android.kotlin.views.databinding.activities
 
-import android.databinding.ViewDataBinding
+import android.databinding.*
 
 /**
  * Created by kasper on 25/07/2017.
  */
 /**
  * Describes what is required to be data bindable, akk use a view data binding
- * @param out T : ViewDataBinding the type of view binding
+ * @param T : ViewDataBinding the type of view binding
  * @property binding T the binding (access here to)
  */
 interface Databindable<out T : ViewDataBinding> {

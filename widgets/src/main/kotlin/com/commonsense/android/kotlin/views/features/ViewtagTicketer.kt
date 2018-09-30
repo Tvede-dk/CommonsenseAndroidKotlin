@@ -1,9 +1,11 @@
+@file:Suppress("unused", "NOTHING_TO_INLINE", "MemberVisibilityCanBePrivate")
+
 package com.commonsense.android.kotlin.views.features
 
-import android.view.View
-import com.commonsense.android.kotlin.base.FunctionUnit
-import com.commonsense.android.kotlin.base.datastructures.Ticketer
-import kotlin.reflect.KClass
+import android.view.*
+import com.commonsense.android.kotlin.base.*
+import com.commonsense.android.kotlin.base.datastructures.*
+import kotlin.reflect.*
 
 
 /**

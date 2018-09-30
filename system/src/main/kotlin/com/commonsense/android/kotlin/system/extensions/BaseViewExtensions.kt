@@ -1,6 +1,6 @@
 package com.commonsense.android.kotlin.system.extensions
 
-import android.widget.EditText
+import android.widget.*
 
 /**
  * Created by Kasper Tvede on 03-08-2017.

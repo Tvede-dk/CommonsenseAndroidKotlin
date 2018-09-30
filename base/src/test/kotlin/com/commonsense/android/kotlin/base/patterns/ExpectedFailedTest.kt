@@ -1,9 +1,7 @@
 package com.commonsense.android.kotlin.base.patterns
 
-import org.junit.Ignore
+import org.junit.*
 import org.junit.jupiter.api.Test
-
-import org.junit.jupiter.api.Assertions.*
 
 /**
  *

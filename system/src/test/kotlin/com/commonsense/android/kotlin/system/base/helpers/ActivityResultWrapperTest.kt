@@ -3,8 +3,6 @@ package com.commonsense.android.kotlin.system.base.helpers
 import org.junit.*
 import org.junit.jupiter.api.Test
 
-import org.junit.jupiter.api.Assertions.*
-
 /**
  *
  */

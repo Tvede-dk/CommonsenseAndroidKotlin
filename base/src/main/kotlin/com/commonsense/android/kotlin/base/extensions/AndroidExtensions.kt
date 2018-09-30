@@ -1,3 +1,5 @@
+@file:Suppress("unused", "NOTHING_TO_INLINE", "MemberVisibilityCanBePrivate")
+
 package com.commonsense.android.kotlin.base.extensions
 
 import android.text.*
@@ -9,7 +11,6 @@ import android.text.*
 /**
  * converts an immutable string to an editable edition :)
  */
-@Suppress("NOTHING_TO_INLINE")
 inline fun String.toEditable(): Editable =
         Editable.Factory.getInstance().newEditable(this)
 

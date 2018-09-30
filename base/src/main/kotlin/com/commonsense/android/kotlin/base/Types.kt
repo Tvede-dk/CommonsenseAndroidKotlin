@@ -1,6 +1,8 @@
+@file:Suppress("unused", "NOTHING_TO_INLINE", "MemberVisibilityCanBePrivate")
+
 package com.commonsense.android.kotlin.base
 
-import kotlinx.coroutines.experimental.CoroutineScope
+import kotlinx.coroutines.experimental.*
 
 /**
  * Created by kasper on 21/07/2017.

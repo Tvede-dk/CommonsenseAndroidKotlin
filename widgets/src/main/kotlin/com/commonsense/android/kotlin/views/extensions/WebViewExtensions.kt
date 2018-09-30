@@ -1,7 +1,9 @@
+@file:Suppress("unused", "NOTHING_TO_INLINE", "MemberVisibilityCanBePrivate")
+
 package com.commonsense.android.kotlin.views.extensions
 
-import android.net.Uri
-import android.webkit.WebView
+import android.net.*
+import android.webkit.*
 
 /**
  * Created by Kasper Tvede on 21-05-2017.
@@ -9,7 +11,7 @@ import android.webkit.WebView
 /**
  * The Default encoding and type for a given html page.
  */
-private val textHtmlWithCharset = "text/html;charset=UTF-8"
+private const val textHtmlWithCharset = "text/html;charset=UTF-8"
 
 
 /**

@@ -1,17 +1,19 @@
+@file:Suppress("unused", "NOTHING_TO_INLINE", "MemberVisibilityCanBePrivate")
+
 package csense.android.tools.fps
 
-import android.content.Context
-import android.view.Choreographer
-import com.commonsense.android.kotlin.base.FunctionUnit
-import com.commonsense.android.kotlin.base.algorithms.RunningAverageFloatCapped
+import android.content.*
+import android.view.*
+import com.commonsense.android.kotlin.base.*
+import com.commonsense.android.kotlin.base.algorithms.*
 import com.commonsense.android.kotlin.base.extensions.*
 import com.commonsense.android.kotlin.base.time.*
-import com.commonsense.android.kotlin.system.extensions.defaultDisplay
-import com.commonsense.android.kotlin.system.logging.L
-import kotlinx.coroutines.experimental.android.UI
-import kotlinx.coroutines.experimental.async
-import java.lang.ref.WeakReference
-import kotlin.math.roundToInt
+import com.commonsense.android.kotlin.system.extensions.*
+import com.commonsense.android.kotlin.system.logging.*
+import kotlinx.coroutines.experimental.*
+import kotlinx.coroutines.experimental.android.*
+import java.lang.ref.*
+import kotlin.math.*
 
 /**
  * Created by Kasper Tvede½
@@ -126,7 +128,7 @@ class FpsWatcher(context: Context,
         if (currentTime - lastTime > backoffTimingInNs && !average.equals(lastAverage, 0.1f)) {
             lastTime = currentTime
             lastAverage = average
-            async(UI) {
+            GlobalScope.launch(Dispatchers.Main) {
                 L.error(FpsWatcher::class.java.simpleName, "fps is:$currentFps")
                 callbackOnTiming(average,
                         maxOf(expectedFps - currentFps, 0f),

@@ -1,12 +1,10 @@
 package com.commonsense.android.kotlin.system.extensions
 
-import android.content.Context
-import android.content.res.TypedArray
-import android.graphics.drawable.Drawable
-import android.support.annotation.ColorInt
-import android.support.annotation.DrawableRes
-import android.support.annotation.StyleableRes
-import android.support.v7.content.res.AppCompatResources
+import android.content.*
+import android.content.res.*
+import android.graphics.drawable.*
+import android.support.annotation.*
+import android.support.v7.content.res.*
 
 /**
  * Created by kasper on 29/05/2017.

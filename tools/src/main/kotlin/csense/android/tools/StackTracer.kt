@@ -1,6 +1,6 @@
 package csense.android.tools
 
-import com.commonsense.android.kotlin.base.StringList
+import com.commonsense.android.kotlin.base.*
 
 /**
  * Created by Kasper Tvede on 10-03-2018.

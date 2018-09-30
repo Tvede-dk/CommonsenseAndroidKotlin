@@ -1,7 +1,9 @@
+@file:Suppress("unused", "NOTHING_TO_INLINE", "MemberVisibilityCanBePrivate")
+
 package com.commonsense.android.kotlin.base.extensions.collections
 
 import android.support.annotation.IntRange
-import com.commonsense.android.kotlin.base.FunctionBoolean
+import com.commonsense.android.kotlin.base.*
 
 /**
  * Created by Kasper Tvede on 09-07-2017.
@@ -38,7 +40,7 @@ fun <E> MutableCollection<E>.set(collection: Collection<E>) {
 /**
  * Clears the collection and add's the given element
  */
-fun <E> MutableCollection<E>.set(item: E) : Unit {
+fun <E> MutableCollection<E>.set(item: E) {
     clear()
     add(item)
 }
@@ -50,7 +52,7 @@ fun <T> MutableList<T>.removeAll(intRange: kotlin.ranges.IntRange): Boolean {
     if (intRange.start >= size || intRange.endInclusive >= size) {
         return false
     }
-    intRange.forEach { this.removeAt(intRange.start) }
+    intRange.forEach { _ -> this.removeAt(intRange.start) }
     return true
 }
 

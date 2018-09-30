@@ -15,7 +15,9 @@
 - mapLazy for null / not null and "map" for null/ not null is now named
     -mapNull
     -mapNullLazy
-    so the "boolean" map is never confused. 
+    so the "boolean" map is never confused.
+
+- removed DataComposer in prebuilt.
     
 ### Changes
 

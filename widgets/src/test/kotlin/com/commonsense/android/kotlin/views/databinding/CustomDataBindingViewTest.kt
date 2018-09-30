@@ -3,8 +3,6 @@ package com.commonsense.android.kotlin.views.databinding
 import org.junit.*
 import org.junit.jupiter.api.Test
 
-import org.junit.jupiter.api.Assertions.*
-
 /**
  *
  */

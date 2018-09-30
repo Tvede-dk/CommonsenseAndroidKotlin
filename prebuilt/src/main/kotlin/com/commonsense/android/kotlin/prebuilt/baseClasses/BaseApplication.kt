@@ -1,20 +1,19 @@
+@file:Suppress("unused", "NOTHING_TO_INLINE", "MemberVisibilityCanBePrivate")
+
 package com.commonsense.android.kotlin.prebuilt.baseClasses
 
-import android.app.Activity
-import android.app.Application
-import android.os.Bundle
-import android.os.StrictMode
+import android.app.*
+import android.os.*
 import android.os.strictmode.*
 import android.support.annotation.*
-import android.support.v7.app.AppCompatDelegate
-import com.commonsense.android.kotlin.base.EmptyFunction
-import com.commonsense.android.kotlin.base.extensions.collections.ifTrue
-import com.commonsense.android.kotlin.base.extensions.isZero
+import android.support.v7.app.*
+import com.commonsense.android.kotlin.base.*
+import com.commonsense.android.kotlin.base.extensions.*
+import com.commonsense.android.kotlin.base.extensions.collections.*
 import com.commonsense.android.kotlin.system.extensions.*
-import com.commonsense.android.kotlin.system.logging.logDebug
-import com.commonsense.android.kotlin.system.logging.tryAndLog
-import com.squareup.leakcanary.LeakCanary
-import java.util.concurrent.atomic.AtomicInteger
+import com.commonsense.android.kotlin.system.logging.*
+import com.squareup.leakcanary.*
+import java.util.concurrent.atomic.*
 
 /**
  * Created by Kasper Tvede on 28-10-2016.

@@ -48,7 +48,7 @@ class CameraFragment : BaseDatabindingFragment<CameraFragmentDemoBinding>() {
         }
 
         binding.cameraFragmentImagesList.setupAsync(imageAdapter, LinearLayoutManager(context)) {
-            launch(UI) {
+            GlobalScope.launch(Dispatchers.Main) {
             }
         }
     }

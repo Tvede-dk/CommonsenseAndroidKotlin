@@ -1,14 +1,13 @@
+@file:Suppress("unused", "NOTHING_TO_INLINE", "MemberVisibilityCanBePrivate")
+
 package com.commonsense.android.kotlin.views.widgets.layouts
 
-import android.content.Context
-import android.graphics.Canvas
-import android.graphics.drawable.Drawable
-import android.util.AttributeSet
-import com.commonsense.android.kotlin.base.extensions.forEach
-import com.commonsense.android.kotlin.views.extensions.contentWidth
-import com.commonsense.android.kotlin.views.extensions.draw
-import com.commonsense.android.kotlin.views.extensions.visibleChildren
-import com.commonsense.android.kotlin.views.extensions.visibleChildrenCount
+import android.content.*
+import android.graphics.*
+import android.graphics.drawable.*
+import android.util.*
+import com.commonsense.android.kotlin.base.extensions.*
+import com.commonsense.android.kotlin.views.extensions.*
 
 /**
  * Created by Kasper Tvede on 27-08-2017.

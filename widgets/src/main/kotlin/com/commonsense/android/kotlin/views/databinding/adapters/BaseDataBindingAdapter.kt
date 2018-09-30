@@ -1,14 +1,15 @@
+@file:Suppress("unused", "NOTHING_TO_INLINE", "MemberVisibilityCanBePrivate")
+
 package com.commonsense.android.kotlin.views.databinding.adapters
 
-import android.content.Context
-import android.databinding.ViewDataBinding
+import android.content.*
+import android.databinding.*
 import android.support.annotation.IntRange
-import android.util.SparseIntArray
-import android.view.LayoutInflater
-import android.view.View
-import android.view.ViewGroup
-import com.commonsense.android.kotlin.base.extensions.collections.set
-import com.commonsense.android.kotlin.views.baseClasses.BaseAdapter
+import android.util.*
+import android.view.*
+import com.commonsense.android.kotlin.base.extensions.collections.*
+import com.commonsense.android.kotlin.views.baseClasses.*
+import kotlin.Pair
 
 /**
  * created by Kasper Tvede on 30-09-2016.
@@ -30,7 +31,7 @@ open class BaseDataBindingAdapter(context: Context) : BaseAdapter<BaseAdapterIte
         }
         binding.root.tag = binding
         return binding.root
-}
+    }
 
     override fun getItemViewType(position: Int): Int {
         val item = getItem(position)?.let { it::class.java.hashCode() } ?: 0
@@ -42,8 +43,8 @@ open class BaseDataBindingAdapter(context: Context) : BaseAdapter<BaseAdapterIte
     override fun getViewTypeCount() = Math.max(viewTypes.size(), 1)
 
     fun calculateViewTypes(): Int {
-        val classes = getItems().map { it::class.java }.distinct()
-        val mappings = classes.map { it::class.java.hashCode() }.zip(IntRange(0, classes.size))
+        val classes: List<Class<out BaseAdapterItemBinding<*>>> = getItems().asSequence().map { it::class.java }.distinct().toList()
+        val mappings: List<Pair<Int, Int>> = classes.map { it::class.java.hashCode() }.zip(IntRange(0, classes.size))
         viewTypes.set(mappings)
         return viewTypeCount
     }

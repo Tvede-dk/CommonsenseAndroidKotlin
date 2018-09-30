@@ -2,8 +2,6 @@ package csense.android.tools.ui
 
 import org.junit.*
 
-import org.junit.Assert.*
-
 /**
  *
  */

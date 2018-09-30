@@ -1,3 +1,5 @@
+@file:Suppress("unused", "NOTHING_TO_INLINE", "MemberVisibilityCanBePrivate")
+
 package com.commonsense.android.kotlin.system.base.helpers
 
 import android.content.*

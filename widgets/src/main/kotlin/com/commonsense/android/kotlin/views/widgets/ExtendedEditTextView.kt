@@ -1,12 +1,12 @@
+@file:Suppress("unused", "NOTHING_TO_INLINE", "MemberVisibilityCanBePrivate")
+
 package com.commonsense.android.kotlin.views.widgets
 
-import android.support.v7.widget.AppCompatEditText
-import android.text.TextWatcher
-import android.view.KeyEvent
-import android.view.inputmethod.EditorInfo
-import android.view.inputmethod.InputConnection
-import android.view.inputmethod.InputConnectionWrapper
-import com.commonsense.android.kotlin.views.extensions.isEmpty
+import android.support.v7.widget.*
+import android.text.*
+import android.view.*
+import android.view.inputmethod.*
+import com.commonsense.android.kotlin.views.extensions.*
 
 /**
  * Created by kasper on 10/07/2017.

@@ -1,10 +1,11 @@
+@file:Suppress("unused", "NOTHING_TO_INLINE", "MemberVisibilityCanBePrivate")
+
 package com.commonsense.android.kotlin.system.logging
 
-import android.content.ComponentCallbacks
-import android.util.Log
-import android.view.View
-import com.commonsense.android.kotlin.base.extensions.collections.invokeEachWith
-import com.commonsense.android.kotlin.base.extensions.collections.onTrue
+import android.content.*
+import android.util.*
+import android.view.*
+import com.commonsense.android.kotlin.base.extensions.collections.*
 import com.commonsense.android.kotlin.system.logging.LoggingType.*
 import kotlin.reflect.*
 

@@ -1,3 +1,5 @@
+@file:Suppress("unused", "NOTHING_TO_INLINE", "MemberVisibilityCanBePrivate")
+
 package com.commonsense.android.kotlin.system.base
 
 import android.app.*
@@ -85,7 +87,7 @@ abstract class BaseActivityData<out InputType> : BaseActivity() {
 
 
     companion object {
-        internal val dataIntentIndex = "baseActivity-data-index"
+        internal const val dataIntentIndex = "baseActivity-data-index"
         internal val dataReferenceMap = ReferenceCountingMap()
 
         /**

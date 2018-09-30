@@ -1,24 +1,19 @@
 package csense.android.exampleApp.activity
 
 
-import android.support.annotation.StringRes
-import android.support.v7.widget.GridLayoutManager
-import com.commonsense.android.kotlin.base.EmptyFunction
-import com.commonsense.android.kotlin.system.extensions.startActivity
+import android.support.annotation.*
+import android.support.v7.widget.*
+import com.commonsense.android.kotlin.base.*
+import com.commonsense.android.kotlin.system.extensions.*
 import com.commonsense.android.kotlin.system.logging.*
-import com.commonsense.android.kotlin.views.ViewInflatingFunction
-import csense.android.exampleApp.views.tools.ToolsOverviewActivity
-import com.commonsense.android.kotlin.views.databinding.activities.BaseDatabindingActivity
-import com.commonsense.android.kotlin.views.databinding.activities.InflaterFunctionSimple
-import com.commonsense.android.kotlin.views.databinding.adapters.BaseDataBindingRecyclerAdapter
-import com.commonsense.android.kotlin.views.databinding.adapters.BaseRenderModel
-import com.commonsense.android.kotlin.views.databinding.adapters.BaseViewHolderItem
-import com.commonsense.android.kotlin.views.extensions.setOnclickAsyncEmpty
-import com.commonsense.android.kotlin.views.extensions.setup
+import com.commonsense.android.kotlin.views.*
+import com.commonsense.android.kotlin.views.databinding.activities.*
+import com.commonsense.android.kotlin.views.databinding.adapters.*
+import com.commonsense.android.kotlin.views.extensions.*
 import csense.android.exampleApp.R
-import csense.android.exampleApp.databinding.CategoryRenderViewBinding
-import csense.android.exampleApp.databinding.MainActivityBinding
-import csense.android.exampleApp.views.widgets.WidgetsOverviewActivity
+import csense.android.exampleApp.databinding.*
+import csense.android.exampleApp.views.tools.*
+import csense.android.exampleApp.views.widgets.*
 
 
 class MainActivity : BaseDatabindingActivity<MainActivityBinding>() {

@@ -2,7 +2,7 @@
 
 package com.commonsense.android.kotlin.base.extensions.generic
 
-import com.commonsense.android.kotlin.base.extensions.isOdd
+import com.commonsense.android.kotlin.base.extensions.*
 
 
 typealias Function2Unit<T, U> = (T, U) -> Unit

@@ -1,10 +1,10 @@
 package com.commonsense.android.kotlin.prebuilt.activities
 
-import android.databinding.ViewDataBinding
-import android.support.v4.app.Fragment
-import android.view.ViewGroup
-import com.commonsense.android.kotlin.system.extensions.replaceFragment
-import com.commonsense.android.kotlin.views.databinding.activities.BaseDatabindingActivity
+import android.databinding.*
+import android.support.v4.app.*
+import android.view.*
+import com.commonsense.android.kotlin.system.extensions.*
+import com.commonsense.android.kotlin.views.databinding.activities.*
 
 /**
  * Created by Kasper Tvede on 26-08-2017.

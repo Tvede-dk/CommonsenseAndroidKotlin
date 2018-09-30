@@ -1,13 +1,12 @@
+@file:Suppress("unused", "NOTHING_TO_INLINE", "MemberVisibilityCanBePrivate")
+
 package com.commonsense.android.kotlin.views.databinding.adapters
 
-import android.content.Context
-import android.databinding.DataBindingUtil
-import android.databinding.ViewDataBinding
-import android.support.annotation.LayoutRes
-import android.view.LayoutInflater
-import android.view.View
-import android.view.ViewGroup
-import com.commonsense.android.kotlin.views.baseClasses.BaseAdapter
+import android.content.*
+import android.databinding.*
+import android.support.annotation.*
+import android.view.*
+import com.commonsense.android.kotlin.views.baseClasses.*
 
 /**
  * created by Kasper Tvede on 29-09-2016.

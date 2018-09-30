@@ -1,3 +1,5 @@
+@file:Suppress("unused", "NOTHING_TO_INLINE", "MemberVisibilityCanBePrivate")
+
 package com.commonsense.android.kotlin.base.extensions.collections
 
 import android.support.annotation.*
@@ -7,17 +9,14 @@ import com.commonsense.android.kotlin.base.*
  * Created by Kasper Tvede on 30-09-2016.
  */
 
-@Suppress("NOTHING_TO_INLINE")
 inline fun Collection<*>.isIndexValid(index: Int) =
         index >= 0 && index < count()
 
 
-@Suppress("NOTHING_TO_INLINE")
 inline fun Collection<*>.isIndexValidForInsert(index: Int) =
         index >= 0 && index <= count()
 
 
-@Suppress("NOTHING_TO_INLINE")
 inline fun <T> Collection<T>.getSafe(index: Int): T? =
         if (this.isIndexValid(index)) {
             elementAt(index)
@@ -25,7 +24,6 @@ inline fun <T> Collection<T>.getSafe(index: Int): T? =
             null
         }
 
-@Suppress("NOTHING_TO_INLINE")
 inline fun <T> List<T>.categorizeInto(@Size(min = 0) vararg filters: (T) -> Boolean): List<List<T>> {
     val result = filters.map { mutableListOf<T>() }
     this.forEach {
@@ -42,7 +40,7 @@ inline fun <T> List<T>.categorize(
     forEach {
         val key = categorizer(it)
         if (result[key] == null) {
-            result.put(key, mutableListOf(it))
+            result[key] = mutableListOf(it)
         } else {
             result[key]?.add(it)
         }
@@ -51,7 +49,6 @@ inline fun <T> List<T>.categorize(
 }
 
 
-@Suppress("NOTHING_TO_INLINE")
 inline fun <T> List<T>.repeate(repeateBy: Int): List<T> {
     val resultList = this.toMutableList()
     for (i in 0 until repeateBy) {
@@ -73,11 +70,9 @@ inline fun <reified T> List<T>.repeateToSize(
 }
 
 
-@Suppress("NOTHING_TO_INLINE")
 inline fun Collection<*>.isRangeValid(intRange: IntRange): Boolean =
         (intRange.start >= 0 && intRange.endInclusive < size)
 
-@Suppress("NOTHING_TO_INLINE")
 inline fun <T> List<T>.subList(intRange: IntRange): List<T> =
         subList(intRange.start, intRange.endInclusive)
 
@@ -85,7 +80,6 @@ inline fun <T> List<T>.subList(intRange: IntRange): List<T> =
  * Returns a limited view of this list, by limiting the size of it (if the list is shorter than the limit,
  * then the result will be the lists' com.commonsense.android.kotlin.base.extensions.getLength).
  */
-@Suppress("NOTHING_TO_INLINE")
 inline fun <E> List<E>.limitToSize(size: Int): List<E> =
         subList(0, minOf(size, this.size))
 
@@ -97,19 +91,16 @@ inline fun <E> List<E>.limitToSize(size: Int): List<E> =
 /**
  * Invokes each function with the given arguments
  */
-@Suppress("NOTHING_TO_INLINE")
 inline fun <I1, O> Iterable<kotlin.Function1<I1, O>>.invokeEachWith(element: I1) =
         forEach { it(element) }
 
 
-@Suppress("NOTHING_TO_INLINE")
 inline fun <I1, I2, O> Iterable<Function2<I1, I2, O>>.invokeEachWith(
         firstElement: I1,
         secondElement: I2) =
         forEach { it(firstElement, secondElement) }
 
 
-@Suppress("NOTHING_TO_INLINE")
 inline fun <I1, I2, I3, O>
         Iterable<Function3<I1, I2, I3, O>>.invokeEachWith(
         firstElement: I1,
@@ -121,7 +112,6 @@ inline fun <I1, I2, I3, O>
                     thirdElement)
         }
 
-@Suppress("NOTHING_TO_INLINE")
 inline fun <I1, I2, I3, I4, O>
         Iterable<Function4<I1, I2, I3, I4, O>>.invokeEachWith(
         firstElement: I1,
@@ -136,7 +126,6 @@ inline fun <I1, I2, I3, I4, O>
         }
 
 
-@Suppress("NOTHING_TO_INLINE")
 inline fun <I1, I2, I3, I4, I5, O>
         Iterable<Function5<I1, I2, I3, I4, I5, O>>.invokeEachWith(
         firstElement: I1,
@@ -152,7 +141,6 @@ inline fun <I1, I2, I3, I4, I5, O>
                     fifthElement)
         }
 
-@Suppress("NOTHING_TO_INLINE")
 inline fun <I1, I2, I3, I4, I5, I6, O>
         Iterable<Function6<I1, I2, I3, I4, I5, I6, O>>.invokeEachWith(
         firstElement: I1,
@@ -172,7 +160,6 @@ inline fun <I1, I2, I3, I4, I5, I6, O>
 //</editor-fold>
 
 
-@Suppress("NOTHING_TO_INLINE")
 inline fun <E> Iterable<E?>.forEachNotNull(crossinline action: FunctionUnit<E>) {
     forEach { it?.let(action) }
 }

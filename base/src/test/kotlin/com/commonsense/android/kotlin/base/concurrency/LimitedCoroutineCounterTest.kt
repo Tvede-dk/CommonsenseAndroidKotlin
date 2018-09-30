@@ -1,10 +1,10 @@
+@file:Suppress("unused", "NOTHING_TO_INLINE", "MemberVisibilityCanBePrivate")
+
 package com.commonsense.android.kotlin.base.concurrency
 
-import com.commonsense.android.kotlin.test.assert
-import kotlinx.coroutines.experimental.async
-import kotlinx.coroutines.experimental.delay
-import kotlinx.coroutines.experimental.runBlocking
-import org.junit.jupiter.api.Test
+import com.commonsense.android.kotlin.test.*
+import kotlinx.coroutines.experimental.*
+import org.junit.jupiter.api.*
 
 /**
  * Created by Kasper Tvede on 20-05-2018.
@@ -15,24 +15,25 @@ class LimitedCoroutineCounterTest {
 
     //TODO make this without delays... it only servers as an"example" of how the test / usage
     //should be
+    @Suppress("DeferredResultUnused")
     @Test
     fun perform() = runBlocking {
         val limited = LimitedCoroutineCounter(2)
         var counter = 0
-        async {
+        GlobalScope.async {
             limited.perform(suspend {
                 counter += 1
                 delay(50)
 
             })
         }
-        async {
+        GlobalScope.async {
             limited.perform(suspend {
                 counter += 1
                 delay(50)
             })
         }
-        async {
+        GlobalScope.async {
             limited.perform(suspend {
                 counter += 1
                 delay(50)

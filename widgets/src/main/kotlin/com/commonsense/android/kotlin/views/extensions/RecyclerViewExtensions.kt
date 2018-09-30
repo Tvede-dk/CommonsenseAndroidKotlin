@@ -1,8 +1,9 @@
+@file:Suppress("unused")
 package com.commonsense.android.kotlin.views.extensions
 
-import android.support.v7.widget.RecyclerView
-import com.commonsense.android.kotlin.base.FunctionUnit
-import com.commonsense.android.kotlin.base.extensions.collections.length
+import android.support.v7.widget.*
+import com.commonsense.android.kotlin.base.*
+import com.commonsense.android.kotlin.base.extensions.collections.*
 
 /**
  * Setup this recycler view with an adapter and a layout manager
@@ -24,11 +25,8 @@ fun RecyclerView.setup(adapter: RecyclerView.Adapter<*>,
  */
 inline fun RecyclerView.addOnScrollWhenPastFirstItem(crossinline action: FunctionUnit<Boolean>): RecyclerView.OnScrollListener {
     val listener = object : RecyclerView.OnScrollListener() {
-        override fun onScrolled(recyclerView: RecyclerView?, dx: Int, dy: Int) {
+        override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
             super.onScrolled(recyclerView, dx, dy)
-            if (recyclerView == null) {
-                return
-            }
             val isFirstVisible = recyclerView.findViewHolderForLayoutPosition(0) == null
             action(isFirstVisible)
         }
@@ -78,4 +76,3 @@ fun RecyclerView.scrollToBottom(shouldScrollSmooth: Boolean = true) {
         layoutManager?.scrollToPosition(lastPosition)
     }
 }
-//

@@ -1,9 +1,9 @@
 package com.commonsense.android.kotlin.system.imaging
 
-import android.graphics.PorterDuff
-import android.graphics.drawable.Drawable
-import android.support.annotation.ColorInt
-import android.support.v4.graphics.drawable.DrawableCompat
+import android.graphics.*
+import android.graphics.drawable.*
+import android.support.annotation.*
+import android.support.v4.graphics.drawable.*
 
 /**
  * Created by kasper on 13/07/2017.

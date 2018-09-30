@@ -1,27 +1,22 @@
+@file:Suppress("unused", "NOTHING_TO_INLINE", "MemberVisibilityCanBePrivate")
+
 package com.commonsense.android.kotlin.views.databinding.adapters
 
-import android.content.Context
-import android.databinding.ViewDataBinding
-import android.support.annotation.AnyThread
+import android.content.*
+import android.databinding.*
+import android.support.annotation.*
 import android.support.annotation.IntRange
-import android.support.annotation.UiThread
-import android.support.v7.widget.RecyclerView
-import android.view.LayoutInflater
-import android.view.ViewGroup
-import com.commonsense.android.kotlin.base.EmptyFunctionResult
+import android.support.v7.widget.*
+import android.view.*
+import com.commonsense.android.kotlin.base.*
 import com.commonsense.android.kotlin.base.extensions.*
-import com.commonsense.android.kotlin.base.extensions.collections.ifTrue
-import com.commonsense.android.kotlin.base.extensions.collections.length
-import com.commonsense.android.kotlin.system.datastructures.IndexPath
-import com.commonsense.android.kotlin.system.datastructures.SectionLookupRep
-import com.commonsense.android.kotlin.system.datastructures.TypeHashCodeLookupRepresent
-import com.commonsense.android.kotlin.system.datastructures.TypeSection
-import com.commonsense.android.kotlin.system.logging.L
-import com.commonsense.android.kotlin.views.ViewInflatingFunction
-import com.commonsense.android.kotlin.views.extensions.notifyItemRangeChanged
-import java.lang.ref.WeakReference
-import kotlin.reflect.KClass
-import kotlin.system.measureNanoTime
+import com.commonsense.android.kotlin.base.extensions.collections.*
+import com.commonsense.android.kotlin.system.datastructures.*
+import com.commonsense.android.kotlin.system.logging.*
+import com.commonsense.android.kotlin.views.*
+import com.commonsense.android.kotlin.views.extensions.*
+import java.lang.ref.*
+import kotlin.reflect.*
 
 /**
  * Created by kasper on 17/05/2017.
@@ -36,7 +31,7 @@ typealias InflatingFunction<Vm> = (inflater: LayoutInflater, parent: ViewGroup?,
 
 /**
  * Defines the required information for a data binding recycler adapter.
- * @param out T : ViewDataBinding the view to contain
+ * @param T : ViewDataBinding the view to contain
  * @property item T the data for the view
  * @property viewBindingTypeValue Int the view type (a unique number for the view)
  */

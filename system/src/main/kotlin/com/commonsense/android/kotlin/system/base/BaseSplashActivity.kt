@@ -5,7 +5,6 @@ import android.os.*
 import android.support.annotation.*
 import android.view.*
 import com.commonsense.android.kotlin.base.debug.*
-import com.commonsense.android.kotlin.base.extensions.*
 import com.commonsense.android.kotlin.system.*
 import com.commonsense.android.kotlin.system.base.helpers.*
 import com.commonsense.android.kotlin.system.extensions.*
@@ -69,7 +68,7 @@ abstract class BaseSplashActivity : Activity() {
         afterOnCreate()
     }
 
-    private fun afterOnCreate() = GlobalScope.launch(Dispatchers.Main, CoroutineStart.DEFAULT, null, {
+    private fun afterOnCreate() = GlobalScope.launch(Dispatchers.Main, CoroutineStart.DEFAULT, {
         //start pre loading views. since we are a splash screen, we are "allowed" to take "some"
         //time, thus we can stall the loading (not the ui thread) until we have loaded all the views to preload.
         preloadViews(viewsToPreload)

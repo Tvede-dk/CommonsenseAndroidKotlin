@@ -1,7 +1,6 @@
 package com.commonsense.android.kotlin.base.algorithms
 
 import org.junit.*
-import org.junit.jupiter.api.*
 import org.junit.jupiter.api.Test
 
 internal class RunningAverageAbstractTest {

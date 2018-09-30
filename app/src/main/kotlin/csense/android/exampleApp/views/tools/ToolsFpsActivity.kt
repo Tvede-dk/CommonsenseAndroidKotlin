@@ -1,14 +1,13 @@
 package csense.android.exampleApp.views.tools
 
-import com.commonsense.android.kotlin.base.EmptyFunction
-import com.commonsense.android.kotlin.base.time.TimeUnit
-import com.commonsense.android.kotlin.system.logging.L
-import com.commonsense.android.kotlin.views.databinding.activities.BaseDatabindingActivity
-import com.commonsense.android.kotlin.views.databinding.activities.InflaterFunctionSimple
-import com.commonsense.android.kotlin.views.extensions.setOnclickAsync
-import csense.android.exampleApp.databinding.ToolsFpsBinding
-import csense.android.tools.fps.FpsWatcher
-import kotlinx.coroutines.experimental.Job
+import com.commonsense.android.kotlin.base.*
+import com.commonsense.android.kotlin.base.time.*
+import com.commonsense.android.kotlin.system.logging.*
+import com.commonsense.android.kotlin.views.databinding.activities.*
+import com.commonsense.android.kotlin.views.extensions.*
+import csense.android.exampleApp.databinding.*
+import csense.android.tools.fps.*
+import kotlinx.coroutines.experimental.*
 import java.util.*
 
 /**

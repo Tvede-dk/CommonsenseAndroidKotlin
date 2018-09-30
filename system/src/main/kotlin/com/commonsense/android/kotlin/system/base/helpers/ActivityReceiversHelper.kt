@@ -1,12 +1,10 @@
 package com.commonsense.android.kotlin.system.base.helpers
 
-import android.content.BroadcastReceiver
-import android.content.Context
-import com.commonsense.android.kotlin.base.EmptyFunction
+import android.content.*
+import com.commonsense.android.kotlin.base.*
 import com.commonsense.android.kotlin.base.debug.*
-import com.commonsense.android.kotlin.base.extensions.collections.ifFalse
-import com.commonsense.android.kotlin.base.extensions.collections.ifTrue
-import com.commonsense.android.kotlin.system.logging.tryAndLog
+import com.commonsense.android.kotlin.base.extensions.collections.*
+import com.commonsense.android.kotlin.system.logging.*
 
 /**
  * A helper for handling BroadCastReceiver registrations of an activity.

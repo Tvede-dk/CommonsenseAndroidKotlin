@@ -1,11 +1,10 @@
 package com.commonsense.android.kotlin.system.base.helpers
 
-import android.content.Intent
+import android.content.*
 import com.commonsense.android.kotlin.system.base.*
-import com.commonsense.android.kotlin.system.dataFlow.ReferenceCountingMap
+import com.commonsense.android.kotlin.system.dataFlow.*
 import com.commonsense.android.kotlin.test.*
-import org.junit.Before
-import org.junit.Test
+import org.junit.*
 
 /**
  * Created by Kasper Tvede on 01-06-2018.

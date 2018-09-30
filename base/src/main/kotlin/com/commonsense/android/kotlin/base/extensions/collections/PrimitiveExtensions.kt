@@ -1,7 +1,8 @@
+@file:Suppress("unused", "NOTHING_TO_INLINE", "MemberVisibilityCanBePrivate")
 package com.commonsense.android.kotlin.base.extensions.collections
 
 import com.commonsense.android.kotlin.base.*
-import com.commonsense.android.kotlin.base.extensions.isNull
+import com.commonsense.android.kotlin.base.extensions.*
 
 /**
  * Created by Kasper Tvede on 06-12-2016.
@@ -31,7 +32,6 @@ suspend inline fun Boolean.onTrueAsync(crossinline action: AsyncEmptyFunction): 
 /**
  * Maps a boolean into a value.
  */
-@Suppress("NOTHING_TO_INLINE")
 inline fun <T> Boolean.map(ifTrue: T, ifFalse: T): T = if (this) {
     ifTrue
 } else {

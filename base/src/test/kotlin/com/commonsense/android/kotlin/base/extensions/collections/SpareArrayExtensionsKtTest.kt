@@ -1,7 +1,6 @@
 package com.commonsense.android.kotlin.base.extensions.collections
 
-import android.util.SparseArray
-import android.util.SparseIntArray
+import android.util.*
 import com.commonsense.android.kotlin.test.*
 import org.junit.*
 

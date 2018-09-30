@@ -1,7 +1,6 @@
 package com.commonsense.android.kotlin.system.imaging
 
 import org.junit.*
-import org.junit.jupiter.api.Assertions.*
 
 /**
  *

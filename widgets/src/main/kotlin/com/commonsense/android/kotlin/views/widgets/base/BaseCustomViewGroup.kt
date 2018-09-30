@@ -1,16 +1,17 @@
+@file:Suppress("unused", "NOTHING_TO_INLINE", "MemberVisibilityCanBePrivate", "LeakingThis")
+
 package com.commonsense.android.kotlin.views.widgets.base
 
-import android.content.Context
-import android.content.res.TypedArray
-import android.graphics.Canvas
-import android.graphics.Rect
-import android.graphics.drawable.Drawable
-import android.util.AttributeSet
-import android.view.ViewGroup
-import com.commonsense.android.kotlin.views.datastructures.ViewVariable
-import com.commonsense.android.kotlin.views.extensions.contentSize
-import com.commonsense.android.kotlin.views.widgets.LateAttributes
-import java.lang.ref.WeakReference
+import android.content.*
+import android.content.res.*
+import android.graphics.*
+import android.graphics.drawable.*
+import android.util.*
+import android.view.*
+import com.commonsense.android.kotlin.views.datastructures.*
+import com.commonsense.android.kotlin.views.extensions.*
+import com.commonsense.android.kotlin.views.widgets.*
+import java.lang.ref.*
 
 /**
  * Created by Kasper Tvede on 27-08-2017.
@@ -87,7 +88,7 @@ abstract class BaseCustomViewGroup : ViewGroup, LateAttributes {
 
     override fun onDraw(canvas: Canvas?) {
         if (canvas != null && willDrawOwnBackground) {
-            storedBackground?.setBounds(0, 0, canvas.width, canvas.height)
+            storedBackground?.setBounds(0, 0, width, height)
             drawBackground(canvas, storedBackground)
         }
         super.onDraw(canvas)

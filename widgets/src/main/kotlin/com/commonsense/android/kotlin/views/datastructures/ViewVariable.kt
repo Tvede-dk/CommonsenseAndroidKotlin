@@ -1,18 +1,16 @@
+@file:Suppress("unused", "NOTHING_TO_INLINE", "MemberVisibilityCanBePrivate")
+
 package com.commonsense.android.kotlin.views.datastructures
 
-import android.content.Context
-import android.content.res.TypedArray
-import android.graphics.drawable.Drawable
-import android.support.annotation.ColorInt
-import android.support.annotation.Dimension
-import android.support.annotation.StyleableRes
-import com.commonsense.android.kotlin.base.EmptyFunction
-import com.commonsense.android.kotlin.base.extensions.weakReference
-import com.commonsense.android.kotlin.system.extensions.getColorSafe
-import com.commonsense.android.kotlin.system.extensions.getDrawableSafe
-import com.commonsense.android.kotlin.system.extensions.getTextSafe
-import java.lang.ref.WeakReference
-import kotlin.reflect.KProperty
+import android.content.*
+import android.content.res.*
+import android.graphics.drawable.*
+import android.support.annotation.*
+import com.commonsense.android.kotlin.base.*
+import com.commonsense.android.kotlin.base.extensions.*
+import com.commonsense.android.kotlin.system.extensions.*
+import java.lang.ref.*
+import kotlin.reflect.*
 
 /**
  * Created by Kasper Tvede on 22-07-2017.
@@ -107,5 +105,5 @@ abstract class AbstractViewVariable<T>(defaultValue: T,
 
     : ViewVariable<T>(defaultValue, styleIndex, toAttachTo, onUpdate) {
     override fun parseFrom(typedArray: TypedArray, context: Context): T? =
-                extractor(typedArray, styleIndex, getInnerValue())
+            extractor(typedArray, styleIndex, getInnerValue())
 }

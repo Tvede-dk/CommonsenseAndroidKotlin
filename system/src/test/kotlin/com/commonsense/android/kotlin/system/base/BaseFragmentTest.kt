@@ -1,6 +1,6 @@
 package com.commonsense.android.kotlin.system.base
 
-import com.commonsense.android.kotlin.test.BaseRoboElectricTest
+import com.commonsense.android.kotlin.test.*
 import org.junit.*
 
 /**

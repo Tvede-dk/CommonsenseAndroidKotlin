@@ -1,9 +1,9 @@
+@file:Suppress("unused", "NOTHING_TO_INLINE", "MemberVisibilityCanBePrivate")
+
 package com.commonsense.android.kotlin.views.baseClasses
 
 import android.support.annotation.IntRange
-import android.support.v4.app.Fragment
-import android.support.v4.app.FragmentManager
-import android.support.v4.app.FragmentPagerAdapter
+import android.support.v4.app.*
 
 private data class FragmentWithTitle(val fragment: Fragment, val title: CharSequence)
 

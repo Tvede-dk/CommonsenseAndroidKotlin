@@ -1,8 +1,9 @@
+@file:Suppress("unused", "NOTHING_TO_INLINE", "MemberVisibilityCanBePrivate")
+
 package com.commonsense.android.kotlin.views.extensions
 
-import android.graphics.Color
-import android.support.annotation.AnyThread
-import android.support.annotation.ColorInt
+import android.graphics.*
+import android.support.annotation.*
 
 /**
  * Given a color in an int, creates a darker version of it by changing all component hereof.

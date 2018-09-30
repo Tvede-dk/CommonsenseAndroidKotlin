@@ -1,7 +1,8 @@
+@file:Suppress("unused", "NOTHING_TO_INLINE", "MemberVisibilityCanBePrivate")
+
 package csense.android.tools.resources
 
 import android.support.annotation.*
-import com.commonsense.android.kotlin.base.*
 import kotlin.reflect.*
 
 

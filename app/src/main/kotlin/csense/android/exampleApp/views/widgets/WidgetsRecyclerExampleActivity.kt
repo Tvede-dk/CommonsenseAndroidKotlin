@@ -1,18 +1,13 @@
 package csense.android.exampleApp.views.widgets
 
-import android.support.v7.widget.LinearLayoutManager
-import com.commonsense.android.kotlin.base.extensions.collections.repeateToSize
-import com.commonsense.android.kotlin.base.extensions.type
-import com.commonsense.android.kotlin.views.ViewInflatingFunction
-import com.commonsense.android.kotlin.views.databinding.activities.BaseDatabindingActivity
-import com.commonsense.android.kotlin.views.databinding.activities.InflaterFunctionSimple
-import com.commonsense.android.kotlin.views.databinding.adapters.BaseDataBindingRecyclerAdapter
-import com.commonsense.android.kotlin.views.databinding.adapters.BaseRenderModel
-import com.commonsense.android.kotlin.views.databinding.adapters.BaseViewHolderItem
-import com.commonsense.android.kotlin.views.databinding.adapters.hideSections
-import com.commonsense.android.kotlin.views.extensions.setOnclickAsync
-import csense.android.exampleApp.databinding.WidgetsRecyclerExampleBinding
-import csense.android.exampleApp.databinding.WidgetsRecyclerItemExampleBinding
+import android.support.v7.widget.*
+import com.commonsense.android.kotlin.base.extensions.*
+import com.commonsense.android.kotlin.base.extensions.collections.*
+import com.commonsense.android.kotlin.views.*
+import com.commonsense.android.kotlin.views.databinding.activities.*
+import com.commonsense.android.kotlin.views.databinding.adapters.*
+import com.commonsense.android.kotlin.views.extensions.*
+import csense.android.exampleApp.databinding.*
 
 class WidgetsRecyclerExampleActivity : BaseDatabindingActivity<WidgetsRecyclerExampleBinding>() {
 

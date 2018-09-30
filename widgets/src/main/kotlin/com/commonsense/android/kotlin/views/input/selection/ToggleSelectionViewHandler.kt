@@ -1,7 +1,7 @@
 package com.commonsense.android.kotlin.views.input.selection
 
-import com.commonsense.android.kotlin.base.FunctionUnit
-import com.commonsense.android.kotlin.base.extensions.collections.setExistence
+import com.commonsense.android.kotlin.base.*
+import com.commonsense.android.kotlin.base.extensions.collections.*
 
 /**
  * Created by kasper on 24/08/2017.

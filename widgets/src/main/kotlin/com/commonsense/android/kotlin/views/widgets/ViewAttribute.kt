@@ -1,19 +1,18 @@
+@file:Suppress("unused", "NOTHING_TO_INLINE", "MemberVisibilityCanBePrivate")
+
 package com.commonsense.android.kotlin.views.widgets
 
-import android.content.Context
-import android.content.res.TypedArray
-import android.graphics.Color
-import android.support.annotation.ColorInt
-import android.support.annotation.Dimension
-import android.support.annotation.StyleableRes
-import android.support.annotation.VisibleForTesting
-import android.util.AttributeSet
-import com.commonsense.android.kotlin.base.EmptyFunction
-import com.commonsense.android.kotlin.base.extensions.use
-import com.commonsense.android.kotlin.system.extensions.getTypedArrayFor
-import com.commonsense.android.kotlin.system.logging.tryAndLog
+import android.content.*
+import android.content.res.*
+import android.graphics.*
+import android.support.annotation.*
+import android.util.*
+import com.commonsense.android.kotlin.base.*
+import com.commonsense.android.kotlin.base.extensions.*
+import com.commonsense.android.kotlin.system.extensions.*
+import com.commonsense.android.kotlin.system.logging.*
 import com.commonsense.android.kotlin.views.datastructures.*
-import java.lang.ref.WeakReference
+import java.lang.ref.*
 
 /**
  * Created by Kasper Tvede on 13-06-2017.

@@ -1,9 +1,9 @@
 package com.commonsense.android.kotlin.views.baseClasses
 
-import android.content.Context
-import android.content.res.Resources
+import android.content.*
+import android.content.res.*
 import android.support.annotation.IntRange
-import android.widget.ArrayAdapter
+import android.widget.*
 import java.util.*
 
 /**

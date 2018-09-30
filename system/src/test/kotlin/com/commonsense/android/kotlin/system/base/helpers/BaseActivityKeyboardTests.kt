@@ -1,20 +1,16 @@
 package com.commonsense.android.kotlin.system.base.helpers
 
-import android.app.Activity
-import android.view.View
-import android.widget.EditText
+import android.app.*
+import android.view.*
+import android.widget.*
 import com.commonsense.android.kotlin.system.BuildConfig
 import com.commonsense.android.kotlin.system.R
-import com.commonsense.android.kotlin.system.base.BaseActivity
-import com.commonsense.android.kotlin.system.extensions.hideSoftKeyboard
-import com.commonsense.android.kotlin.system.extensions.inputMethodManager
-import com.commonsense.android.kotlin.system.extensions.requestFocusAndShowKeyboard
-import com.commonsense.android.kotlin.test.BaseRoboElectricTest
-import com.commonsense.android.kotlin.test.assert
-import org.junit.Ignore
-import org.junit.Test
-import org.robolectric.Shadows
-import org.robolectric.annotation.Config
+import com.commonsense.android.kotlin.system.base.*
+import com.commonsense.android.kotlin.system.extensions.*
+import com.commonsense.android.kotlin.test.*
+import org.junit.*
+import org.robolectric.*
+import org.robolectric.annotation.*
 
 /**
  * Created by kasper on 18/12/2017.

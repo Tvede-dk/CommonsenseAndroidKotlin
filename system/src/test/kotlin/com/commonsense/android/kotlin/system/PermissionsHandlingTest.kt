@@ -1,14 +1,13 @@
 package com.commonsense.android.kotlin.system
 
-import android.Manifest
-import android.content.pm.PackageManager
-import android.os.Bundle
-import com.commonsense.android.kotlin.system.base.BaseActivity
-import com.commonsense.android.kotlin.test.BaseRoboElectricTest
-import com.commonsense.android.kotlin.test.testCallbackWithSemaphore
+import android.*
+import android.content.pm.*
+import android.os.*
+import com.commonsense.android.kotlin.system.base.*
+import com.commonsense.android.kotlin.test.*
 import org.junit.*
-import org.robolectric.annotation.Config
-import java.util.concurrent.Semaphore
+import org.robolectric.annotation.*
+import java.util.concurrent.*
 
 /**
  * Created by Kasper Tvede on 27-05-2017.

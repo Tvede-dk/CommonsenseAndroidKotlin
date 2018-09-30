@@ -2,7 +2,6 @@ package com.commonsense.android.kotlin.system.logging
 
 import com.commonsense.android.kotlin.test.*
 import org.junit.*
-import org.junit.jupiter.api.*
 import org.junit.jupiter.api.Test
 
 /**

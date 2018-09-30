@@ -1,7 +1,7 @@
 package com.commonsense.android.kotlin.base.scheduling
 
-import com.commonsense.android.kotlin.base.extensions.collections.replace
-import org.junit.Assert
+import com.commonsense.android.kotlin.base.extensions.collections.*
+import org.junit.*
 import org.junit.jupiter.api.Test
 
 /**

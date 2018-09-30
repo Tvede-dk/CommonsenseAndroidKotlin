@@ -1,19 +1,18 @@
 package com.commonsense.android.kotlin.system.base
 
-import android.app.Activity
-import android.content.Intent
-import android.os.Bundle
+import android.app.*
+import android.content.*
+import android.os.*
 import android.support.annotation.IntRange
 import android.support.v4.app.DialogFragment
-import android.view.MenuItem
-import com.commonsense.android.kotlin.system.PermissionsHandling
+import android.view.*
+import com.commonsense.android.kotlin.base.*
+import com.commonsense.android.kotlin.system.*
 import com.commonsense.android.kotlin.system.base.helpers.*
-import com.commonsense.android.kotlin.system.extensions.onBackPressed
-import com.commonsense.android.kotlin.system.logging.logError
-import com.commonsense.android.kotlin.system.logging.logWarning
-import com.commonsense.android.kotlin.system.uiAware.UiAwareJobContainer
-import kotlinx.coroutines.experimental.CommonPool
-import kotlinx.coroutines.experimental.Job
+import com.commonsense.android.kotlin.system.extensions.*
+import com.commonsense.android.kotlin.system.logging.*
+import com.commonsense.android.kotlin.system.uiAware.*
+import kotlinx.coroutines.experimental.*
 
 
 /**
@@ -96,18 +95,20 @@ open class BaseFragment : DialogFragment(), ActivityResultHelperContainer {
      * @param action suspend () -> Unit
      * @return Job
      */
-    fun launchInBackground(group: String, action: suspend () -> Unit): Job =
-            localJobs.performAction(CommonPool, action, group)
+    fun launchInBackground(group: String, action: AsyncEmptyFunction): Job =
+            localJobs.performAction(Dispatchers.Default, action, group)
 
 
     /**
      *
      * @param group String
      * @param action suspend () -> Unit
-     * @return Job
+     * @return Job? null if the context is unavailable.
      */
-    fun launchInUi(group: String, action: suspend () -> Unit): Job =
-            localJobs.launchInUi({ isAdded && !this.isHidden && isResumed }, group, action)
+    fun launchInUi(group: String, action: AsyncFunctionUnit<Context>): Job? {
+        val context = context ?: return null
+        return localJobs.launchInUi({ isAdded && !this.isHidden && isResumed }, group, action, context)
+    }
 
     override fun onResume() {
         super.onResume()
@@ -121,7 +122,7 @@ open class BaseFragment : DialogFragment(), ActivityResultHelperContainer {
     }
 
     override fun onDestroy() {
-        localJobs.onDestory()
+        localJobs.onDestroy()
         activityResultHelper.clear()
         super.onDestroy()
     }

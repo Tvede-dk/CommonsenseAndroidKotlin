@@ -1,3 +1,5 @@
+@file:Suppress("unused", "NOTHING_TO_INLINE", "MemberVisibilityCanBePrivate", "LeakingThis")
+
 package com.commonsense.android.kotlin.views.widgets.base
 
 import android.content.*

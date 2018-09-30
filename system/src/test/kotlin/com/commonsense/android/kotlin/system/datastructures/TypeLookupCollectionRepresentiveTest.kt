@@ -1,9 +1,9 @@
 package com.commonsense.android.kotlin.system.datastructures
 
-import com.commonsense.android.kotlin.base.extensions.collections.repeateToSize
+import com.commonsense.android.kotlin.base.extensions.collections.*
 import com.commonsense.android.kotlin.test.*
-import org.junit.Test
-import org.robolectric.annotation.Config
+import org.junit.*
+import org.robolectric.annotation.*
 
 /**
  * Created by Kasper Tvede on 20-07-2017.

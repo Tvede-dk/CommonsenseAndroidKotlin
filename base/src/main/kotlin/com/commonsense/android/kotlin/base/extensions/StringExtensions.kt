@@ -1,7 +1,9 @@
+@file:Suppress("unused", "NOTHING_TO_INLINE", "MemberVisibilityCanBePrivate")
+
 package com.commonsense.android.kotlin.base.extensions
 
-import android.net.Uri
-import com.commonsense.android.kotlin.base.extensions.collections.mapLazy
+import android.net.*
+import com.commonsense.android.kotlin.base.extensions.collections.*
 import com.commonsense.android.kotlin.base.extensions.generic.*
 
 /**
@@ -15,7 +17,6 @@ const val httpPrefix = "http://"
  * Makes sure that the given string would work as a url.
  * this means prefixing it with (http(s)://) if missing
  */
-@Suppress("NOTHING_TO_INLINE")
 inline fun String.asUrl(forceHttps: Boolean = true): Uri {
     val isHttp = startsWith(httpPrefix)
     val isHttps = startsWith(httpsPrefix)
@@ -32,12 +33,10 @@ inline fun String.asUrl(forceHttps: Boolean = true): Uri {
 }
 
 
-@Suppress("NOTHING_TO_INLINE")
 inline fun Uri.fileExtension(): String? {
     return path?.fileExtension()
 }
 
-@Suppress("NOTHING_TO_INLINE")
 inline fun String.fileExtension(): String? {
     return lastIndexOf('.').let {
         if (it > 0 && it + 1 < length) {
@@ -52,23 +51,19 @@ inline fun String.fileExtension(): String? {
  * Removes the query from a Uri.
  *
  */
-@Suppress("NOTHING_TO_INLINE")
 inline fun Uri.withoutQueryParameters(): Uri {
     return buildUpon().query("").build()
 }
 
 
-@Suppress("NOTHING_TO_INLINE")
 inline fun String.wrapInQuotes(): String = "\"${this}\""
 
 
 /**
  * The opposite of ByteArray.toHexString , so takes a hex string (eg "0x20") and converts it to a byte array of that
  * @receiver String
- * @param haveHexPrefix Boolean if we have a prefix (0x..)
  * @return ByteArray
  */
-@Suppress("NOTHING_TO_INLINE")
 inline fun String.fromHexStringToByteArray(): ShortArray? {
     //strip prefix iff asked to
     if (length.isOdd || isEmpty()) {
@@ -92,7 +87,6 @@ inline fun String.fromHexStringToByteArray(): ShortArray? {
  * @param ignoreCase Boolean how we should compare prefix with this string
  * @return String the resulting string, either the original or substring by the prefix length
  */
-@Suppress("NOTHING_TO_INLINE")
 inline fun String.skipStartsWith(prefix: String, ignoreCase: Boolean = false): String {
     val startsWith = startsWith(prefix, ignoreCase)
     return startsWith.mapLazy(ifTrue = { substring(prefix.length) }, ifFalse = { this })

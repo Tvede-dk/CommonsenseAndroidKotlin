@@ -1,6 +1,9 @@
+@file:Suppress("unused", "NOTHING_TO_INLINE", "MemberVisibilityCanBePrivate")
+
 package com.commonsense.android.kotlin.base.time
 
 import com.commonsense.android.kotlin.base.time.TimeUnit.*
+import kotlinx.coroutines.experimental.*
 
 /**
  * Created by Kasper Tvede on 10-03-2018.
@@ -226,5 +229,5 @@ fun Days.toHours(): Hours =
  * Sleeps (coroutine) this time unit
  */
 suspend fun TimeUnit.delay() {
-    kotlinx.coroutines.experimental.delay(this.toMilliSeconds().value, java.util.concurrent.TimeUnit.MILLISECONDS)
+    delay(this.toMilliSeconds().value)
 }

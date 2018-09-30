@@ -1,10 +1,11 @@
+@file:Suppress("unused", "NOTHING_TO_INLINE", "MemberVisibilityCanBePrivate")
+
 package com.commonsense.android.kotlin.views.features
 
-import com.commonsense.android.kotlin.base.EmptyFunction
-import com.commonsense.android.kotlin.base.extensions.collections.invokeEachWith
-import com.commonsense.android.kotlin.base.patterns.ToggleBoolean
-import com.commonsense.android.kotlin.views.databinding.adapters.DataBindingRecyclerAdapter
-import com.commonsense.android.kotlin.views.databinding.adapters.IRenderModelItem
+import com.commonsense.android.kotlin.base.*
+import com.commonsense.android.kotlin.base.extensions.collections.*
+import com.commonsense.android.kotlin.base.patterns.*
+import com.commonsense.android.kotlin.views.databinding.adapters.*
 
 /**
  * Created by Kasper Tvede on 21-07-2017.
@@ -17,30 +18,19 @@ private class SectionTransactionCommando<T : IRenderModelItem<*, *>>(
         val applyOperation: SectionOperation<T>,
         val resetOperation: SectionOperation<T>)
 
-class SectionRecyclerTransaction<T : IRenderModelItem<*, *>> {
-
-    private val applyTransactions: List<SectionOperation<T>>
-
-    private val resetTransactions: List<SectionOperation<T>>
-
-    private val adapter: DataBindingRecyclerAdapter<T>
+class SectionRecyclerTransaction<T : IRenderModelItem<*, *>>
+private constructor(
+        private val applyTransactions: List<SectionOperation<T>>,
+        private val resetTransactions: List<SectionOperation<T>>,
+        private val adapter: DataBindingRecyclerAdapter<T>,
+        private val allowExternalModifications: Boolean) {
 
     private val isApplied = ToggleBoolean(false)
 
     private var oldSize = 0
 
-    private val allowExternalModifications: Boolean
-
-    private constructor(applyTransactions: List<SectionOperation<T>>,
-                        resetTransactions: List<SectionOperation<T>>,
-                        adapter: DataBindingRecyclerAdapter<T>,
-                        allowExternalModifications: Boolean) {
-
-        this.adapter = adapter
+    init {
         oldSize = adapter.itemCount
-        this.allowExternalModifications = allowExternalModifications
-        this.applyTransactions = applyTransactions
-        this.resetTransactions = resetTransactions
     }
 
     fun apply() = isApplied.ifFalse {

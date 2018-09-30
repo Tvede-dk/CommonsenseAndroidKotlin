@@ -1,7 +1,7 @@
 package com.commonsense.android.kotlin.views.extensions
 
-import android.support.annotation.UiThread
-import android.widget.TextView
+import android.support.annotation.*
+import android.widget.*
 
 /**
  * Created by Kasper Tvede on 04-12-2017.

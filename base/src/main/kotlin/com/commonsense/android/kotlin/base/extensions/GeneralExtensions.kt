@@ -1,14 +1,14 @@
+@file:Suppress("unused", "NOTHING_TO_INLINE", "MemberVisibilityCanBePrivate")
+
 package com.commonsense.android.kotlin.base.extensions
 
 import android.support.annotation.IntRange
-import com.commonsense.android.kotlin.base.EmptyFunction
-import com.commonsense.android.kotlin.base.EmptyFunctionResult
-import com.commonsense.android.kotlin.base.FunctionUnit
+import com.commonsense.android.kotlin.base.*
 import com.commonsense.android.kotlin.base.extensions.collections.map
 import com.commonsense.android.kotlin.base.time.*
-import java.lang.ref.WeakReference
+import java.lang.ref.*
 import java.util.*
-import kotlin.system.measureNanoTime
+import kotlin.system.*
 
 
 /**
@@ -68,7 +68,6 @@ inline val Any?.isNotNull
  * @param other T? the value to compare to
  * @return Boolean true this is null or is equal to the other object (equals)
  */
-@Suppress("NOTHING_TO_INLINE")
 inline fun <T> T?.isNullOrEqualTo(other: T?): Boolean = this == null || this == other
 
 /**
@@ -76,7 +75,6 @@ inline fun <T> T?.isNullOrEqualTo(other: T?): Boolean = this == null || this == 
  * @receiver T the object to create a weak reference of
  * @return WeakReference<T> a weak reference to the given object
  */
-@Suppress("NOTHING_TO_INLINE")
 inline fun <T> T.weakReference(): WeakReference<T> = WeakReference(this)
 
 /**
@@ -130,7 +128,6 @@ inline fun <T> T?.useOr(crossinline ifNotNull: T.() -> Unit,
  * @receiver WeakReference<FunctionUnit<T>?> the weak reference
  * @param input T the type of wrapped object
  */
-@Suppress("NOTHING_TO_INLINE")
 inline fun <T> WeakReference<FunctionUnit<T>?>.use(input: T) {
     get()?.let { it(input) }
 }
@@ -141,7 +138,6 @@ inline fun <T> WeakReference<FunctionUnit<T>?>.use(input: T) {
  * @receiver T? the potential not null object
  * @return WeakReference<T>? the weak reference of the object, or null if this parameter was null
  */
-@Suppress("NOTHING_TO_INLINE")
 inline fun <T> T?.weakReference(): WeakReference<T>? where T : Optional<*> =
         this?.let(::WeakReference)
 
@@ -165,7 +161,6 @@ fun <T> T?.parseTo(receiver: ((T) -> Unit)?): T? {
  * @param ifNull the value if 'this' is null
  * @return the value depending on 'this' value
  */
-@Suppress("NOTHING_TO_INLINE")
 inline fun <U> Any?.map(ifNotNull: U, ifNull: U): U {
     return this.isNotNull.map(ifNotNull, ifNull)
 }

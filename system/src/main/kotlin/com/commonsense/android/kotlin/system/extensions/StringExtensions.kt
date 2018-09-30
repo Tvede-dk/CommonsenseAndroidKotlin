@@ -1,6 +1,6 @@
 package com.commonsense.android.kotlin.system.extensions
 
-import java.net.URLEncoder
+import java.net.*
 
 /**
  * Created by Kasper Tvede on 28-05-2018.

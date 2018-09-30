@@ -1,18 +1,14 @@
+@file:Suppress("unused", "NOTHING_TO_INLINE", "MemberVisibilityCanBePrivate")
+
 package com.commonsense.android.kotlin.base.scheduling
 
-import com.commonsense.android.kotlin.base.AsyncCoroutineFunction
-import com.commonsense.android.kotlin.base.AsyncEmptyFunction
+import com.commonsense.android.kotlin.base.*
 import com.commonsense.android.kotlin.base.debug.*
-import com.commonsense.android.kotlin.base.extensions.asyncSimple
-import com.commonsense.android.kotlin.base.extensions.awaitAll
-import com.commonsense.android.kotlin.base.extensions.collections.set
-import kotlinx.coroutines.experimental.GlobalScope
-import kotlinx.coroutines.experimental.Job
-import kotlinx.coroutines.experimental.launch
-import kotlinx.coroutines.experimental.runBlocking
-import kotlinx.coroutines.experimental.sync.Mutex
-import kotlinx.coroutines.experimental.sync.withLock
-import kotlin.coroutines.experimental.CoroutineContext
+import com.commonsense.android.kotlin.base.extensions.*
+import com.commonsense.android.kotlin.base.extensions.collections.*
+import kotlinx.coroutines.experimental.*
+import kotlinx.coroutines.experimental.sync.*
+import kotlin.coroutines.experimental.*
 
 
 typealias QueuedJob = Pair<CoroutineContext, AsyncEmptyFunction>
@@ -156,7 +152,7 @@ open class JobContainer {
      * Executes all queued up actions in that group.
      * does not wait for the response of this.
      */
-    fun executeQueueBackground(group: String): Unit {
+    fun executeQueueBackground(group: String) {
         asyncSimple {
             executeQueueAwaited(group)
         }

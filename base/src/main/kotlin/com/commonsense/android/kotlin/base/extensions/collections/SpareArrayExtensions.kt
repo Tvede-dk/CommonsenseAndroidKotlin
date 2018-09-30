@@ -1,17 +1,18 @@
+@file:Suppress("unused", "NOTHING_TO_INLINE", "MemberVisibilityCanBePrivate")
+
 package com.commonsense.android.kotlin.base.extensions.collections
 
 import android.support.annotation.IntRange
-import android.util.SparseArray
-import android.util.SparseIntArray
+import android.util.*
 import com.commonsense.android.kotlin.base.*
-import com.commonsense.android.kotlin.base.algorithms.Comparing
+import com.commonsense.android.kotlin.base.algorithms.*
+import kotlin.Pair
 
 typealias SparseArrayEntryMapper<T, O> = (key: Int, item: T) -> O
 
 /**
  * sets the content to the given list of pairs (unwraps the pair into (first  -> second)
  */
-@Suppress("NOTHING_TO_INLINE")
 inline fun SparseIntArray.set(input: List<Pair<Int, Int>>) {
     clear()
     input.forEach { put(it.first, it.second) }
@@ -20,7 +21,6 @@ inline fun SparseIntArray.set(input: List<Pair<Int, Int>>) {
 /**
  * sets the content to the given map (unwraps the map into (first  -> second)
  */
-@Suppress("NOTHING_TO_INLINE")
 inline fun SparseIntArray.set(input: Map<Int, Int>) {
     clear()
     input.forEach { put(it.key, it.value) }
@@ -38,7 +38,6 @@ data class SparseArrayEntry<out T>(@IntRange(from = 0) val key: Int, val value: 
  * @param maxKeyValue Int
  * @return List<SparseArrayEntry<T>>
  */
-@Suppress("NOTHING_TO_INLINE")
 inline fun <T> SparseArray<T>.toList(
         @IntRange(from = 1) maxKeyValue: Int = Int.MAX_VALUE): List<SparseArrayEntry<T>> {
     val mapped = (0 until size())

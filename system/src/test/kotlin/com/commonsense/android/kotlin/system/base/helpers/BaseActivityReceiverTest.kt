@@ -1,12 +1,10 @@
 package com.commonsense.android.kotlin.system.base.helpers
 
-import android.content.BroadcastReceiver
-import android.content.IntentFilter
-import com.commonsense.android.kotlin.system.base.BaseActivity
-import com.commonsense.android.kotlin.test.BaseRoboElectricTest
-import com.commonsense.android.kotlin.test.assertSize
-import org.junit.Test
-import org.robolectric.Robolectric
+import android.content.*
+import com.commonsense.android.kotlin.system.base.*
+import com.commonsense.android.kotlin.test.*
+import org.junit.*
+import org.robolectric.*
 
 /**
  * Created by kasper on 18/12/2017.

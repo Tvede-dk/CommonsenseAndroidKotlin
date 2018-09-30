@@ -1,3 +1,5 @@
+@file:Suppress("unused", "NOTHING_TO_INLINE", "MemberVisibilityCanBePrivate")
+
 package com.commonsense.android.kotlin.base.patterns
 
 /**
@@ -19,13 +21,15 @@ package com.commonsense.android.kotlin.base.patterns
  * java's String.getBytes( charset) where if the charset is not found an exception is thrown.
  * however, try catches are slow in general, and clutters up what could be a simple "if" statement
  * instead.
- *
- * @sample  val bytes :ByteArray? = try {"".getBytes("unknownCharset") }catch(Exception) {null}
- * whereas if it returned Expected it would look like this:
+ * @sample
+ * ````kotlin
+ * val bytes :ByteArray? = try {"".getBytes("unknownCharset") }catch(Exception) {null}
+ * // whereas if it returned Expected it would look like this:
  * val expectedBytes : Expectetd<Bytes> = "".getBytes("unknownCharset")
  * expectedBytes.use{
  *    //if expectedBytes is actually valid
  * }
+ * ````
  *
  * and if an exception is expected, one can simply use the value directly,
  * which throws in case its an error

@@ -1,8 +1,7 @@
 package com.commonsense.android.kotlin.views.features
 
-import com.commonsense.android.kotlin.test.BaseRoboElectricTest
-import com.commonsense.android.kotlin.test.assert
-import org.junit.Test
+import com.commonsense.android.kotlin.test.*
+import org.junit.*
 
 /**
  * Created by Kasper Tvede on 08-08-2017.

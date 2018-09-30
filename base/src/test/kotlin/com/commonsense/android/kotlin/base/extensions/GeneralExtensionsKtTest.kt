@@ -97,7 +97,7 @@ class GeneralExtensionsKtTest {
     fun map() {
         val optString: String? = ""
         optString.map(42, 0).assert(42, "value is not null")
-        val testme: String = ""
+        val testme = ""
         testme.map(100, 0).assert(100, "should not treat correctly typed variables wrong")
         val nullOpt: String? = null
         nullOpt.map(-3, 12).assert(12, "should map null into ifNull branch")
@@ -107,7 +107,7 @@ class GeneralExtensionsKtTest {
     fun mapLazy() {
         val optString: String? = ""
         optString.mapNullLazy({ 42 }, { 0 }).assert(42, "value is not null")
-        val testme: String = ""
+        val testme = ""
         testme.mapNullLazy({ 100 }, { 0 }).assert(100, "should not treat correctly typed variables wrong")
         val nullOpt: String? = null
         nullOpt.mapNullLazy({ -3 }, { 12 }).assert(12, "should map null into ifNull branch")

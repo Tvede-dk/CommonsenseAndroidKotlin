@@ -1,18 +1,17 @@
+@file:Suppress("unused", "NOTHING_TO_INLINE", "MemberVisibilityCanBePrivate")
+
 package com.commonsense.android.kotlin.views.widgets
 
-import android.content.Context
-import android.support.annotation.UiThread
-import android.support.v4.widget.SwipeRefreshLayout
-import android.support.v7.widget.LinearLayoutManager
-import android.support.v7.widget.RecyclerView
-import android.util.AttributeSet
-import com.commonsense.android.kotlin.base.extensions.launchOnCompleted
-import com.commonsense.android.kotlin.views.databinding.CustomDataBindingView
-import com.commonsense.android.kotlin.views.databinding.InflaterFunction
-import com.commonsense.android.kotlin.views.databinding.SwipeRefreshRecylerViewBinding
-import com.commonsense.android.kotlin.views.extensions.setup
-import kotlinx.coroutines.experimental.Job
-import kotlinx.coroutines.experimental.android.UI
+import android.content.*
+import android.support.annotation.*
+import android.support.v4.widget.*
+import android.support.v7.widget.*
+import android.util.*
+import com.commonsense.android.kotlin.base.extensions.*
+import com.commonsense.android.kotlin.views.databinding.*
+import com.commonsense.android.kotlin.views.extensions.*
+import kotlinx.coroutines.experimental.*
+import kotlinx.coroutines.experimental.android.*
 
 
 /**
@@ -25,8 +24,7 @@ class SwipeRefreshRecyclerView : CustomDataBindingView<SwipeRefreshRecylerViewBi
 
     override fun afterSetupView() {}
 
-    override fun inflate(): InflaterFunction<SwipeRefreshRecylerViewBinding>
-            = SwipeRefreshRecylerViewBinding::inflate
+    override fun inflate(): InflaterFunction<SwipeRefreshRecylerViewBinding> = SwipeRefreshRecylerViewBinding::inflate
 
     constructor(context: Context) : super(context)
     constructor(context: Context, attrs: AttributeSet) : super(context, attrs)
@@ -79,7 +77,7 @@ class SwipeRefreshRecyclerView : CustomDataBindingView<SwipeRefreshRecylerViewBi
     fun setupAsync(newAdapter: RecyclerView.Adapter<*>, newLayoutManager: LinearLayoutManager, refreshCallback: () -> Job) {
         recyclerView.setup(newAdapter, newLayoutManager)
         onRefreshListener = {
-            refreshCallback().launchOnCompleted(UI) {
+            refreshCallback().launchOnCompleted(Dispatchers.Main) {
                 stopRefreshing()
             }
         }

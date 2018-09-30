@@ -1,7 +1,6 @@
 package com.commonsense.android.kotlin.base.patterns
 
-import com.commonsense.android.kotlin.test.BaseRoboElectricTest
-import com.commonsense.android.kotlin.test.assert
+import com.commonsense.android.kotlin.test.*
 import org.junit.*
 
 

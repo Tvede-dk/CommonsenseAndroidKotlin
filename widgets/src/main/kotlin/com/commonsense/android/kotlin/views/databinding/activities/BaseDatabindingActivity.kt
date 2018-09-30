@@ -1,9 +1,12 @@
+@file:Suppress("unused", "NOTHING_TO_INLINE", "MemberVisibilityCanBePrivate")
+
+
 package com.commonsense.android.kotlin.views.databinding.activities
 
-import android.databinding.ViewDataBinding
-import android.os.Bundle
-import android.view.LayoutInflater
-import com.commonsense.android.kotlin.system.base.BaseActivity
+import android.databinding.*
+import android.os.*
+import android.view.*
+import com.commonsense.android.kotlin.system.base.*
 
 /**
  * created by Kasper Tvede
@@ -20,7 +23,7 @@ typealias InflaterFunctionSimple<T> = (layoutInflater: LayoutInflater) -> T
  * Base of a databinded activity
  * Wraps the databinding of an Activity
  * handles setup and the acccess to the binding
- * @param out T : ViewDataBinding the view binding
+ * @param T : ViewDataBinding the view binding
  * @property binding T the view binding.
  */
 abstract class BaseDatabindingActivity<out T : ViewDataBinding> : BaseActivity(), Databindable<T> {

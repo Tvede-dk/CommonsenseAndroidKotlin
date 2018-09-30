@@ -1,11 +1,12 @@
+@file:Suppress("unused", "NOTHING_TO_INLINE", "MemberVisibilityCanBePrivate")
+
 package com.commonsense.android.kotlin.system.extensions
 
-import android.app.Activity
-
+import android.app.*
 import android.support.v4.app.Fragment
-import android.view.MenuItem
-import com.commonsense.android.kotlin.base.EmptyFunction
-import com.commonsense.android.kotlin.base.extensions.collections.ifTrue
+import android.view.*
+import com.commonsense.android.kotlin.base.*
+import com.commonsense.android.kotlin.base.extensions.collections.*
 
 /**
  * Created by kasper on 28/08/2017.

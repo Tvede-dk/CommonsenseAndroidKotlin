@@ -1,12 +1,10 @@
 package com.commonsense.android.kotlin.views.input
 
-import android.widget.EditText
-import com.commonsense.android.kotlin.base.extensions.toEditable
-import com.commonsense.android.kotlin.test.BaseRoboElectricTest
-import com.commonsense.android.kotlin.test.assert
+import android.widget.*
+import com.commonsense.android.kotlin.base.extensions.*
+import com.commonsense.android.kotlin.test.*
 import org.junit.*
-import java.util.concurrent.Semaphore
-import java.util.concurrent.TimeUnit
+import java.util.concurrent.*
 
 /**
  * Created by kasper on 21/08/2017.

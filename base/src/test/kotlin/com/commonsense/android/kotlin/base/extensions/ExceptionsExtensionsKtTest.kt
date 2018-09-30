@@ -1,8 +1,7 @@
 package com.commonsense.android.kotlin.base.extensions
 
-import com.commonsense.android.kotlin.test.assertContains
-import org.junit.*
-import org.junit.jupiter.api.Test
+import com.commonsense.android.kotlin.test.*
+import org.junit.jupiter.api.*
 
 /**
  * Created by Kasper Tvede on 03-06-2018.

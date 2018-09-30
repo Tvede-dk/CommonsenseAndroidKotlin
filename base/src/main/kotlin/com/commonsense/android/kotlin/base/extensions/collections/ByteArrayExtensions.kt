@@ -1,17 +1,15 @@
+@file:Suppress("unused", "NOTHING_TO_INLINE", "MemberVisibilityCanBePrivate")
+
 package com.commonsense.android.kotlin.base.extensions.collections
 
-import com.commonsense.android.kotlin.base.extensions.hexCharsAsString
-import com.commonsense.android.kotlin.base.extensions.splitIntoComponents
-import com.commonsense.android.kotlin.base.extensions.toCase
+import com.commonsense.android.kotlin.base.extensions.*
 
 /**
- * Created by Kasper Tvede on 11-04-2018.
+ * Created by Kasper Tvede
  * Purpose:
  *
  */
 
-
-@Suppress("NOTHING_TO_INLINE")
 inline fun ByteArray.toHexString(appendHexPrefix: Boolean = false,
                                  shouldBeUppercase: Boolean = true): String {
 

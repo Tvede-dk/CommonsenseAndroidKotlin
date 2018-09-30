@@ -1,13 +1,13 @@
+@file:Suppress("unused", "NOTHING_TO_INLINE", "MemberVisibilityCanBePrivate")
+
 package com.commonsense.android.kotlin.views.features
 
+import android.support.annotation.*
 import android.support.annotation.IntRange
-import android.support.annotation.StringRes
-import android.support.design.widget.BaseTransientBottomBar
-import android.support.design.widget.Snackbar
-import android.support.v4.app.Fragment
-import android.view.View
-import com.commonsense.android.kotlin.base.EmptyFunction
-import com.commonsense.android.kotlin.base.FunctionUnit
+import android.support.design.widget.*
+import android.support.v4.app.*
+import android.view.*
+import com.commonsense.android.kotlin.base.*
 
 /**
  * Created by kasper on 12/07/2017.

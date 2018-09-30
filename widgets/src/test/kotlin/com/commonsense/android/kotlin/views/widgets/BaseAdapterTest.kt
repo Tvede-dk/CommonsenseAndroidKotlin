@@ -1,10 +1,9 @@
 package com.commonsense.android.kotlin.views.widgets
 
-import com.commonsense.android.kotlin.test.BaseRoboElectricTest
-import com.commonsense.android.kotlin.views.baseClasses.BaseAdapter
-import org.junit.Assert
-import org.junit.Test
-import org.robolectric.annotation.Config
+import com.commonsense.android.kotlin.test.*
+import com.commonsense.android.kotlin.views.baseClasses.*
+import org.junit.*
+import org.robolectric.annotation.*
 
 /**
  * Created by Kasper Tvede on 27-05-2017.

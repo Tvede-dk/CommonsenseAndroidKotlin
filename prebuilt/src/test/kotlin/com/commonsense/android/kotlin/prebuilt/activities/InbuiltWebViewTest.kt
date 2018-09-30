@@ -2,8 +2,6 @@ package com.commonsense.android.kotlin.prebuilt.activities
 
 import org.junit.*
 
-import org.junit.Assert.*
-
 /**
  *
  */

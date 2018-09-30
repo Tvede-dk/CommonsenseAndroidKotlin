@@ -1,3 +1,5 @@
+@file:Suppress("unused", "NOTHING_TO_INLINE", "MemberVisibilityCanBePrivate")
+
 package com.commonsense.android.kotlin.base.extensions
 
 /**
@@ -13,14 +15,12 @@ inline val Float.negative: Float
  * Compares two floats with a delta, since floats are not precise.
  *
  */
-@Suppress("NOTHING_TO_INLINE")
 inline fun Float.equals(otherFloat: Float, delta: Float): Boolean =
         this >= otherFloat - delta && this <= otherFloat + delta
 
 /**
  * Tells if this float value is zero (or more correctly, close to, since floats are not precise)
  */
-@Suppress("NOTHING_TO_INLINE")
 inline fun Float.isZero(tolerance: Float = 0.1f): Boolean {
     return this < tolerance && this > tolerance.negative
 }

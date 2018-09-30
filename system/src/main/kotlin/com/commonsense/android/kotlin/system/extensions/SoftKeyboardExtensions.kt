@@ -1,3 +1,5 @@
+@file:Suppress("unused", "NOTHING_TO_INLINE", "MemberVisibilityCanBePrivate")
+
 package com.commonsense.android.kotlin.system.extensions
 
 import android.app.*
@@ -12,12 +14,10 @@ import com.commonsense.android.kotlin.system.logging.*
  *
  */
 
-@Suppress("NOTHING_TO_INLINE")
 inline fun Context.hideSoftKeyboardFrom(editText: EditText) {
     inputMethodManager?.hideSoftInputFromWindow(editText.windowToken, 0)
 }
 
-@Suppress("NOTHING_TO_INLINE")
 inline fun Activity.hideSoftKeyboard() {
     val view = currentFocus ?: rootView
     if (view == null) {
@@ -28,7 +28,6 @@ inline fun Activity.hideSoftKeyboard() {
 }
 
 
-@Suppress("NOTHING_TO_INLINE")
 inline fun EditText.requestFocusAndShowKeyboard() {
     requestFocus()
     context.inputMethodManager?.toggleSoftInput(InputMethodManager.SHOW_FORCED, InputMethodManager.HIDE_IMPLICIT_ONLY)

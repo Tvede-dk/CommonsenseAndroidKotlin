@@ -1,10 +1,10 @@
+@file:Suppress("unused", "NOTHING_TO_INLINE", "MemberVisibilityCanBePrivate")
+
 package com.commonsense.android.kotlin.system.extensions
 
-import android.support.v4.app.DialogFragment
-import android.support.v4.app.Fragment
-import android.support.v7.app.AppCompatActivity
-import android.view.ViewGroup
-import android.view.WindowManager
+import android.support.v4.app.*
+import android.support.v7.app.*
+import android.view.*
 
 /**
  * Created by Kasper Tvede on 10-01-2017.

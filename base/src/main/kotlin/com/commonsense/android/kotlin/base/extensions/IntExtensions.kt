@@ -1,6 +1,8 @@
+@file:Suppress("unused", "NOTHING_TO_INLINE", "MemberVisibilityCanBePrivate")
+
 package com.commonsense.android.kotlin.base.extensions
 
-import com.commonsense.android.kotlin.base.algorithms.Comparing
+import com.commonsense.android.kotlin.base.algorithms.*
 
 /**
  * Created by Kasper Tvede on 13-09-2017.
@@ -45,7 +47,6 @@ inline val Int.isOdd: Boolean
  * @param to Int
  * @return Comparing
  */
-@Suppress("NOTHING_TO_INLINE")
 inline fun Int.compareToRange(from: Int, to: Int): Comparing {
     //make it a bit more "defined" behavior.
     if (from > to) {

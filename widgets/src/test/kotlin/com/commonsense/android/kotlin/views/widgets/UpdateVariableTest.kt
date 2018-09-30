@@ -1,8 +1,7 @@
 package com.commonsense.android.kotlin.views.widgets
 
-import com.commonsense.android.kotlin.views.datastructures.UpdateVariable
-import org.junit.Assert
-import org.junit.Test
+import com.commonsense.android.kotlin.views.datastructures.*
+import org.junit.*
 
 /**
  * Created by Kasper Tvede on 15-06-2017.

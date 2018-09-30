@@ -1,9 +1,11 @@
+@file:Suppress("unused", "NOTHING_TO_INLINE", "MemberVisibilityCanBePrivate")
+
 package com.commonsense.android.kotlin.system.extensions
 
 import android.app.*
 import android.app.job.*
 import android.app.usage.*
-import android.content.Context
+import android.content.*
 import android.location.*
 import android.net.*
 import android.net.wifi.*
@@ -13,7 +15,7 @@ import android.os.*
 import android.os.Build.*
 import android.support.annotation.*
 import android.view.*
-import android.view.inputmethod.InputMethodManager
+import android.view.inputmethod.*
 import com.commonsense.android.kotlin.base.extensions.collections.*
 
 /**

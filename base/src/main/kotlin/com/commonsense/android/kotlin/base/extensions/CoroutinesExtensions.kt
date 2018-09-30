@@ -1,12 +1,11 @@
+@file:Suppress("unused", "NOTHING_TO_INLINE", "MemberVisibilityCanBePrivate")
+
 package com.commonsense.android.kotlin.base.extensions
 
-import com.commonsense.android.kotlin.base.AsyncEmptyFunction
-import com.commonsense.android.kotlin.base.AsyncFunctionUnit
-import com.commonsense.android.kotlin.base.EmptyFunction
-import com.commonsense.android.kotlin.base.FunctionUnit
+import com.commonsense.android.kotlin.base.*
 import kotlinx.coroutines.experimental.*
-import kotlinx.coroutines.experimental.channels.Channel
-import kotlin.coroutines.experimental.CoroutineContext
+import kotlinx.coroutines.experimental.channels.*
+import kotlin.coroutines.experimental.*
 
 /**
  * Created by Kasper Tvede on 22-07-2017.
@@ -17,9 +16,10 @@ import kotlin.coroutines.experimental.CoroutineContext
 fun Job.launchOnCompleted(context: CoroutineContext,
                           action: EmptyFunction) {
     invokeOnCompletion {
-        launch(context) {
+
+        GlobalScope.launch(context, CoroutineStart.DEFAULT, {
             action()
-        }
+        })
     }
 }
 
@@ -30,9 +30,9 @@ fun Job.launchOnCompleted(context: CoroutineContext,
 fun Job.launchOnCompletedAsync(context: CoroutineContext,
                                action: AsyncEmptyFunction) {
     invokeOnCompletion {
-        launch(context) {
+        GlobalScope.launch(context, CoroutineStart.DEFAULT, {
             action()
-        }
+        })
     }
 }
 
@@ -42,29 +42,26 @@ fun Job.launchOnCompletedAsync(context: CoroutineContext,
 fun launchBlock(context: CoroutineContext,
                 start: CoroutineStart = CoroutineStart.DEFAULT,
                 block: AsyncEmptyFunction): Job {
-    return kotlinx.coroutines.experimental.launch(context, start) {
+    return GlobalScope.launch(context, start, {
         block()
-    }
+    })
 }
 
 /**
  * Like the original async, except without the coroutineScope 'this parameter
  */
-fun <T> asyncSimple(context: CoroutineContext = CommonPool,
+fun <T> asyncSimple(context: CoroutineContext = Dispatchers.Default,
                     start: CoroutineStart = CoroutineStart.DEFAULT,
                     block: suspend () -> T): Deferred<T> {
-    return kotlinx.coroutines.experimental.async(
-            context,
+    return GlobalScope.async(context,
             start,
-            null,
-            null,
             { block() })
 }
 
 /**
  * Like the original async, except without the coroutineScope 'this parameter
  */
-fun <T> asyncSimple(context: CoroutineContext = CommonPool,
+fun <T> asyncSimple(context: CoroutineContext = Dispatchers.Default,
                     block: suspend () -> T): Deferred<T> {
     return asyncSimple(context, CoroutineStart.DEFAULT, block)
 }

@@ -1,24 +1,25 @@
+@file:Suppress("unused", "NOTHING_TO_INLINE", "MemberVisibilityCanBePrivate")
+
 package com.commonsense.android.kotlin.views.widgets
 
-import android.content.Context
-import android.graphics.drawable.Drawable
-import android.support.v7.widget.AppCompatImageView
-import android.util.AttributeSet
-import android.view.View
-import com.commonsense.android.kotlin.base.EmptyFunction
-import com.commonsense.android.kotlin.base.extensions.collections.map
-import com.commonsense.android.kotlin.system.extensions.getDrawableSafe
-import com.commonsense.android.kotlin.system.imaging.withTintColor
+import android.content.*
+import android.graphics.drawable.*
+import android.support.v7.widget.*
+import android.util.*
+import android.view.*
+import com.commonsense.android.kotlin.base.*
+import com.commonsense.android.kotlin.base.extensions.collections.*
+import com.commonsense.android.kotlin.system.extensions.*
+import com.commonsense.android.kotlin.system.imaging.*
 import com.commonsense.android.kotlin.views.R
-import com.commonsense.android.kotlin.views.datastructures.ViewVariable
-import com.commonsense.android.kotlin.views.input.selection.CheckableStatusCallback
-import java.lang.ref.WeakReference
+import com.commonsense.android.kotlin.views.datastructures.*
+import com.commonsense.android.kotlin.views.input.selection.*
+import java.lang.ref.*
 
 /**
  * Created by Kasper Tvede on 13-06-2017.
  */
 open class ToggleImageButton : AppCompatImageView, ViewAttribute, View.OnClickListener, CheckableStatusCallback {
-
 
 
     override val attributes: MutableList<WeakReference<ViewVariable<*>>> = mutableListOf()
@@ -102,11 +103,9 @@ open class ToggleImageButton : AppCompatImageView, ViewAttribute, View.OnClickLi
         invalidate()
     }
 
-    private fun getCheckColor(): Int
-            = checked.map(selectedColor, unselectedColor)
+    private fun getCheckColor(): Int = checked.map(selectedColor, unselectedColor)
 
-    private fun getCheckBackground(): Drawable?
-            = checked.map(selectedBackground, unselectedBackground)
+    private fun getCheckBackground(): Drawable? = checked.map(selectedBackground, unselectedBackground)
 
     override fun afterSetupView() {
         super.setOnClickListener(this)

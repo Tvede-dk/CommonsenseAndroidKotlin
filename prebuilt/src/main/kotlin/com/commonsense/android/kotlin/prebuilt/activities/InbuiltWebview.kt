@@ -1,12 +1,13 @@
+@file:Suppress("unused", "NOTHING_TO_INLINE", "MemberVisibilityCanBePrivate")
+
 package com.commonsense.android.kotlin.prebuilt.activities
 
-import android.content.Context
-import android.content.Intent
-import android.net.Uri
-import android.os.Bundle
-import android.webkit.WebView
-import com.commonsense.android.kotlin.system.base.BaseActivity
-import com.commonsense.android.kotlin.views.extensions.loadUri
+import android.content.*
+import android.net.*
+import android.os.*
+import android.webkit.*
+import com.commonsense.android.kotlin.system.base.*
+import com.commonsense.android.kotlin.views.extensions.*
 
 /**
  * Created by Kasper Tvede on 09-07-2017.
@@ -38,7 +39,7 @@ open class InbuiltWebView : BaseActivity() {
     // https://developer.chrome.com/multidevice/android/customtabs
 
     companion object {
-        private val uriIntentIndex = "uri"
+        private const val uriIntentIndex = "uri"
         /**
          *
          */

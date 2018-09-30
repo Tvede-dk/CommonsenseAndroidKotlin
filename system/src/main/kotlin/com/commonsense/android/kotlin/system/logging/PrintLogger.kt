@@ -1,6 +1,8 @@
+@file:Suppress("unused", "NOTHING_TO_INLINE", "MemberVisibilityCanBePrivate")
+
 package com.commonsense.android.kotlin.system.logging
 
-import com.commonsense.android.kotlin.base.extensions.stackTraceToString
+import com.commonsense.android.kotlin.base.extensions.*
 
 /**
  * Created by Kasper Tvede on 03-06-2018.

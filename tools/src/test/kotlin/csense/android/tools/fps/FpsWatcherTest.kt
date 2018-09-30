@@ -2,8 +2,6 @@ package csense.android.tools.fps
 
 import org.junit.*
 
-import org.junit.Assert.*
-
 /**
  *
  */

@@ -1,17 +1,13 @@
 package com.commonsense.android.kotlin.views.databinding.activities
 
-import android.content.Intent
-import android.databinding.ViewDataBinding
-import android.view.View
-import android.view.ViewGroup
-import com.commonsense.android.kotlin.system.base.BaseActivityData
-import com.commonsense.android.kotlin.system.logging.PrintLogger
-import com.commonsense.android.kotlin.test.BaseRoboElectricTest
-import com.commonsense.android.kotlin.test.assert
-import com.commonsense.android.kotlin.test.assertFalse
-import com.commonsense.android.kotlin.test.assertTrue
+import android.content.*
+import android.databinding.*
+import android.view.*
+import com.commonsense.android.kotlin.system.base.*
+import com.commonsense.android.kotlin.system.logging.*
+import com.commonsense.android.kotlin.test.*
 import org.junit.*
-import org.mockito.Mockito.mock
+import org.mockito.Mockito.*
 
 class BaseDatabindingActivityWithDataTest : BaseRoboElectricTest() {
 

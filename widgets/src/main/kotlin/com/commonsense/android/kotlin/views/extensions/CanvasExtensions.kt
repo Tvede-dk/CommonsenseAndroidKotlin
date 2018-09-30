@@ -1,7 +1,7 @@
 package com.commonsense.android.kotlin.views.extensions
 
-import android.graphics.Canvas
-import android.graphics.drawable.Drawable
+import android.graphics.*
+import android.graphics.drawable.*
 
 /**
  * Calculates the center X value of this canvas

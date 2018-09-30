@@ -4,13 +4,13 @@ import android.graphics.*
 import android.support.v7.widget.*
 import android.view.*
 import com.commonsense.android.kotlin.system.logging.*
-import com.commonsense.android.kotlin.views.ViewInflatingFunction
+import com.commonsense.android.kotlin.views.*
 import com.commonsense.android.kotlin.views.databinding.adapters.*
 import com.commonsense.android.kotlin.views.databinding.fragments.*
 import com.commonsense.android.kotlin.views.extensions.*
 import com.commonsense.android.kotlin.views.features.*
 import com.commonsense.android.kotlin.views.features.SectionRecyclerTransaction.*
-import csense.android.exampleApp.*
+import csense.android.exampleApp.R
 import csense.android.exampleApp.databinding.*
 
 /**

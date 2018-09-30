@@ -7,8 +7,6 @@ import com.commonsense.android.kotlin.views.extensions.*
 import com.commonsense.android.kotlin.views.helpers.*
 import csense.android.exampleApp.databinding.*
 import csense.android.tools.anr.*
-import kotlinx.coroutines.experimental.*
-import kotlinx.coroutines.experimental.android.*
 
 /**
  * Created by Kasper Tvede on 01-03-2018.

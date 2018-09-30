@@ -1,13 +1,13 @@
+@file:Suppress("unused", "NOTHING_TO_INLINE", "MemberVisibilityCanBePrivate")
+
 package csense.android.tools.crash
 
-import android.annotation.SuppressLint
-import android.content.Context
-import android.support.annotation.AnyThread
-import android.support.annotation.UiThread
-import com.commonsense.android.kotlin.base.extensions.collections.ifTrue
-import com.commonsense.android.kotlin.base.extensions.isNotNull
-import com.commonsense.android.kotlin.system.logging.L
-import com.commonsense.android.kotlin.system.logging.tryAndLog
+import android.annotation.*
+import android.content.*
+import android.support.annotation.*
+import com.commonsense.android.kotlin.base.extensions.*
+import com.commonsense.android.kotlin.base.extensions.collections.*
+import com.commonsense.android.kotlin.system.logging.*
 
 /**
  * Created by Kasper Tvede on 01-02-2018.

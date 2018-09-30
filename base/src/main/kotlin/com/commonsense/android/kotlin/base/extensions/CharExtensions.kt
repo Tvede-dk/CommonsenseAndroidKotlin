@@ -1,7 +1,8 @@
+@file:Suppress("unused", "NOTHING_TO_INLINE", "MemberVisibilityCanBePrivate")
 package com.commonsense.android.kotlin.base.extensions
 
-import com.commonsense.android.kotlin.base.extensions.collections.mapLazy
-import kotlin.experimental.or
+import com.commonsense.android.kotlin.base.extensions.collections.*
+import kotlin.experimental.*
 
 /**
  * Created by Kasper Tvede on 15-04-2018.
@@ -10,21 +11,18 @@ import kotlin.experimental.or
  */
 
 
-@Suppress("NOTHING_TO_INLINE")
 inline fun Char.toCase(upperCase: Boolean): Char =
         upperCase.mapLazy(this::toUpperCase,
                 this::toLowerCase)
 
 
 //TODO in kotlin 1.3 use UByte
-@Suppress("NOTHING_TO_INLINE")
 inline fun hexCharsToByte(first: Char, second: Char): Short? {
     val firstToInt = first.mapFromHexValue()?.toShort() ?: return null
     val secondToInt = second.mapFromHexValue()?.toShort() ?: return null
     return firstToInt.shl(4) or secondToInt
 }
 
-@Suppress("NOTHING_TO_INLINE")
 inline fun Char.mapFromHexValue(): Byte? {
     val zeroNum = '0'.toByte()
     val aNum = 'a'.toByte()

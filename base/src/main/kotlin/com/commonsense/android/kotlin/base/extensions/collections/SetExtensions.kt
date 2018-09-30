@@ -1,3 +1,4 @@
+@file:Suppress("unused", "NOTHING_TO_INLINE", "MemberVisibilityCanBePrivate")
 package com.commonsense.android.kotlin.base.extensions.collections
 
 /**
@@ -9,7 +10,6 @@ package com.commonsense.android.kotlin.base.extensions.collections
  * if the set contains the item it will be removed.
  * if it does not contain the item, the item will be inserted.
  */
-@Suppress("NOTHING_TO_INLINE")
 inline fun <T> MutableSet<T>.toggleExistence(item: T) {
     setExistence(item, !contains(item))
 }
@@ -18,7 +18,6 @@ inline fun <T> MutableSet<T>.toggleExistence(item: T) {
  * like toggle, except you control the action by the "shouldExists";
  * if that is true, then the element is added, if false the element is removed.
  */
-@Suppress("NOTHING_TO_INLINE")
 inline fun <T> MutableSet<T>.setExistence(item: T, shouldExists: Boolean) {
     if (shouldExists) {
         add(item)

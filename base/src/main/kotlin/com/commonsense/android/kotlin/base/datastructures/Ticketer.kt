@@ -1,7 +1,9 @@
+@file:Suppress("unused", "NOTHING_TO_INLINE", "MemberVisibilityCanBePrivate")
+
 package com.commonsense.android.kotlin.base.datastructures
 
 import android.support.annotation.IntRange
-import java.util.concurrent.atomic.AtomicInteger
+import java.util.concurrent.atomic.*
 
 /**
  * A ticket system

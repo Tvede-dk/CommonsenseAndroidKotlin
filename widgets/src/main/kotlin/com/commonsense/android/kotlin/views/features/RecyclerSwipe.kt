@@ -1,19 +1,14 @@
+@file:Suppress("unused")
 package com.commonsense.android.kotlin.views.features
 
-import android.databinding.ViewDataBinding
-import android.graphics.Canvas
-import android.support.v7.widget.RecyclerView
-import android.support.v7.widget.helper.ItemTouchHelper
-import android.view.View
-import com.commonsense.android.kotlin.base.extensions.collections.forEachNotNull
-import com.commonsense.android.kotlin.base.extensions.collections.map
-import com.commonsense.android.kotlin.views.databinding.adapters.AbstractSearchableDataBindingRecyclerAdapter
-import com.commonsense.android.kotlin.views.databinding.adapters.BaseDataBindingRecyclerAdapter
-import com.commonsense.android.kotlin.views.databinding.adapters.BaseViewHolderItem
-import com.commonsense.android.kotlin.views.databinding.adapters.DataBindingRecyclerAdapter
-import com.commonsense.android.kotlin.views.extensions.ViewHelper
-import com.commonsense.android.kotlin.views.extensions.resetTransformations
-import com.commonsense.android.kotlin.views.extensions.visible
+import android.databinding.*
+import android.graphics.*
+import android.support.v7.widget.*
+import android.support.v7.widget.helper.*
+import android.view.*
+import com.commonsense.android.kotlin.base.extensions.collections.*
+import com.commonsense.android.kotlin.views.databinding.adapters.*
+import com.commonsense.android.kotlin.views.extensions.*
 
 /**
  * Created by Kasper Tvede on 22-06-2017.
@@ -69,7 +64,7 @@ private class InnerSwipeHelper(val recyclerAdapter: DataBindingRecyclerAdapter<*
 
     private var lastDirection: Direction? = null
 
-    override fun getMovementFlags(recyclerView: RecyclerView?, viewHolder: RecyclerView.ViewHolder?): Int {
+    override fun getMovementFlags(recyclerView: RecyclerView, viewHolder: RecyclerView.ViewHolder): Int {
         val swipeItem = getOptInterface(viewHolder) ?: return 0
         val baseViewHolder = viewHolder as? BaseViewHolderItem<*> ?: return 0
         val (startView, endView, _) = getViews(swipeItem, baseViewHolder.item)
@@ -87,15 +82,15 @@ private class InnerSwipeHelper(val recyclerAdapter: DataBindingRecyclerAdapter<*
     }
 
 
-    override fun onChildDraw(canvas: Canvas?,
-                             recyclerView: RecyclerView?,
-                             viewHolder: RecyclerView.ViewHolder?,
+    override fun onChildDraw(canvas: Canvas,
+                             recyclerView: RecyclerView,
+                             viewHolder: RecyclerView.ViewHolder,
                              dX: Float,
                              dY: Float,
                              actionState: Int,
                              isCurrentlyActive: Boolean) {
         super.onChildDraw(canvas, recyclerView, viewHolder, dX, dY, actionState, isCurrentlyActive)
-        if (viewHolder?.adapterPosition ?: -1 < 0) {
+        if (viewHolder.adapterPosition < 0) {
             return
         }
         val swipeItem = getOptInterface(viewHolder) ?: return
@@ -111,18 +106,18 @@ private class InnerSwipeHelper(val recyclerAdapter: DataBindingRecyclerAdapter<*
             return
         }
 
-        when {
+        lastDirection = when {
             dX in (-0.1f..0.1f) -> { //nothing is visible. just hide it
                 ViewHelper.goneViews(startView, endView)
-                lastDirection = null
+                null
             }
             dX > 0 -> { //else, what side.
                 ViewHelper.showGoneView(startView, endView)
-                lastDirection = Direction.StartToEnd
+                Direction.StartToEnd
             }
             else -> {
                 ViewHelper.showGoneView(endView, startView)
-                lastDirection = Direction.EndToStart
+                Direction.EndToStart
             }
         }
     }
@@ -138,7 +133,7 @@ private class InnerSwipeHelper(val recyclerAdapter: DataBindingRecyclerAdapter<*
 
     }
 
-    override fun clearView(recyclerView: RecyclerView?, viewHolder: RecyclerView.ViewHolder?) {
+    override fun clearView(recyclerView: RecyclerView, viewHolder: RecyclerView.ViewHolder) {
         super.clearView(recyclerView, viewHolder)
         val view = (viewHolder as? BaseViewHolderItem<*>)?.item ?: return
         val swipeInterface = getOptInterface(viewHolder) ?: return
@@ -159,11 +154,11 @@ private class InnerSwipeHelper(val recyclerAdapter: DataBindingRecyclerAdapter<*
     }
 
     //move is reordering. we only deal with swipe for simplicity.
-    override fun onMove(recyclerView: RecyclerView?,
-                        beforeViewHolder: RecyclerView.ViewHolder?,
-                        afterViewHolder: RecyclerView.ViewHolder?): Boolean = false
+    override fun onMove(recyclerView: RecyclerView,
+                        beforeViewHolder: RecyclerView.ViewHolder,
+                        afterViewHolder: RecyclerView.ViewHolder): Boolean = false
 
-    override fun onSwiped(viewHolder: RecyclerView.ViewHolder?, directionInt: Int) {
+    override fun onSwiped(viewHolder: RecyclerView.ViewHolder, directionInt: Int) {
         val optInterface = getOptInterface(viewHolder)
         val dir = directionInt.toDirection()
         val baseViewHolder = viewHolder as? BaseViewHolderItem<*>

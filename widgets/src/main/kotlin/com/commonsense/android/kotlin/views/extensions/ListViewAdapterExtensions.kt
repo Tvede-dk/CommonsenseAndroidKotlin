@@ -1,7 +1,7 @@
 package com.commonsense.android.kotlin.views.extensions
 
-import android.support.annotation.UiThread
-import android.widget.ArrayAdapter
+import android.support.annotation.*
+import android.widget.*
 
 
 /**

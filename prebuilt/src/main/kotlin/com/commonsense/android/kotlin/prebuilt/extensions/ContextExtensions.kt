@@ -1,14 +1,14 @@
+@file:Suppress("unused", "NOTHING_TO_INLINE", "MemberVisibilityCanBePrivate")
+
 package com.commonsense.android.kotlin.prebuilt.extensions
 
-import android.content.ActivityNotFoundException
-import android.content.Context
-import android.content.Intent
-import android.widget.Toast
-import com.commonsense.android.kotlin.base.extensions.asUrl
-import com.commonsense.android.kotlin.prebuilt.R
-import com.commonsense.android.kotlin.prebuilt.activities.InbuiltWebView
-import com.commonsense.android.kotlin.system.extensions.safeToast
-import com.commonsense.android.kotlin.system.logging.L
+import android.content.*
+import android.widget.*
+import com.commonsense.android.kotlin.base.extensions.*
+import com.commonsense.android.kotlin.prebuilt.*
+import com.commonsense.android.kotlin.prebuilt.activities.*
+import com.commonsense.android.kotlin.system.extensions.*
+import com.commonsense.android.kotlin.system.logging.*
 
 /**
  * Created by Kasper Tvede on 19-07-2017.

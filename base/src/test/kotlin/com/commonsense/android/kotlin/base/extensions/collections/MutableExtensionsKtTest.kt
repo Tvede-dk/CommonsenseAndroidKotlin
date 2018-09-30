@@ -1,8 +1,6 @@
 package com.commonsense.android.kotlin.base.extensions.collections
 
-import com.commonsense.android.kotlin.test.assert
-import com.commonsense.android.kotlin.test.assertEmpty
-import com.commonsense.android.kotlin.test.assertSize
+import com.commonsense.android.kotlin.test.*
 import org.junit.*
 import org.junit.jupiter.api.Test
 
@@ -14,7 +12,7 @@ class MutableExtensionsKtTest {
 
     @Test
     fun findAndRemove() {
-        val list = mutableListOf<String>("a", "b")
+        val list = mutableListOf("a", "b")
         list.findAndRemove { it == "a" }
         list.assertSize(1, "should have removed a")
         list.first().assert("b")

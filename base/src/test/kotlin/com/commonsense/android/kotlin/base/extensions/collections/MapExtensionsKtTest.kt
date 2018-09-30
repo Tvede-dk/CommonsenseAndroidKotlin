@@ -2,7 +2,9 @@ package com.commonsense.android.kotlin.base.extensions.collections
 
 import android.util.SparseArray
 import com.commonsense.android.kotlin.test.*
-import org.junit.Test
+import org.junit.*
+import kotlin.Pair
+import kotlin.String
 
 
 /**

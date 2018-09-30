@@ -1,4 +1,7 @@
+@file:Suppress("unused", "NOTHING_TO_INLINE", "MemberVisibilityCanBePrivate")
+
 package com.commonsense.android.kotlin.system.imaging
+
 
 import android.*
 import android.app.*

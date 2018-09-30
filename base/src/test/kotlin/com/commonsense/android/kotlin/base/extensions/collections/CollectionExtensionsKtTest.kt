@@ -1,6 +1,6 @@
 package com.commonsense.android.kotlin.base.extensions.collections
 
-import com.commonsense.android.kotlin.base.extensions.forEach
+import com.commonsense.android.kotlin.base.extensions.*
 import com.commonsense.android.kotlin.test.*
 import org.junit.*
 import org.junit.jupiter.api.Test

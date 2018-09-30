@@ -1,7 +1,7 @@
 package com.commonsense.android.kotlin.base.compat
 
-import com.commonsense.android.kotlin.test.assertNotNull
-import org.junit.jupiter.api.Test
+import com.commonsense.android.kotlin.test.*
+import org.junit.jupiter.api.*
 
 /**
  * Created by Kasper Tvede on 20-05-2018.

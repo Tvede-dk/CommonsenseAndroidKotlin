@@ -1,12 +1,13 @@
+@file:Suppress("unused", "NOTHING_TO_INLINE", "MemberVisibilityCanBePrivate")
+
 package com.commonsense.android.kotlin.base.extensions
 
-import com.commonsense.android.kotlin.test.assert
-import com.commonsense.android.kotlin.test.assertSize
+import com.commonsense.android.kotlin.test.*
 import kotlinx.coroutines.experimental.*
-import kotlinx.coroutines.experimental.channels.Channel
+import kotlinx.coroutines.experimental.channels.*
 import org.junit.*
 import org.junit.jupiter.api.Test
-import java.util.concurrent.Semaphore
+import java.util.concurrent.*
 
 /**
  * Created by Kasper Tvede on 22-05-2018.
@@ -19,12 +20,12 @@ class CoroutinesExtensionsKtTest {
 
         val sem = Semaphore(0, false)
         var counter = 0
-        val job = launch(CommonPool) {
+        val job = GlobalScope.launch {
             counter += 1
             delay(5)
             counter += 1
         }.apply {
-            launchOnCompleted(CommonPool) {
+            launchOnCompleted(Dispatchers.Default) {
                 counter.assert(2, "should have completed job")
                 counter += 1
                 sem.release()
@@ -40,12 +41,12 @@ class CoroutinesExtensionsKtTest {
     fun launchOnCompletedAsync() = runBlocking {
         val sem = Semaphore(0, false)
         var counter = 0
-        val job = launch(CommonPool) {
+        val job = GlobalScope.launch {
             counter += 1
             delay(5)
             counter += 1
         }.apply {
-            launchOnCompletedAsync(CommonPool) {
+            launchOnCompletedAsync(Dispatchers.Default) {
                 counter.assert(2, "should have completed job")
                 delay(5)
                 counter += 11
@@ -62,7 +63,7 @@ class CoroutinesExtensionsKtTest {
     @Test
     fun launchBlock() = runBlocking {
         var counter = 0
-        val job = launchBlock(CommonPool) {
+        val job = launchBlock(Dispatchers.Default) {
             counter += 1
         }
 
@@ -70,7 +71,7 @@ class CoroutinesExtensionsKtTest {
 
     @Test
     fun asyncSimple() = runBlocking {
-        val simpleLazy = asyncSimple(CommonPool, CoroutineStart.LAZY) {
+        val simpleLazy = asyncSimple(Dispatchers.Default, CoroutineStart.LAZY) {
             "someValue"
         }
         simpleLazy.start()
@@ -80,7 +81,7 @@ class CoroutinesExtensionsKtTest {
 
     @Test
     fun asyncSimple1() = runBlocking {
-        val simple = asyncSimple(CommonPool) {
+        val simple = asyncSimple(Dispatchers.Default) {
             42
         }
         simple.await().assert(42)
@@ -90,10 +91,10 @@ class CoroutinesExtensionsKtTest {
     fun await() = runBlocking {
 
         val deferred: List<Deferred<Int>> = listOf(
-                async(CommonPool) { 41 },
-                async(CommonPool) { 42 },
-                async(CommonPool) { 9 },
-                async(CommonPool) { 8 }
+                GlobalScope.async { 41 },
+                GlobalScope.async { 42 },
+                GlobalScope.async { 9 },
+                GlobalScope.async { 8 }
         )
         val results = deferred.await()
         results.assertSize(4)
@@ -109,11 +110,11 @@ class CoroutinesExtensionsKtTest {
 
         var counter = 0
         val jobs = listOf(
-                launch(CommonPool) {
+                GlobalScope.launch{
                     delay(20)
                     counter += 1
                 },
-                launch(CommonPool) {
+                GlobalScope.launch {
                     counter += 1
                     delay(20)
                     counter += 1
@@ -128,7 +129,7 @@ class CoroutinesExtensionsKtTest {
         var combinedResult = 0
         val semaphore = Semaphore(0)
         val channel = Channel<Int>()
-        async {
+        GlobalScope.launch {
             channel.forEach {
                 combinedResult += it
                 semaphore.release()
@@ -149,7 +150,7 @@ class CoroutinesExtensionsKtTest {
         var combinedResult = 0
         val semaphore = Semaphore(0)
         val channel = Channel<Int>()
-        async {
+        GlobalScope.launch {
             channel.forEachAsync {
                 combinedResult += it
                 semaphore.release()

@@ -1,7 +1,9 @@
+@file:Suppress("unused", "NOTHING_TO_INLINE", "MemberVisibilityCanBePrivate")
+
 package com.commonsense.android.kotlin.views.datastructures
 
-import com.commonsense.android.kotlin.base.EmptyFunction
-import com.commonsense.android.kotlin.base.extensions.collections.onTrue
+import com.commonsense.android.kotlin.base.*
+import com.commonsense.android.kotlin.base.extensions.collections.*
 
 /**
  * Created by Kasper Tvede on 13-06-2017.
@@ -15,7 +17,7 @@ import com.commonsense.android.kotlin.base.extensions.collections.onTrue
  * @property value T the accessor for the inner variable, also calling the onUpdated callback
  */
 class UpdateVariable<T>(initialValue: T,
-                        val onUpdated: EmptyFunction) {
+                        private val onUpdated: EmptyFunction) {
     /**
      * the real hidden variable
      */

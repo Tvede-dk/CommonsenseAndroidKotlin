@@ -1,8 +1,10 @@
+@file:Suppress("unused", "NOTHING_TO_INLINE", "MemberVisibilityCanBePrivate")
+
 package com.commonsense.android.kotlin.base.compat
 
-import java.security.KeyStore
+import java.security.*
+import javax.net.ssl.*
 import javax.net.ssl.TrustManagerFactory
-import javax.net.ssl.X509TrustManager
 
 /**
  * Created by kasper on 10/06/2017.

@@ -1,9 +1,10 @@
+@file:Suppress("unused", "NOTHING_TO_INLINE", "MemberVisibilityCanBePrivate")
+
 package com.commonsense.android.kotlin.views.extensions
 
-import android.graphics.Rect
+import android.graphics.*
 import android.support.annotation.IntRange
-import android.view.View
-import android.view.ViewGroup
+import android.view.*
 
 /**
  * The width inside (after subtracting the padding).

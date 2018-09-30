@@ -1,3 +1,5 @@
+@file:Suppress("unused", "NOTHING_TO_INLINE", "MemberVisibilityCanBePrivate")
+
 package com.commonsense.android.kotlin.system.extensions
 
 import android.content.*
@@ -19,15 +21,13 @@ import kotlinx.coroutines.experimental.android.*
 
 
 /**
- * Created by Kasper Tvede on 06-12-2016.
+ * Created by Kasper Tvede
  */
 
-@Suppress("NOTHING_TO_INLINE")
 inline fun Context.checkPermission(@DangerousPermissionString permission: String): Boolean {
     return ContextCompat.checkSelfPermission(this, permission) == PackageManager.PERMISSION_GRANTED
 }
 
-@Suppress("NOTHING_TO_INLINE")
 inline fun Context.presentDialer(phoneNumber: String) {
     val intent = Intent(Intent.ACTION_DIAL).apply {
         data = Uri.parse("tel:$phoneNumber")
@@ -35,7 +35,6 @@ inline fun Context.presentDialer(phoneNumber: String) {
     startActivitySafe(intent)
 }
 
-@Suppress("NOTHING_TO_INLINE")
 inline fun Context.showOnMaps(address: String) {
     val urlEncoded = address.urlEncoded()
     val toLaunch = Uri.parse("geo:0,0?q=$urlEncoded")
@@ -43,12 +42,10 @@ inline fun Context.showOnMaps(address: String) {
     startActivitySafe(intent)
 }
 
-@Suppress("NOTHING_TO_INLINE")
 inline fun Context.getDrawableSafe(@DrawableRes drawable: Int): Drawable? {
     return AppCompatResources.getDrawable(this, drawable)
 }
 
-@Suppress("NOTHING_TO_INLINE")
 inline fun Context.safeToast(@StringRes message: Int, length: Int = Toast.LENGTH_SHORT) {
     try {
         Toast.makeText(this, message, length).show()
@@ -58,9 +55,8 @@ inline fun Context.safeToast(@StringRes message: Int, length: Int = Toast.LENGTH
 }
 
 
-@Suppress("NOTHING_TO_INLINE")
 inline fun Context.safeToast(message: String, length: Int = Toast.LENGTH_SHORT) {
-    launch(UI) {
+    GlobalScope.launch(Dispatchers.Main) {
         try {
             Toast.makeText(this@safeToast, message, length).show()
         } catch (e: Exception) {
@@ -70,12 +66,10 @@ inline fun Context.safeToast(message: String, length: Int = Toast.LENGTH_SHORT) 
 }
 
 
-@Suppress("NOTHING_TO_INLINE")
 inline fun Context.getColorSafe(@ColorRes color: Int) =
         ContextCompat.getColor(this, color)
 
 
-@Suppress("NOTHING_TO_INLINE")
 inline fun Context.getVirtualScreenSize(): Point? {
     val windowManager = getSystemService(Context.WINDOW_SERVICE) as? WindowManager
     val display = windowManager?.defaultDisplay
@@ -87,15 +81,12 @@ inline fun Context.getVirtualScreenSize(): Point? {
 }
 
 
-
-
 fun Context.getTypedArrayFor(attributeSet: AttributeSet,
                              @StyleableRes style: IntArray,
                              defStyleAttr: Int = 0,
                              defStyleRes: Int = 0): TypedArray =
         theme.obtainStyledAttributes(attributeSet, style, defStyleAttr, defStyleRes)
 
-@Suppress("NOTHING_TO_INLINE")
 inline fun Context.startActivitySafe(intent: Intent) = tryAndLog("ContextExtensions") {
     startActivity(intent)
 }

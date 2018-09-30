@@ -1,4 +1,7 @@
+@file:Suppress("unused", "NOTHING_TO_INLINE", "MemberVisibilityCanBePrivate")
+
 package com.commonsense.android.kotlin.system.extensions
+
 
 import android.support.annotation.*
 import android.support.v4.app.*
@@ -36,7 +39,7 @@ inline fun FragmentManager.transactionCommitNowAllowStateLoss(crossinline action
 @UiThread
 fun FragmentManager.popToFirstFragment() {
     tryAndLog("popToFirstFragment failed.") {
-        (0 until this.backStackEntryCount).forEach { this.popBackStack() }
+        (0 until this.backStackEntryCount).forEach { _ -> this.popBackStack() }
         this.executePendingTransactions() //then allow Android to do the popping.
     }
 }

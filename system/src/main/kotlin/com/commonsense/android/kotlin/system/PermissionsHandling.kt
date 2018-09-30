@@ -1,23 +1,25 @@
+@file:Suppress("unused", "NOTHING_TO_INLINE")
+
 package com.commonsense.android.kotlin.system
 
-import android.Manifest
+import android.*
 import android.annotation.*
-import android.app.Activity
-import android.content.Context
-import android.content.pm.PackageManager
+import android.app.*
+import android.content.*
+import android.content.pm.*
 import android.os.Build.*
 import android.support.annotation.*
 import android.support.annotation.IntRange
-import android.support.v4.app.ActivityCompat
-import android.support.v4.content.ContextCompat
+import android.support.v4.app.*
+import android.support.v4.content.*
 import com.commonsense.android.kotlin.base.*
 import com.commonsense.android.kotlin.base.debug.*
+import com.commonsense.android.kotlin.base.extensions.*
 import com.commonsense.android.kotlin.base.extensions.collections.*
-import com.commonsense.android.kotlin.base.extensions.launchBlock
 import com.commonsense.android.kotlin.system.base.*
-import com.commonsense.android.kotlin.system.extensions.checkPermission
-import kotlinx.coroutines.experimental.Job
-import kotlinx.coroutines.experimental.android.UI
+import com.commonsense.android.kotlin.system.extensions.*
+import kotlinx.coroutines.experimental.*
+import kotlinx.coroutines.experimental.android.*
 
 /**
  * Created by Kasper Tvede
@@ -184,17 +186,17 @@ fun PermissionEnum.useSuspend(handler: PermissionsHandling,
                               function: AsyncEmptyFunction,
                               errorFunction: AsyncEmptyFunction) {
     handler.performActionForPermission(permissionValue, activity, {
-        launchBlock(UI, block = function)
+        launchBlock(Dispatchers.Main, block = function)
     }, {
-        launchBlock(UI, block = errorFunction)
+        launchBlock(Dispatchers.Main, block = errorFunction)
     })
 }
 
 @UiThread
 fun PermissionEnum.useSuspend(handler: PermissionsHandling,
                               activity: BaseActivity,
-                              function: AsyncEmptyFunction,
-                              errorFunction: AsyncEmptyFunction) {
+                              function: AsyncFunctionUnit<Context>,
+                              errorFunction: AsyncFunctionUnit<Context>) {
     handler.performActionForPermission(permissionValue, activity, {
         activity.launchInUi("PermissionEnum.useSuspend", function)
     }, {
@@ -211,14 +213,14 @@ inline fun PermissionEnum.usePermission(context: Context, crossinline usePermiss
 @UiThread
 fun PermissionEnum.useSuspend(context: Context, usePermission: AsyncEmptyFunction): Job? {
     return if (havePermission(context)) {
-        launchBlock(UI, block = usePermission)
+        launchBlock(Dispatchers.Main, block = usePermission)
     } else {
         null
     }
 }
 
 @UiThread
-fun PermissionEnum.useSuspend(context: BaseActivity, usePermission: AsyncEmptyFunction) {
+fun PermissionEnum.useSuspend(context: BaseActivity, usePermission: AsyncFunctionUnit<Context>) {
     if (havePermission(context)) {
         context.launchInUi("PermissionEnum.useSuspend", usePermission)
     }
@@ -265,7 +267,7 @@ suspend fun BaseFragment.usePermissionSuspend(
     }
 }
 
-suspend fun BaseActivity.usePermissionSuspend(
+fun BaseActivity.usePermissionSuspend(
         permission: PermissionEnum,
         usePermission: AsyncEmptyFunction,
         onFailed: AsyncEmptyFunction) {

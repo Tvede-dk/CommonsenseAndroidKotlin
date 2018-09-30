@@ -1,20 +1,17 @@
+@file:Suppress("unused", "NOTHING_TO_INLINE", "MemberVisibilityCanBePrivate")
+
 package com.commonsense.android.kotlin.views.databinding.adapters
 
-import android.content.Context
-import android.databinding.ViewDataBinding
-import android.support.v7.widget.RecyclerView
-import com.commonsense.android.kotlin.base.FunctionUnit
-import com.commonsense.android.kotlin.base.exceptions.StackTraceException
-import com.commonsense.android.kotlin.system.datastructures.SectionLookupRep
-import com.commonsense.android.kotlin.system.datastructures.TypeSection
-import com.commonsense.android.kotlin.system.logging.L
-import kotlinx.coroutines.experimental.CommonPool
-import kotlinx.coroutines.experimental.android.UI
-import kotlinx.coroutines.experimental.channels.Channel
-import kotlinx.coroutines.experimental.channels.SendChannel
-import kotlinx.coroutines.experimental.channels.actor
-import kotlinx.coroutines.experimental.channels.consumeEach
-import kotlinx.coroutines.experimental.launch
+import android.content.*
+import android.databinding.*
+import android.support.v7.widget.*
+import com.commonsense.android.kotlin.base.*
+import com.commonsense.android.kotlin.base.exceptions.*
+import com.commonsense.android.kotlin.system.datastructures.*
+import com.commonsense.android.kotlin.system.logging.*
+import kotlinx.coroutines.experimental.*
+import kotlinx.coroutines.experimental.android.*
+import kotlinx.coroutines.experimental.channels.*
 
 /**
  * Created by kasper on 01/06/2017.
@@ -81,7 +78,7 @@ open class AbstractSearchableDataBindingRecyclerAdapter<
     }
 
     private suspend fun updateVisibly(data: List<TypeSection<T>>) {
-        launch(UI) {
+        GlobalScope.launch(Dispatchers.Main) {
             super.setAllSections(data)
         }.join()
     }
@@ -282,7 +279,7 @@ private class ConflatedActorHelper<F> {
             return
         }
 
-        eventActor = actor(CommonPool, capacity = Channel.CONFLATED) {
+        eventActor = GlobalScope.actor(Dispatchers.Default, capacity = Channel.CONFLATED) {
             channel.consumeEach { callback(it) }
         }
     }

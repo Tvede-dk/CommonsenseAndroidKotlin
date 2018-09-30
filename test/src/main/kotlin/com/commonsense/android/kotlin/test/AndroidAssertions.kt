@@ -1,7 +1,7 @@
 package com.commonsense.android.kotlin.test
 
-import android.net.Uri
-import org.junit.Assert
+import android.net.*
+import org.junit.*
 
 /**
  * Created by Kasper Tvede on 21-05-2018.

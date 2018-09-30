@@ -1,2 +1,1 @@
-<manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="com.commonsense.android.kotlin.test" />
+<manifest package="com.commonsense.android.kotlin.test" />

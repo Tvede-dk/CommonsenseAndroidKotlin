@@ -1,10 +1,12 @@
+@file:Suppress("unused", "NOTHING_TO_INLINE", "MemberVisibilityCanBePrivate")
+
 package com.commonsense.android.kotlin.views.features
 
-import android.app.DatePickerDialog
-import android.content.Context
+import android.app.*
+import android.content.*
+import android.support.annotation.*
 import android.support.annotation.IntRange
-import android.support.annotation.StringRes
-import android.widget.DatePicker
+import android.widget.*
 import java.util.*
 
 /**

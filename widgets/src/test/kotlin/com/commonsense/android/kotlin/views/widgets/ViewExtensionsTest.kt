@@ -1,12 +1,11 @@
 package com.commonsense.android.kotlin.views.widgets
 
-import android.widget.ImageView
-import com.commonsense.android.kotlin.test.BaseRoboElectricTest
-import com.commonsense.android.kotlin.test.assertAs
-import org.junit.Test
-import org.junit.runner.RunWith
-import org.robolectric.RobolectricTestRunner
-import org.robolectric.annotation.Config
+import android.widget.*
+import com.commonsense.android.kotlin.test.*
+import org.junit.*
+import org.junit.runner.*
+import org.robolectric.*
+import org.robolectric.annotation.*
 
 /**
  * Created by Kasper Tvede on 24-07-2017.

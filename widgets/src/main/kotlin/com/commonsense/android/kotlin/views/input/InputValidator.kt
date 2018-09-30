@@ -1,25 +1,23 @@
+@file:Suppress("unused", "NOTHING_TO_INLINE", "MemberVisibilityCanBePrivate")
+
 package com.commonsense.android.kotlin.views.input
 
-import com.commonsense.android.kotlin.base.FunctionUnit
+import com.commonsense.android.kotlin.base.*
 
 /**
  * Created by kasper on 21/08/2017.
  */
 
 typealias ValidationCallback<T, U> = (T) -> U?
+
 typealias ValidationFailedCallback<T, U> = (T, U) -> Unit
 private typealias MutableRuleList<U> = MutableList<ValidationRule<*, U>>
 private typealias RuleList<U> = List<ValidationRule<*, U>>
-class InputValidator<U> {
 
-    private val elementsToValidate: RuleList<U>
-
-    private val onFailedValidation: FunctionUnit<U>?
-
-    private constructor(elementsToValidate: RuleList<U>, onFailedValidation: FunctionUnit<U>?) {
-        this.elementsToValidate = elementsToValidate
-        this.onFailedValidation = onFailedValidation
-    }
+class InputValidator<U>
+private constructor(
+        private val elementsToValidate: RuleList<U>,
+        private val onFailedValidation: FunctionUnit<U>?) {
 
 
     fun validate(): Boolean {
@@ -58,7 +56,7 @@ class InputValidator<U> {
 
 
         fun build(): InputValidator<U> {
-            return InputValidator<U>(elementsToValidate.toList(), onFailedValidation)
+            return InputValidator(elementsToValidate.toList(), onFailedValidation)
         }
 
     }

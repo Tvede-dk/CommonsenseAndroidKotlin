@@ -1,6 +1,7 @@
+@file:Suppress("unused", "NOTHING_TO_INLINE", "MemberVisibilityCanBePrivate")
 package com.commonsense.android.kotlin.base.patterns
 
-import com.commonsense.android.kotlin.base.EmptyFunction
+import com.commonsense.android.kotlin.base.*
 
 /**
  * Created by kasper on 21/07/2017.

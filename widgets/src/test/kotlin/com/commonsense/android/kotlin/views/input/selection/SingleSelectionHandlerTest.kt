@@ -1,7 +1,6 @@
 package com.commonsense.android.kotlin.views.input.selection
 
-import com.commonsense.android.kotlin.test.assert
-import com.commonsense.android.kotlin.test.assertNotNullAndEquals
+import com.commonsense.android.kotlin.test.*
 import org.junit.*
 
 /**

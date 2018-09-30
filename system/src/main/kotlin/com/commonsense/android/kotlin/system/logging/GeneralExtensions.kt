@@ -1,8 +1,7 @@
 package com.commonsense.android.kotlin.system.logging
 
-import com.commonsense.android.kotlin.base.AsyncEmptyFunctionResult
-import com.commonsense.android.kotlin.base.EmptyFunctionResult
-import kotlin.reflect.KClass
+import com.commonsense.android.kotlin.base.*
+import kotlin.reflect.*
 
 typealias loggerFunction = (tag: String, message: String, stackTrace: Throwable?) -> Any
 

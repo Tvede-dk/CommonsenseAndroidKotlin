@@ -1,21 +1,22 @@
+@file:Suppress("unused")
+
 package com.commonsense.android.kotlin.system.base.helpers
 
-import android.app.Activity
-import android.content.Intent
-import android.os.Bundle
+import android.app.*
+import android.content.*
+import android.os.*
 import android.support.annotation.IntRange
-import android.support.v4.app.ActivityCompat
-import android.util.SparseArray
-import com.commonsense.android.kotlin.base.FunctionUnit
+import android.support.v4.app.*
+import android.util.*
+import com.commonsense.android.kotlin.base.*
 import com.commonsense.android.kotlin.base.debug.*
+import com.commonsense.android.kotlin.base.extensions.*
 import com.commonsense.android.kotlin.base.extensions.collections.*
-import com.commonsense.android.kotlin.base.extensions.use
-import com.commonsense.android.kotlin.base.extensions.weakReference
-import com.commonsense.android.kotlin.system.base.BaseActivity
-import com.commonsense.android.kotlin.system.base.BaseFragment
-import com.commonsense.android.kotlin.system.logging.L
-import kotlinx.coroutines.experimental.android.UI
-import kotlinx.coroutines.experimental.launch
+import com.commonsense.android.kotlin.system.base.*
+import com.commonsense.android.kotlin.system.logging.*
+import kotlinx.coroutines.experimental.*
+import kotlinx.coroutines.experimental.android.*
+
 
 /**
  * Created by Kasper Tvede on 20-07-2017.
@@ -179,10 +180,10 @@ class AsyncActivityResultWrapper(val callback: AsyncActivityResultCallback,
                                  val removerFunction: (requestCode: Int) -> Unit)
     : ActivityResultCallbackInterface {
     override fun onActivityResult(resultCode: Int, data: Intent?) {
-        launch(UI) {
+        GlobalScope.launch(Dispatchers.Main, CoroutineStart.DEFAULT, {
             callback(resultCode, data)
             removerFunction(requestCode)
-        }
+        })
     }
 }
 //</editor-fold>

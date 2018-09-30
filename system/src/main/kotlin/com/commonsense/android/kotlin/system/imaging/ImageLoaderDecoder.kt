@@ -1,12 +1,13 @@
+@file:Suppress("unused", "NOTHING_TO_INLINE")
+
 package com.commonsense.android.kotlin.system.imaging
 
-import android.graphics.Bitmap
-import com.commonsense.android.kotlin.base.concurrency.LimitedCoroutineCounter
-import com.commonsense.android.kotlin.base.extensions.asyncSimple
-import com.commonsense.android.kotlin.base.extensions.collections.ifTrue
-import kotlinx.coroutines.experimental.CommonPool
-import kotlinx.coroutines.experimental.sync.Mutex
-import kotlinx.coroutines.experimental.sync.withLock
+import android.graphics.*
+import com.commonsense.android.kotlin.base.concurrency.*
+import com.commonsense.android.kotlin.base.extensions.*
+import com.commonsense.android.kotlin.base.extensions.collections.*
+import kotlinx.coroutines.experimental.*
+import kotlinx.coroutines.experimental.sync.*
 
 /**
  * Created by Kasper Tvede on 27-08-2017.
@@ -46,7 +47,7 @@ class ImageLoader(loadingCapacity: Int = 3, decodingScalingCapacity: Int = 2) {
             return null
         }
 
-        return asyncSimple(CommonPool, loader).await()?.let { bitmap ->
+        return asyncSimple(Dispatchers.Default, loader).await()?.let { bitmap ->
             decodingSemaphore.perform {
                 decodeStage(id, bitmap, decoder)
             }
@@ -58,7 +59,7 @@ class ImageLoader(loadingCapacity: Int = 3, decodingScalingCapacity: Int = 2) {
         if (shouldCancel(id)) {
             return null
         }
-        return asyncSimple(CommonPool) {
+        return asyncSimple(Dispatchers.Default) {
             decoder(bitmap)
         }.await()
     }

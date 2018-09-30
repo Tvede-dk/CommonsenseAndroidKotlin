@@ -1,8 +1,7 @@
 package com.commonsense.android.kotlin.views.input.selection
 
-import com.commonsense.android.kotlin.base.EmptyFunction
-import com.commonsense.android.kotlin.base.FunctionUnit
-import com.commonsense.android.kotlin.base.extensions.parseTo
+import com.commonsense.android.kotlin.base.*
+import com.commonsense.android.kotlin.base.extensions.*
 
 /**
  *  Handles a group of ToggleableViews , such that you can select at max 1 of them

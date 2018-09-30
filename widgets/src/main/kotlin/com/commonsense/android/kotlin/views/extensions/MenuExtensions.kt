@@ -1,7 +1,9 @@
+@file:Suppress("unused", "NOTHING_TO_INLINE", "MemberVisibilityCanBePrivate")
+
 package com.commonsense.android.kotlin.views.extensions
 
-import android.support.v7.widget.SearchView
-import android.view.MenuItem
+import android.support.v7.widget.*
+import android.view.*
 
 /**
  * Created by kasper on 06/06/2017.

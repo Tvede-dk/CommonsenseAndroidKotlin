@@ -1,14 +1,11 @@
+@file:Suppress("unused", "NOTHING_TO_INLINE", "MemberVisibilityCanBePrivate")
+
 package com.commonsense.android.kotlin.system.datastructures
 
 import android.support.annotation.IntRange
-import android.util.SparseArray
-import com.commonsense.android.kotlin.base.algorithms.Comparing
+import android.util.*
+import com.commonsense.android.kotlin.base.extensions.*
 import com.commonsense.android.kotlin.base.extensions.collections.*
-import com.commonsense.android.kotlin.base.extensions.compareToRange
-import com.commonsense.android.kotlin.base.extensions.forEach
-import com.commonsense.android.kotlin.system.logging.L
-import kotlin.system.measureNanoTime
-import kotlin.system.measureTimeMillis
 
 
 /**
@@ -42,7 +39,7 @@ data class TypeSection<T>(
 /**
  * A container for having sections with very complex types that can represent" a feature
  * @param T : TypeHashCodeLookupRepresent<Rep>
- * @param out Rep : Any
+ * @param Rep : Any
  */
 class SectionLookupRep<T : TypeHashCodeLookupRepresent<Rep>, out Rep : Any> {
 

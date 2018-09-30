@@ -1,6 +1,6 @@
 package com.commonsense.android.kotlin.system.extensions
 
-import android.content.SharedPreferences
+import android.content.*
 
 /**
  * Created by Kasper Tvede on 20-05-2017.

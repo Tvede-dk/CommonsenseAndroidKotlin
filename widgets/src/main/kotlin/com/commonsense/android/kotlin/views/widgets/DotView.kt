@@ -1,18 +1,15 @@
 package com.commonsense.android.kotlin.views.widgets
 
-import android.content.Context
-import android.graphics.Canvas
-import android.graphics.Color
-import android.graphics.Paint
-import android.util.AttributeSet
-import com.commonsense.android.kotlin.base.extensions.equals
-import com.commonsense.android.kotlin.views.R
-import com.commonsense.android.kotlin.views.extensions.centerX
-import com.commonsense.android.kotlin.views.extensions.centerY
-import com.commonsense.android.kotlin.views.widgets.base.BaseCustomDrawView
+import android.content.*
+import android.graphics.*
+import android.util.*
+import com.commonsense.android.kotlin.base.extensions.*
+import com.commonsense.android.kotlin.views.*
+import com.commonsense.android.kotlin.views.extensions.*
+import com.commonsense.android.kotlin.views.widgets.base.*
 
 /**
- * Created by Kasper Tvede on 26-08-2017.
+ * Created by Kasper Tvede
  */
 class DotView @JvmOverloads constructor(
         context: Context,
@@ -20,14 +17,14 @@ class DotView @JvmOverloads constructor(
         defStyleAttr: Int = 0
 ) : BaseCustomDrawView(context, attrs, defStyleAttr) {
 
-    val Fill_space = -1F
+    private val fillSpace = -1F
 
     override fun getStyleResource(): IntArray? = R.styleable.DotView
 
     private val paint by lazy { Paint() }
 
     //<editor-fold desc="Radius">
-    private val innerRadius by lazy { dimensionVariable(Fill_space, R.styleable.DotView_radius) }
+    private val innerRadius by lazy { dimensionVariable(fillSpace, R.styleable.DotView_radius) }
 
     var radius: Float by innerRadius
     //</editor-fold>
@@ -45,7 +42,7 @@ class DotView @JvmOverloads constructor(
 
     override fun onMeasure(widthMeasureSpec: Int, heightMeasureSpec: Int) {
         val expectedHeight = getDefaultSize(suggestedMinimumHeight, heightMeasureSpec)
-        if (radius.equals(Fill_space, 0.1f)) {
+        if (radius.equals(fillSpace, 0.1f)) {
             val expectedWidth = getDefaultSize(suggestedMinimumWidth, widthMeasureSpec)
             val size = minOf(expectedHeight, expectedWidth)
             setMeasuredDimension(size, size)
@@ -57,7 +54,7 @@ class DotView @JvmOverloads constructor(
 
 
     override fun doDrawing(canvas: Canvas) {
-        val size = if (radius.equals(Fill_space, 0.1f)) {
+        val size = if (radius.equals(fillSpace, 0.1f)) {
             minOf(canvas.height, canvas.width) / 2f
         } else {
             radius

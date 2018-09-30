@@ -1,3 +1,5 @@
+@file:Suppress("unused", "NOTHING_TO_INLINE", "MemberVisibilityCanBePrivate")
+
 package csense.android.tools.anr
 
 import android.os.*
@@ -81,7 +83,7 @@ private class ANRWatcherThread(val name: String, val callbackOnANR: EmptyFunctio
     private var job: Job? = null
 
     fun start() {
-        job = async(newSingleThreadContext(name)) {
+        job = GlobalScope.async(newSingleThreadContext(name)) {
             while (this.isActive) {
 
                 val start = System.currentTimeMillis()
@@ -113,11 +115,11 @@ private class ANRWatcherThread(val name: String, val callbackOnANR: EmptyFunctio
      * @receiver TimeUnit.MilliSeconds
      */
     private suspend fun TimeUnit.MilliSeconds.relaxSpamming() {
-        L.warning(ANRWatcher::class,"before relax")
+        L.warning(ANRWatcher::class, "before relax")
         if (value < 50) {
             delay(100 - value)
         }
-        L.warning(ANRWatcher::class,"after relax")
+        L.warning(ANRWatcher::class, "after relax")
     }
 
     /**
@@ -127,14 +129,14 @@ private class ANRWatcherThread(val name: String, val callbackOnANR: EmptyFunctio
     suspend fun monitorWith(): Long? {
         var calledBack: Long? = null
 
-        launch(UI) {
+        GlobalScope.launch(Dispatchers.Main) {
             L.debug(ANRWatcher::class, "measuring")
             calledBack = System.currentTimeMillis()
         }
         val timeoutInMs = currentTimeoutInMs.value
 
         if (timeoutInMs < 100) {
-            delay(100, java.util.concurrent.TimeUnit.MILLISECONDS)
+            delay(100)
         } else {
             for (x in 0 until (offset + 1)) {
                 delay(offset)
@@ -148,7 +150,7 @@ private class ANRWatcherThread(val name: String, val callbackOnANR: EmptyFunctio
     }
 
     private fun logTiming(delta: TimeUnit.MilliSeconds?) {
-        launchBlock(UI) {
+        launchBlock(Dispatchers.Main) {
             val tag = ANRWatcherThread::class.java.simpleName
             val message = if (delta == null || delta.isTimeout()) {
                 "timed out, ANR detected, delta (if present) is: $delta"

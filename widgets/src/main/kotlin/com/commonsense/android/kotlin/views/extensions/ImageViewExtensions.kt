@@ -1,3 +1,5 @@
+@file:Suppress("unused", "NOTHING_TO_INLINE", "MemberVisibilityCanBePrivate")
+
 package com.commonsense.android.kotlin.views.extensions
 
 import android.graphics.*
@@ -35,7 +37,7 @@ fun ImageView.loadAndUse(loading: ImageLoaderType,
     val index = counterTag
     val ourIndex = index.incrementAndGet()
 
-    GlobalScope.launch(Dispatchers.Main, CoroutineStart.DEFAULT, null, {
+    GlobalScope.launch(Dispatchers.Main) {
         //make sure the UI is visible TODO..
         tryAndLogSuspend("ImageView.loadAndUse") {
             val bitmap = ImageLoader.instance.loadAndScale(
@@ -46,7 +48,7 @@ fun ImageView.loadAndUse(loading: ImageLoaderType,
                 afterDecoded(this@loadAndUse, bitmap)
             }
         }
-    })
+    }
 }
 
 /**

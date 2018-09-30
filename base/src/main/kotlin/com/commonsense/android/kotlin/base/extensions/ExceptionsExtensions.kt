@@ -1,7 +1,8 @@
+@file:Suppress("unused", "NOTHING_TO_INLINE", "MemberVisibilityCanBePrivate")
+
 package com.commonsense.android.kotlin.base.extensions
 
-import java.io.PrintWriter
-import java.io.StringWriter
+import java.io.*
 
 /**
  * Created by Kasper Tvede

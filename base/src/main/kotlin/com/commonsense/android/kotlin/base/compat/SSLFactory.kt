@@ -1,11 +1,10 @@
+@file:Suppress("unused", "NOTHING_TO_INLINE", "MemberVisibilityCanBePrivate")
+
 package com.commonsense.android.kotlin.base.compat
 
 import android.support.annotation.IntRange
-import java.net.InetAddress
-import java.net.Socket
-import javax.net.ssl.SSLContext
-import javax.net.ssl.SSLSocket
-import javax.net.ssl.SSLSocketFactory
+import java.net.*
+import javax.net.ssl.*
 
 /**
  * Created by kasper on 10/06/2017.

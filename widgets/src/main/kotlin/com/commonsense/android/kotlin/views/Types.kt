@@ -1,7 +1,6 @@
 package com.commonsense.android.kotlin.views
 
-import android.view.LayoutInflater
-import android.view.ViewGroup
+import android.view.*
 
 /**
  * Created by Kasper Tvede on 22-07-2017.

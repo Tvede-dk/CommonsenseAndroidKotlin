@@ -1,19 +1,16 @@
 package com.commonsense.android.kotlin.test
 
-import android.app.Activity
-import android.content.Context
+import android.app.*
+import android.content.*
+import android.support.annotation.*
 import android.support.annotation.IntRange
-import android.support.annotation.StyleRes
-import org.junit.runner.RunWith
-
-import org.robolectric.Robolectric
-import org.robolectric.RobolectricTestRunner
-import org.robolectric.RuntimeEnvironment
-import org.robolectric.android.controller.ActivityController
-import org.robolectric.annotation.Config
-import org.robolectric.shadows.ShadowLooper
-import java.util.concurrent.TimeUnit
-import kotlin.system.measureTimeMillis
+import org.junit.runner.*
+import org.robolectric.*
+import org.robolectric.android.controller.*
+import org.robolectric.annotation.*
+import org.robolectric.shadows.*
+import java.util.concurrent.*
+import kotlin.system.*
 
 /**
  * Created by Kasper Tvede on 20-07-2017.

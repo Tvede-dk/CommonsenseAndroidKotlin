@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
-<layout>
+<layout xmlns:tools="http://schemas.android.com/tools"
+    tools:keep="@layout/swipe_refresh_recyler_view">
 
     <merge>
 

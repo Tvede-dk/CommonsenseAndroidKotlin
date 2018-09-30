@@ -2,8 +2,6 @@ package com.commonsense.android.kotlin.prebuilt.data
 
 import org.junit.*
 
-import org.junit.Assert.*
-
 /**
  *
  */

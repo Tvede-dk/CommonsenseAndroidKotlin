@@ -24,11 +24,8 @@ fun RecyclerView.setup(adapter: RecyclerView.Adapter<*>,
  */
 inline fun RecyclerView.addOnScrollWhenPastFirstItem(crossinline action: FunctionUnit<Boolean>): RecyclerView.OnScrollListener {
     val listener = object : RecyclerView.OnScrollListener() {
-        override fun onScrolled(recyclerView: RecyclerView?, dx: Int, dy: Int) {
+        override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
             super.onScrolled(recyclerView, dx, dy)
-            if (recyclerView == null) {
-                return
-            }
             val isFirstVisible = recyclerView.findViewHolderForLayoutPosition(0) == null
             action(isFirstVisible)
         }

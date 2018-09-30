@@ -65,6 +65,7 @@ class BaseActivityWithDataTest : BaseRoboElectricTest() {
         val intentAndIndex = BaseActivityData.createDataActivityIntent(
                 context,
                 TestActWithData::class,
+                null,
                 "some-data")
         actController.get().intent = intentAndIndex.intent
         actController.create()

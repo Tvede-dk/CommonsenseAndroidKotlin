@@ -38,7 +38,7 @@ fun <E> MutableCollection<E>.set(collection: Collection<E>) {
 /**
  * Clears the collection and add's the given element
  */
-fun <E> MutableCollection<E>.set(item: E) : Unit {
+fun <E> MutableCollection<E>.set(item: E) {
     clear()
     add(item)
 }

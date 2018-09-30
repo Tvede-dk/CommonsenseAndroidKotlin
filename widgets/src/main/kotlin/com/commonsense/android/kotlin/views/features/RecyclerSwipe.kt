@@ -69,7 +69,7 @@ private class InnerSwipeHelper(val recyclerAdapter: DataBindingRecyclerAdapter<*
 
     private var lastDirection: Direction? = null
 
-    override fun getMovementFlags(recyclerView: RecyclerView?, viewHolder: RecyclerView.ViewHolder?): Int {
+    override fun getMovementFlags(recyclerView: RecyclerView, viewHolder: RecyclerView.ViewHolder): Int {
         val swipeItem = getOptInterface(viewHolder) ?: return 0
         val baseViewHolder = viewHolder as? BaseViewHolderItem<*> ?: return 0
         val (startView, endView, _) = getViews(swipeItem, baseViewHolder.item)
@@ -87,9 +87,9 @@ private class InnerSwipeHelper(val recyclerAdapter: DataBindingRecyclerAdapter<*
     }
 
 
-    override fun onChildDraw(canvas: Canvas?,
-                             recyclerView: RecyclerView?,
-                             viewHolder: RecyclerView.ViewHolder?,
+    override fun onChildDraw(canvas: Canvas,
+                             recyclerView: RecyclerView,
+                             viewHolder: RecyclerView.ViewHolder,
                              dX: Float,
                              dY: Float,
                              actionState: Int,
@@ -138,7 +138,7 @@ private class InnerSwipeHelper(val recyclerAdapter: DataBindingRecyclerAdapter<*
 
     }
 
-    override fun clearView(recyclerView: RecyclerView?, viewHolder: RecyclerView.ViewHolder?) {
+    override fun clearView(recyclerView: RecyclerView, viewHolder: RecyclerView.ViewHolder) {
         super.clearView(recyclerView, viewHolder)
         val view = (viewHolder as? BaseViewHolderItem<*>)?.item ?: return
         val swipeInterface = getOptInterface(viewHolder) ?: return
@@ -159,11 +159,11 @@ private class InnerSwipeHelper(val recyclerAdapter: DataBindingRecyclerAdapter<*
     }
 
     //move is reordering. we only deal with swipe for simplicity.
-    override fun onMove(recyclerView: RecyclerView?,
-                        beforeViewHolder: RecyclerView.ViewHolder?,
-                        afterViewHolder: RecyclerView.ViewHolder?): Boolean = false
+    override fun onMove(recyclerView: RecyclerView,
+                        beforeViewHolder: RecyclerView.ViewHolder,
+                        afterViewHolder: RecyclerView.ViewHolder): Boolean = false
 
-    override fun onSwiped(viewHolder: RecyclerView.ViewHolder?, directionInt: Int) {
+    override fun onSwiped(viewHolder: RecyclerView.ViewHolder, directionInt: Int) {
         val optInterface = getOptInterface(viewHolder)
         val dir = directionInt.toDirection()
         val baseViewHolder = viewHolder as? BaseViewHolderItem<*>

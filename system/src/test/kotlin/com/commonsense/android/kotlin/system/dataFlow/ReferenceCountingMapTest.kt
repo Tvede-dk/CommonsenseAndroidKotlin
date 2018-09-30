@@ -84,7 +84,7 @@ class ReferenceCountingMapTest {
         }
 
         val incJobs = listOf(0 until maxJobs).map {
-            async(CommonPool) {
+            GlobalScope.async(Dispatchers.Default) {
                 (0 until maxSize).forEach(incrementFunction)
             }
         }
@@ -93,7 +93,7 @@ class ReferenceCountingMapTest {
         map.hasItem(index).assert(true)
 
         val decJobs = listOf(0 until maxJobs).map {
-            async(CommonPool) {
+            GlobalScope.async(Dispatchers.Default) {
                 (0 until maxSize).forEach(decrementFunction)
             }
         }
@@ -121,12 +121,12 @@ class ReferenceCountingMapTest {
         //at this point, we have maxSize+1 counts, now mix add and remove, (only to the half)
 
         val decJobs = listOf(0 until maxJobs / 2).map {
-            async(CommonPool) {
+            GlobalScope.async(Dispatchers.Default) {
                 (0 until maxSize).forEach(decrementFunction)
             }
         }
         val incJobs = listOf(0 until maxJobs / 2).map {
-            async(CommonPool) {
+            GlobalScope.async(Dispatchers.Default) {
                 (0 until maxSize).forEach(incrementFunction)
             }
         }

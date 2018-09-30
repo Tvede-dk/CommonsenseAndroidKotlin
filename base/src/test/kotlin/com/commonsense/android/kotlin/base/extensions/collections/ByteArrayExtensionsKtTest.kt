@@ -3,7 +3,9 @@ package com.commonsense.android.kotlin.base.extensions.collections
 import com.commonsense.android.kotlin.base.extensions.*
 import com.commonsense.android.kotlin.test.*
 import com.commonsense.android.kotlin.test.benchmark.*
+import org.junit.*
 import org.junit.jupiter.api.*
+import org.junit.jupiter.api.Test
 
 /**
  * Created by Kasper Tvede on 11-04-2018.
@@ -24,6 +26,7 @@ class ByteArrayExtensionsKtTest {
     /**
      * a regression test.
      */
+    @Ignore
     @Test()
     fun benchmarkToHexString() {
 
@@ -33,13 +36,8 @@ class ByteArrayExtensionsKtTest {
         }
         val bytearray = array.toByteArray()
 
-        microBench(limitMsPrInvocation = 200, forceGcBetweenRuns = true, totalTimeoutInSeconds = 30) {
+        microBench(limitMsPrInvocation = 500, forceGcBetweenRuns = true, totalTimeoutInSeconds = 60) {
             bytearray.toHexString()
         }
     }
-
-
 }
-
-
-

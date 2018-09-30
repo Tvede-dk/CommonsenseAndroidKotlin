@@ -1,3 +1,5 @@
+@file:Suppress("UNUSED_ANONYMOUS_PARAMETER")
+
 package com.commonsense.android.kotlin.base.extensions.collections
 
 import android.util.*

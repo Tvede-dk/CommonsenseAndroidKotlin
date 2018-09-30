@@ -63,9 +63,9 @@ class CoroutinesExtensionsKtTest {
     @Test
     fun launchBlock() = runBlocking {
         var counter = 0
-        val job = launchBlock(Dispatchers.Default) {
-            counter += 1
-        }
+//        val job = launchBlock(Dispatchers.Default) {
+//            counter += 1
+//        }
 
     }
 

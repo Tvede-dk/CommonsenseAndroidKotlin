@@ -1,3 +1,5 @@
+@file:Suppress("unused", "NOTHING_TO_INLINE", "MemberVisibilityCanBePrivate")
+
 package com.commonsense.android.kotlin.system.datastructures
 
 import com.commonsense.android.kotlin.base.extensions.collections.*
@@ -629,14 +631,14 @@ class SectionLookupRepTest : BaseRoboElectricTest() {
     @Ignore
     @Test
     fun testGetSectionLocation() {
-        val a = SectionLookupRep<TestData, String>()
+//        val a = SectionLookupRep<TestData, String>()
 
     }
 
     @Ignore
     @Test
     fun testSetAllSections() {
-        val a = SectionLookupRep<TestData, String>()
+//        val a = SectionLookupRep<TestData, String>()
 
     }
 

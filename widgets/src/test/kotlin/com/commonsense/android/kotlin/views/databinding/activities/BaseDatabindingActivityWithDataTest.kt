@@ -1,3 +1,5 @@
+@file:Suppress("unused", "NOTHING_TO_INLINE", "MemberVisibilityCanBePrivate")
+
 package com.commonsense.android.kotlin.views.databinding.activities
 
 import android.content.*
@@ -57,6 +59,7 @@ class BaseDatabindingActivityWithDataTest : BaseRoboElectricTest() {
         val intentAndIndex = BaseActivityData.createDataActivityIntent(
                 context,
                 TestDatabindingActWithData::class,
+                null,
                 "Some data")
         val controller = createActivityController<TestDatabindingActWithData>()
         controller.get().intent = intentAndIndex.intent
@@ -90,7 +93,7 @@ class TestDatabindingActWithData : BaseDatabindingActivityWithData<ViewDataBindi
     var gotBinding = false
 
     override fun createBinding(): InflaterFunctionSimple<ViewDataBinding> {
-        return { layoutInflater ->
+        return { _ ->
             mock(ViewDataBinding::class.java)
         }
     }

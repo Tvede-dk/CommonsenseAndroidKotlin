@@ -39,7 +39,7 @@ class LimitedCoroutineCounterTest {
                 delay(50)
             })
         }
-        delay(10)
+        delay(40)
         counter.assert(2, "should only allow max count until tasks gets done")
         delay(80)
         counter.assert(3)

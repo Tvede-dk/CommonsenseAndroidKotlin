@@ -21,6 +21,7 @@
     
 ### Changes
 
+- added long missing counterparts to "visibleOrGone" , akk the "invisible" is also there now.
 - a whack ton of documentation
 - backported more things, and minor moving around.
 - more typealiases for functions.

@@ -119,6 +119,16 @@ fun View.toggleVisibilityGone() {
 }
 
 /**
+ * Toggles between visible and invisible.
+ * so if this view is visible then after calling it will be invisible
+ * and vice versa
+ */
+@UiThread
+fun View.toggleVisibilityInvisible() {
+    isVisible.ifTrue(this::invisible).ifFalse(this::visible)
+}
+
+/**
  * Returns true iff its visible, false otherwise.
  */
 val View.isVisible: Boolean
@@ -180,6 +190,15 @@ fun View.visibleOrGone(condition: Boolean) {
     }
 }
 
+@UiThread
+fun View.visibleOrInvisible(condition: Boolean) {
+    if (condition) {
+        visible()
+    } else {
+        invisible()
+    }
+}
+
 /**
  * Makes the supplied array of (optional) views gone.
  * @receiver Array<View?>
@@ -201,6 +220,14 @@ fun List<View?>.goneViews() = ViewHelper.goneViews(this)
  */
 @UiThread
 fun List<View?>.visibleViews() = ViewHelper.showViews(this)
+
+
+/**
+ * Makes the supplied list of (optional) views invisible
+ * @receiver List<View?>
+ */
+@UiThread
+fun List<View?>.invisibleViews() = ViewHelper.invisibleViews(this)
 
 @UiThread
 object ViewHelper {
@@ -232,10 +259,18 @@ object ViewHelper {
 
     /**
      * Shows the given views.
-     * @param views Iterable<View?>
+     * @param views Iterable<View?> view to show
      */
     fun showViews(views: Iterable<View?>) {
         views.forEachNotNull(View::visible)
+    }
+
+    /**
+     * Invisibles the given views.
+     * @param views Iterable<View?> views to make invisible
+     */
+    fun invisibleViews(views: Iterable<View?>) {
+        views.forEachNotNull(View::invisible)
     }
 }
 

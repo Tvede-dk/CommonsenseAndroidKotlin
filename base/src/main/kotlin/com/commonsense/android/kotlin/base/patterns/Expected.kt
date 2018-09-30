@@ -2,6 +2,8 @@
 
 package com.commonsense.android.kotlin.base.patterns
 
+import com.commonsense.android.kotlin.base.*
+
 /**
  * Created by Kasper Tvede
  *
@@ -120,5 +122,56 @@ suspend fun <T, U> Expected<T>.useAsync(action: suspend (T) -> U): U? {
         action(value)
     } else {
         null
+    }
+}
+
+/**
+ * Performs the given action iff this is valid.
+ * @receiver Expected<T>
+ * @param action FunctionUnit<T>
+ */
+inline fun <T> Expected<T>.ifValid(action: FunctionUnit<T>) {
+    if (this is ExpectedSuccess) {
+        action(value)
+    }
+}
+
+/**
+ * Performs the given function iff this is an error
+ * @receiver Expected<T>
+ * @param action FunctionUnit<Throwable>
+ */
+inline fun <T> Expected<T>.ifError(action: FunctionUnit<Throwable>) {
+    if (this is ExpectedFailed) {
+        action(error)
+    }
+}
+
+/**
+ * A simple "if else" wrapper
+ * @receiver Expected<T>
+ * @param onValid FunctionUnit<T>
+ * @param onError FunctionUnit<Throwable>
+ */
+inline fun <T> Expected<T>.ifValidOr(onValid: FunctionUnit<T>,
+                                     onError: FunctionUnit<Throwable>) {
+    when (this) {
+        is ExpectedFailed -> onError(this.error)
+        is ExpectedSuccess -> onValid(this.value)
+    }
+}
+
+/**
+ * a simple mapper for the "if else" case of an expected.
+ * @receiver Expected<T>
+ * @param onValid Function1<T, U>
+ * @param onError Function1<Throwable, U>
+ * @return U
+ */
+inline fun <T, U> Expected<T>.mapIfValidOr(onValid: Function1<T, U>,
+                                           onError: Function1<Throwable, U>): U {
+    return when (this) {
+        is ExpectedFailed -> onError(this.error)
+        is ExpectedSuccess -> onValid(this.value)
     }
 }

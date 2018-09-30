@@ -19,7 +19,7 @@ import kotlinx.coroutines.experimental.android.*
 
 
 /**
- * Created by Kasper Tvede on 20-07-2017.
+ * Created by Kasper Tvede
  */
 
 /**

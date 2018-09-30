@@ -15,7 +15,7 @@ class JavaDocSourceWithDokka implements Plugin<Project> {
         project.task("dokkaJavadoc", type: project.dokka.class) {
             outputFormat = 'javadoc'
             outputDirectory = "${project.buildDir}/javadoc"
-            inputs.dir 'src/main/java'
+//            inputs.dir 'src/main/java'
             inputs.dir 'src/main/kotlin'//TODO extract the "src/main" sourceset this.
 
         }
@@ -27,7 +27,9 @@ class JavaDocSourceWithDokka implements Plugin<Project> {
 
         project.task("sourcesJar", type: Jar) {
             classifier = 'sources'
-            from project.android.sourceSets.main.java.srcDirs
+            from "src/main/kotlin"
+//            inputs.dir 'src/main/java'
+//            inputs.dir 'src/main/kotlin'//TODO extract the "src/main" sourceset this.
         }
     }
 

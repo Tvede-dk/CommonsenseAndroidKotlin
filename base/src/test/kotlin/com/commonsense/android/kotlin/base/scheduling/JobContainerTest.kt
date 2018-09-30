@@ -114,13 +114,12 @@ class JobContainerTest {
     }
 
     @Test
-    fun testQueueingBackground() = runBlocking {
+    fun testQueueingBackground() {
         val container = JobContainer()
-        var counter = 1
-        container.addToQueue(Dispatchers.Default, { counter -= 1 }, "test")
+        val sem = Semaphore(1)
+        container.addToQueue(Dispatchers.Default, { sem.release() }, "test")
         container.executeQueueBackground("test")
-        delay(50)
-        counter.assert(0, "should have executed test even from the background")
+        sem.tryAcquire(1, 1000, TimeUnit.MILLISECONDS)
     }
 
     @Test

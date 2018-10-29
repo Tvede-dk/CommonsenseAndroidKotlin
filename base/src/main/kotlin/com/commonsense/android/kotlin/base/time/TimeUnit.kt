@@ -3,7 +3,7 @@
 package com.commonsense.android.kotlin.base.time
 
 import com.commonsense.android.kotlin.base.time.TimeUnit.*
-import kotlinx.coroutines.experimental.*
+import kotlinx.coroutines.*
 
 /**
  * Created by Kasper Tvede on 10-03-2018.

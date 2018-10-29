@@ -16,8 +16,8 @@ import android.view.*
 import android.widget.*
 import com.commonsense.android.kotlin.system.*
 import com.commonsense.android.kotlin.system.logging.*
-import kotlinx.coroutines.experimental.*
-import kotlinx.coroutines.experimental.android.*
+import kotlinx.coroutines.*
+import kotlinx.coroutines.android.*
 
 
 /**

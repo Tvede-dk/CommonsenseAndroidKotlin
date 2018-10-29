@@ -2,7 +2,7 @@
 
 package com.commonsense.android.kotlin.base
 
-import kotlinx.coroutines.experimental.*
+import kotlinx.coroutines.*
 
 /**
  * Created by kasper on 21/07/2017.

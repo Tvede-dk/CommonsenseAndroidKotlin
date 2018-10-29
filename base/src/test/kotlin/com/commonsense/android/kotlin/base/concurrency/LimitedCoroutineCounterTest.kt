@@ -3,7 +3,7 @@
 package com.commonsense.android.kotlin.base.concurrency
 
 import com.commonsense.android.kotlin.test.*
-import kotlinx.coroutines.experimental.*
+import kotlinx.coroutines.*
 import org.junit.jupiter.api.*
 
 /**

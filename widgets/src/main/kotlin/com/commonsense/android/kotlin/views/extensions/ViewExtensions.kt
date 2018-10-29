@@ -14,9 +14,9 @@ import com.commonsense.android.kotlin.base.*
 import com.commonsense.android.kotlin.base.extensions.collections.*
 import com.commonsense.android.kotlin.system.extensions.*
 import com.commonsense.android.kotlin.system.logging.*
-import kotlinx.coroutines.experimental.*
-import kotlinx.coroutines.experimental.android.*
-import kotlinx.coroutines.experimental.channels.*
+import kotlinx.coroutines.*
+import kotlinx.coroutines.android.*
+import kotlinx.coroutines.channels.*
 
 
 /**

@@ -3,9 +3,9 @@
 package com.commonsense.android.kotlin.base.extensions
 
 import com.commonsense.android.kotlin.base.*
-import kotlinx.coroutines.experimental.*
-import kotlinx.coroutines.experimental.channels.*
-import kotlin.coroutines.experimental.*
+import kotlinx.coroutines.*
+import kotlinx.coroutines.channels.*
+import kotlin.coroutines.*
 
 /**
  * Created by Kasper Tvede on 22-07-2017.

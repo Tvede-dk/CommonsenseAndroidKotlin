@@ -2,7 +2,7 @@ package com.commonsense.android.kotlin.system.dataFlow
 
 import com.commonsense.android.kotlin.system.base.*
 import com.commonsense.android.kotlin.test.*
-import kotlinx.coroutines.experimental.*
+import kotlinx.coroutines.*
 import org.junit.*
 
 /**

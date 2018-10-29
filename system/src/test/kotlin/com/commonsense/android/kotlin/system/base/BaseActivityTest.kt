@@ -3,7 +3,7 @@ package com.commonsense.android.kotlin.system.base
 import com.commonsense.android.kotlin.system.R
 import com.commonsense.android.kotlin.system.logging.*
 import com.commonsense.android.kotlin.test.*
-import kotlinx.coroutines.experimental.*
+import kotlinx.coroutines.*
 import org.junit.*
 import org.robolectric.*
 import org.robolectric.annotation.*

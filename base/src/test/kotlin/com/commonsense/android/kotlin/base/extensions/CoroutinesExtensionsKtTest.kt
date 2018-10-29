@@ -3,8 +3,8 @@
 package com.commonsense.android.kotlin.base.extensions
 
 import com.commonsense.android.kotlin.test.*
-import kotlinx.coroutines.experimental.*
-import kotlinx.coroutines.experimental.channels.*
+import kotlinx.coroutines.*
+import kotlinx.coroutines.channels.*
 import org.junit.*
 import org.junit.jupiter.api.Test
 import java.util.concurrent.*

@@ -10,8 +10,8 @@ import android.util.*
 import com.commonsense.android.kotlin.base.extensions.*
 import com.commonsense.android.kotlin.views.databinding.*
 import com.commonsense.android.kotlin.views.extensions.*
-import kotlinx.coroutines.experimental.*
-import kotlinx.coroutines.experimental.android.*
+import kotlinx.coroutines.*
+import kotlinx.coroutines.android.*
 
 
 /**

@@ -3,7 +3,7 @@ package com.commonsense.android.kotlin.system.imaging
 import android.graphics.*
 import android.net.*
 import com.commonsense.android.kotlin.test.*
-import kotlinx.coroutines.experimental.*
+import kotlinx.coroutines.*
 import org.junit.*
 import org.robolectric.*
 import org.robolectric.annotation.*

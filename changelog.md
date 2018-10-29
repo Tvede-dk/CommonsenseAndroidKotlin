@@ -1,5 +1,11 @@
 # Changelog
 
+
+## 0.0.16
+- preview of fragment with data
+- kotlin updated to 1.3
+- coroutines version 1
+
 ## 0.0.15
 
 ### Breaking changes

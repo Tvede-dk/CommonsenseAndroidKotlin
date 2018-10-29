@@ -1,8 +1,5 @@
 ext.setupProject = { it ->
-    it.extensions.findByName("kotlin")?.with {
-        println " - Enabling coroutines"
-        it.experimental.coroutines "enable"
-    }
+
     it.extensions.findByName("kapt")?.with {
         println " - Enabling kapt cache"
         it.useBuildCache = true

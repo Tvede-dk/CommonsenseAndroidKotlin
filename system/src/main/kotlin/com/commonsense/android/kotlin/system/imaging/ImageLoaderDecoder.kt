@@ -6,8 +6,8 @@ import android.graphics.*
 import com.commonsense.android.kotlin.base.concurrency.*
 import com.commonsense.android.kotlin.base.extensions.*
 import com.commonsense.android.kotlin.base.extensions.collections.*
-import kotlinx.coroutines.experimental.*
-import kotlinx.coroutines.experimental.sync.*
+import kotlinx.coroutines.*
+import kotlinx.coroutines.sync.*
 
 /**
  * Created by Kasper Tvede on 27-08-2017.

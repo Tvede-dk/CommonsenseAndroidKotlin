@@ -15,9 +15,6 @@ class JavaDocSourceWithDokka implements Plugin<Project> {
             cacheRoot = 'default'
             outputFormat = 'javadoc'
             outputDirectory = "${project.buildDir}/javadoc"
-            packageOptions {
-                suppress = true
-            }
         }
         project.task("dokkaJavadoc", type: project.dokka.class) {
             outputFormat = 'javadoc'

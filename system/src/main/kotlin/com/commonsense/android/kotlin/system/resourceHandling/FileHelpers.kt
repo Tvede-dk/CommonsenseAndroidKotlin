@@ -5,7 +5,7 @@ package com.commonsense.android.kotlin.system.resourceHandling
 import android.content.*
 import android.net.*
 import com.commonsense.android.kotlin.system.logging.*
-import kotlinx.coroutines.experimental.*
+import kotlinx.coroutines.*
 import java.io.*
 
 /**

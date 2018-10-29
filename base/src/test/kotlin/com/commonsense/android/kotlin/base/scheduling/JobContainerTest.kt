@@ -5,7 +5,7 @@ package com.commonsense.android.kotlin.base.scheduling
 import com.commonsense.android.kotlin.base.*
 import com.commonsense.android.kotlin.base.extensions.*
 import com.commonsense.android.kotlin.test.*
-import kotlinx.coroutines.experimental.*
+import kotlinx.coroutines.*
 import org.junit.*
 import org.junit.jupiter.api.Test
 import java.util.concurrent.*

@@ -11,7 +11,7 @@ import android.support.media.*
 import com.commonsense.android.kotlin.base.extensions.collections.*
 import com.commonsense.android.kotlin.system.extensions.*
 import com.commonsense.android.kotlin.system.logging.*
-import kotlinx.coroutines.experimental.*
+import kotlinx.coroutines.*
 import java.io.*
 
 
@@ -271,7 +271,7 @@ val ImageSize.largest: Int
 
 
 /**
- *
+ * Scales the imaage to the max width given.
  * @receiver ImageSize
  * @param destWidth Int
  * @return ImageSize

@@ -8,7 +8,7 @@ import android.support.v7.app.*
 import android.view.*
 import com.commonsense.android.kotlin.base.*
 import com.commonsense.android.kotlin.base.extensions.collections.*
-import kotlinx.coroutines.experimental.Runnable
+import kotlinx.coroutines.Runnable
 
 /**
  * Created by Kasper Tvede on 10-01-2017.

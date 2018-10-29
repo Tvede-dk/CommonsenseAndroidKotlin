@@ -10,8 +10,8 @@ import com.commonsense.android.kotlin.base.extensions.*
 import com.commonsense.android.kotlin.base.time.*
 import com.commonsense.android.kotlin.system.extensions.*
 import com.commonsense.android.kotlin.system.logging.*
-import kotlinx.coroutines.experimental.*
-import kotlinx.coroutines.experimental.android.*
+import kotlinx.coroutines.*
+import kotlinx.coroutines.android.*
 import java.lang.ref.*
 import kotlin.math.*
 

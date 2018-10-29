@@ -14,8 +14,8 @@ import com.commonsense.android.kotlin.views.databinding.adapters.*
 import com.commonsense.android.kotlin.views.databinding.fragments.*
 import com.commonsense.android.kotlin.views.extensions.*
 import csense.android.exampleApp.databinding.*
-import kotlinx.coroutines.experimental.*
-import kotlinx.coroutines.experimental.android.*
+import kotlinx.coroutines.*
+import kotlinx.coroutines.android.*
 import kotlin.system.*
 
 /**

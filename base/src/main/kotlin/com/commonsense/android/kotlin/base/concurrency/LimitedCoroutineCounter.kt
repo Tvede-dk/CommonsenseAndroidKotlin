@@ -1,7 +1,7 @@
 @file:Suppress("unused", "NOTHING_TO_INLINE", "MemberVisibilityCanBePrivate")
 package com.commonsense.android.kotlin.base.concurrency
 
-import kotlinx.coroutines.experimental.channels.*
+import kotlinx.coroutines.channels.*
 
 /**
  * Created by Kasper Tvede on 27-08-2017.

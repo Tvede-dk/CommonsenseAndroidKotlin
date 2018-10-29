@@ -9,9 +9,9 @@ import com.commonsense.android.kotlin.base.*
 import com.commonsense.android.kotlin.base.exceptions.*
 import com.commonsense.android.kotlin.system.datastructures.*
 import com.commonsense.android.kotlin.system.logging.*
-import kotlinx.coroutines.experimental.*
-import kotlinx.coroutines.experimental.android.*
-import kotlinx.coroutines.experimental.channels.*
+import kotlinx.coroutines.*
+import kotlinx.coroutines.android.*
+import kotlinx.coroutines.channels.*
 
 /**
  * Created by kasper on 01/06/2017.

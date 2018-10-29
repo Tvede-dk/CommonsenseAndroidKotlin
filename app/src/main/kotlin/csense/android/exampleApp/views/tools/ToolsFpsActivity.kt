@@ -7,7 +7,7 @@ import com.commonsense.android.kotlin.views.databinding.activities.*
 import com.commonsense.android.kotlin.views.extensions.*
 import csense.android.exampleApp.databinding.*
 import csense.android.tools.fps.*
-import kotlinx.coroutines.experimental.*
+import kotlinx.coroutines.*
 import java.util.*
 
 /**

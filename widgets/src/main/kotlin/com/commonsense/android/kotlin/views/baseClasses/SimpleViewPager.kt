@@ -8,7 +8,7 @@ import android.support.v4.view.*
 import android.view.*
 
 /**
- * Created by kasper on 17/07/2017.
+ * Created by Kasper Tvede
  * TODO expand this.
  */
 class SimpleViewPager : ViewPager {

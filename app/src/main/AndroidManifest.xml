@@ -24,10 +24,7 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".activity.DemoActivity" />
-        <activity android:name=".activity.Demo2Activity" />
-        <activity android:name=".activity.Demo4Activity" />
-        <activity android:name=".activity.Demo5Activity" />
+     
         <activity android:name=".activity.CameraActivity" />
         <activity android:name=".activity.LargeDataActivity" />
         <activity android:name=".activity.MainActivity" />
@@ -39,6 +36,7 @@
         <activity android:name=".views.tools.ToolsAnrActivity" />
         <activity android:name=".views.widgets.WidgetsOverviewActivity" />
         <activity android:name=".views.widgets.WidgetsRecyclerExampleActivity" />
+        <activity android:name=".views.widgets.pagerAdapter.WidgetsBaseFragmentPagerAdapterActivity" />
 
     </application>
 

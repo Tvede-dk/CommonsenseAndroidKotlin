@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical">
+
+
+        <com.commonsense.android.kotlin.views.widgets.layouts.UniformHorizontalLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <Button
+                android:id="@+id/widgets_pager_example_addSingle"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="add" />
+
+            <Button
+                android:id="@+id/widgets_pager_example_addMany"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="add many" />
+
+        </com.commonsense.android.kotlin.views.widgets.layouts.UniformHorizontalLayout>
+
+        <com.commonsense.android.kotlin.views.widgets.layouts.UniformHorizontalLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+
+            <Button
+                android:id="@+id/widgets_pager_example_removeFirst"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="remove first" />
+
+            <Button
+                android:id="@+id/widgets_pager_example_removeLast"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="remove last" />
+
+        </com.commonsense.android.kotlin.views.widgets.layouts.UniformHorizontalLayout>
+
+        <TextView
+            android:id="@+id/widgets_pager_example_title"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="title" />
+
+        <com.commonsense.android.kotlin.views.baseClasses.SimpleViewPager
+            android:id="@+id/widgets_pager_example_viewpager"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent" />
+
+    </LinearLayout>
+</layout>

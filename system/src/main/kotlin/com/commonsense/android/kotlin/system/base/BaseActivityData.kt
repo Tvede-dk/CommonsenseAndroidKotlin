@@ -23,25 +23,21 @@ import kotlin.reflect.*
  *
  */
 abstract class BaseActivityData<out InputType> : BaseActivity() {
+    /**
+     * Handles the interaction with intent(s) and data.
+     * in the future this will work even when android performs "empty process".
+     */
+    private val dataHandler: IntentDataAble<InputType> = IntentDataAble()
 
     /**
      * The data associated with this activity. it will be accessible when the activity have started. (onSafeData) and onwards
      */
     val data: InputType
-        get() {
-            val safeIntent = intent ?: throw RuntimeException("intent is null")
-            val intentIndex = safeIntent.getStringExtra(dataIntentIndex)
-                    ?: throw RuntimeException("Intent content not presented; extra is: ${safeIntent.extras}")
-            val item = dataReferenceMap.getItemOr(intentIndex)
-                    ?: throw RuntimeException("Data is not in map, so this activity is " +
-                            "\"${this.javaClass.simpleName}\" referring to the data after closing.")
-            @Suppress("UNCHECKED_CAST") // Unfortunately we are unable to Type safe bypass the map though this. not in this generic manner
-            return item as InputType
-        }
+        get() = dataHandler.getData(intent?.extras)
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        if (!haveRequiredIndex()) { // bad start. skip it.
+        if (!dataHandler.haveRequiredIndex(intent?.extras)) { // bad start. skip it.
             beforeCloseOnBadData() //hookpoint for users who needs to do "something" before the activity is killed.
             setResult(Activity.RESULT_CANCELED)
             finish()
@@ -49,6 +45,7 @@ abstract class BaseActivityData<out InputType> : BaseActivity() {
             onSafeData()
         }
     }
+
 
     /**
      * This will be called after onCreate, iff and only iff the data is valid and accessible.
@@ -60,30 +57,12 @@ abstract class BaseActivityData<out InputType> : BaseActivity() {
      */
     open fun beforeCloseOnBadData() {
         logError("required data for this activity not presented, please make sure you provide it;")
-        val isBadCall = intent?.getStringExtra(dataIntentIndex).isNullOrBlank()
+        val isBadCall = dataHandler.getDataIndex(intent?.extras).isNullOrBlank()
         isBadCall.ifTrue {
             logError("You properly called this without the data index;" +
                     " use the \"startActivityWithData\" method, that takes care of it")
-
         }
-
-
     }
-
-    /**
-     * Verifies that we have the data we expected (the index)
-     * @return Boolean true if we have the index and the item
-     */
-    private fun haveRequiredIndex(): Boolean {
-        val index = dataIndex ?: return false
-        return dataReferenceMap.hasItem(index)
-    }
-
-    /**
-     * Retrives the data index from the intent or returns null
-     */
-    private inline val dataIndex: String?
-        get() = intent?.getStringExtra(dataIntentIndex)
 
 
     companion object {

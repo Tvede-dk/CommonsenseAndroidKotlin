@@ -21,7 +21,7 @@ buildscript {
     //included versions.
     ext.kotlin_version = '1.2.71'
     ext.supportVersion = '28.0.0'
-    ext.coroutinesVersion = '0.30.0'
+    ext.coroutinesVersion = '0.30.2'
     ext.leakCanaryVersion = "1.6.1"
     ext.junitVersion = "4.12"
     ext.androidGradleVersion = "3.2.0"
@@ -55,8 +55,8 @@ apply plugin: 'io.gitlab.arturbosch.detekt'
 
 allprojects {
     repositories {
-        jcenter()
         google()
+        jcenter()
     }
 }
 

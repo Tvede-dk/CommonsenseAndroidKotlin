@@ -25,6 +25,7 @@ abstract class BaseDatabindingFragment<out T : ViewDataBinding> : BaseFragment()
     private val ourLayoutInflater: LayoutInflater by lazy {
         LayoutInflater.from(context)
     }
+
     private val inflationFunction by lazy {
         getInflater()
     }
@@ -35,7 +36,9 @@ abstract class BaseDatabindingFragment<out T : ViewDataBinding> : BaseFragment()
 
     private var parentView: ViewGroup? = null
 
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
+    override fun onCreateView(inflater: LayoutInflater,
+                              container: ViewGroup?,
+                              savedInstanceState: Bundle?): View? {
         if (showsDialog) {
             return super.onCreateView(inflater, container, savedInstanceState)
         }

@@ -38,14 +38,45 @@ class IntExtensionsKtTest {
         Int.MIN_VALUE.isZero.assert(false)
     }
 
-    @Ignore
     @Test
     fun isEven() {
+        //some examples
+        0.isEven.assertTrue("")
+        2.isEven.assertTrue("")
+        4.isEven.assertTrue("")
+        6.isEven.assertTrue("")
+        (-0).isEven.assertTrue("")
+        (-2).isEven.assertTrue("")
+        (-4).isEven.assertTrue("")
+        (-6).isEven.assertTrue("")
+
+
+        (-5).isEven.assertFalse("")
+        (-1).isEven.assertFalse("")
+        (1).isEven.assertFalse("")
+        (203).isEven.assertFalse("")
     }
 
-    @Ignore
     @Test
     fun isOdd() {
+        //some examples
+        0.isOdd.assertFalse("")
+        2.isOdd.assertFalse("")
+        4.isOdd.assertFalse("")
+        6.isOdd.assertFalse("")
+        (-0).isOdd.assertFalse("")
+        (-2).isOdd.assertFalse("")
+        (-4).isOdd.assertFalse("")
+        (-6).isOdd.assertFalse("")
+
+
+        (-5).isOdd.assertTrue("")
+        (-1).isOdd.assertTrue("")
+        (1).isOdd.assertTrue("")
+        (3).isOdd.assertTrue("")
+        (5).isOdd.assertTrue("")
+        (17).isOdd.assertTrue("")
+        (203).isOdd.assertTrue("")
     }
 
     @Ignore

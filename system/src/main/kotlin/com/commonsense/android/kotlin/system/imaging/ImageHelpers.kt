@@ -18,10 +18,16 @@ import java.io.*
 /**
  * Created by Kasper Tvede on 11-07-2017.
  */
-data class ImageSize(val width: Int, val height: Int) {
-    override fun toString(): String = "$width-$height"
-}
 
+
+/**
+ *
+ * @receiver Uri
+ * @param contentResolver ContentResolver
+ * @param ratio Double
+ * @param containsTransparency Boolean
+ * @return Deferred<Bitmap?>
+ */
 fun Uri.loadBitmapWithSampleSize(contentResolver: ContentResolver, ratio: Double, containsTransparency: Boolean = true): Deferred<Bitmap?> = GlobalScope.async(Dispatchers.Default, CoroutineStart.DEFAULT) {
     val bitmapConfig = containsTransparency.map(Bitmap.Config.ARGB_8888, Bitmap.Config.RGB_565)
     val bitmapOptions = BitmapFactory.Options().apply {
@@ -39,7 +45,11 @@ fun Uri.loadBitmapWithSampleSize(contentResolver: ContentResolver, ratio: Double
 }
 
 /**
- * Size of a bitmap
+ *
+ * @receiver Uri
+ * @param contentResolver ContentResolver
+ * @param bitmapConfig Bitmap.Config
+ * @return Deferred<BitmapFactory.Options?>
  */
 fun Uri.loadBitmapSize(contentResolver: ContentResolver, bitmapConfig: Bitmap.Config = Bitmap.Config.ARGB_8888): Deferred<BitmapFactory.Options?> = GlobalScope.async(Dispatchers.Default, CoroutineStart.DEFAULT) {
     val onlyBoundsOptions = BitmapFactory.Options().apply {
@@ -59,6 +69,9 @@ fun Uri.loadBitmapSize(contentResolver: ContentResolver, bitmapConfig: Bitmap.Co
 
 /**
  *
+ * @receiver Bitmap
+ * @param compressionPercentage Int
+ * @return Deferred<Bitmap>
  */
 fun Bitmap.compress(@IntRange(from = 0L, to = 100L) compressionPercentage: Int): Deferred<Bitmap> = GlobalScope.async(Dispatchers.Default, CoroutineStart.DEFAULT) {
     ByteArrayOutputStream().use { out ->
@@ -78,12 +91,23 @@ suspend fun Uri.loadBitmapPreviews(scalePreviewsPercentages: IntArray,
     return@async compressSizes.map { it.await() }
 }
 
+/**
+ *
+ * @param ratio Double
+ * @return Int
+ */
 @IntRange(from = 1)
 private fun getPowerOfTwoForSampleRatio(ratio: Double): Int {
     val k = Integer.highestOneBit(Math.floor(ratio).toInt())
     return maxOf(k, 1)
 }
 
+/**
+ *
+ * @receiver Bitmap
+ * @param width Int
+ * @return Deferred<Bitmap?>
+ */
 suspend fun Bitmap.scaleToWidth(@IntRange(from = 0) width: Int): Deferred<Bitmap?> = GlobalScope.async(Dispatchers.Default, CoroutineStart.DEFAULT) {
     tryAndLogSuspend("Bitmap.scaleToWidth") {
         val size = getImageSize().scaleWidth(width)
@@ -92,8 +116,13 @@ suspend fun Bitmap.scaleToWidth(@IntRange(from = 0) width: Int): Deferred<Bitmap
 }
 
 /**
- * Assuming a thumbnail is square
  *
+ * Assumes a thumbnail is square
+ * @receiver Context
+ * @param defaultSize Int
+ * @param minSize Int
+ * @param fraction Int
+ * @return Int
  */
 @IntRange(from = 0)
 fun Context.calculateOptimalThumbnailSize(@IntRange(from = 0) defaultSize: Int = 200,
@@ -106,7 +135,12 @@ fun Context.calculateOptimalThumbnailSize(@IntRange(from = 0) defaultSize: Int =
     return maxOf(combined / 2, minSize)
 }
 
-
+/**
+ *
+ * @receiver Bitmap
+ * @param exifInterface ExifInterface
+ * @return Deferred<Bitmap>
+ */
 suspend fun Bitmap.rotate(exifInterface: ExifInterface): Deferred<Bitmap> = GlobalScope.async(Dispatchers.Default, CoroutineStart.DEFAULT) {
     var rotation = 0F
     val orientation = exifInterface.getAttributeInt(
@@ -122,6 +156,12 @@ suspend fun Bitmap.rotate(exifInterface: ExifInterface): Deferred<Bitmap> = Glob
 }
 
 
+/**
+ *
+ * @receiver Bitmap
+ * @param degrees Float
+ * @return Deferred<Bitmap>
+ */
 fun Bitmap.rotate(@FloatRange(from = 0.0, to = 360.0) degrees: Float): Deferred<Bitmap> = GlobalScope.async(Dispatchers.Default, CoroutineStart.DEFAULT) {
     val matrix = Matrix()
     if (degrees != 0f) {
@@ -130,6 +170,13 @@ fun Bitmap.rotate(@FloatRange(from = 0.0, to = 360.0) degrees: Float): Deferred<
     return@async Bitmap.createBitmap(this@rotate, 0, 0, width, height, matrix, true)
 }
 
+/**
+ *
+ * @receiver Uri
+ * @param contentResolver ContentResolver
+ * @param width Int
+ * @return Deferred<Bitmap?>
+ */
 suspend fun Uri.loadBitmapRotatedCorrectly(contentResolver: ContentResolver, width: Int): Deferred<Bitmap?> = GlobalScope.async(Dispatchers.Default, CoroutineStart.DEFAULT) {
     tryAndLogSuspend("loadImage") {
         val exif = getExifForImage(contentResolver).await()
@@ -142,20 +189,37 @@ suspend fun Uri.loadBitmapRotatedCorrectly(contentResolver: ContentResolver, wid
     }
 }
 
+/**
+ *
+ * @receiver Uri
+ * @param contentResolver ContentResolver
+ * @return Deferred<ExifInterface?>
+ */
 fun Uri.getExifForImage(contentResolver: ContentResolver) = GlobalScope.async(Dispatchers.Default, CoroutineStart.DEFAULT) {
     contentResolver.openInputStream(this@getExifForImage)?.use { input ->
         return@async ExifInterface(input)
     }
 }
 
-
+/**
+ *
+ * @receiver Bitmap
+ * @param outputStream OutputStream
+ * @param quality Int
+ * @param format Bitmap.CompressFormat
+ */
 fun Bitmap.outputTo(outputStream: OutputStream, @IntRange(from = 0, to = 100) quality: Int, format: Bitmap.CompressFormat) {
     compress(format, quality, outputStream)
 }
 
 /**
  * Allows to save a bitmap to the given location, using the supplied arguements for controlling the quality / format.
- *
+ * @receiver Bitmap
+ * @param path Uri
+ * @param contentResolver ContentResolver
+ * @param quality Int
+ * @param format Bitmap.CompressFormat
+ * @return Deferred<Unit?>
  */
 fun Bitmap.saveTo(path: Uri, contentResolver: ContentResolver, @IntRange(from = 0, to = 100) quality: Int,
                   format: Bitmap.CompressFormat) = GlobalScope.async(Dispatchers.Default, CoroutineStart.DEFAULT) {
@@ -164,8 +228,13 @@ fun Bitmap.saveTo(path: Uri, contentResolver: ContentResolver, @IntRange(from = 
     }
 }
 
+
 /**
  * want to be able to load a "scaled bitmap"
+ * @receiver Uri
+ * @param contentResolver ContentResolver
+ * @param width Int
+ * @return Deferred<Bitmap?>
  */
 suspend fun Uri.loadBitmapScaled(contentResolver: ContentResolver, width: Int): Deferred<Bitmap?> = GlobalScope.async(Dispatchers.Default, CoroutineStart.DEFAULT) {
     val onlyBoundsOptions = this@loadBitmapScaled.loadBitmapSize(contentResolver).await()
@@ -176,11 +245,37 @@ suspend fun Uri.loadBitmapScaled(contentResolver: ContentResolver, width: Int): 
     return@async loadBitmapWithSampleSize(contentResolver, ratio).await()
 }
 
+/**
+ *
+ * @receiver Bitmap
+ * @return ImageSize
+ */
+fun Bitmap.getImageSize(): ImageSize = ImageSize(width, height)
 
+
+/**
+ *
+ * @property width Int
+ * @property height Int
+ * @constructor
+ */
+data class ImageSize(val width: Int, val height: Int) {
+    override fun toString(): String = "$width-$height"
+}
+
+/**
+ *
+ */
 val ImageSize.largest: Int
     get() = maxOf(width, height)
 
 
+/**
+ *
+ * @receiver ImageSize
+ * @param destWidth Int
+ * @return ImageSize
+ */
 fun ImageSize.scaleWidth(destWidth: Int): ImageSize {
     val destFloat = destWidth.toFloat()
     val srcFloat = width.toFloat()
@@ -188,8 +283,11 @@ fun ImageSize.scaleWidth(destWidth: Int): ImageSize {
     return applyRatio(ratio)
 }
 
+/**
+ *
+ * @receiver ImageSize
+ * @param ratio Float
+ * @return ImageSize
+ */
 fun ImageSize.applyRatio(ratio: Float): ImageSize =
         ImageSize((width * ratio).toInt(), (height * ratio).toInt())
-
-
-fun Bitmap.getImageSize(): ImageSize = ImageSize(width, height)

@@ -3,6 +3,7 @@
 package com.commonsense.android.kotlin.base.extensions
 
 import com.commonsense.android.kotlin.base.algorithms.*
+import kotlin.math.*
 
 /**
  * Created by Kasper Tvede on 13-09-2017.
@@ -32,13 +33,12 @@ inline val Int.isZero: Boolean
  *
  */
 inline val Int.isEven: Boolean
-    get() = this % 2 == 0
+    get() = abs(this % 2) == 0
 /**
  *
  */
 inline val Int.isOdd: Boolean
-    get() = this % 2 == 1
-
+    get() = !isEven
 
 /**
  *

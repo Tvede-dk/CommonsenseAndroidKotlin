@@ -1,6 +1,17 @@
 # Changelog
 
 
+## 0.0.17
+- fragment with data 
+- kotlin 1.3.10
+- coroutines 1.0.1
+- fixed a lot of issues with startWithData and parsing types of flags resulting in "prematurely" called "onActivityResult".
+- added more extensions missing 
+    - context functions
+    - invokeEachWith (for 1 arg unit return)
+    
+
+
 ## 0.0.16
 - preview of fragment with data
 - kotlin updated to 1.3

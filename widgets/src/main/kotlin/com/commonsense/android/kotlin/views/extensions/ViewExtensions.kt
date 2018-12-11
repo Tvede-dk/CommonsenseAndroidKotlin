@@ -52,6 +52,7 @@ inline fun View.measureSize(crossinline afterMeasureAction: (with: Int, height: 
 
 @UiThread
 fun View.setOnclickAsyncSuspend(action: AsyncFunctionUnit<Context>) {
+    @Suppress("EXPERIMENTAL_API_USAGE")
     val eventActor = GlobalScope.actor<Unit>(Dispatchers.Main, capacity = Channel.CONFLATED) {
         channel.consumeEach {
             val cont = context ?: return@actor
@@ -65,11 +66,12 @@ fun View.setOnclickAsyncSuspend(action: AsyncFunctionUnit<Context>) {
 
 @UiThread
 fun View.setOnclickAsyncSuspendEmpty(action: AsyncEmptyFunction) {
-    this.setOnclickAsyncSuspend({ _ -> action() })
+    this.setOnclickAsyncSuspend { action() }
 }
 
 @UiThread
 fun View.setOnclickAsync(action: FunctionUnit<Context>) {
+    @Suppress("EXPERIMENTAL_API_USAGE")
     val eventActor = GlobalScope.actor<Unit>(Dispatchers.Main, capacity = Channel.CONFLATED) {
         channel.consumeEach {
             val cont = context ?: return@actor
@@ -83,7 +85,7 @@ fun View.setOnclickAsync(action: FunctionUnit<Context>) {
 
 @UiThread
 fun View.setOnclickAsyncEmpty(action: EmptyFunction) {
-    this.setOnclickAsync { _ -> action() }
+    this.setOnclickAsync { action() }
 }
 
 @UiThread
@@ -199,6 +201,7 @@ fun View.visibleOrInvisible(condition: Boolean) {
     }
 }
 
+
 /**
  * Makes the supplied array of (optional) views gone.
  * @receiver Array<View?>
@@ -275,35 +278,6 @@ object ViewHelper {
 }
 
 /**
- * Computes the children as a list.
- * instead of the old "0 to childCount".
- * This is O(n) where n being the number of children
- */
-val ViewGroup.children: List<View>
-    @UiThread
-    get() {
-        return (0 until childCount).map(this::getChildAt)
-    }
-
-
-/**
- * Computes all the visible children;
- * (this includes invisible as they participate in the layout thus are not truly invisible)
- * this is O(n) where n being the number of children.
- */
-val ViewGroup.visibleChildren: List<View>
-    @UiThread
-    get() = children.filterNot { it.isGone }
-
-/**
- * Counts the number of visible children;
- * warning is is O(n) (n being children)
- */
-val ViewGroup.visibleChildrenCount: Int
-    @UiThread
-    get() = visibleChildren.size
-
-/**
  * disables this view (isEnabled = false, isClickable = false)
  * if it is a ViewGroup, then all children will be disabled as well
  * @receiver View
@@ -326,14 +300,4 @@ fun View.enable() {
     isEnabled = true
     isClickable = true
     (this as? ViewGroup)?.children?.forEach(View::enable)
-}
-
-/**
- * Marks an EditText to be the "last one" akk the one with the ime done action button on the keyboard.
- * @receiver EditText
- */
-@UiThread
-fun EditText.imeDone() {
-    imeOptions = EditorInfo.IME_ACTION_DONE
-    inputType = inputType xor InputType.TYPE_TEXT_FLAG_MULTI_LINE xor InputType.TYPE_TEXT_FLAG_IME_MULTI_LINE
 }

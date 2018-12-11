@@ -3,6 +3,7 @@
 package com.commonsense.android.kotlin.views.extensions
 
 import android.graphics.*
+import android.support.annotation.*
 import android.support.annotation.IntRange
 import android.view.*
 
@@ -45,3 +46,34 @@ fun ViewGroup.addViews(views: List<View>, @IntRange(from = 0) atIndex: Int) {
         this.addView(view, index + atIndex)
     }
 }
+
+
+
+/**
+ * Computes the children as a list.
+ * instead of the old "0 to childCount".
+ * This is O(n) where n being the number of children
+ */
+val ViewGroup.children: List<View>
+    @UiThread
+    get() {
+        return (0 until childCount).map(this::getChildAt)
+    }
+
+
+/**
+ * Computes all the visible children;
+ * (this includes invisible as they participate in the layout thus are not truly invisible)
+ * this is O(n) where n being the number of children.
+ */
+val ViewGroup.visibleChildren: List<View>
+    @UiThread
+    get() = children.filterNot { it.isGone }
+
+/**
+ * Counts the number of visible children;
+ * warning is is O(n) (n being children)
+ */
+val ViewGroup.visibleChildrenCount: Int
+    @UiThread
+    get() = visibleChildren.size

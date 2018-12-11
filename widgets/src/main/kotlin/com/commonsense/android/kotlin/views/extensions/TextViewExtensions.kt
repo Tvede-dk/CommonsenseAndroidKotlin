@@ -13,3 +13,11 @@ import android.widget.*
 val TextView.isEmpty: Boolean
     @UiThread
     get () = length() <= 0
+
+/**
+ *
+ */
+val TextView.isNotEmpty: Boolean
+    @UiThread
+    get () = !isEmpty
+

@@ -91,6 +91,7 @@ inline fun <E> List<E>.limitToSize(size: Int): List<E> =
 /**
  * Invokes each function with the given arguments
  */
+
 inline fun <I1, O> Iterable<kotlin.Function1<I1, O>>.invokeEachWith(element: I1) =
         forEach { it(element) }
 

@@ -12,6 +12,7 @@ import com.commonsense.android.kotlin.system.logging.*
 import kotlinx.coroutines.*
 import kotlinx.coroutines.android.*
 import kotlinx.coroutines.sync.*
+import java.util.concurrent.*
 
 
 /**
@@ -28,7 +29,7 @@ class BaseAsyncLayoutInflater(val context: Context,
     private val tag = BaseAsyncLayoutInflater::class.java.simpleName
 
     private val inflaterQueue: ExecutorCoroutineDispatcher =
-            newFixedThreadPoolContext(maxThreads, "asyncLayoutInflaterPool")
+            Executors.newFixedThreadPool(maxThreads).asCoroutineDispatcher()
 
     private val inflaters = maxThreads.mapEach {
         LockableInflater(context)

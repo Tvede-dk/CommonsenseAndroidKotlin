@@ -37,6 +37,8 @@
         <activity android:name=".views.widgets.WidgetsOverviewActivity" />
         <activity android:name=".views.widgets.WidgetsRecyclerExampleActivity" />
         <activity android:name=".views.widgets.pagerAdapter.WidgetsBaseFragmentPagerAdapterActivity" />
+        <activity android:name=".views.dataAware.DataAActivity"  />
+        <activity android:name=".views.dataAware.DataBActivity" android:launchMode="singleTask"  />
 
     </application>
 

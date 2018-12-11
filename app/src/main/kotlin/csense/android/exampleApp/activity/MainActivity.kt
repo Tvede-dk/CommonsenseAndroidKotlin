@@ -12,6 +12,7 @@ import com.commonsense.android.kotlin.views.databinding.adapters.*
 import com.commonsense.android.kotlin.views.extensions.*
 import csense.android.exampleApp.R
 import csense.android.exampleApp.databinding.*
+import csense.android.exampleApp.views.dataAware.*
 import csense.android.exampleApp.views.tools.*
 import csense.android.exampleApp.views.widgets.*
 
@@ -36,7 +37,7 @@ class MainActivity : BaseDatabindingActivity<MainActivityBinding>() {
             startActivity(ToolsOverviewActivity::class)
         }, 0)
         adapter.add(CategoryRecyclerRender(R.string.mainactivity_category_adapter) {
-            startActivity(ToolsOverviewActivity::class)
+            startActivity(WidgetsRecyclerExampleActivity::class)
         }, 0)
         adapter.add(CategoryRecyclerRender(R.string.mainactivity_category_base_activity) {
             startActivity(ToolsOverviewActivity::class)
@@ -48,6 +49,9 @@ class MainActivity : BaseDatabindingActivity<MainActivityBinding>() {
 
         adapter.add(CategoryRecyclerRender(R.string.mainactivity_category_widgets) {
             startActivity(WidgetsOverviewActivity::class)
+        }, 0)
+        adapter.add(CategoryRecyclerRender(R.string.intro_text) {
+            startActivity(DataAActivity::class)
         }, 0)
 
 

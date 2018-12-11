@@ -201,11 +201,11 @@ object L {
         isProductionLoggingAllowed.onTrue { productionLoggers.invokeEachWith(tag, message, exception) }
     }
 
-    fun logProd(javaClass: Class<*>, message: String, throwable: Throwable?) {
+    fun logProd(javaClass: Class<*>, message: String, throwable: Throwable? = null) {
         logProd(javaClass.simpleName, message, throwable)
     }
 
-    fun logProd(kClass: KClass<*>, message: String, throwable: Throwable?) {
+    fun logProd(kClass: KClass<*>, message: String, throwable: Throwable? = null) {
         logProd(kClass.java, message, throwable)
     }
     //endregion

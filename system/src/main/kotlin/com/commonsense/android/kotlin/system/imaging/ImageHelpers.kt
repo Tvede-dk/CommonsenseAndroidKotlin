@@ -5,19 +5,14 @@ package com.commonsense.android.kotlin.system.imaging
 import android.content.*
 import android.graphics.*
 import android.net.*
+import android.support.media.ExifInterface
 import android.support.annotation.*
 import android.support.annotation.IntRange
-import android.support.media.*
 import com.commonsense.android.kotlin.base.extensions.collections.*
 import com.commonsense.android.kotlin.system.extensions.*
 import com.commonsense.android.kotlin.system.logging.*
 import kotlinx.coroutines.*
 import java.io.*
-
-
-/**
- * Created by Kasper Tvede on 11-07-2017.
- */
 
 
 /**
@@ -28,11 +23,14 @@ import java.io.*
  * @param containsTransparency Boolean
  * @return Deferred<Bitmap?>
  */
-fun Uri.loadBitmapWithSampleSize(contentResolver: ContentResolver, ratio: Double, containsTransparency: Boolean = true): Deferred<Bitmap?> = GlobalScope.async(Dispatchers.Default, CoroutineStart.DEFAULT) {
+fun Uri.loadBitmapWithSampleSize(contentResolver: ContentResolver,
+                                 ratio: Double,
+                                 containsTransparency: Boolean = true,
+                                 shouldDownSample: Boolean = false): Deferred<Bitmap?> = GlobalScope.async(Dispatchers.Default, CoroutineStart.DEFAULT) {
     val bitmapConfig = containsTransparency.map(Bitmap.Config.ARGB_8888, Bitmap.Config.RGB_565)
     val bitmapOptions = BitmapFactory.Options().apply {
         @IntRange(from = 1)
-        inSampleSize = getPowerOfTwoForSampleRatio(ratio)
+        inSampleSize = getPowerOfTwoForSampleRatio(ratio, shouldDownSample)
         inPreferredConfig = bitmapConfig//
         /*     inDensity = srcWidth //TODO do this later, as this will result in perfecter scaling.
              inScaled = true
@@ -97,8 +95,13 @@ suspend fun Uri.loadBitmapPreviews(scalePreviewsPercentages: IntArray,
  * @return Int
  */
 @IntRange(from = 1)
-private fun getPowerOfTwoForSampleRatio(ratio: Double): Int {
-    val k = Integer.highestOneBit(Math.floor(ratio).toInt())
+fun getPowerOfTwoForSampleRatio(ratio: Double, downSample: Boolean): Int {
+    val scaledRatio = if (downSample) {
+        Math.floor(ratio)
+    } else {
+        Math.ceil(ratio)
+    }
+    val k = Integer.highestOneBit(scaledRatio.toInt())
     return maxOf(k, 1)
 }
 
@@ -148,8 +151,8 @@ suspend fun Bitmap.rotate(exifInterface: ExifInterface): Deferred<Bitmap> = Glob
             ExifInterface.ORIENTATION_NORMAL)
 
     when (orientation) {
-        ExifInterface.ORIENTATION_ROTATE_90 -> rotation = 90F
         ExifInterface.ORIENTATION_ROTATE_180 -> rotation = 180F
+        ExifInterface.ORIENTATION_ROTATE_90 -> rotation = 90F
         ExifInterface.ORIENTATION_ROTATE_270 -> rotation = 270F
     }
     return@async this@rotate.rotate(rotation).await()

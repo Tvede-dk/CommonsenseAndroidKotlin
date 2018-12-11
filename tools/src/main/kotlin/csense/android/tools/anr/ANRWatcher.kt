@@ -6,11 +6,11 @@ import android.os.*
 import com.commonsense.android.kotlin.base.*
 import com.commonsense.android.kotlin.base.extensions.*
 import com.commonsense.android.kotlin.base.extensions.collections.mapLazy
-import com.commonsense.android.kotlin.base.time.*
+import com.commonsense.android.kotlin.base.time.TimeUnit
 import com.commonsense.android.kotlin.system.logging.*
 import kotlinx.coroutines.*
-import kotlinx.coroutines.android.*
 import java.lang.ref.*
+import java.util.concurrent.*
 
 /**
  * Created by Kasper Tvede on 01-03-2018.
@@ -83,7 +83,7 @@ private class ANRWatcherThread(val name: String, val callbackOnANR: EmptyFunctio
     private var job: Job? = null
 
     fun start() {
-        job = GlobalScope.async(newSingleThreadContext(name)) {
+        job = GlobalScope.async(Executors.newFixedThreadPool(1).asCoroutineDispatcher()) {
             while (this.isActive) {
 
                 val start = System.currentTimeMillis()

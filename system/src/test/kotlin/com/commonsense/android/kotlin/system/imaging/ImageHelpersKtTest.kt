@@ -1,5 +1,6 @@
 package com.commonsense.android.kotlin.system.imaging
 
+import com.commonsense.android.kotlin.test.*
 import org.junit.*
 import org.junit.jupiter.api.Test
 
@@ -91,4 +92,12 @@ internal class ImageHelpersKtTest {
     @Test
     fun getImageSize() {
     }
+
+    @Test
+    fun testGetPowerOfTwoForSampleRatio() {
+        getPowerOfTwoForSampleRatio(3.9, false).assert(4)
+        getPowerOfTwoForSampleRatio(3.9, true).assert(2)
+    }
+
+
 }

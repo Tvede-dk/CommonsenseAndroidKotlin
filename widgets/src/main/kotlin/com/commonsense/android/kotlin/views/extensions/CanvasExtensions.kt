@@ -16,7 +16,6 @@ val Canvas.centerY: Float
     get() = height / 2f
 
 
-
 /**
  * Does modify the drawable! (setBounds)
  * @receiver Canvas the canvas to draw this drawable to

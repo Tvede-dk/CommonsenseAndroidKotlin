@@ -41,14 +41,12 @@ dependencies {
 
     implementation "org.jetbrains.kotlinx:kotlinx-coroutines-core:$coroutinesVersion"
     implementation "org.jetbrains.kotlinx:kotlinx-coroutines-android:$coroutinesVersion"
-    implementation "com.android.support:appcompat-v7:$supportVersion"
-    implementation "com.android.support:design:$supportVersion"
-    implementation "com.android.support:exifinterface:$supportVersion"
-    implementation "com.android.support:recyclerview-v7:$supportVersion"
     implementation "org.jetbrains.kotlin:kotlin-stdlib:$kotlin_version"
 
     //support libs
     implementation "com.android.support:appcompat-v7:$supportVersion"
+    implementation "com.android.support:exifinterface:$supportVersion"
+    implementation "com.android.support:recyclerview-v7:$supportVersion"
     implementation "com.android.support:design:$supportVersion"
     implementation "com.android.support:cardview-v7:$supportVersion"
 

@@ -92,17 +92,13 @@ class ActivityResultHelper(warningLogger: FunctionUnit<String>? = null) {
     }
 
     fun addForAllResultsAsync(@IntRange(from = 0) requestCode: Int, receiver: AsyncActivityResultCallback) {
-        addReceiver(AsyncActivityResultWrapper({ resultCode, data ->
-            receiver(resultCode, data)
-        }, requestCode, this::remove))
+        addReceiver(AsyncActivityResultWrapper(receiver, requestCode, this::remove))
     }
 
     fun addForOnlyOkAsync(@IntRange(from = 0) requestCode: Int, receiver: AsyncActivityResultCallbackOk) {
-        addForAllResultsAsync(requestCode, { resultCode: Int, data: Intent? ->
-            if (resultCode.isOkResult()) {
-                receiver(data)
-            }
-        })
+        addForAllResultsAsync(requestCode) { resultCode: Int, data: Intent? ->
+            resultCode.isOkResult().ifTrue { receiver(data) }
+        }
     }
 
     private fun addReceiver(receiver: ActivityResultCallbackInterface) {

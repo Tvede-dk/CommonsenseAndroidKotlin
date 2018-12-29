@@ -1,4 +1,5 @@
 @file:Suppress("unused", "NOTHING_TO_INLINE", "MemberVisibilityCanBePrivate")
+
 package com.commonsense.android.kotlin.base.extensions.collections
 
 import com.commonsense.android.kotlin.base.*
@@ -11,7 +12,7 @@ import com.commonsense.android.kotlin.base.extensions.*
 /**
  * performs the action if the boolean is true.
  */
-inline fun Boolean.onTrue(crossinline action: EmptyFunction): Boolean {
+inline fun Boolean.onTrue(action: EmptyFunction): Boolean {
     if (this) {
         action()
     }
@@ -84,7 +85,7 @@ inline fun <T> T?.ifNotNull(crossinline action: FunctionUnit<T>) {
 /**
  * Makes a more "elegant" sentence for some expressions, same as "com.commonsense.android.kotlin.com.commonsense.android.kotlin.base.onTrue"
  */
-inline fun Boolean.ifTrue(crossinline action: EmptyFunction): Boolean = onTrue(action)
+inline fun Boolean.ifTrue(action: EmptyFunction): Boolean = onTrue(action)
 
 /**
  * Makes a more "elegant" sentence for some expressions, same as "com.commonsense.android.kotlin.com.commonsense.android.kotlin.base.onTrue"

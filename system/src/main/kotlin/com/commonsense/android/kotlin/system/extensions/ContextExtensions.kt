@@ -14,10 +14,9 @@ import android.support.v7.content.res.*
 import android.util.*
 import android.view.*
 import android.widget.*
-import com.commonsense.android.kotlin.system.*
 import com.commonsense.android.kotlin.system.logging.*
+import com.commonsense.android.kotlin.system.permissions.*
 import kotlinx.coroutines.*
-import kotlinx.coroutines.android.*
 
 
 /**
@@ -26,20 +25,6 @@ import kotlinx.coroutines.android.*
 
 inline fun Context.checkPermission(@DangerousPermissionString permission: String): Boolean {
     return ContextCompat.checkSelfPermission(this, permission) == PackageManager.PERMISSION_GRANTED
-}
-
-inline fun Context.presentDialer(phoneNumber: String) {
-    val intent = Intent(Intent.ACTION_DIAL).apply {
-        data = Uri.parse("tel:$phoneNumber")
-    }
-    startActivitySafe(intent)
-}
-
-inline fun Context.showOnMaps(address: String) {
-    val urlEncoded = address.urlEncoded()
-    val toLaunch = Uri.parse("geo:0,0?q=$urlEncoded")
-    val intent = Intent(Intent.ACTION_VIEW, toLaunch)
-    startActivitySafe(intent)
 }
 
 inline fun Context.getDrawableSafe(@DrawableRes drawable: Int): Drawable? {

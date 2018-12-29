@@ -4,6 +4,7 @@ import android.*
 import android.content.pm.*
 import android.os.*
 import com.commonsense.android.kotlin.system.base.*
+import com.commonsense.android.kotlin.system.permissions.*
 import com.commonsense.android.kotlin.test.*
 import org.junit.*
 import org.robolectric.annotation.*

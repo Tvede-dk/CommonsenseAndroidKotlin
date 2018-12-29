@@ -7,3 +7,4 @@ package com.commonsense.android.kotlin.system
  *
  */
 class BadUsageException(message: String) : RuntimeException(message)
+

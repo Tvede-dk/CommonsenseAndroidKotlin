@@ -61,8 +61,9 @@ fun <T> asyncSimple(context: CoroutineContext = Dispatchers.Default,
 /**
  * Like the original async, except without the coroutineScope 'this parameter
  */
-fun <T> asyncSimple(context: CoroutineContext = Dispatchers.Default,
-                    block: suspend () -> T): Deferred<T> {
+fun <T> asyncSimple(
+        context: CoroutineContext = Dispatchers.Default,
+        block: suspend () -> T): Deferred<T> {
     return asyncSimple(context, CoroutineStart.DEFAULT, block)
 }
 

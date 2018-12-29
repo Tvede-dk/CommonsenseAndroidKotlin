@@ -11,9 +11,9 @@ import android.net.*
 import android.provider.*
 import android.support.annotation.*
 import com.commonsense.android.kotlin.base.*
-import com.commonsense.android.kotlin.system.*
 import com.commonsense.android.kotlin.system.base.*
 import com.commonsense.android.kotlin.system.base.helpers.*
+import com.commonsense.android.kotlin.system.permissions.*
 
 
 /**

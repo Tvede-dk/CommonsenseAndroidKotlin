@@ -7,10 +7,10 @@ import android.support.annotation.IntRange
 import android.support.v4.app.DialogFragment
 import android.view.*
 import com.commonsense.android.kotlin.base.*
-import com.commonsense.android.kotlin.system.*
 import com.commonsense.android.kotlin.system.base.helpers.*
 import com.commonsense.android.kotlin.system.extensions.*
 import com.commonsense.android.kotlin.system.logging.*
+import com.commonsense.android.kotlin.system.permissions.*
 import com.commonsense.android.kotlin.system.uiAware.*
 import kotlinx.coroutines.*
 

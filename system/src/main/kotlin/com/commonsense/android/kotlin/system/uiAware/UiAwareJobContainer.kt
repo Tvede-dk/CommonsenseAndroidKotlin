@@ -9,7 +9,7 @@ import kotlinx.coroutines.android.*
 /**
  * Created by Kasper Tvede
  */
-class UiAwareJobContainer : JobContainer() {
+class UiAwareJobContainer(scope: CoroutineScope) : JobContainer(scope) {
 
     /**
      * Redirect the UI event "onPostResume" here to

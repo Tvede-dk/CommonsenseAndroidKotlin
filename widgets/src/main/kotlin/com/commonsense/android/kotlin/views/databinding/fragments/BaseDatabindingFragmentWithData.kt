@@ -1,8 +1,11 @@
 package com.commonsense.android.kotlin.views.databinding.fragments
 
+import android.content.*
 import android.databinding.*
+import android.os.*
 import com.commonsense.android.kotlin.base.extensions.collections.*
 import com.commonsense.android.kotlin.system.base.*
+import com.commonsense.android.kotlin.system.dataFlow.*
 import com.commonsense.android.kotlin.system.extensions.*
 import com.commonsense.android.kotlin.system.logging.*
 
@@ -47,8 +50,18 @@ abstract class BaseDatabindingFragmentWithData<
 
     abstract fun onSafeDataAndBinding()
 
+    companion object {
+        internal const val dataIntentIndex = "baseFragment-data-index"
+        internal val dataReferenceMap = ReferenceCountingMap()
+    }
+
 }
 
 fun <T> BaseDatabindingFragmentWithData<*, T>.setData(data: T) {
+    val index = BaseDatabindingFragmentWithData.dataReferenceMap.count.toString()
+    arguments = Bundle().apply {
+        BaseDatabindingFragmentWithData.dataReferenceMap.addItem(data, index)
+        putString(BaseDatabindingFragmentWithData.dataIntentIndex,index)
+    }
 
 }

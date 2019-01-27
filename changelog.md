@@ -3,13 +3,16 @@
 
 ## 0.0.17
 - fragment with data 
-- kotlin 1.3.10
-- coroutines 1.0.1
-- fixed a lot of issues with startWithData and parsing types of flags resulting in "prematurely" called "onActivityResult".
+- kotlin 1.3.11
+- coroutines 1.1.0
 - added more extensions missing 
     - context functions
     - invokeEachWith (for 1 arg unit return)
-    
+
+- add more missing tests
+- more extensions
+- fixed issues with job schedular container / and a crash when cleaning up with remaing local jobs 
+
 
 
 ## 0.0.16

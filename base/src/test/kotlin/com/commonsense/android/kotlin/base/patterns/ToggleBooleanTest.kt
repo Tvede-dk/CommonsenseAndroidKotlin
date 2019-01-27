@@ -7,7 +7,7 @@ import org.junit.*
 /**
  * Created by Kasper Tvede on 23-07-2017.
  */
-class ToggleBooleanTest : BaseRoboElectricTest() {
+class ToggleBooleanTest {
 
     @Test
     fun testToggling() {
@@ -36,14 +36,25 @@ class ToggleBooleanTest : BaseRoboElectricTest() {
 
     }
 
-    @Ignore
     @Test
     fun ifTrue() {
+        val startFalse = ToggleBoolean(false)
+        startFalse.ifTrue { failTest() }
+        var counter = 0
+        startFalse.ifFalse { counter = 1 }
+        counter.assert(1)
+
     }
 
-    @Ignore
+
     @Test
     fun ifFalse() {
+        val startFalse = ToggleBoolean(true)
+        startFalse.ifFalse { failTest() }
+        var counter = 0
+        startFalse.ifTrue { counter = 1 }
+        counter.assert(1)
+
     }
 
 }

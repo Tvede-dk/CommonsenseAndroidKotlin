@@ -7,8 +7,11 @@ import com.commonsense.android.kotlin.base.extensions.*
 import com.commonsense.android.kotlin.test.*
 import kotlinx.coroutines.*
 import org.junit.*
+import org.junit.jupiter.api.*
 import org.junit.jupiter.api.Test
+import java.lang.Exception
 import java.util.concurrent.*
+import java.util.concurrent.atomic.*
 
 /**
  * Created by Kasper Tvede on 20-07-2017.
@@ -20,7 +23,7 @@ class JobContainerTest {
     @Test
     fun testMassiveInsertRemove() = runBlocking {
 
-        val jobContainer = JobContainer()
+        val jobContainer = JobContainer(this)
         val jobs = mutableListOf<Job>()
         for (i in 0 until 1000) {
             jobs += GlobalScope.launch {
@@ -44,7 +47,7 @@ class JobContainerTest {
 
     @Test
     fun testLaunchDelay() = runBlocking {
-        val container = JobContainer()
+        val container = JobContainer(this)
         val slowJob = GlobalScope.launch {
             delay(200)
         }
@@ -58,7 +61,7 @@ class JobContainerTest {
 
     @Test
     fun testLaunchDelayAdvanced() = runBlocking {
-        val container = JobContainer()
+        val container = JobContainer(this)
         val slowJob = GlobalScope.launch {
             delay(300)
         }
@@ -83,48 +86,57 @@ class JobContainerTest {
 
     @Test
     fun testDuplicatedGroups() = runBlocking {
-        val container = JobContainer()
+        val container = JobContainer(this)
+        val slowSem = Semaphore(0)
+        val slow2Sem = Semaphore(0)
         val slowJob = GlobalScope.launch {
-            delay(200)
+            slowSem.acquire()
         }
         val slowJob2 = GlobalScope.launch {
-            delay(400)
+            slow2Sem.acquire()
         }
         container.addJob(slowJob, "test")
         container.addJob(slowJob2, "test")
+
+
         container.getRemainingGroupedJobs().assert(1,
                 "should have 2 job that is not done yet")
-        delay(250)
+        slowSem.release()
+        slowJob.join()
         container.getRemainingGroupedJobs().assert(1, "only(last) job should exists so no done yet.")
-        delay(250)
-        container.getRemainingGroupedJobs().assert(0, "only(last) job should exists so no done yet.")
+        delay(50)//since the onCompleted should be invoked.
+        slow2Sem.release()
+        slowJob2.join()
+        delay(50)//since the onCompleted should be invoked.
+        container.getRemainingGroupedJobs().assert(0, "should run last job")
     }
 
     @Test
     fun testQueuingAwaited() = runBlocking {
-        val container = JobContainer()
-        var counter = 0
-        container.addToQueue(Dispatchers.Default, { counter += 1 }, "test")
-        container.addToQueue(Dispatchers.Default, { counter += 1 }, "test")
-        container.addToQueue(Dispatchers.Default, { counter += 1 }, "test")
-        counter.assert(0, " no jobs should run before ready.")
+        val container = JobContainer(this)
+        val counter = AtomicInteger(0)
+        container.addToQueue(Dispatchers.Default, { counter.incrementAndGet() }, "test")
+        container.addToQueue(Dispatchers.Default, { counter.incrementAndGet() }, "test")
+        container.addToQueue(Dispatchers.Default, { counter.incrementAndGet() }, "test")
+        counter.get().assert(0, " no jobs should run before ready.")
 
         container.executeQueueAwaited("test")
-        counter.assert(3, "all should have randed")
+        counter.get().assert(3, "all should have randed")
     }
 
     @Test
-    fun testQueueingBackground() {
-        val container = JobContainer()
+    fun testQueueingBackground() = runBlocking {
+        val container = JobContainer(this)
         val sem = Semaphore(1)
         container.addToQueue(Dispatchers.Default, { sem.release() }, "test")
         container.executeQueueBackground("test")
         sem.tryAcquire(1, 1000, TimeUnit.MILLISECONDS)
+        Unit
     }
 
     @Test
     fun performAction() = runBlocking {
-        val container = JobContainer()
+        val container = JobContainer(this)
         var simpleCounter = 1
         val sem = Semaphore(0, false)
         val simple: AsyncEmptyFunction = {
@@ -144,67 +156,91 @@ class JobContainerTest {
         sem.release(2)
 
 
-        listOf(scopedJob, simpleJob).awaitAll()
+        listOf(scopedJob, simpleJob).joinAll()
         container.getRemainingJobs().assert(0, "Should have finished all jobs")
         simpleCounter.assert(0)
         scopedCounter.assert(0)
 
     }
 
+    /**
+     * This tests that inserting another job for a group will discard the old job,
+     * and only run the new one.
+     *
+     * for example this could be used in a button, where if the user preses it multiple times,
+     * then you want to cancel the old and run the new.
+     *
+     * @return Unit
+     */
     @Test
-    fun performActionGrouped() = runBlocking {
-        val container = JobContainer()
-        var simpleCounter = 1
+    fun performActionGrouped(): Unit = runBlocking {
+        val container = JobContainer(this)
 
         val releasingSem = Semaphore(0, false)
         val presetupSem = Semaphore(0, false)
 
+        //the counter that should never be 0, as the job should forcibly be canceled
+        var simpleCounter = 1
         val simple: AsyncEmptyFunction = {
             presetupSem.release()
-            while (this.isActive) {
-                if (releasingSem.tryAcquire(1)) {
-                    break
-                }
-                delay(1)
-            }
+            idleForSemaphore(releasingSem)
             simpleCounter -= 1
         }
 
         var scopedCounter = 1
         val scoped: AsyncCoroutineFunction = {
             presetupSem.release()
-            while (this.isActive) {
-                if (releasingSem.tryAcquire(1)) {
-                    break
-                }
-                delay(1)
-            }
+            idleForSemaphore(releasingSem)
             scopedCounter -= 1
         }
+
         val simpleJob = container.performAction(Dispatchers.Default, simple, "A")
+        presetupSem.tryAcquire(1, 500, TimeUnit.MILLISECONDS).assertTrue("should get the first job to start")
+
         val scopedJob = container.performAction(Dispatchers.Default, scoped, "A")
-        presetupSem.acquire(2)
+        presetupSem.tryAcquire(1, 500, TimeUnit.MILLISECONDS).assertTrue("the next job should also start")
+        //assert active jobs
         container.getRemainingGroupedJobs()
                 .assert(1, "there should only be one job for a group. the last one always wins.")
-
         container.getRemainingJobs().assert(0, "should have 0 non grouped jobs")
+        //now let them finish
+        simpleJob.isCancelled.assertTrue("should be canceled")
+        delay(100)
         releasingSem.release(1)
+//        println("is scopedJob canceled: ${scopedJob.isCancelled}")
+        try {
+            withTimeout(500) {
 
-        listOf(scopedJob, simpleJob).awaitAll()
+                println("simpleJob : ${simpleJob.isCancelled}")
+
+                listOf(scopedJob, simpleJob).joinAll()
+            }
+        } catch (e: Exception) {
+            println(e)
+            println("simpleJob : $simpleJob")
+            println("scopedJob : $scopedJob")
+        }
+//        println("got here")
+        //assert that only the allowed job finished.
         container.getRemainingGroupedJobs().assert(0, "Should have finished all jobs")
         simpleCounter.assert(1, "should not have done its work" +
                 " since it got canceled in favor of the second instead")
         scopedCounter.assert(0, "should have canceled the previous running group item.")
     }
 
+
     @Ignore
     @Test
     fun removeDoneJobs() {
     }
 
-    @Ignore
     @Test
-    fun cleanJobs() {
+    fun cleanJobs() = runBlocking {
+        val container = JobContainer(this)
+        container.addToQueue(Dispatchers.Default, { fail("should never be called") }, "test")
+        container.addJob(GlobalScope.launch(start = CoroutineStart.LAZY) { fail("should never be called") }, "test")
+        container.addJob(GlobalScope.launch(start = CoroutineStart.LAZY) { fail("should never be called") })
+        container.cleanJobs()
     }
 
     @Ignore
@@ -260,5 +296,14 @@ class JobContainerTest {
     @Ignore
     @Test
     fun toPrettyString() {
+    }
+
+    private suspend fun CoroutineScope.idleForSemaphore(semaphore: Semaphore, delayTimeInMs: Long = 20) {
+        while (this.isActive) {
+            if (semaphore.tryAcquire(1)) {
+                break
+            }
+            delay(delayTimeInMs)
+        }
     }
 }

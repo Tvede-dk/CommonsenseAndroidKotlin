@@ -105,24 +105,7 @@ class CoroutinesExtensionsKtTest {
         results.sum().assert(100)
     }
 
-    @Test
-    fun awaitAll() = runBlocking {
 
-        var counter = 0
-        val jobs = listOf(
-                GlobalScope.launch{
-                    delay(20)
-                    counter += 1
-                },
-                GlobalScope.launch {
-                    counter += 1
-                    delay(20)
-                    counter += 1
-                }
-        )
-        jobs.awaitAll()
-        counter.assert(3, "should have done all combinations of jobs before reaching here.")
-    }
 
     @Test
     fun forEachSync() = runBlocking {

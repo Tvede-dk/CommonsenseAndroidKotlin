@@ -6,6 +6,7 @@ import android.content.*
 import android.support.annotation.*
 import com.commonsense.android.kotlin.base.extensions.*
 import com.commonsense.android.kotlin.system.resourceHandling.*
+import kotlinx.coroutines.*
 
 
 /**
@@ -34,7 +35,7 @@ class LayoutResList internal constructor(@LayoutRes vararg ids: Int) {
      * @param inflater BaseAsyncLayoutInflater
      */
     suspend fun inflateAllNoFallbackAndAwait(inflater: BaseAsyncLayoutInflater) {
-        views.map { inflater.inflateNoFallback(it, null) }.awaitAll()
+        views.map { inflater.inflateNoFallback(it, null) }.joinAll()
     }
 
     /**

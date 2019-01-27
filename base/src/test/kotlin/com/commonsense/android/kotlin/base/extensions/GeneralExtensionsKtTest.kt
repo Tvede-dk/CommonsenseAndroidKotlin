@@ -82,8 +82,6 @@ class GeneralExtensionsKtTest {
     }
 
 
-
-
     @Test
     fun parseTo() {
         var testOpt: String? = null
@@ -164,15 +162,27 @@ class GeneralExtensionsKtTest {
     @Ignore
     @Test
     fun measureSecondTime() {
+
     }
 
     @Ignore
     @Test
     fun mapNullLazy() {
+
     }
 
-    @Ignore
     @Test
     fun mapEach() {
+        0.mapEach { failTest("zero size is nothing so should not call this") }
+        1.mapEach { "$it" }.apply {
+            assertSize(1)
+            first().assert("0")
+        }
+
+        2.mapEach { "$it" }.apply {
+            assertSize(2)
+            first().assert("0")
+            last().assert("1")
+        }
     }
 }

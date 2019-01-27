@@ -74,7 +74,7 @@ open class BaseActivity : AppCompatActivity(), ActivityResultHelperContainer {
     //</editor-fold>
 
     private val localJobs by lazy {
-        UiAwareJobContainer()
+        UiAwareJobContainer(CoroutineScope(Dispatchers.Main))
     }
 
     private val activityResultHelper by lazy {
@@ -88,19 +88,18 @@ open class BaseActivity : AppCompatActivity(), ActivityResultHelperContainer {
      * @param group String
      * @param action AsyncEmptyFunction
      */
-    fun launchInUi(group: String, action: AsyncFunctionUnit<Context>) {
-        localJobs.launchInUi({ isVisible }, group, action, this)
-    }
+    fun launchInUi(group: String, action: AsyncFunctionUnit<Context>): Job =
+            localJobs.launchInUi({ isVisible }, group, action, this)
+
 
     /**
      * Launches the given action
      * @param group String the group name (So that no duplicates of this action can be schedualed at the same time)
      * @param action AsyncEmptyFunction the action to perform in the background
      */
-    fun launchInBackground(group: String, action: AsyncEmptyFunction) {
-        localJobs.performAction(Dispatchers.Default, action, group)
-    }
-
+    fun launchInBackground(group: String, action: AsyncEmptyFunction): Job =
+            localJobs.performAction(Dispatchers.Default, action, group)
+    
 
     //<editor-fold desc="Lifecycle events">
 

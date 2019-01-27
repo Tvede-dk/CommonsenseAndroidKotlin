@@ -75,13 +75,13 @@ fun <T> asyncSimple(
 suspend fun <T> List<Deferred<T>>.await(): List<T> {
     return this.map { it.await() }
 }
-
-/**
- * Waits for all the given jobs to finish.
- */
-suspend fun List<Job>.awaitAll() {
-    this.forEach { it.join() }
-}
+//
+///**
+// * Waits for all the given jobs to finish.
+// */
+//suspend fun List<Job>.awaitAll() {
+//    this.forEach { it.join() }
+//}
 
 suspend fun <E> Channel<E>.forEach(function: FunctionUnit<E>) {
     for (item in this) {

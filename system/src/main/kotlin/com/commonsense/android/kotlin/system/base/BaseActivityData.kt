@@ -194,9 +194,9 @@ fun <Input, T : BaseActivityData<Input>>
     startActivityForResultAsync(
             intentAndDataIndex.intent,
             null,
-            requestCode,
-            { resultCode: Int, resultIntent: Intent? ->
-                BaseActivityData.dataReferenceMap.decrementCounter(intentAndDataIndex.index)
-                optOnResult?.invoke(resultCode, resultIntent)
-            })
+            requestCode
+    ) { resultCode: Int, resultIntent: Intent? ->
+        BaseActivityData.dataReferenceMap.decrementCounter(intentAndDataIndex.index)
+        optOnResult?.invoke(resultCode, resultIntent)
+    }
 }

@@ -2,6 +2,7 @@
 
 package com.commonsense.android.kotlin.system.extensions
 
+import android.app.*
 import android.content.*
 import android.content.pm.*
 import android.content.res.*
@@ -75,3 +76,10 @@ fun Context.getTypedArrayFor(attributeSet: AttributeSet,
 inline fun Context.startActivitySafe(intent: Intent) = tryAndLog("ContextExtensions") {
     startActivity(intent)
 }
+
+inline fun <T : Activity> Context.startActivity(clz: Class<T>): Unit =
+        startActivity(Intent(this, clz))
+
+
+inline fun <T : Service> Context.startService(clz: Class<T>): ComponentName? =
+        startService(Intent(this, clz))

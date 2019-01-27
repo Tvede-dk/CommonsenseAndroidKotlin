@@ -24,6 +24,7 @@ import kotlinx.coroutines.*
  */
 open class BaseFragment : DialogFragment(), ActivityResultHelperContainer {
 
+
     /**
      * Gateway for permission handling.
      * This requires the hosting activity to be a BaseActivity
@@ -54,7 +55,7 @@ open class BaseFragment : DialogFragment(), ActivityResultHelperContainer {
      *
      */
     private val localJobs by lazy {
-        UiAwareJobContainer()
+        UiAwareJobContainer(CoroutineScope(Dispatchers.Main))
     }
 
     /**

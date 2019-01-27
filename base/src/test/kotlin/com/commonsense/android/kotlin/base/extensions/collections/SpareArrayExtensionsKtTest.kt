@@ -13,29 +13,6 @@ import org.junit.*
  */
 class SpareArrayExtensionsKtTest : BaseRoboElectricTest() {
 
-    @Test
-    fun setViaList() {
-
-        val arr = SparseIntArray()
-        arr.append(50, 50)
-        arr.set(listOf(50 to 10))
-        arr.size().assert(1)
-        arr.get(50).assert(10)
-        arr.get(1).assert(0)
-    }
-
-    @Test
-    fun setViaMap() {
-
-        val arr = SparseIntArray()
-        arr.append(50, 50)
-
-        arr.set(mapOf(20 to 40))
-        arr.size().assert(1)
-        arr.get(20).assertNotNullAndEquals(40)
-        arr.get(50).assert(0, "should give 06")
-
-    }
 
     @Test
     fun toList() {
@@ -109,29 +86,82 @@ class SpareArrayExtensionsKtTest : BaseRoboElectricTest() {
 
 
     }
-    @Ignore
+
     @Test
     fun set() {
+        setViaList()
     }
 
-    @Ignore
     @Test
     fun set1() {
+        setViaMap()
     }
 
-    @Ignore
     @Test
     fun map() {
+        val start = SparseArray<Int>()
+        start.map { }.assertSize(0)
+        start.put(42, 0)
+        start.map { it }.assertSize(1)
+        start.put(44, 1)
+        start.map { it }.assertSize(2)
+
+
+        start.map { it }.apply {
+            first().assert(0)
+            last().assert(1)
+        }
+        start.map { "$it" }.apply {
+            first().assert("0")
+            last().assert("1")
+        }
     }
 
-    @Ignore
     @Test
     fun forEach() {
+
+        val start = SparseArray<Int>()
+        start.forEach { failTest("is empty") }
+        start.put(0, 0)
+        start.forEach { it.assert(0) }
+
+        start.put(5, 5)
+        start.put(2, 2)
+        var counter = 0
+        val seenValues = mutableListOf<Int>()
+        start.forEach { counter += 1; seenValues.add(it) }
+        counter.assert(3)
+        seenValues.assertSize(3)
+        seenValues.first().assert(0)
+        seenValues[1].assert(2)
+        seenValues[2].assert(5)
     }
 
     @Ignore
     @Test
     fun binarySearch() {
+
     }
 
+    fun setViaList() {
+
+        val arr = SparseIntArray()
+        arr.append(50, 50)
+        arr.set(listOf(50 to 10))
+        arr.size().assert(1)
+        arr.get(50).assert(10)
+        arr.get(1).assert(0)
+    }
+
+    fun setViaMap() {
+
+        val arr = SparseIntArray()
+        arr.append(50, 50)
+
+        arr.set(mapOf(20 to 40))
+        arr.size().assert(1)
+        arr.get(20).assertNotNullAndEquals(40)
+        arr.get(50).assert(0, "should give 06")
+
+    }
 }

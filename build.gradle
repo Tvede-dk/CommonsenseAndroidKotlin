@@ -25,7 +25,7 @@ buildscript {
     ext.leakCanaryVersion = "1.6.2"
     ext.junitVersion = "4.12"
     ext.androidGradleVersion = "3.3.0"
-    ext.roboElectricVersion = "3.8"
+    ext.roboElectricVersion = "4.1"
     ext.espressoVersion = "3.0.2"
     ext.testSupportRunnerVersion = "1.0.2"
     //https://github.com/Kotlin/dokka

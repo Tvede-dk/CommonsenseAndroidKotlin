@@ -17,7 +17,7 @@ import kotlin.system.*
  * Base class of roboeletric tests, not requiring the manifest to be the set.
  */
 @RunWith(RobolectricTestRunner::class)
-@Config(constants = BuildConfig::class, sdk = [16, 21, 27])
+@Config(sdk = [16, 21, 27])
 abstract class BaseRoboElectricTest {
     /**
      * the context to use in roboelectric tests

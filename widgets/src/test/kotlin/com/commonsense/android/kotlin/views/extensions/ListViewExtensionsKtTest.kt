@@ -16,6 +16,6 @@ class ListViewExtensionsKtTest : BaseRoboElectricTest() {
     @Test
     fun scrollToBottom() {
 
-    }ViewtagTicketerTest
+    }
 
 }

@@ -60,7 +60,7 @@ class BaseFragmentPagerAdapter(val fragmentManager: FragmentManager) : PagerAdap
         } else {
             fragment = this.getItem(position)
             transaction.show(fragment)
-            transaction.replace(container.id, fragment, makeFragmentName(container.id, itemId))
+            transaction.add(container.id, fragment, makeFragmentName(container.id, itemId))
         }
 
         if (fragment !== this.mCurrentPrimaryItem) {
@@ -102,8 +102,10 @@ class BaseFragmentPagerAdapter(val fragmentManager: FragmentManager) : PagerAdap
     }
 
     override fun finishUpdate(container: ViewGroup) {
-        mCurTransaction?.commitNowAllowingStateLoss()
+        mCurTransaction?.commitAllowingStateLoss()
         mCurTransaction = null
+        fragmentManager.executePendingTransactions()
+
     }
 
 

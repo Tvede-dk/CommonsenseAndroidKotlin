@@ -54,11 +54,11 @@ class BaseFragmentPagerAdapter(val fragmentManager: FragmentManager) : PagerAdap
         val transaction = getOrCreateTransaction()
         val itemId = this.getItemId(position)
         val name = makeFragmentName(container.id, itemId)
-        var fragment = this.fragmentManager.findFragmentByTag(name)
+        var fragment = this.fragmentManager.findFragmentByTag(name)?.correctDialogFlag()
         if (fragment != null) {
             transaction.attach(fragment)
         } else {
-            fragment = this.getItem(position)
+            fragment = this.getItem(position).correctDialogFlag()
             transaction.show(fragment)
             transaction.add(container.id, fragment, makeFragmentName(container.id, itemId))
         }
@@ -69,6 +69,14 @@ class BaseFragmentPagerAdapter(val fragmentManager: FragmentManager) : PagerAdap
         }
         return fragment
     }
+
+    private fun Fragment.correctDialogFlag(): Fragment = apply {
+        if (this is DialogFragment) {
+            this.showsDialog = false //make sure
+        }
+    }
+
+
 
     override fun destroyItem(container: ViewGroup, position: Int, `object`: Any) {
         val transaction = getOrCreateTransaction()

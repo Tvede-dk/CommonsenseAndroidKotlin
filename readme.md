@@ -1,6 +1,15 @@
 # Introduction
 This library is a layer upon the android platform, trying to lift out bad design design decisions, and other annoyances. including the tremendous boilerplate code that is required in android programming.
 
+
+## Versions and Android X
+
+old support libs: below 0.0.20
+AndroidX : 0.0.20 and above
+
+Below version 0.0.20 is the old support libray versions, 0.0.20 and above will be using androidX
+Hotfixes and bug fixing will be provided for the older as well as the newer part for some time.
+
 # Why use this library?
 
 The point about this library is that google is developing android as a platform, which means to allow developers to create everything, which does not necessarily translate to "easy to program for"
@@ -394,7 +403,7 @@ The project is accessible though jcenter, so there should be a jcenter() in the 
 It is recommended to store the version 1 place only, such as;
 ```gralde
 buildscript {
-  ext.commonsenseVersion = "0.0.17"
+  ext.commonsenseVersion = "0.0.18"
 }
 ````
 Then you can start importing each of the sub modules. a full list is:

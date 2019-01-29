@@ -1,5 +1,8 @@
 # Changelog
 
+## 0.0.18
+- fixed minor bug with dialogFragments and baseFragmentPagerAdapter (a bug from the support libs)
+
 ## 0.0.17
 - fragment with data (still needs testing and API refinement, so its still experimental)
 - kotlin 1.3.20

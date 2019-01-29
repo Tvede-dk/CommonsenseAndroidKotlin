@@ -34,9 +34,7 @@ android {
 dependencies {
 
     //TESTS
-    androidTestImplementation("com.android.support.test.espresso:espresso-core:$espressoVersion", {
-        exclude group: 'com.android.support', module: 'support-annotations'
-    })
+    androidTestImplementation("androidx.test.espresso:espresso-core:$espressoVersion")
     testImplementation project(':test')
 
     //coroutines libs
@@ -47,10 +45,10 @@ dependencies {
     implementation project(':base')
 
     //support libs
-    api "com.android.support:appcompat-v7:$supportVersion"
-    api "com.android.support:design:$supportVersion"
-    api "com.android.support:exifinterface:$supportVersion"
-    api "com.android.support:recyclerview-v7:$supportVersion"
+    api "androidx.appcompat:appcompat:$appcompatVersion"
+    api "com.google.android.material:material:$materialVersion"
+    api "androidx.exifinterface:exifinterface:$exifVersion"
+    api "androidx.recyclerview:recyclerview:$recyclerviewVersion"
 
     implementation "org.jetbrains.kotlin:kotlin-stdlib:$kotlin_version"
 

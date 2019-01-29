@@ -2,7 +2,7 @@
 
 package com.commonsense.android.kotlin.views.databinding.activities
 
-import android.databinding.*
+import androidx.databinding.*
 
 /**
  * Created by kasper on 25/07/2017.

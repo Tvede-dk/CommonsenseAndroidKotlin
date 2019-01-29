@@ -2,8 +2,8 @@ package com.commonsense.android.kotlin.system.permissions
 
 import android.app.*
 import android.content.*
-import android.support.annotation.*
-import android.support.v4.content.*
+import androidx.annotation.*
+import androidx.core.content.*
 import com.commonsense.android.kotlin.base.*
 import com.commonsense.android.kotlin.base.extensions.*
 import com.commonsense.android.kotlin.base.extensions.collections.*

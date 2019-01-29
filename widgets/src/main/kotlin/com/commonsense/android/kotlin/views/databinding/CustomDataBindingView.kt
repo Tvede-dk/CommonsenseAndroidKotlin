@@ -2,10 +2,10 @@ package com.commonsense.android.kotlin.views.databinding
 
 import android.content.*
 import android.content.res.*
-import android.databinding.*
 import android.util.*
 import android.view.*
 import android.widget.*
+import androidx.databinding.*
 import com.commonsense.android.kotlin.views.datastructures.*
 import com.commonsense.android.kotlin.views.widgets.*
 import java.lang.ref.*

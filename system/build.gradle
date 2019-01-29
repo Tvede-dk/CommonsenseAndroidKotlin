@@ -12,18 +12,16 @@ android {
 
 dependencies {
     //Tests
-    androidTestImplementation("com.android.support.test.espresso:espresso-core:$espressoVersion", {
-        exclude group: 'com.android.support', module: 'support-annotations'
-    })
+    androidTestImplementation("androidx.test.espresso:espresso-core:$espressoVersion")
     testImplementation project(':test')
     //coroutines libs
     implementation "org.jetbrains.kotlinx:kotlinx-coroutines-core:$coroutinesVersion"
     implementation "org.jetbrains.kotlinx:kotlinx-coroutines-android:$coroutinesVersion"
 
-    api "com.android.support:exifinterface:$supportVersion"
+    api "androidx.exifinterface:exifinterface:$exifVersion"
     implementation project(':base')
-    implementation "com.android.support:appcompat-v7:$supportVersion"
-    implementation "com.android.support:support-fragment:$supportVersion"
+    implementation "androidx.appcompat:appcompat:$appcompatVersion"
+    implementation "androidx.fragment:fragment:$fragmentVersion"
     implementation "org.jetbrains.kotlin:kotlin-stdlib:$kotlin_version"
 }
 

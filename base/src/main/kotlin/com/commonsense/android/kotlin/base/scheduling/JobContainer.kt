@@ -4,10 +4,8 @@ package com.commonsense.android.kotlin.base.scheduling
 
 import com.commonsense.android.kotlin.base.*
 import com.commonsense.android.kotlin.base.debug.*
-import com.commonsense.android.kotlin.base.extensions.*
 import com.commonsense.android.kotlin.base.extensions.collections.*
 import kotlinx.coroutines.*
-import kotlinx.coroutines.sync.*
 import java.util.concurrent.*
 import kotlin.coroutines.*
 

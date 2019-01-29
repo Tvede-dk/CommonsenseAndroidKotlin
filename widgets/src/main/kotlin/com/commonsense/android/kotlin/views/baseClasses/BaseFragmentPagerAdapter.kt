@@ -4,11 +4,10 @@ package com.commonsense.android.kotlin.views.baseClasses
 
 import android.annotation.*
 import android.os.*
-import android.support.annotation.*
-import android.support.annotation.IntRange
-import android.support.v4.app.*
-import android.support.v4.view.*
 import android.view.*
+import androidx.annotation.*
+import androidx.fragment.app.*
+import androidx.viewpager.widget.*
 import com.commonsense.android.kotlin.base.extensions.collections.*
 
 /**
@@ -54,11 +53,11 @@ class BaseFragmentPagerAdapter(val fragmentManager: FragmentManager) : PagerAdap
         val transaction = getOrCreateTransaction()
         val itemId = this.getItemId(position)
         val name = makeFragmentName(container.id, itemId)
-        var fragment = this.fragmentManager.findFragmentByTag(name)
+        var fragment = this.fragmentManager.findFragmentByTag(name)?.correctDialogFlag()
         if (fragment != null) {
             transaction.attach(fragment)
         } else {
-            fragment = this.getItem(position)
+            fragment = this.getItem(position).correctDialogFlag()
             transaction.show(fragment)
             transaction.add(container.id, fragment, makeFragmentName(container.id, itemId))
         }
@@ -68,6 +67,12 @@ class BaseFragmentPagerAdapter(val fragmentManager: FragmentManager) : PagerAdap
             fragment.userVisibleHint = false
         }
         return fragment
+    }
+
+    private fun Fragment.correctDialogFlag(): Fragment = apply {
+        if (this is DialogFragment) {
+            this.showsDialog = false //make sure
+        }
     }
 
     override fun destroyItem(container: ViewGroup, position: Int, `object`: Any) {
@@ -109,7 +114,7 @@ class BaseFragmentPagerAdapter(val fragmentManager: FragmentManager) : PagerAdap
     }
 
 
-    fun getItem(@IntRange(from = 0) position: Int): Fragment = data[position].fragment
+    fun getItem(@androidx.annotation.IntRange(from = 0) position: Int): Fragment = data[position].fragment
 
     override fun getCount(): Int = data.size
 
@@ -125,7 +130,7 @@ class BaseFragmentPagerAdapter(val fragmentManager: FragmentManager) : PagerAdap
     }
 
 
-    fun getItemId(@IntRange(from = 0) position: Int): Long {
+    fun getItemId(@androidx.annotation.IntRange(from = 0) position: Int): Long {
         //since the hashcode will default to the memory address of the object,
         // We will never have to come up with a uniq id for the object as the memory add is unique :)
         return getItem(position).hashCode().toLong()

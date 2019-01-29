@@ -3,8 +3,8 @@
 package com.commonsense.android.kotlin.system.extensions
 
 import android.app.*
-import android.support.v4.app.Fragment
 import android.view.*
+import androidx.fragment.app.Fragment
 import com.commonsense.android.kotlin.base.*
 import com.commonsense.android.kotlin.base.extensions.collections.*
 

@@ -1,9 +1,9 @@
 package com.commonsense.android.kotlin.views.extensions
 
-import android.support.annotation.*
 import android.text.*
 import android.view.inputmethod.*
 import android.widget.*
+import androidx.annotation.*
 
 
 /**

@@ -12,21 +12,19 @@ android {
 }
 
 dependencies {
-    androidTestImplementation("com.android.support.test.espresso:espresso-core:$espressoVersion", {
-        exclude group: 'com.android.support', module: 'support-annotations'
-    })
-    api "org.junit.jupiter:junit-jupiter-api:5.2.0"
-    api "org.junit.jupiter:junit-jupiter-engine:5.2.0"
-    api "org.junit.jupiter:junit-jupiter-engine:5.2.0"
+    androidTestImplementation("androidx.test.espresso:espresso-core:$espressoVersion")
+    api "org.junit.jupiter:junit-jupiter-api:5.3.2"
+    api "org.junit.jupiter:junit-jupiter-engine:5.3.2"
+    api "org.junit.jupiter:junit-jupiter-engine:5.3.2"
 
     api "junit:junit:4.12"
     api "org.junit.vintage:junit-vintage-engine:5.2.0"
 
     api "org.robolectric:robolectric:$roboElectricVersion"
-    api "com.android.support.test:runner:$testSupportRunnerVersion"
+    api "androidx.test:runner:$testRunnerVersion"
     api "org.mockito:mockito-core:$mockitoVersion"
 
-    implementation "com.android.support:support-annotations:$supportVersion"
+    implementation "androidx.annotation:annotation:$annotationsVersion"
     implementation "org.jetbrains.kotlin:kotlin-stdlib:$kotlin_version"
 }
 

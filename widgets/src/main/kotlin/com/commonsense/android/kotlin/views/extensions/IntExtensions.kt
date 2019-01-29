@@ -3,7 +3,7 @@
 package com.commonsense.android.kotlin.views.extensions
 
 import android.graphics.*
-import android.support.annotation.*
+import androidx.annotation.*
 
 /**
  * Given a color in an int, creates a darker version of it by changing all component hereof.

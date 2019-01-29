@@ -5,9 +5,8 @@ package com.commonsense.android.kotlin.system.imaging
 import android.content.*
 import android.graphics.*
 import android.net.*
-import android.support.media.ExifInterface
-import android.support.annotation.*
-import android.support.annotation.IntRange
+import androidx.annotation.*
+import androidx.exifinterface.media.*
 import com.commonsense.android.kotlin.base.extensions.collections.*
 import com.commonsense.android.kotlin.system.extensions.*
 import com.commonsense.android.kotlin.system.logging.*
@@ -29,7 +28,7 @@ fun Uri.loadBitmapWithSampleSize(contentResolver: ContentResolver,
                                  shouldDownSample: Boolean = false): Deferred<Bitmap?> = GlobalScope.async(Dispatchers.Default, CoroutineStart.DEFAULT) {
     val bitmapConfig = containsTransparency.map(Bitmap.Config.ARGB_8888, Bitmap.Config.RGB_565)
     val bitmapOptions = BitmapFactory.Options().apply {
-        @IntRange(from = 1)
+        @androidx.annotation.IntRange(from = 1)
         inSampleSize = getPowerOfTwoForSampleRatio(ratio, shouldDownSample)
         inPreferredConfig = bitmapConfig//
         /*     inDensity = srcWidth //TODO do this later, as this will result in perfecter scaling.
@@ -71,7 +70,7 @@ fun Uri.loadBitmapSize(contentResolver: ContentResolver, bitmapConfig: Bitmap.Co
  * @param compressionPercentage Int
  * @return Deferred<Bitmap>
  */
-fun Bitmap.compress(@IntRange(from = 0L, to = 100L) compressionPercentage: Int): Deferred<Bitmap> = GlobalScope.async(Dispatchers.Default, CoroutineStart.DEFAULT) {
+fun Bitmap.compress(@androidx.annotation.IntRange(from = 0L, to = 100L) compressionPercentage: Int): Deferred<Bitmap> = GlobalScope.async(Dispatchers.Default, CoroutineStart.DEFAULT) {
     ByteArrayOutputStream().use { out ->
         this@compress.compress(Bitmap.CompressFormat.JPEG, compressionPercentage, out)
         return@async BitmapFactory.decodeStream(ByteArrayInputStream(out.toByteArray()))
@@ -94,7 +93,7 @@ suspend fun Uri.loadBitmapPreviews(scalePreviewsPercentages: IntArray,
  * @param ratio Double
  * @return Int
  */
-@IntRange(from = 1)
+@androidx.annotation.IntRange(from = 1)
 fun getPowerOfTwoForSampleRatio(ratio: Double, downSample: Boolean): Int {
     val scaledRatio = if (downSample) {
         Math.floor(ratio)
@@ -111,7 +110,7 @@ fun getPowerOfTwoForSampleRatio(ratio: Double, downSample: Boolean): Int {
  * @param width Int
  * @return Deferred<Bitmap?>
  */
-suspend fun Bitmap.scaleToWidth(@IntRange(from = 0) width: Int): Deferred<Bitmap?> = GlobalScope.async(Dispatchers.Default, CoroutineStart.DEFAULT) {
+suspend fun Bitmap.scaleToWidth(@androidx.annotation.IntRange(from = 0) width: Int): Deferred<Bitmap?> = GlobalScope.async(Dispatchers.Default, CoroutineStart.DEFAULT) {
     tryAndLogSuspend("Bitmap.scaleToWidth") {
         val size = getImageSize().scaleWidth(width)
         Bitmap.createScaledBitmap(this@scaleToWidth, size.width, size.height, true)
@@ -127,10 +126,10 @@ suspend fun Bitmap.scaleToWidth(@IntRange(from = 0) width: Int): Deferred<Bitmap
  * @param fraction Int
  * @return Int
  */
-@IntRange(from = 0)
-fun Context.calculateOptimalThumbnailSize(@IntRange(from = 0) defaultSize: Int = 200,
-                                          @IntRange(from = 0) minSize: Int = 50,
-                                          @IntRange(from = 0) fraction: Int = 8): Int {
+@androidx.annotation.IntRange(from = 0)
+fun Context.calculateOptimalThumbnailSize(@androidx.annotation.IntRange(from = 0) defaultSize: Int = 200,
+                                          @androidx.annotation.IntRange(from = 0) minSize: Int = 50,
+                                          @androidx.annotation.IntRange(from = 0) fraction: Int = 8): Int {
     val virtualSize = getVirtualScreenSize() ?: return defaultSize
     val widthFraction = virtualSize.x / fraction
     val heightFraction = virtualSize.y / fraction
@@ -211,7 +210,7 @@ fun Uri.getExifForImage(contentResolver: ContentResolver) = GlobalScope.async(Di
  * @param quality Int
  * @param format Bitmap.CompressFormat
  */
-fun Bitmap.outputTo(outputStream: OutputStream, @IntRange(from = 0, to = 100) quality: Int, format: Bitmap.CompressFormat) {
+fun Bitmap.outputTo(outputStream: OutputStream, @androidx.annotation.IntRange(from = 0, to = 100) quality: Int, format: Bitmap.CompressFormat) {
     compress(format, quality, outputStream)
 }
 
@@ -224,7 +223,7 @@ fun Bitmap.outputTo(outputStream: OutputStream, @IntRange(from = 0, to = 100) qu
  * @param format Bitmap.CompressFormat
  * @return Deferred<Unit?>
  */
-fun Bitmap.saveTo(path: Uri, contentResolver: ContentResolver, @IntRange(from = 0, to = 100) quality: Int,
+fun Bitmap.saveTo(path: Uri, contentResolver: ContentResolver, @androidx.annotation.IntRange(from = 0, to = 100) quality: Int,
                   format: Bitmap.CompressFormat) = GlobalScope.async(Dispatchers.Default, CoroutineStart.DEFAULT) {
     contentResolver.openOutputStream(path)?.use {
         this@saveTo.outputTo(it, quality, format)

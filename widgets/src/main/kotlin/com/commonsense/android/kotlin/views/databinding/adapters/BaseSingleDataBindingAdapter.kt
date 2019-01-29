@@ -3,9 +3,9 @@
 package com.commonsense.android.kotlin.views.databinding.adapters
 
 import android.content.*
-import android.databinding.*
-import android.support.annotation.*
 import android.view.*
+import androidx.annotation.*
+import androidx.databinding.*
 import com.commonsense.android.kotlin.views.baseClasses.*
 
 /**

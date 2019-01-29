@@ -4,18 +4,14 @@ package com.commonsense.android.kotlin.views.extensions
 
 import android.content.*
 import android.content.res.*
-import android.support.annotation.*
-import android.text.*
 import android.util.*
 import android.view.*
-import android.view.inputmethod.*
-import android.widget.*
+import androidx.annotation.*
 import com.commonsense.android.kotlin.base.*
 import com.commonsense.android.kotlin.base.extensions.collections.*
 import com.commonsense.android.kotlin.system.extensions.*
 import com.commonsense.android.kotlin.system.logging.*
 import kotlinx.coroutines.*
-import kotlinx.coroutines.android.*
 import kotlinx.coroutines.channels.*
 
 

@@ -2,7 +2,6 @@
 
 package com.commonsense.android.kotlin.base.extensions
 
-import android.support.annotation.IntRange
 import com.commonsense.android.kotlin.base.*
 import com.commonsense.android.kotlin.base.extensions.collections.map
 import com.commonsense.android.kotlin.base.time.*

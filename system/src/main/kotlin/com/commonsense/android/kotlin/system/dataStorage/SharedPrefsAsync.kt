@@ -1,12 +1,5 @@
 package com.commonsense.android.kotlin.system.dataStorage
 
-import android.content.*
-import android.content.Context.*
-import com.commonsense.android.kotlin.base.extensions.*
-import com.commonsense.android.kotlin.base.extensions.coroutines.*
-import kotlinx.coroutines.*
-import kotlin.reflect.*
-
 
 ///**
 // * A coroutine like wrapper over the standard shared preferences.

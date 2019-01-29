@@ -4,9 +4,8 @@ package com.commonsense.android.kotlin.views.features
 
 import android.app.*
 import android.content.*
-import android.support.annotation.*
-import android.support.annotation.IntRange
 import android.widget.*
+import androidx.annotation.*
 import java.util.*
 
 /**
@@ -15,9 +14,9 @@ import java.util.*
 
 
 fun Context.showDatePickerDialog(
-        @IntRange(from = 0) startYear: Int,
-        @IntRange(from = 0) monthOfYear: Int,
-        @IntRange(from = 0) dayOfMonth: Int,
+        @androidx.annotation.IntRange(from = 0) startYear: Int,
+        @androidx.annotation.IntRange(from = 0) monthOfYear: Int,
+        @androidx.annotation.IntRange(from = 0) dayOfMonth: Int,
         minDate: Date?,
         maxDate: Date?,
         onDateSelected: (year: Int, month: Int, day: Int) -> Unit,

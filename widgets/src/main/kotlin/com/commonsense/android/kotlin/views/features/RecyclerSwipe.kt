@@ -1,11 +1,10 @@
 @file:Suppress("unused")
 package com.commonsense.android.kotlin.views.features
 
-import android.databinding.*
 import android.graphics.*
-import android.support.v7.widget.*
-import android.support.v7.widget.helper.*
 import android.view.*
+import androidx.databinding.*
+import androidx.recyclerview.widget.*
 import com.commonsense.android.kotlin.base.extensions.collections.*
 import com.commonsense.android.kotlin.views.databinding.adapters.*
 import com.commonsense.android.kotlin.views.extensions.*

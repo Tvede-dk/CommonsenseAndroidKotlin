@@ -3,15 +3,14 @@
 package com.commonsense.android.kotlin.views.widgets
 
 import android.content.*
-import android.support.annotation.*
-import android.support.v4.widget.*
-import android.support.v7.widget.*
 import android.util.*
+import androidx.annotation.*
+import androidx.recyclerview.widget.*
+import androidx.swiperefreshlayout.widget.*
 import com.commonsense.android.kotlin.base.extensions.*
 import com.commonsense.android.kotlin.views.databinding.*
 import com.commonsense.android.kotlin.views.extensions.*
 import kotlinx.coroutines.*
-import kotlinx.coroutines.android.*
 
 
 /**

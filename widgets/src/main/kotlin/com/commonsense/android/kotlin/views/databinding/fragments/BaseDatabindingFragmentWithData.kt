@@ -1,8 +1,7 @@
 package com.commonsense.android.kotlin.views.databinding.fragments
 
-import android.content.*
-import android.databinding.*
 import android.os.*
+import androidx.databinding.*
 import com.commonsense.android.kotlin.base.extensions.collections.*
 import com.commonsense.android.kotlin.system.base.*
 import com.commonsense.android.kotlin.system.dataFlow.*

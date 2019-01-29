@@ -2,10 +2,10 @@
 
 package com.commonsense.android.kotlin.views.widgets
 
-import android.support.v7.widget.*
 import android.text.*
 import android.view.*
 import android.view.inputmethod.*
+import androidx.appcompat.widget.*
 import com.commonsense.android.kotlin.views.extensions.*
 
 /**

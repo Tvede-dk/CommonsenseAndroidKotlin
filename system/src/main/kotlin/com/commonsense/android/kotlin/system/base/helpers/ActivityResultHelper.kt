@@ -5,9 +5,8 @@ package com.commonsense.android.kotlin.system.base.helpers
 import android.app.*
 import android.content.*
 import android.os.*
-import android.support.annotation.IntRange
-import android.support.v4.app.*
 import android.util.*
+import androidx.core.app.*
 import com.commonsense.android.kotlin.base.*
 import com.commonsense.android.kotlin.base.debug.*
 import com.commonsense.android.kotlin.base.extensions.*
@@ -15,7 +14,6 @@ import com.commonsense.android.kotlin.base.extensions.collections.*
 import com.commonsense.android.kotlin.system.base.*
 import com.commonsense.android.kotlin.system.logging.*
 import kotlinx.coroutines.*
-import kotlinx.coroutines.android.*
 
 
 /**
@@ -75,27 +73,27 @@ class ActivityResultHelper(warningLogger: FunctionUnit<String>? = null) {
     /**
      * removes a listener based on request code.
      */
-    fun remove(@IntRange(from = 0) requestCode: Int) {
+    fun remove(@androidx.annotation.IntRange(from = 0) requestCode: Int) {
         activityResultListeners.remove(requestCode)
     }
 
-    fun addForAllResults(@IntRange(from = 0) requestCode: Int, receiver: ActivityResultCallback) {
+    fun addForAllResults(@androidx.annotation.IntRange(from = 0) requestCode: Int, receiver: ActivityResultCallback) {
         addReceiver(ActivityResultWrapper({ resultCode, data ->
             receiver(resultCode, data)
         }, requestCode, this::remove))
     }
 
-    fun addForOnlyOk(@IntRange(from = 0) requestCode: Int, receiver: ActivityResultCallbackOk) {
+    fun addForOnlyOk(@androidx.annotation.IntRange(from = 0) requestCode: Int, receiver: ActivityResultCallbackOk) {
         addForAllResults(requestCode) { resultCode: Int, data: Intent? ->
             resultCode.isOkResult().ifTrue { receiver(data) }
         }
     }
 
-    fun addForAllResultsAsync(@IntRange(from = 0) requestCode: Int, receiver: AsyncActivityResultCallback) {
+    fun addForAllResultsAsync(@androidx.annotation.IntRange(from = 0) requestCode: Int, receiver: AsyncActivityResultCallback) {
         addReceiver(AsyncActivityResultWrapper(receiver, requestCode, this::remove))
     }
 
-    fun addForOnlyOkAsync(@IntRange(from = 0) requestCode: Int, receiver: AsyncActivityResultCallbackOk) {
+    fun addForOnlyOkAsync(@androidx.annotation.IntRange(from = 0) requestCode: Int, receiver: AsyncActivityResultCallbackOk) {
         addForAllResultsAsync(requestCode) { resultCode: Int, data: Intent? ->
             resultCode.isOkResult().ifTrue { receiver(data) }
         }
@@ -155,7 +153,7 @@ interface ActivityResultHelperContainer {
     /**
      *
      */
-    fun removeActivityResultListener(@IntRange(from = 0) requestCode: Int)
+    fun removeActivityResultListener(@androidx.annotation.IntRange(from = 0) requestCode: Int)
 }
 //</editor-fold>
 

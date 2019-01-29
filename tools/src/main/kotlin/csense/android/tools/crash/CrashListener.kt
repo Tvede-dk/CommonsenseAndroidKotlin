@@ -4,7 +4,7 @@ package csense.android.tools.crash
 
 import android.annotation.*
 import android.content.*
-import android.support.annotation.*
+import androidx.annotation.*
 import com.commonsense.android.kotlin.base.extensions.*
 import com.commonsense.android.kotlin.base.extensions.collections.*
 import com.commonsense.android.kotlin.system.logging.*

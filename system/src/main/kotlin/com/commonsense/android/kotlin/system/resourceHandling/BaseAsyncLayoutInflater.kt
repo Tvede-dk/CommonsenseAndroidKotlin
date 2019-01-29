@@ -3,14 +3,13 @@
 package com.commonsense.android.kotlin.system.resourceHandling
 
 import android.content.*
-import android.support.annotation.*
 import android.util.*
 import android.view.*
+import androidx.annotation.*
 import com.commonsense.android.kotlin.base.extensions.*
 import com.commonsense.android.kotlin.system.extensions.*
 import com.commonsense.android.kotlin.system.logging.*
 import kotlinx.coroutines.*
-import kotlinx.coroutines.android.*
 import kotlinx.coroutines.sync.*
 import java.util.concurrent.*
 

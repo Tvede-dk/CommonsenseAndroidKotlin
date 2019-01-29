@@ -1,8 +1,8 @@
 package csense.android.exampleApp.fragments
 
 import android.graphics.*
-import android.support.v7.widget.*
 import android.view.*
+import androidx.recyclerview.widget.*
 import com.commonsense.android.kotlin.system.logging.*
 import com.commonsense.android.kotlin.views.*
 import com.commonsense.android.kotlin.views.databinding.adapters.*

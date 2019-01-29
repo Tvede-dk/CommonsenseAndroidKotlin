@@ -2,8 +2,8 @@ package com.commonsense.android.kotlin.system.imaging
 
 import android.graphics.*
 import android.graphics.drawable.*
-import android.support.annotation.*
-import android.support.v4.graphics.drawable.*
+import androidx.annotation.*
+import androidx.core.graphics.drawable.*
 
 /**
  * Created by kasper on 13/07/2017.

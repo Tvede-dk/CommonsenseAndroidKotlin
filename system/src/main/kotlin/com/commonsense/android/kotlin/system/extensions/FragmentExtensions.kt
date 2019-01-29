@@ -3,13 +3,13 @@
 package com.commonsense.android.kotlin.system.extensions
 
 import android.os.*
-import android.support.v4.app.*
-import android.support.v7.app.*
 import android.view.*
+import androidx.appcompat.app.*
+import androidx.fragment.app.*
 import com.commonsense.android.kotlin.base.*
 import com.commonsense.android.kotlin.base.extensions.collections.*
 import com.commonsense.android.kotlin.system.systemIntegration.*
-import kotlinx.coroutines.Runnable
+import kotlinx.coroutines.*
 
 /**
  * Created by Kasper Tvede on 10-01-2017.

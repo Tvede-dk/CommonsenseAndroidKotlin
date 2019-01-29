@@ -1,8 +1,8 @@
 package com.commonsense.android.kotlin.prebuilt.activities
 
-import android.databinding.*
-import android.support.v4.app.*
 import android.view.*
+import androidx.databinding.*
+import androidx.fragment.app.*
 import com.commonsense.android.kotlin.system.extensions.*
 import com.commonsense.android.kotlin.views.databinding.activities.*
 

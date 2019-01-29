@@ -3,8 +3,8 @@
 package com.commonsense.android.kotlin.views.databinding.adapters
 
 import android.content.*
-import android.databinding.*
-import android.support.v7.widget.*
+import androidx.databinding.*
+import androidx.recyclerview.widget.*
 import com.commonsense.android.kotlin.base.*
 import com.commonsense.android.kotlin.base.exceptions.*
 import com.commonsense.android.kotlin.system.datastructures.*

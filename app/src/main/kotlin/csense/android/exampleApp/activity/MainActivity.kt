@@ -1,8 +1,8 @@
 package csense.android.exampleApp.activity
 
 
-import android.support.annotation.*
-import android.support.v7.widget.*
+import androidx.annotation.*
+import androidx.recyclerview.widget.*
 import com.commonsense.android.kotlin.base.*
 import com.commonsense.android.kotlin.system.extensions.*
 import com.commonsense.android.kotlin.system.logging.*

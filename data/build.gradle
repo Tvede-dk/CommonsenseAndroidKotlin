@@ -23,7 +23,7 @@ android {
 }
 
 dependencies {
-    androidTestImplementation("com.android.support.test.espresso:espresso-core:$espressoVersion", {
+    androidTestImplementation("androidx.test.espresso:espresso-core:$espressoVersion", {
         exclude group: 'com.android.support', module: 'support-annotations'
     })
 
@@ -32,9 +32,9 @@ dependencies {
     implementation "org.jetbrains.kotlinx:kotlinx-coroutines-core:$coroutinesVersion"
     implementation "org.jetbrains.kotlinx:kotlinx-coroutines-android:$coroutinesVersion"
 
-    api "com.android.support:exifinterface:$supportVersion"
+    api "androidx.exifinterface:exifinterface:$exifVersion"
     implementation project(':base')
-    implementation "com.android.support:appcompat-v7:$supportVersion"
+    implementation "androidx.appcompat:appcompat:$appcompatVersion"
     implementation "org.jetbrains.kotlin:kotlin-stdlib:$kotlin_version"
 
 }

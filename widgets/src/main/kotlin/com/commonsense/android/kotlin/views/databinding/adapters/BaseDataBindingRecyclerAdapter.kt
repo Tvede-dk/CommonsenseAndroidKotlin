@@ -3,11 +3,10 @@
 package com.commonsense.android.kotlin.views.databinding.adapters
 
 import android.content.*
-import android.databinding.*
-import android.support.annotation.*
-import android.support.annotation.IntRange
-import android.support.v7.widget.*
 import android.view.*
+import androidx.annotation.*
+import androidx.databinding.*
+import androidx.recyclerview.widget.*
 import com.commonsense.android.kotlin.base.*
 import com.commonsense.android.kotlin.base.extensions.*
 import com.commonsense.android.kotlin.base.extensions.collections.*
@@ -226,7 +225,7 @@ abstract class DataBindingRecyclerAdapter<T>(context: Context) :
      * @param viewType Int
      * @return BaseViewHolderItem<*>
      */
-    override fun onCreateViewHolder(parent: ViewGroup, @IntRange(from = 0) viewType: Int): BaseViewHolderItem<*> {
+    override fun onCreateViewHolder(parent: ViewGroup, @androidx.annotation.IntRange(from = 0) viewType: Int): BaseViewHolderItem<*> {
         val rep = dataCollection.getTypeRepresentativeFromTypeValue(viewType)
         return rep?.invoke(inflater, parent, false)
                 ?: throw RuntimeException("could not find item, even though we expected it, for viewtype: $viewType")
@@ -237,7 +236,7 @@ abstract class DataBindingRecyclerAdapter<T>(context: Context) :
      * @param position Int
      * @return Int
      */
-    override fun getItemViewType(@IntRange(from = 0) position: Int): Int {
+    override fun getItemViewType(@androidx.annotation.IntRange(from = 0) position: Int): Int {
         val index = dataCollection.indexToPath(position) ?: return 0
         return dataCollection[index]?.getTypeValue() ?: 0
     }
@@ -248,7 +247,7 @@ abstract class DataBindingRecyclerAdapter<T>(context: Context) :
      * @param holder BaseViewHolderItem<*>
      * @param position Int
      */
-    override fun onBindViewHolder(holder: BaseViewHolderItem<*>, @IntRange(from = 0) position: Int) {
+    override fun onBindViewHolder(holder: BaseViewHolderItem<*>, @androidx.annotation.IntRange(from = 0) position: Int) {
         //lookup type to converter, then apply model on view using converter
         val index = dataCollection.indexToPath(position) ?: return
         val render = dataCollection[index]
@@ -621,7 +620,7 @@ abstract class DataBindingRecyclerAdapter<T>(context: Context) :
      * @return IndexPath? the index where the element is, if found, null otherwise (or null also if the section is not there)
      */
     @UiThread
-    fun getIndexFor(item: T, @IntRange(from = 0) inSection: Int): IndexPath? {
+    fun getIndexFor(item: T, @androidx.annotation.IntRange(from = 0) inSection: Int): IndexPath? {
         val innerIndex = dataCollection.sectionAt(inSection)?.collection?.indexOf(item)
                 ?: return null
         return IndexPath(innerIndex, inSection)
@@ -665,7 +664,7 @@ abstract class DataBindingRecyclerAdapter<T>(context: Context) :
      * @param sectionIndex Int the section index (sparse) to remove.
      */
     @UiThread
-    open fun removeSection(@IntRange(from = 0) sectionIndex: Int) = clearSection(sectionIndex)
+    open fun removeSection(@androidx.annotation.IntRange(from = 0) sectionIndex: Int) = clearSection(sectionIndex)
 
     /**
      * Removes a given list of sections
@@ -673,7 +672,7 @@ abstract class DataBindingRecyclerAdapter<T>(context: Context) :
      * @param sectionIndexes IntArray the sections (sparse) to remove
      */
     @UiThread
-    fun removeSections(@IntRange(from = 0) vararg sectionIndexes: Int) {
+    fun removeSections(@androidx.annotation.IntRange(from = 0) vararg sectionIndexes: Int) {
         sectionIndexes.forEach(this::removeSection)
     }
 
@@ -683,7 +682,7 @@ abstract class DataBindingRecyclerAdapter<T>(context: Context) :
      * @param sectionIndex Int the section index (sparse)
      */
     @UiThread
-    fun smoothScrollToSection(@IntRange(from = 0) sectionIndex: Int) {
+    fun smoothScrollToSection(@androidx.annotation.IntRange(from = 0) sectionIndex: Int) {
         val positionInList = dataCollection.getSectionLocation(sectionIndex)?.inRaw?.first ?: return
         listeningRecyclers.forEach {
             it.use { this.smoothScrollToPosition(positionInList) }

@@ -4,7 +4,6 @@ import android.content.*
 import com.commonsense.android.kotlin.base.*
 import com.commonsense.android.kotlin.base.scheduling.*
 import kotlinx.coroutines.*
-import kotlinx.coroutines.android.*
 
 /**
  * Created by Kasper Tvede

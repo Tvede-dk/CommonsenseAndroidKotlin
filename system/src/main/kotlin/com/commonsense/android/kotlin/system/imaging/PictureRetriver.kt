@@ -9,7 +9,7 @@ import android.content.*
 import android.graphics.*
 import android.net.*
 import android.provider.*
-import android.support.annotation.*
+import androidx.annotation.*
 import com.commonsense.android.kotlin.base.*
 import com.commonsense.android.kotlin.system.base.*
 import com.commonsense.android.kotlin.system.base.helpers.*

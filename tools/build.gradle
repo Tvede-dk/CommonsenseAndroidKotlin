@@ -18,14 +18,12 @@ dependencies {
     //TEST LIBS
     testImplementation "junit:junit:$junitVersion"
     testImplementation project(":test")
-    androidTestImplementation("com.android.support.test.espresso:espresso-core:$espressoVersion", {
-        exclude group: 'com.android.support', module: 'support-annotations'
-    })
+    androidTestImplementation("androidx.test.espresso:espresso-core:$espressoVersion")
 
     //support libs
-    implementation "com.android.support:appcompat-v7:$supportVersion"
-    implementation "com.android.support:design:$supportVersion"
-    implementation "com.android.support:exifinterface:$supportVersion"
+    implementation "androidx.appcompat:appcompat:$appcompatVersion"
+    implementation "com.google.android.material:material:$materialVersion"
+    implementation "androidx.exifinterface:exifinterface:$exifVersion"
 
     //KOTLIN
     implementation "org.jetbrains.kotlinx:kotlinx-coroutines-core:$coroutinesVersion"

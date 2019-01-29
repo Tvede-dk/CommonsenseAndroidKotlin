@@ -5,8 +5,8 @@ package com.commonsense.android.kotlin.views.widgets
 import android.content.*
 import android.content.res.*
 import android.graphics.*
-import android.support.annotation.*
 import android.util.*
+import androidx.annotation.*
 import com.commonsense.android.kotlin.base.*
 import com.commonsense.android.kotlin.base.extensions.*
 import com.commonsense.android.kotlin.system.extensions.*

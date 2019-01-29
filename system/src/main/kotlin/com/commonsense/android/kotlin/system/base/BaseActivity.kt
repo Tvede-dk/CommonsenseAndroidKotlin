@@ -4,9 +4,8 @@ package com.commonsense.android.kotlin.system.base
 
 import android.content.*
 import android.os.*
-import android.support.annotation.IntRange
-import android.support.v7.app.*
 import android.view.*
+import androidx.appcompat.app.*
 import com.commonsense.android.kotlin.base.*
 import com.commonsense.android.kotlin.base.debug.*
 import com.commonsense.android.kotlin.system.base.helpers.*
@@ -173,7 +172,7 @@ open class BaseActivity : AppCompatActivity(), ActivityResultHelperContainer {
         activityResultHelper.addForAllResultsAsync(requestCode, receiver)
     }
 
-    override fun removeActivityResultListener(@IntRange(from = 0) requestCode: Int) {
+    override fun removeActivityResultListener(@androidx.annotation.IntRange(from = 0) requestCode: Int) {
         activityResultHelper.remove(requestCode)
     }
     //</editor-fold>

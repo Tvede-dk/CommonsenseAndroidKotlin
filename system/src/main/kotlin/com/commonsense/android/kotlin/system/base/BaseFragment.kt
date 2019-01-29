@@ -3,9 +3,8 @@ package com.commonsense.android.kotlin.system.base
 import android.app.*
 import android.content.*
 import android.os.*
-import android.support.annotation.IntRange
-import android.support.v4.app.DialogFragment
 import android.view.*
+import androidx.fragment.app.DialogFragment
 import com.commonsense.android.kotlin.base.*
 import com.commonsense.android.kotlin.system.base.helpers.*
 import com.commonsense.android.kotlin.system.extensions.*
@@ -137,33 +136,33 @@ open class BaseFragment : DialogFragment(), ActivityResultHelperContainer {
         }
     }
 
-    override fun onActivityResult(@IntRange(from = 0) requestCode: Int, resultCode: Int, data: Intent?) {
+    override fun onActivityResult(@androidx.annotation.IntRange(from = 0) requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
         activityResultHelper.handle(requestCode, resultCode, data)
     }
 
     //<editor-fold desc="Add activity result listener">
     override fun addActivityResultListenerOnlyOk(
-            @IntRange(from = 0) requestCode: Int,
+            @androidx.annotation.IntRange(from = 0) requestCode: Int,
             receiver: ActivityResultCallbackOk) =
             activityResultHelper.addForOnlyOk(requestCode, receiver)
 
     override fun addActivityResultListener(
-            @IntRange(from = 0) requestCode: Int,
+            @androidx.annotation.IntRange(from = 0) requestCode: Int,
             receiver: ActivityResultCallback) =
             activityResultHelper.addForAllResults(requestCode, receiver)
 
     override fun removeActivityResultListener(
-            @IntRange(from = 0) requestCode: Int) =
+            @androidx.annotation.IntRange(from = 0) requestCode: Int) =
             activityResultHelper.remove(requestCode)
 
     override fun addActivityResultListenerOnlyOkAsync(
-            @IntRange(from = 0) requestCode: Int,
+            @androidx.annotation.IntRange(from = 0) requestCode: Int,
             receiver: AsyncActivityResultCallbackOk) =
             activityResultHelper.addForOnlyOkAsync(requestCode, receiver)
 
     override fun addActivityResultListenerAsync(
-            @IntRange(from = 0) requestCode: Int,
+            @androidx.annotation.IntRange(from = 0) requestCode: Int,
             receiver: AsyncActivityResultCallback) =
             activityResultHelper.addForAllResultsAsync(requestCode, receiver)
     //</editor-fold>

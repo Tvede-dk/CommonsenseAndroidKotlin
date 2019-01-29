@@ -2,12 +2,11 @@
 
 package com.commonsense.android.kotlin.views.features
 
-import android.support.annotation.*
-import android.support.annotation.IntRange
-import android.support.design.widget.*
-import android.support.v4.app.*
 import android.view.*
+import androidx.annotation.*
+import androidx.fragment.app.*
 import com.commonsense.android.kotlin.base.*
+import com.google.android.material.snackbar.*
 
 /**
  * Created by kasper on 12/07/2017.
@@ -17,7 +16,7 @@ import com.commonsense.android.kotlin.base.*
 fun Fragment.showSnackbar(view: View,
                           @StringRes text: Int,
                           @StringRes actionText: Int,
-                          @IntRange(from = 0)
+                          @androidx.annotation.IntRange(from = 0)
                           durationInMs: Int,
                           onAction: EmptyFunction,
                           modifyView: FunctionUnit<View>? = null,
@@ -45,7 +44,7 @@ fun Fragment.showSnackbar(view: View,
 
 fun Fragment.showSnackbarNoAction(view: View,
                                   @StringRes text: Int,
-                                  @IntRange(from = 0)
+                                  @androidx.annotation.IntRange(from = 0)
                                   durationInMs: Int,
                                   modifyView: FunctionUnit<View>? = null,
                                   onTimeout: EmptyFunction? = null,

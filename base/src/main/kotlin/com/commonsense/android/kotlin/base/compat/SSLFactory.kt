@@ -2,7 +2,6 @@
 
 package com.commonsense.android.kotlin.base.compat
 
-import android.support.annotation.IntRange
 import java.net.*
 import javax.net.ssl.*
 
@@ -57,26 +56,26 @@ class SSLSocketFactoryCompat : SSLSocketFactory {
 
     override fun createSocket(socket: Socket?,
                               host: String?,
-                              @IntRange(from = 0, to = 65535) port: Int,
+                              @androidx.annotation.IntRange(from = 0, to = 65535) port: Int,
                               autoClose: Boolean): Socket =
             factory.createSocket(socket, host, port, autoClose).setProtocolToTls12()
 
     override fun createSocket(host: String?,
-                              @IntRange(from = 0, to = 65535) port: Int): Socket =
+                              @androidx.annotation.IntRange(from = 0, to = 65535) port: Int): Socket =
             factory.createSocket(host, port).setProtocolToTls12()
 
     override fun createSocket(host: String?,
-                              @IntRange(from = 0, to = 65535) port: Int,
+                              @androidx.annotation.IntRange(from = 0, to = 65535) port: Int,
                               localHost: InetAddress?,
                               localPort: Int): Socket =
             factory.createSocket(host, port, localHost, localPort).setProtocolToTls12()
 
     override fun createSocket(host: InetAddress?,
-                              @IntRange(from = 0, to = 65535) port: Int): Socket =
+                              @androidx.annotation.IntRange(from = 0, to = 65535) port: Int): Socket =
             factory.createSocket(host, port).setProtocolToTls12()
 
     override fun createSocket(address: InetAddress?,
-                              @IntRange(from = 0, to = 65535) port: Int,
+                              @androidx.annotation.IntRange(from = 0, to = 65535) port: Int,
                               localAddress: InetAddress?, localPort: Int): Socket =
             factory.createSocket(address, port, localAddress, localPort).setProtocolToTls12()
 

@@ -3,8 +3,7 @@
 package com.commonsense.android.kotlin.system.base.helpers
 
 import android.content.*
-import android.support.annotation.*
-import com.commonsense.android.kotlin.base.extensions.*
+import androidx.annotation.*
 import com.commonsense.android.kotlin.system.resourceHandling.*
 import kotlinx.coroutines.*
 

@@ -3,8 +3,8 @@ package com.commonsense.android.kotlin.system.extensions
 import android.content.*
 import android.content.res.*
 import android.graphics.drawable.*
-import android.support.annotation.*
-import android.support.v7.content.res.*
+import androidx.annotation.*
+import androidx.appcompat.content.res.*
 
 /**
  * Created by kasper on 29/05/2017.

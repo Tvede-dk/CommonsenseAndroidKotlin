@@ -1,7 +1,7 @@
 @file:Suppress("unused")
 package com.commonsense.android.kotlin.views.extensions
 
-import android.support.v7.widget.*
+import androidx.recyclerview.widget.*
 import com.commonsense.android.kotlin.base.*
 import com.commonsense.android.kotlin.base.extensions.collections.*
 

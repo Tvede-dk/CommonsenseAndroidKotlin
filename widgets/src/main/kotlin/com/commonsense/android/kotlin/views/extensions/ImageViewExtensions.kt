@@ -3,15 +3,14 @@
 package com.commonsense.android.kotlin.views.extensions
 
 import android.graphics.*
-import android.support.annotation.*
 import android.widget.*
+import androidx.annotation.*
 import com.commonsense.android.kotlin.base.*
 import com.commonsense.android.kotlin.base.extensions.collections.*
 import com.commonsense.android.kotlin.system.imaging.*
 import com.commonsense.android.kotlin.system.logging.*
 import com.commonsense.android.kotlin.views.features.*
 import kotlinx.coroutines.*
-import kotlinx.coroutines.android.*
 import java.util.concurrent.atomic.*
 
 /**

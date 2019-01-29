@@ -1,10 +1,10 @@
 package com.commonsense.android.kotlin.views.databinding.activities
 
 import android.content.res.*
-import android.databinding.*
 import android.os.*
-import android.support.v7.app.*
 import android.view.*
+import androidx.appcompat.app.*
+import androidx.databinding.*
 
 /**
  * Created by Kasper Tvede on 01-11-2016.

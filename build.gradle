@@ -20,14 +20,25 @@ buildscript {
 
     //included versions.
     ext.kotlin_version = '1.3.20'
-    ext.supportVersion = '28.0.0'
     ext.coroutinesVersion = '1.1.1'
     ext.leakCanaryVersion = "1.6.3"
     ext.junitVersion = "4.12"
     ext.androidGradleVersion = "3.3.0"
     ext.roboElectricVersion = "4.1"
-    ext.espressoVersion = "3.0.2"
-    ext.testSupportRunnerVersion = "1.0.2"
+
+
+    //Versions for X.
+    ext.appcompatVersion = "1.0.2"
+    ext.materialVersion = "1.0.0"
+    ext.exifVersion = "1.0.0"
+    ext.annotationsVersion = "1.0.0"
+    ext.testRunnerVersion = "1.1.1"
+    ext.recyclerviewVersion = "1.0.0"
+    ext.fragmentVersion = "1.0.0"
+    ext.espressoVersion = "3.1.0"
+    ext.cardViewVersion = "1.0.0"
+
+
     //https://github.com/Kotlin/dokka
     ext.dokkaVersion = "0.9.17"
     ext.mockitoVersion = "2.23.4"

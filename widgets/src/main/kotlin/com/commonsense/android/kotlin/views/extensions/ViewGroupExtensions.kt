@@ -3,9 +3,8 @@
 package com.commonsense.android.kotlin.views.extensions
 
 import android.graphics.*
-import android.support.annotation.*
-import android.support.annotation.IntRange
 import android.view.*
+import androidx.annotation.*
 
 /**
  * The width inside (after subtracting the padding).
@@ -41,7 +40,7 @@ fun ViewGroup.addViews(views: List<View>) {
  * @param views List<View> the views to insert
  * @param atIndex Int where to perform the insert must be 0 or greater
  */
-fun ViewGroup.addViews(views: List<View>, @IntRange(from = 0) atIndex: Int) {
+fun ViewGroup.addViews(views: List<View>, @androidx.annotation.IntRange(from = 0) atIndex: Int) {
     views.forEachIndexed { index, view ->
         this.addView(view, index + atIndex)
     }

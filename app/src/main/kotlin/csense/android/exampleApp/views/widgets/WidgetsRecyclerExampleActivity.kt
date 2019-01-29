@@ -1,6 +1,6 @@
 package csense.android.exampleApp.views.widgets
 
-import android.support.v7.widget.*
+import androidx.recyclerview.widget.*
 import com.commonsense.android.kotlin.base.extensions.*
 import com.commonsense.android.kotlin.base.extensions.collections.*
 import com.commonsense.android.kotlin.views.*

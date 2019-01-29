@@ -3,8 +3,8 @@
 package com.commonsense.android.kotlin.views.features
 
 import android.content.*
-import android.support.annotation.*
-import android.support.v7.app.*
+import androidx.annotation.*
+import androidx.appcompat.app.*
 import com.commonsense.android.kotlin.base.*
 
 /**

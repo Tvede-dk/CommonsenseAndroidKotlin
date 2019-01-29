@@ -3,7 +3,7 @@ package csense.android.exampleApp.fragments
 import android.annotation.*
 import android.graphics.*
 import android.net.*
-import android.support.v7.widget.*
+import androidx.recyclerview.widget.*
 import com.commonsense.android.kotlin.base.extensions.collections.*
 import com.commonsense.android.kotlin.system.base.*
 import com.commonsense.android.kotlin.system.extensions.*
@@ -15,7 +15,6 @@ import com.commonsense.android.kotlin.views.databinding.fragments.*
 import com.commonsense.android.kotlin.views.extensions.*
 import csense.android.exampleApp.databinding.*
 import kotlinx.coroutines.*
-import kotlinx.coroutines.android.*
 import kotlin.system.*
 
 /**

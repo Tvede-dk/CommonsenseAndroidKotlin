@@ -2,11 +2,9 @@
 
 package com.commonsense.android.kotlin.base.extensions.collections
 
-import android.support.annotation.IntRange
 import android.util.*
-import com.commonsense.android.kotlin.base.*
-import com.commonsense.android.kotlin.base.algorithms.*
 import kotlin.Pair
+import com.commonsense.android.kotlin.base.*
 
 typealias SparseArrayEntryMapper<T, O> = (key: Int, item: T) -> O
 
@@ -30,7 +28,7 @@ inline fun SparseIntArray.set(input: Map<Int, Int>) {
 /**
  * Describes a sparse array entry. which is a key value pair.
  */
-data class SparseArrayEntry<out T>(@IntRange(from = 0) val key: Int, val value: T)
+data class SparseArrayEntry<out T>(@androidx.annotation.IntRange(from = 0) val key: Int, val value: T)
 
 /**
  * Converts a spareArray to a list. it will convert all keys, unless a max key is specified.
@@ -39,7 +37,7 @@ data class SparseArrayEntry<out T>(@IntRange(from = 0) val key: Int, val value: 
  * @return List<SparseArrayEntry<T>>
  */
 inline fun <T> SparseArray<T>.toList(
-        @IntRange(from = 1) maxKeyValue: Int = Int.MAX_VALUE): List<SparseArrayEntry<T>> {
+        @androidx.annotation.IntRange(from = 1) maxKeyValue: Int = Int.MAX_VALUE): List<SparseArrayEntry<T>> {
     val mapped = (0 until size())
             .map(this::keyAt)
     return if (maxKeyValue < Int.MAX_VALUE) {
@@ -90,20 +88,3 @@ inline fun <E> SparseArray<E>.forEach(crossinline action: FunctionUnit<E>) {
         action(valueAt(i))
     }
 }
-//
-//inline fun <E> SparseArray<E>.binarySearch(crossinline comparere: Function2<E, Int, Comparing>): SparseArrayEntry<E>? {
-//    var start = 0
-//    var end = size()
-//    while (start < end) {
-//        val mid = start + (end - start) / 2
-//        val key = keyAt(mid)
-//        val item = valueAt(key)
-//        val compResult = comparere(item, mid)
-//        when (compResult) {
-//            Comparing.LargerThan -> start = mid + 1
-//            Comparing.LessThan -> end = mid
-//            Comparing.Equal -> return SparseArrayEntry<E>(key, item)
-//        }
-//    }
-//    return null
-//}

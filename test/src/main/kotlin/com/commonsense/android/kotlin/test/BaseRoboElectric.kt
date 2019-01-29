@@ -2,8 +2,7 @@ package com.commonsense.android.kotlin.test
 
 import android.app.*
 import android.content.*
-import android.support.annotation.*
-import android.support.annotation.IntRange
+import androidx.annotation.*
 import org.junit.runner.*
 import org.robolectric.*
 import org.robolectric.android.controller.*
@@ -43,7 +42,7 @@ abstract class BaseRoboElectricTest {
             }
 
     fun awaitAllTheading(condition: () -> Boolean,
-                         @IntRange(from = 0) timeoutTime: Long,
+                         @androidx.annotation.IntRange(from = 0) timeoutTime: Long,
                          TimeoutTimeUnit: TimeUnit,
                          message: String = "awaiting condition failed") {
 

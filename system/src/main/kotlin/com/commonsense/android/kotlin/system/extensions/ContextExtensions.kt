@@ -8,13 +8,12 @@ import android.content.pm.*
 import android.content.res.*
 import android.graphics.*
 import android.graphics.drawable.*
-import android.net.*
-import android.support.annotation.*
-import android.support.v4.content.*
-import android.support.v7.content.res.*
 import android.util.*
 import android.view.*
 import android.widget.*
+import androidx.annotation.*
+import androidx.appcompat.content.res.*
+import androidx.core.content.*
 import com.commonsense.android.kotlin.system.logging.*
 import com.commonsense.android.kotlin.system.permissions.*
 import kotlinx.coroutines.*

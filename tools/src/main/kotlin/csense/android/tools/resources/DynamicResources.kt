@@ -2,7 +2,7 @@
 
 package csense.android.tools.resources
 
-import android.support.annotation.*
+import androidx.annotation.*
 import kotlin.reflect.*
 
 

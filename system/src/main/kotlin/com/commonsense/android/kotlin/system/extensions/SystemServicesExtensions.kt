@@ -13,9 +13,9 @@ import android.net.wifi.aware.*
 import android.net.wifi.p2p.*
 import android.os.*
 import android.os.Build.*
-import android.support.annotation.*
 import android.view.*
 import android.view.inputmethod.*
+import androidx.annotation.*
 import com.commonsense.android.kotlin.base.extensions.collections.*
 
 /**

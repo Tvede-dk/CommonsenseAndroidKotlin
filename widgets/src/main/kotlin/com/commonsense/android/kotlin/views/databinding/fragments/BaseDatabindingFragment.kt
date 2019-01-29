@@ -3,10 +3,10 @@
 package com.commonsense.android.kotlin.views.databinding.fragments
 
 import android.app.*
-import android.databinding.*
 import android.os.*
-import android.support.v4.app.Fragment
 import android.view.*
+import androidx.databinding.*
+import androidx.fragment.app.Fragment
 import com.commonsense.android.kotlin.system.base.*
 import com.commonsense.android.kotlin.system.extensions.*
 import com.commonsense.android.kotlin.views.*

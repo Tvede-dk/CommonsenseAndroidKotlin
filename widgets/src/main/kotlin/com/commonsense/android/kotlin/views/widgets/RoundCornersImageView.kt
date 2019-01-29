@@ -2,7 +2,7 @@
 
 package com.commonsense.android.kotlin.views.widgets
 
-import android.support.v7.widget.*
+import androidx.appcompat.widget.*
 
 /**
  * Created by kasper on 29/05/2017.

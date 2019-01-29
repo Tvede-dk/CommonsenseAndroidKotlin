@@ -2,10 +2,10 @@
 
 package com.commonsense.android.kotlin.system.extensions
 
-
-import android.support.annotation.*
-import android.support.v4.app.*
+import androidx.annotation.*
+import androidx.fragment.app.*
 import com.commonsense.android.kotlin.system.logging.*
+
 
 /**
  * Created by Kasper Tvede on 20-05-2017.

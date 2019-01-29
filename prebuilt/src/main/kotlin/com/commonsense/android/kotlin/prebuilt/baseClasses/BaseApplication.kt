@@ -5,8 +5,8 @@ package com.commonsense.android.kotlin.prebuilt.baseClasses
 import android.app.*
 import android.os.*
 import android.os.strictmode.*
-import android.support.annotation.*
-import android.support.v7.app.*
+import androidx.annotation.*
+import androidx.appcompat.app.*
 import com.commonsense.android.kotlin.base.*
 import com.commonsense.android.kotlin.base.extensions.*
 import com.commonsense.android.kotlin.base.extensions.collections.*

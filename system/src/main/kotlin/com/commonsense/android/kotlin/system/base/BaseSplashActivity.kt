@@ -2,14 +2,13 @@ package com.commonsense.android.kotlin.system.base
 
 import android.app.*
 import android.os.*
-import android.support.annotation.*
 import android.view.*
+import androidx.annotation.*
 import com.commonsense.android.kotlin.base.debug.*
 import com.commonsense.android.kotlin.system.*
 import com.commonsense.android.kotlin.system.base.helpers.*
 import com.commonsense.android.kotlin.system.extensions.*
 import kotlinx.coroutines.*
-import kotlinx.coroutines.android.*
 
 
 /**

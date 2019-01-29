@@ -4,7 +4,6 @@ import android.util.SparseArray
 import com.commonsense.android.kotlin.test.*
 import org.junit.*
 import kotlin.Pair
-import kotlin.String
 
 
 /**

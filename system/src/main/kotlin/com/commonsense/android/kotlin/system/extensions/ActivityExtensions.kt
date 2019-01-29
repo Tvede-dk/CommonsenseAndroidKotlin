@@ -4,15 +4,14 @@ package com.commonsense.android.kotlin.system.extensions
 
 import android.app.*
 import android.content.*
-import android.support.annotation.*
-import android.support.v4.app.*
-import android.support.v4.app.Fragment
-import android.support.v4.widget.*
-import android.support.v7.app.*
-import android.support.v7.app.ActionBar
-import android.support.v7.app.ActionBarDrawerToggle
-import android.support.v7.widget.*
 import android.view.*
+import androidx.annotation.*
+import androidx.appcompat.app.*
+import androidx.appcompat.app.ActionBar
+import androidx.appcompat.widget.*
+import androidx.drawerlayout.widget.*
+import androidx.fragment.app.*
+import androidx.fragment.app.Fragment
 import com.commonsense.android.kotlin.base.*
 import kotlin.reflect.*
 

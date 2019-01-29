@@ -4,9 +4,9 @@ package com.commonsense.android.kotlin.views.widgets
 
 import android.content.*
 import android.graphics.drawable.*
-import android.support.v7.widget.*
 import android.util.*
 import android.view.*
+import androidx.appcompat.widget.*
 import com.commonsense.android.kotlin.base.*
 import com.commonsense.android.kotlin.base.extensions.collections.*
 import com.commonsense.android.kotlin.system.extensions.*

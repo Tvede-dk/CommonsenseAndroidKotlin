@@ -17,11 +17,9 @@ android {
 
 dependencies {
     //Tests
-    androidTestImplementation("com.android.support.test.espresso:espresso-core:$espressoVersion", {
-        testImplementation project(':test')
-        exclude group: 'com.android.support', module: 'support-annotations'
-    })
+    androidTestImplementation("androidx.test.espresso:espresso-core:$espressoVersion")
     testImplementation "junit:junit:$junitVersion"
+    testImplementation project(':test')
 
     //coroutines libs
     implementation "org.jetbrains.kotlinx:kotlinx-coroutines-core:$coroutinesVersion"
@@ -37,7 +35,7 @@ dependencies {
     releaseImplementation "com.squareup.leakcanary:leakcanary-android-no-op:$leakCanaryVersion"
     testImplementation "com.squareup.leakcanary:leakcanary-android-no-op:$leakCanaryVersion"
 
-    implementation "com.android.support:appcompat-v7:$supportVersion"
+    implementation "androidx.appcompat:appcompat:$appcompatVersion"
     implementation "org.jetbrains.kotlin:kotlin-stdlib:$kotlin_version"
 
 }

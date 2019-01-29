@@ -3,9 +3,9 @@
 
 package com.commonsense.android.kotlin.views.databinding.activities
 
-import android.databinding.*
 import android.os.*
 import android.view.*
+import androidx.databinding.*
 import com.commonsense.android.kotlin.system.base.*
 
 /**

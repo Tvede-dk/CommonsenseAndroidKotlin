@@ -3,13 +3,11 @@
 package com.commonsense.android.kotlin.base.scheduling
 
 import com.commonsense.android.kotlin.base.*
-import com.commonsense.android.kotlin.base.extensions.*
 import com.commonsense.android.kotlin.test.*
 import kotlinx.coroutines.*
 import org.junit.*
 import org.junit.jupiter.api.*
 import org.junit.jupiter.api.Test
-import java.lang.Exception
 import java.util.concurrent.*
 import java.util.concurrent.atomic.*
 

@@ -1,6 +1,5 @@
 package com.commonsense.android.kotlin.test
 
-import android.support.annotation.IntRange
 import org.junit.*
 import java.util.concurrent.*
 
@@ -72,9 +71,9 @@ inline fun <reified T : Exception> assertThrows(
 }
 
 
-inline fun testCallbackWithSemaphore(@IntRange(from = 0) startPermits: Int = 0,
-                                     @IntRange(from = 0) startAcquire: Int = startPermits + 1,
-                                     @IntRange(from = 0) timeoutTime: Int = 50,
+inline fun testCallbackWithSemaphore(@androidx.annotation.IntRange(from = 0) startPermits: Int = 0,
+                                     @androidx.annotation.IntRange(from = 0) startAcquire: Int = startPermits + 1,
+                                     @androidx.annotation.IntRange(from = 0) timeoutTime: Int = 50,
                                      timeoutUnit: TimeUnit = TimeUnit.MILLISECONDS,
                                      shouldAcquire: Boolean = true,
                                      errorMessage: String = "",

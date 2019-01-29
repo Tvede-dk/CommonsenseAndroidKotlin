@@ -2,7 +2,7 @@
 
 package com.commonsense.android.kotlin.views.extensions
 
-import android.support.v4.view.*
+import androidx.viewpager.widget.*
 
 
 /**

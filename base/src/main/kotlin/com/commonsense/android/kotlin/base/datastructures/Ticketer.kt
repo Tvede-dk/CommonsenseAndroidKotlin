@@ -2,7 +2,6 @@
 
 package com.commonsense.android.kotlin.base.datastructures
 
-import android.support.annotation.IntRange
 import java.util.concurrent.atomic.*
 
 /**
@@ -10,7 +9,7 @@ import java.util.concurrent.atomic.*
  * each category requests a ticket.
  * and if there has been assigned a number to a category, it will always get the same number back.
  */
-class Ticketer(@IntRange(from = 0) initialValue: Int) {
+class Ticketer(@androidx.annotation.IntRange(from = 0) initialValue: Int) {
 
     private val currentDrawNumber = AtomicInteger(initialValue)
 
@@ -19,7 +18,7 @@ class Ticketer(@IntRange(from = 0) initialValue: Int) {
     /**
      * Draws a number
      */
-    @IntRange(from = 0)
+    @androidx.annotation.IntRange(from = 0)
     fun getIdForCategory(category: String): Int {
         if (!categoryStore.containsKey(category)) {
             synchronized(this) {
@@ -32,7 +31,7 @@ class Ticketer(@IntRange(from = 0) initialValue: Int) {
         return categoryStore[category] ?: 0
     }
 
-    @IntRange(from = 0)
+    @androidx.annotation.IntRange(from = 0)
     private fun drawNextNumber(): Int {
         return currentDrawNumber.getAndIncrement()
     }

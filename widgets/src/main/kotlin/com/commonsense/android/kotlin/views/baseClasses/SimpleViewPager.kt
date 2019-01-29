@@ -4,8 +4,8 @@ package com.commonsense.android.kotlin.views.baseClasses
 
 
 import android.annotation.*
-import android.support.v4.view.*
 import android.view.*
+import androidx.viewpager.widget.*
 
 /**
  * Created by Kasper Tvede

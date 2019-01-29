@@ -3,19 +3,12 @@
 package com.commonsense.android.kotlin.system.permissions
 
 import android.app.*
-import android.content.*
 import android.content.pm.*
-import android.support.annotation.*
-import android.support.annotation.IntRange
-import android.support.v4.app.*
-import android.support.v4.content.*
+import androidx.core.app.*
 import com.commonsense.android.kotlin.base.*
 import com.commonsense.android.kotlin.base.debug.*
-import com.commonsense.android.kotlin.base.extensions.*
 import com.commonsense.android.kotlin.base.extensions.collections.*
-import com.commonsense.android.kotlin.system.base.*
 import com.commonsense.android.kotlin.system.extensions.*
-import kotlinx.coroutines.*
 
 /**
  * Created by Kasper Tvede
@@ -74,7 +67,7 @@ class PermissionsHandling(val handlerRequestCode: Int = 999) {
      *
      * @return true if handled, false otherwise.
      */
-    fun onRequestPermissionResult(@IntRange(from = 0) requestCode: Int,
+    fun onRequestPermissionResult(@androidx.annotation.IntRange(from = 0) requestCode: Int,
                                   permissions: Array<out String>,
                                   grantedResults: IntArray): Boolean {
         return (requestCode == handlerRequestCode).onTrue {

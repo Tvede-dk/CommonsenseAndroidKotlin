@@ -3,8 +3,8 @@
 package com.commonsense.android.kotlin.views.input.selection
 
 import android.content.*
-import android.support.v7.widget.*
 import android.util.*
+import androidx.appcompat.widget.*
 
 /**
  * Created by kasper on 21/08/2017.

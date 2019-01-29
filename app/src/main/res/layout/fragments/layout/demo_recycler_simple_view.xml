@@ -17,7 +17,7 @@
             android:layout_height="wrap_content"
             android:text="A simple demo for some recycler views :) dont waste, recycle, with ease" />
 
-        <android.support.v7.widget.RecyclerView
+        <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/demo_recycler_simple_view_recyclerview"
             android:layout_width="match_parent"
             android:layout_height="match_parent" />

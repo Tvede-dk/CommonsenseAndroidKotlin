@@ -2,7 +2,6 @@ package com.commonsense.android.kotlin.views.baseClasses
 
 import android.content.*
 import android.content.res.*
-import android.support.annotation.IntRange
 import android.widget.*
 import java.util.*
 
@@ -38,7 +37,7 @@ open class BaseAdapter<T>(context: Context) : ArrayAdapter<T>(context, 0) {
         items.forEach { this.add(it) }
     }
 
-    override fun getItem(@IntRange(from = 0) position: Int): T? {
+    override fun getItem(@androidx.annotation.IntRange(from = 0) position: Int): T? {
         if (isIndexValid(position)) {
             return super.getItem(position)
         }
@@ -63,7 +62,7 @@ open class BaseAdapter<T>(context: Context) : ArrayAdapter<T>(context, 0) {
     override fun getPosition(item: T): Int = super.getPosition(item)
 
     @Suppress("RedundantOverride")
-    @IntRange(from = 0)
+    @androidx.annotation.IntRange(from = 0)
     override fun getCount(): Int = super.getCount()
 
     @Suppress("RedundantOverride")
@@ -74,7 +73,7 @@ open class BaseAdapter<T>(context: Context) : ArrayAdapter<T>(context, 0) {
     /**
      *  insert the given item, if it is not null
      */
-    override fun insert(obj: T, @IntRange(from = 0) index: Int) {
+    override fun insert(obj: T, @androidx.annotation.IntRange(from = 0) index: Int) {
         if (obj != null) {
             super.insert(obj, index)
         }
@@ -83,7 +82,7 @@ open class BaseAdapter<T>(context: Context) : ArrayAdapter<T>(context, 0) {
     /**
      * Tells if the given index is valid ( in range 0 until count /  [0 ;count[ )
      */
-    fun isIndexValid(@IntRange(from = 0) index: Int): Boolean = index in 0 until count
+    fun isIndexValid(@androidx.annotation.IntRange(from = 0) index: Int): Boolean = index in 0 until count
 }
 
 

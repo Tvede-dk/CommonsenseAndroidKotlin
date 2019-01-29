@@ -2,7 +2,6 @@
 
 package com.commonsense.android.kotlin.system.datastructures
 
-import android.support.annotation.IntRange
 import android.util.*
 import com.commonsense.android.kotlin.base.extensions.*
 import com.commonsense.android.kotlin.base.extensions.collections.*
@@ -57,7 +56,7 @@ class SectionLookupRep<T : TypeHashCodeLookupRepresent<Rep>, out Rep : Any> {
     /**
      * The total number of items in this, cached
      */
-    @IntRange(from = 0)
+    @androidx.annotation.IntRange(from = 0)
     private var cachedSize: Int = 0
     //</editor-fold>
 
@@ -66,14 +65,14 @@ class SectionLookupRep<T : TypeHashCodeLookupRepresent<Rep>, out Rep : Any> {
      * The total number of items in this
      */
     val size
-        @IntRange(from = 0)
+        @androidx.annotation.IntRange(from = 0)
         get() = cachedSize
 
     /**
      * The total number of sections in this
      */
     val sectionCount
-        @IntRange(from = 0)
+        @androidx.annotation.IntRange(from = 0)
         get () = data.size()
 
     //</editor-fold>
@@ -98,7 +97,7 @@ class SectionLookupRep<T : TypeHashCodeLookupRepresent<Rep>, out Rep : Any> {
      * @param inSection Int into this section (sparse index)
      * @return SectionLocation? the resulting update if any was there (if this section is ignored then this becomes null)
      */
-    fun add(item: T, @IntRange(from = 0) inSection: Int): SectionLocation? {
+    fun add(item: T, @androidx.annotation.IntRange(from = 0) inSection: Int): SectionLocation? {
         val sectionUpdate = addSectionIfMissing(inSection)
         updateCacheForSection(inSection) {
             data[inSection].collection.add(item)
@@ -113,7 +112,7 @@ class SectionLookupRep<T : TypeHashCodeLookupRepresent<Rep>, out Rep : Any> {
     private fun isSectionIgnored(inSection: Int): Boolean =
             data.get(inSection, null)?.isIgnored ?: false
 
-    fun insert(item: T, @IntRange(from = 0) atRow: Int, @IntRange(from = 0) inSection: Int): SectionLocation? {
+    fun insert(item: T, @androidx.annotation.IntRange(from = 0) atRow: Int, @androidx.annotation.IntRange(from = 0) inSection: Int): SectionLocation? {
         if (!sectionExists(inSection) || !data[inSection].collection.isIndexValidForInsert(atRow)) {
             return null
         }
@@ -130,7 +129,7 @@ class SectionLookupRep<T : TypeHashCodeLookupRepresent<Rep>, out Rep : Any> {
     }
 
 
-    fun addAll(items: Collection<T>, @IntRange(from = 0) inSection: Int): SectionUpdate? {
+    fun addAll(items: Collection<T>, @androidx.annotation.IntRange(from = 0) inSection: Int): SectionUpdate? {
         val section = addSectionIfMissing(inSection)
         updateCacheForSection(inSection) {
             data.get(inSection).collection.addAll(items)
@@ -143,7 +142,7 @@ class SectionLookupRep<T : TypeHashCodeLookupRepresent<Rep>, out Rep : Any> {
                 section.inSection.largest until section.inSection.largest + items.size)
     }
 
-    fun insertAll(items: Collection<T>, @IntRange(from = 0) startPosition: Int, @IntRange(from = 0) inSection: Int): SectionUpdate? {
+    fun insertAll(items: Collection<T>, @androidx.annotation.IntRange(from = 0) startPosition: Int, @androidx.annotation.IntRange(from = 0) inSection: Int): SectionUpdate? {
         if (!sectionExists(inSection) || !data[inSection].collection.isIndexValidForInsert(startPosition)) {
             return null
         }
@@ -161,7 +160,7 @@ class SectionLookupRep<T : TypeHashCodeLookupRepresent<Rep>, out Rep : Any> {
     //</editor-fold>
 
     //<editor-fold desc="Remove functions">
-    fun removeItem(item: T, @IntRange(from = 0) inSection: Int): SectionLocation? {
+    fun removeItem(item: T, @androidx.annotation.IntRange(from = 0) inSection: Int): SectionLocation? {
         val section = calculateSectionLocation(inSection) ?: return null
         return updateCacheForSection(inSection) {
             val indexOf = data[inSection].collection.indexOf(item)
@@ -176,7 +175,7 @@ class SectionLookupRep<T : TypeHashCodeLookupRepresent<Rep>, out Rep : Any> {
         }
     }
 
-    fun removeAt(@IntRange(from = 0) row: Int, @IntRange(from = 0) inSection: Int): SectionLocation? {
+    fun removeAt(@androidx.annotation.IntRange(from = 0) row: Int, @androidx.annotation.IntRange(from = 0) inSection: Int): SectionLocation? {
         val sectionLocation = calculateSectionLocation(inSection)
         if (sectionLocation == null || isIndexValidInSection(row, inSection) != true) {
             return null
@@ -193,7 +192,7 @@ class SectionLookupRep<T : TypeHashCodeLookupRepresent<Rep>, out Rep : Any> {
             data[inSection]?.collection?.isIndexValid(row)
 
 
-    fun removeItems(items: List<T>, @IntRange(from = 0) inSection: Int): List<SectionLocation> =
+    fun removeItems(items: List<T>, @androidx.annotation.IntRange(from = 0) inSection: Int): List<SectionLocation> =
             items.mapNotNull { removeItem(it, inSection) }
 
 
@@ -214,7 +213,7 @@ class SectionLookupRep<T : TypeHashCodeLookupRepresent<Rep>, out Rep : Any> {
     }
     //</editor-fold>
 
-    fun replace(newItem: T, @IntRange(from = 0) atRow: Int, @IntRange(from = 0) inSection: Int): SectionLocation? {
+    fun replace(newItem: T, @androidx.annotation.IntRange(from = 0) atRow: Int, @androidx.annotation.IntRange(from = 0) inSection: Int): SectionLocation? {
         val sectionLocation = addSectionIfMissing(inSection)
         if (!data[inSection].collection.isIndexValid(atRow)) {
             return null
@@ -237,7 +236,7 @@ class SectionLookupRep<T : TypeHashCodeLookupRepresent<Rep>, out Rep : Any> {
     }
 
 
-    fun indexToPath(@IntRange(from = 0) position: Int): IndexPath? {
+    fun indexToPath(@androidx.annotation.IntRange(from = 0) position: Int): IndexPath? {
         computeLookup()
 
         val index = preComputedLookup.binarySearch { item: Int, index: Int ->
@@ -272,7 +271,7 @@ class SectionLookupRep<T : TypeHashCodeLookupRepresent<Rep>, out Rep : Any> {
         isPrecomputedUpToDate = true
     }
 
-    private fun indexPathIsValid(@IntRange(from = 0) atRow: Int, @IntRange(from = 0) inSection: Int): Boolean =
+    private fun indexPathIsValid(@androidx.annotation.IntRange(from = 0) atRow: Int, @androidx.annotation.IntRange(from = 0) inSection: Int): Boolean =
             getItem(atRow, inSection) != null
 
     fun indexOf(newItem: T, inSection: Int): SectionLocation? {
@@ -285,11 +284,11 @@ class SectionLookupRep<T : TypeHashCodeLookupRepresent<Rep>, out Rep : Any> {
     }
 
 
-    private fun getItem(@IntRange(from = 0) atRow: Int, @IntRange(from = 0) inSection: Int): T? =
+    private fun getItem(@androidx.annotation.IntRange(from = 0) atRow: Int, @androidx.annotation.IntRange(from = 0) inSection: Int): T? =
             data.get(inSection)?.collection?.getSafe(atRow)
 
     //<editor-fold desc="Section igorance">
-    fun ignoreSection(@IntRange(from = 0) sectionIndex: Int): SectionUpdate? {
+    fun ignoreSection(@androidx.annotation.IntRange(from = 0) sectionIndex: Int): SectionUpdate? {
         if (!sectionExists(sectionIndex) || data[sectionIndex].isIgnored) {
             return null
         }
@@ -303,7 +302,7 @@ class SectionLookupRep<T : TypeHashCodeLookupRepresent<Rep>, out Rep : Any> {
     /**
      * Inverse of ignore section.
      */
-    fun acceptSection(@IntRange(from = 0) sectionIndex: Int): SectionUpdate? {
+    fun acceptSection(@androidx.annotation.IntRange(from = 0) sectionIndex: Int): SectionUpdate? {
         if (!sectionExists(sectionIndex) || !data[sectionIndex].isIgnored) {
             return null
         }
@@ -313,10 +312,10 @@ class SectionLookupRep<T : TypeHashCodeLookupRepresent<Rep>, out Rep : Any> {
         return calculateSectionLocation(sectionIndex)
     }
 
-    fun toggleSectionVisibility(@IntRange(from = 0) sectionIndex: Int): SectionUpdate? =
+    fun toggleSectionVisibility(@androidx.annotation.IntRange(from = 0) sectionIndex: Int): SectionUpdate? =
             setSectionVisibility(sectionIndex, !isSectionIgnored(sectionIndex))
 
-    fun setSectionVisibility(@IntRange(from = 0) sectionIndex: Int, visible: Boolean): SectionUpdate? {
+    fun setSectionVisibility(@androidx.annotation.IntRange(from = 0) sectionIndex: Int, visible: Boolean): SectionUpdate? {
         return if (visible) {
             acceptSection(sectionIndex)
         } else {
@@ -330,7 +329,7 @@ class SectionLookupRep<T : TypeHashCodeLookupRepresent<Rep>, out Rep : Any> {
     /**
      * returns what have changed. (the diff).
      */
-    fun setSection(items: List<T>, @IntRange(from = 0) inSection: Int): SectionUpdates? {
+    fun setSection(items: List<T>, @androidx.annotation.IntRange(from = 0) inSection: Int): SectionUpdates? {
         val wasVisible = !isSectionIgnored(inSection)
         val removed = clearSection(inSection)
         val added = addAll(items, inSection)
@@ -375,10 +374,10 @@ class SectionLookupRep<T : TypeHashCodeLookupRepresent<Rep>, out Rep : Any> {
     }
 
 
-    fun getSectionLocation(@IntRange(from = 0) sectionIndex: Int): SectionUpdate? =
+    fun getSectionLocation(@androidx.annotation.IntRange(from = 0) sectionIndex: Int): SectionUpdate? =
             calculateSectionLocation(sectionIndex)
 
-    fun clearSection(@IntRange(from = 0) inSection: Int): SectionUpdate? {
+    fun clearSection(@androidx.annotation.IntRange(from = 0) inSection: Int): SectionUpdate? {
         if (data[inSection, null] == null) { //missing section => null.
             return null
         }
@@ -419,7 +418,7 @@ class SectionLookupRep<T : TypeHashCodeLookupRepresent<Rep>, out Rep : Any> {
 //<editor-fold desc="Operators">
 
     /**  */
-    operator fun get(@IntRange(from = 0) atRow: Int, @IntRange(from = 0) inSection: Int): T? = getItem(atRow, inSection)
+    operator fun get(@androidx.annotation.IntRange(from = 0) atRow: Int, @androidx.annotation.IntRange(from = 0) inSection: Int): T? = getItem(atRow, inSection)
 
     /**  */
     operator fun get(index: IndexPath): T? = getItem(index.row, index.section)
@@ -455,7 +454,7 @@ class SectionLookupRep<T : TypeHashCodeLookupRepresent<Rep>, out Rep : Any> {
 
 //<editor-fold desc="location calculations">
 
-    private fun addSectionIfMissing(@IntRange(from = 0) inSection: Int): SectionUpdate {
+    private fun addSectionIfMissing(@androidx.annotation.IntRange(from = 0) inSection: Int): SectionUpdate {
         if (!sectionExists(inSection)) {
             data.put(inSection, TypeSection(inSection))
         }
@@ -483,8 +482,8 @@ class SectionLookupRep<T : TypeHashCodeLookupRepresent<Rep>, out Rep : Any> {
  * @property row Int the row index in the given section
  * @property section Int the section index (sparse)
  */
-data class IndexPath(@IntRange(from = 0) val row: Int,
-                     @IntRange(from = 0) val section: Int)
+data class IndexPath(@androidx.annotation.IntRange(from = 0) val row: Int,
+                     @androidx.annotation.IntRange(from = 0) val section: Int)
 
 /**
  * Describes an update, both in "mapped" / sparse and raw terms.

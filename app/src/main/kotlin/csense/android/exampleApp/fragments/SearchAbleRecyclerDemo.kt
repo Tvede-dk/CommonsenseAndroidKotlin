@@ -1,13 +1,13 @@
 package csense.android.exampleApp.fragments
 
 import android.graphics.*
-import android.support.v7.widget.*
 import android.text.*
+import androidx.recyclerview.widget.*
 import com.commonsense.android.kotlin.base.extensions.collections.*
 import com.commonsense.android.kotlin.views.databinding.adapters.*
 import com.commonsense.android.kotlin.views.databinding.fragments.*
-import com.commonsense.android.kotlin.views.extensions.*
 import csense.android.exampleApp.databinding.*
+import com.commonsense.android.kotlin.views.extensions.*
 
 /**
  * Created by kasper on 01/06/2017.

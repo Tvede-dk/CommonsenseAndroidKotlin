@@ -1,9 +1,7 @@
 package com.commonsense.android.kotlin.system.base.helpers
 
 import android.app.*
-import android.view.*
 import android.widget.*
-import com.commonsense.android.kotlin.system.BuildConfig
 import com.commonsense.android.kotlin.system.R
 import com.commonsense.android.kotlin.system.base.*
 import com.commonsense.android.kotlin.system.extensions.*

@@ -3,7 +3,7 @@ package com.commonsense.android.kotlin.system.permissions
 import android.*
 import android.annotation.*
 import android.os.*
-import android.support.annotation.*
+import androidx.annotation.*
 
 /**
  * annotates all the dangerous permissions strings

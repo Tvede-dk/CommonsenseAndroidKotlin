@@ -1,7 +1,7 @@
 package com.commonsense.android.kotlin.views.databinding.adapters
 
-import android.databinding.*
-import android.support.v7.widget.*
+import androidx.databinding.*
+import androidx.recyclerview.widget.*
 import com.commonsense.android.kotlin.system.logging.*
 import com.commonsense.android.kotlin.test.*
 import org.junit.*

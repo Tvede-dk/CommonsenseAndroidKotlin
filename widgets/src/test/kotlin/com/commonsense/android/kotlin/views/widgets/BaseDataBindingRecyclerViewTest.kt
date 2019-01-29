@@ -1,8 +1,8 @@
 package com.commonsense.android.kotlin.views.widgets
 
 import android.content.*
-import android.databinding.*
 import android.view.*
+import androidx.databinding.*
 import com.commonsense.android.kotlin.test.*
 import com.commonsense.android.kotlin.views.databinding.adapters.*
 import org.junit.*

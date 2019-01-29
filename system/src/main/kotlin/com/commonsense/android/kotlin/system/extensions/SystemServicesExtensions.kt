@@ -182,8 +182,7 @@ inline val Context.hardwarePropertiesManager: HardwarePropertiesManager?
 
 //TODO inline class. its is more of a "simple" wrapper type to make it possible to write
 // [in a context type] services.window
-
-val Context.services: ContextServices
+inline val Context.services: ContextServices
     get() = ContextServices(this)
 
 class ContextServices(val context: Context) {

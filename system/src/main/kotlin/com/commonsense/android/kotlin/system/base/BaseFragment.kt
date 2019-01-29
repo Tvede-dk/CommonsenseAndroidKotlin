@@ -85,7 +85,6 @@ open class BaseFragment : DialogFragment(), ActivityResultHelperContainer {
      * add the jobs manually. eg some api composing of async / launch api'
      * @param group String
      * @param job Job
-     * @return Unit
      */
     fun addLocalJob(group: String, job: Job): Unit =
             localJobs.addJob(job, group)

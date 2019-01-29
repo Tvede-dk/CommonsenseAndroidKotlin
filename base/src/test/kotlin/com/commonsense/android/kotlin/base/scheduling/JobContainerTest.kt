@@ -170,7 +170,6 @@ class JobContainerTest {
      * for example this could be used in a button, where if the user preses it multiple times,
      * then you want to cancel the old and run the new.
      *
-     * @return Unit
      */
     @Test
     fun performActionGrouped(): Unit = runBlocking {

@@ -14,10 +14,14 @@ import com.commonsense.android.kotlin.views.*
 typealias InflateBinding<T> = (inflater: LayoutInflater, parent: ViewGroup?, attach: Boolean) -> T
 
 /**
- * created by Kasper Tvede on 29-09-2016.
+ * created by Kasper Tvede
  */
 abstract class BaseDatabindingFragment<out T : ViewDataBinding> : BaseFragment() {
 
+    /**
+     * If true, will force the dialog to take up the whole screen,
+     * and on newer devices also hide the status bar.
+     */
     var showDialogAsFullScreen = false
 
     abstract fun getInflater(): InflateBinding<T>
@@ -29,20 +33,25 @@ abstract class BaseDatabindingFragment<out T : ViewDataBinding> : BaseFragment()
     private val inflationFunction by lazy {
         getInflater()
     }
-
+    /**
+     * The Viewbinding.
+     */
     val binding: T by lazy {
         inflationFunction(ourLayoutInflater, parentView, false)
     }
-
+    /**
+     * Only used when we are embedded and needs to respect the given sizing that the xml
+     * provides
+     */
     private var parentView: ViewGroup? = null
 
     override fun onCreateView(inflater: LayoutInflater,
                               container: ViewGroup?,
                               savedInstanceState: Bundle?): View? {
-        if (showsDialog) {
-            return super.onCreateView(inflater, container, savedInstanceState)
+        //if its not a dialog, we are to use the container to do the inflation correctly.
+        if (!showsDialog) {
+            parentView = container
         }
-        parentView = container
         return binding.root
     }
 
@@ -52,31 +61,47 @@ abstract class BaseDatabindingFragment<out T : ViewDataBinding> : BaseFragment()
         useBinding()
     }
 
+    /**
+     * Use binding to setup and update the view;
+     * This will be called when the view is ready and all is set up.
+     */
     abstract fun useBinding()
 
+    /**
+     * Replaces this fragment with the given fragment.
+     * @param otherFragment () -> Fragment
+     */
     inline fun replaceThisFragment(otherFragment: () -> Fragment) {
         getParrentContainerId()?.let { fragmentManager?.replaceFragment(it, otherFragment()) }
     }
 
-    //adds a new fragment after the current fragment
+    /**
+     * adds a new fragment after the current fragment
+     * @receiver Fragment
+     * @param otherFragment () -> Fragment
+     */
     inline fun Fragment.pushThisFragment(crossinline otherFragment: () -> Fragment) {
         getParrentContainerId()?.let { fragmentManager?.pushNewFragmentTo(it, otherFragment()) }
     }
 
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
-        val builder = AlertDialog.Builder(context, R.style.TransperantDialog)
-        return builder
-                .setCustomTitle(null)
-                .setView(binding.root)
-                .create()
+        val context = requireContext()
+        //DO ONLY USE DIALOG; AS IT DOES NOT MODIFY THE STYLING / WAY THE WINDOW WORK.
+        return Dialog(context, R.style.TransperantDialog)
     }
 
     override fun onResume() {
-        if (showDialogAsFullScreen) {
+        if (showsDialog && showDialogAsFullScreen) {
             dialogFillParentView()
         }
         super.onResume()
     }
 
+    /**
+     * Hookpoint before the fragment gets to far in its lifecycle, to safely modify the window.
+     * @param window Window
+     */
+    open fun updateWindowBeforeShowing(window: Window){
 
+    }
 }

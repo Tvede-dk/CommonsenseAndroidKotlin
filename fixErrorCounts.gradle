@@ -1,0 +1,30 @@
+//allprojects {
+//    kapt {
+//        javacOptions {
+//            // Increase the max count of errors from annotation processors.
+//            // Default is 100.
+//            option("-Xmaxerrs", 500)
+//        }
+//    }
+//
+//}
+
+ext.changeErrorLimit = { Project it ->
+    def haveToldJava = false
+    //make java have high limits
+    it.tasks.withType(JavaCompile) { Task task ->
+        options.compilerArgs << "-Xmaxerrs" << "100000"
+        if (!haveToldJava) {
+            haveToldJava = true
+            println " - upgrading java max errors"
+        }
+    }
+    //make kapt have high limits
+    it.extensions.findByName("kapt")?.with { kapt ->
+        kapt.javacOptions {
+            // Increase the max count of errors from annotation processors.
+            option("-Xmaxerrs", 50000)
+        }
+        println " - upgrading Kapt max errors"
+    }
+}

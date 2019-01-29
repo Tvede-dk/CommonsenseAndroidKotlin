@@ -34,7 +34,7 @@ abstract class BaseDatabindingFragment<out T : ViewDataBinding> : BaseFragment()
         getInflater()
     }
     /**
-     * The Viewbinding.
+     * The ViewBinding.
      */
     val binding: T by lazy {
         inflationFunction(ourLayoutInflater, parentView, false)
@@ -97,11 +97,18 @@ abstract class BaseDatabindingFragment<out T : ViewDataBinding> : BaseFragment()
         super.onResume()
     }
 
+    override fun onStart() {
+        super.onStart()
+        dialog?.window?.let { updateWindowBeforeShowing(it) }
+    }
+
     /**
      * Hookpoint before the fragment gets to far in its lifecycle, to safely modify the window.
      * @param window Window
+     * this is called after onStart, since modifying the window requires it to "be there", but before the data is displayed
+     * see various only diagrams over the lifecycle to have an idea.
      */
-    open fun updateWindowBeforeShowing(window: Window){
+    open fun updateWindowBeforeShowing(window: Window) {
 
     }
 }

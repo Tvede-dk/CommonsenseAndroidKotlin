@@ -15,8 +15,11 @@ import kotlin.coroutines.*
 typealias QueuedJob = Pair<CoroutineContext, AsyncEmptyFunction>
 
 /**
- * Created by Kasper Tvede on 22-06-2017.
+ * Created by Kasper Tvede
  * It is meant for handling 3 types of scheduling
+ * - localJobs
+ * - queuedGroupedJobs
+ * - groupedJobs
  */
 open class JobContainer(val scope: CoroutineScope) {
 
@@ -109,35 +112,6 @@ open class JobContainer(val scope: CoroutineScope) {
     }
     //</editor-fold>
 
-    //<editor-fold desc="Inline mutex functions">
-//    private inline fun changeLocalJob(crossinline action: List<Job>.() -> List<Job>): Unit = runBlocking {
-//        localJobMutex.withLock {
-//            val result = action(localJobs)
-//            localJobs.set(result)
-//        }
-//    }
-//
-//    private inline fun changeGroupJob(crossinline action: Map<String, Job>.() -> Map<String, Job>): Unit = runBlocking {
-//        groupJobMutex.withLock {
-//            val result = action(groupedJobs)
-//            groupedJobs.clear()
-//            groupedJobs.putAll(result)
-//        }
-//    }
-//
-//
-//    private fun changeQueuedJob(
-//            action: suspend Map<String, MutableList<QueuedJob>>.() -> Map<String, MutableList<QueuedJob>>)
-//            : Unit = runBlocking {
-//        queuedGroupedJobsMutex.withLock {
-//            val result = action(queuedGroupedJobs)
-//            queuedGroupedJobs.clear()
-//            queuedGroupedJobs.putAll(result)
-//        }
-//    }
-
-    //</editor-fold>
-
     /**
      * Executes all queued up actions in that group.
      * does not wait for the response of this.
@@ -161,17 +135,11 @@ open class JobContainer(val scope: CoroutineScope) {
      * Adds a given operation to a named queue.
      */
     fun addToQueue(context: CoroutineContext, action: AsyncEmptyFunction, group: String) {
-//        return@changeQueuedJob this.toMutableMap().apply {
-//            getOrPut(group) { mutableListOf() }.add(Pair(context, action))
-//        }
         queuedGroupedJobs.getOrPut(group) { mutableListOf() }.add(Pair(context, action))
     }
 
     fun toPrettyString(): String {
         return "Job container state: " +
-//                "\n\t\tLocal job mutex locked state: ${localJobMutex.isLocked}" +
-//                "\n\t\tGroup job mutex lock state: ${groupJobMutex.isLocked}" +
-//                "\n\t\tQueue job mutex lock state: ${queuedGroupedJobsMutex.isLocked}\n" +
                 localJobs.map { "$it" }.prettyStringContent(
                         "\t\tlocal Jobs",
                         "\t\tno local jobs") +

@@ -1,4 +1,4 @@
-ext.setupProject = { it ->
+ext.setupProject = { Project it ->
 
     it.extensions.findByName("kapt")?.with {
         println " - Enabling kapt cache"

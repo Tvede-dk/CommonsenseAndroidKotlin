@@ -1,6 +1,15 @@
 # Introduction
 This library is a layer upon the android platform, trying to lift out bad design design decisions, and other annoyances. including the tremendous boilerplate code that is required in android programming.
 
+
+## Versions and Android X
+
+old support libs: below 0.0.20
+AndroidX : 0.0.20 and above
+
+Below version 0.0.20 is the old support libray versions, 0.0.20 and above will be using androidX
+Hotfixes and bug fixing will be provided for the older as well as the newer part for some time.
+
 # Why use this library?
 
 The point about this library is that google is developing android as a platform, which means to allow developers to create everything, which does not necessarily translate to "easy to program for"

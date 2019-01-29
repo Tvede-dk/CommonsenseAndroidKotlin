@@ -42,7 +42,7 @@ abstract class BaseRoboElectricTest {
                 }
             }
 
-    inline fun awaitAllTheading(crossinline condition: () -> Boolean,
+    fun awaitAllTheading(condition: () -> Boolean,
                                 @IntRange(from = 0) timeoutTime: Long,
                                 TimeoutTimeUnit: TimeUnit,
                                 message: String = "awaiting condition failed") {

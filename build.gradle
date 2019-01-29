@@ -85,6 +85,8 @@ subprojects {
         setupProject(project)
         changeErrorLimit(project)
     }
+
+    task uploadProd(dependsOn: ["clean", "assemble", "test", "sourcesJar", "javadocJar", "bintrayUpload"])
 }
 
 

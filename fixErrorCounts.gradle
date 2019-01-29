@@ -1,14 +1,5 @@
-//allprojects {
-//    kapt {
-//        javacOptions {
-//            // Increase the max count of errors from annotation processors.
-//            // Default is 100.
-//            option("-Xmaxerrs", 500)
-//        }
-//    }
-//
-//}
-
+//adds the function "changeErrorLimit(Project)" to the external scope.
+//calling this with a project will change the error limits
 ext.changeErrorLimit = { Project it ->
     def haveToldJava = false
     //make java have high limits

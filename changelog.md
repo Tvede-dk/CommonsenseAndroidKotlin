@@ -1,9 +1,7 @@
 # Changelog
 
-
-
 ## 0.0.17
-- fragment with data 
+- fragment with data (still needs testing and API refinement, so its still experimental)
 - kotlin 1.3.20
 - coroutines 1.1.1
 - added more extensions missing 
@@ -12,16 +10,20 @@
 
 - add more missing tests
 - more extensions
-- fixed issues with job schedular container / and a crash when cleaning up with remaining local jobs 
+- fixed issues with job scheduler container / and a crash when cleaning up with remaining local jobs 
 - fixed issues with BaseDataBindingFragment used as dialog and then containing child fragments; 
 - gradle 5.2-rc-1
-- more work on 
+- more work on BaseFragmentPagerAdapter
 - added gradle script to bump all "max errors" to ridiculous levels to avoid missing the real error (like DataBinding swallows other compilation errors)
+- more functions to deviceSettings
+- strict mode configurable in baseApplication
+- coroutine start for base splash activity changed
+
 
 ## 0.0.16
 - preview of fragment with data
 - kotlin updated to 1.3
-- coroutines version 1
+- coroutines version 1.1.0
 
 ## 0.0.15
 

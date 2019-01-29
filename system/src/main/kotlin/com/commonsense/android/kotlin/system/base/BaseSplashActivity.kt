@@ -68,7 +68,7 @@ abstract class BaseSplashActivity : Activity() {
         afterOnCreate()
     }
 
-    private fun afterOnCreate() = GlobalScope.launch(Dispatchers.Main, CoroutineStart.DEFAULT, {
+    private fun afterOnCreate() = GlobalScope.launch(Dispatchers.Main, CoroutineStart.UNDISPATCHED) {
         //start pre loading views. since we are a splash screen, we are "allowed" to take "some"
         //time, thus we can stall the loading (not the ui thread) until we have loaded all the views to preload.
         preloadViews(viewsToPreload)
@@ -77,7 +77,7 @@ abstract class BaseSplashActivity : Activity() {
         //and close the splash screen
         safeFinish()
 
-    })
+    }
 
     /**
      * Specifies which layouts should be loaded in the background

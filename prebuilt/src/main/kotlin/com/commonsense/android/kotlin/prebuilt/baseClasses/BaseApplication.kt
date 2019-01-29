@@ -58,7 +58,7 @@ abstract class BaseApplication : Application() {
     /**
      * Function handling the checking if we are a special process (required for eg leak canary).
      */
-    fun shouldBailOnCreate() = tryAndLog(BaseApplication::class) {
+    fun shouldBailOnCreate(): Boolean? = tryAndLog(BaseApplication::class) {
         if (LeakCanary.isInAnalyzerProcess(this)) {
             logDebug("Spawning analyzer procees. skipping setup")
             // This process is dedicated to LeakCanary for heap analysis.
@@ -94,17 +94,16 @@ abstract class BaseApplication : Application() {
         enableStrictMode()
     }
 
-    private fun enableLeakCanary() {
+    private fun enableLeakCanary() = tryAndLog(BaseApplication::class) {
+
         logDebug("Setting up leak canary")
         LeakCanary.install(this)
     }
 
-    private fun enableStrictMode() {
+    private fun enableStrictMode() = tryAndLog(BaseApplication::class) {
         logDebug("Setting up strictMode")
         val threadPolicyBuilder = StrictMode.ThreadPolicy.Builder().apply {
-            detectAll()
-            penaltyLog()
-            penaltyFlashScreen()
+            configureStrictModeThreadPolicy(this)
             shouldDieOnStrictModeViolation().ifTrue { penaltyDeath() }
             ifApiIsEqualOrGreater(28) {
                 penaltyListener(mainExecutor, StrictMode.OnThreadViolationListener { onStrictModeViolationOptional(it) })
@@ -114,14 +113,29 @@ abstract class BaseApplication : Application() {
         StrictMode.setThreadPolicy(threadPolicyBuilder.build())
 
         val vmPolicyBuilder = StrictMode.VmPolicy.Builder().apply {
-            detectAll()
-            penaltyLog()
+            configureStrictModeVMPolicy(this)
             shouldDieOnStrictModeViolation().ifTrue { penaltyDeath() }
             ifApiIsEqualOrGreater(28) {
                 penaltyListener(mainExecutor, StrictMode.OnVmViolationListener { onStrictModeViolationOptional(it) })
             }
         }
         StrictMode.setVmPolicy(vmPolicyBuilder.build())
+    }
+
+    open fun configureStrictModeThreadPolicy(builder: StrictMode.ThreadPolicy.Builder) {
+        builder.apply {
+            detectAll()
+            penaltyLog()
+            penaltyFlashScreen()
+        }
+    }
+
+
+    open fun configureStrictModeVMPolicy(builder: StrictMode.VmPolicy.Builder) {
+        builder.apply {
+            detectAll()
+            penaltyLog()
+        }
     }
 
     /**

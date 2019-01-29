@@ -394,7 +394,7 @@ The project is accessible though jcenter, so there should be a jcenter() in the 
 It is recommended to store the version 1 place only, such as;
 ```gralde
 buildscript {
-  ext.commonsenseVersion = "0.0.16"
+  ext.commonsenseVersion = "0.0.17"
 }
 ````
 Then you can start importing each of the sub modules. a full list is:

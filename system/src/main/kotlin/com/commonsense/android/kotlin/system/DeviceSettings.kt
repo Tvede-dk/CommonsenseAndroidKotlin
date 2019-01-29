@@ -33,6 +33,8 @@ class DeviceSettings(context: Context, settingsName: String = "DeviceSettings") 
 
     fun saveSetting(value: Long, key: String) = sharedPrefs.editWith { putLong(key, value) }
 
+    fun saveSetting(value: Set<String>, key: String) = sharedPrefs.editWith { putStringSet(key, value) }
+
     inline fun <U> saveSetting(item: U, crossinline converter: (U) -> String?, key: String) = sharedPrefs.editWith { putString(key, converter(item)) }
     //</editor-fold>
 
@@ -46,6 +48,9 @@ class DeviceSettings(context: Context, settingsName: String = "DeviceSettings") 
     fun loadSetting(key: String, default: Boolean = false) = sharedPrefs.getBoolean(key, default)
 
     fun loadSetting(key: String, default: Long = 0) = sharedPrefs.getLong(key, default)
+
+    fun loadSetting(key: String, default: Set<String>? = null): Set<String>? = sharedPrefs.getStringSet(key, default)
+
 
     inline fun <U> loadSetting(key: String, crossinline converter: (String?) -> U?, default: U?) = sharedPrefs.getString(key, null)?.let { converter(it) }
             ?: default

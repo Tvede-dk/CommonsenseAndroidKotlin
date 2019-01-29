@@ -86,7 +86,7 @@ subprojects {
         changeErrorLimit(project)
     }
 
-    task uploadProd(dependsOn: ["clean", "assemble", "test", "sourcesJar", "javadocJar", "bintrayUpload"])
+
 }
 
 
@@ -108,3 +108,6 @@ apply from: "fix-tests.gradle"
 //    }
 //}
 //
+//to publish to bintray / prod
+//clean assemble test sourcesJar javadocJar bintrayUpload
+

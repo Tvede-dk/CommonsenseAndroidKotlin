@@ -28,15 +28,17 @@ buildscript {
 
 
     //Versions for X.
+    //https://dl.google.com/dl/android/maven2/index.html
+
+    ext.annotationsVersion = "1.0.1"
     ext.appcompatVersion = "1.0.2"
-    ext.materialVersion = "1.0.0"
-    ext.exifVersion = "1.0.0"
-    ext.annotationsVersion = "1.0.0"
-    ext.testRunnerVersion = "1.1.1"
-    ext.recyclerviewVersion = "1.0.0"
-    ext.fragmentVersion = "1.0.0"
-    ext.espressoVersion = "3.1.0"
     ext.cardViewVersion = "1.0.0"
+    ext.exifVersion = "1.0.0"
+    ext.espressoVersion = "3.1.1"
+    ext.fragmentVersion = "1.0.0"
+    ext.materialVersion = "1.0.0"
+    ext.recyclerviewVersion = "1.0.0"
+    ext.testRunnerVersion = "1.1.1"
 
 
     //https://github.com/Kotlin/dokka

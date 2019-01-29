@@ -12,6 +12,7 @@ import com.commonsense.android.kotlin.views.databinding.adapters.*
 import com.commonsense.android.kotlin.views.extensions.*
 import csense.android.exampleApp.R
 import csense.android.exampleApp.databinding.*
+import csense.android.exampleApp.fragments.*
 import csense.android.exampleApp.views.dataAware.*
 import csense.android.exampleApp.views.tools.*
 import csense.android.exampleApp.views.widgets.*
@@ -40,7 +41,15 @@ class MainActivity : BaseDatabindingActivity<MainActivityBinding>() {
             startActivity(WidgetsRecyclerExampleActivity::class)
         }, 0)
         adapter.add(CategoryRecyclerRender(R.string.mainactivity_category_base_activity) {
-            startActivity(ToolsOverviewActivity::class)
+            //            startActivity(ToolsOverviewActivity::class)
+            supportFragmentManager.beginTransaction().apply {
+                MagicFragment().show(this, "")
+            }
+//            MagicFragment().apply {
+//                                this.showDialogAsFullScreen = true
+//                show(supportFragmentManager, "name")
+//
+//            }
         }, 0)
 
         adapter.add(CategoryRecyclerRender(R.string.mainactivity_category_base_fragment) {

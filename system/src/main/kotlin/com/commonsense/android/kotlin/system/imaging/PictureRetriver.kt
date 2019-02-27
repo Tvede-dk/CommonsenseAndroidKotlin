@@ -32,24 +32,27 @@ class PictureRetriver(private val activity: BaseActivity,
     private var pictureUri: Uri? = null
 
     fun useCamera() = activity.usePermission(PermissionEnum.WriteExternalStorage, usePermission = {
-        //lets use the background since the contentresolver is using disk access, which
-        //violates the UI thread on file access principle; then only when we are ready,
-        // use the main thread.
-        activity.launchInBackground("useCamera") {
-            val takePictureIntent = Intent(MediaStore.ACTION_IMAGE_CAPTURE)
-            takePictureIntent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION or Intent.FLAG_GRANT_WRITE_URI_PERMISSION)
+        //we also need camera.
+        activity.usePermission(PermissionEnum.Camera, usePermission = {
+            //lets use the background since the contentresolver is using disk access, which
+            //violates the UI thread on file access principle; then only when we are ready,
+            // use the main thread.
+            activity.launchInBackground("useCamera") {
+                val takePictureIntent = Intent(MediaStore.ACTION_IMAGE_CAPTURE)
+                takePictureIntent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION or Intent.FLAG_GRANT_WRITE_URI_PERMISSION)
 
-            val values = ContentValues(1)
-            values.put(MediaStore.Images.Media.MIME_TYPE, "image/jpg")
-            pictureUri = activity.contentResolver
-                    .insert(MediaStore.Images.Media.EXTERNAL_CONTENT_URI, values)
-            takePictureIntent.putExtra(MediaStore.EXTRA_OUTPUT, pictureUri)
-            if (takePictureIntent.resolveActivity(activity.packageManager) != null) {
-                activity.launchInUi("useCamera") {
-                    activity.startActivityForResult(takePictureIntent, null, requestCode, this::onActivityResult)
+                val values = ContentValues(1)
+                values.put(MediaStore.Images.Media.MIME_TYPE, "image/jpg")
+                pictureUri = activity.contentResolver
+                        .insert(MediaStore.Images.Media.EXTERNAL_CONTENT_URI, values)
+                takePictureIntent.putExtra(MediaStore.EXTRA_OUTPUT, pictureUri)
+                if (takePictureIntent.resolveActivity(activity.packageManager) != null) {
+                    activity.launchInUi("useCamera") {
+                        activity.startActivityForResult(takePictureIntent, null, requestCode, this::onActivityResult)
+                    }
                 }
             }
-        }
+        })
     })
 
     fun useGallery() {

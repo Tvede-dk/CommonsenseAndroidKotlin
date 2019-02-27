@@ -77,7 +77,6 @@ class BaseFragmentPagerAdapter(val fragmentManager: FragmentManager) : PagerAdap
     }
 
 
-
     override fun destroyItem(container: ViewGroup, position: Int, `object`: Any) {
         val transaction = getOrCreateTransaction()
         transaction.detach(`object` as Fragment)
@@ -112,7 +111,16 @@ class BaseFragmentPagerAdapter(val fragmentManager: FragmentManager) : PagerAdap
     override fun finishUpdate(container: ViewGroup) {
         mCurTransaction?.commitAllowingStateLoss()
         mCurTransaction = null
-        fragmentManager.executePendingTransactions()
+//        fragmentManager.executePendingTransactions()
+        container.post { fragmentManager.executePendingTransactions() } // long story short,
+        //by delaying this, we allow the viewpager to update its internal strucutures (populate -> all the code AFTER finishUpdate)
+        //which in terms should cause some correct calculations to sortChildDrawingOrder
+        //which in turn should avoid any issues with the viewpager drifting in state from the viewgroup , as
+        // otherwise can be seen when having accessibility and eg a textview;
+        //which causes access to the viewpager indirectly before the call to sortChildDrawingOrder , thus
+        //a state drift.
+        //and that can lead to index out of bounds. in the getChildDrawingOrder method.
+
 
     }
 

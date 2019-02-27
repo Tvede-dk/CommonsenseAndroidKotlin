@@ -18,6 +18,10 @@ class WidgetsBaseFragmentPagerAdapterActivity : BaseDatabindingActivity<WidgetsP
             WidgetsPagerAdapterExampleBinding::inflate
 
     override fun useBinding() {
+        for (i in 0 until 5) {
+            addNew()
+        }
+
         binding.widgetsPagerExampleAddSingle.setOnclickAsync { addNew() }
 
         binding.widgetsPagerExampleAddMany.setOnclickAsync {
@@ -31,8 +35,9 @@ class WidgetsBaseFragmentPagerAdapterActivity : BaseDatabindingActivity<WidgetsP
         binding.widgetsPagerExampleRemoveFirst.setOnclickAsync { removeFirst() }
 
         binding.widgetsPagerExampleViewpager.setAdapterAndListener(adapter, BaseViewPagerOnChangeListener {
-            binding.widgetsPagerExampleTitle.text = adapter.getPageTitle(it)
+            //            binding.widgetsPagerExampleTitle.text = adapter.getPageTitle(it)
         })
+//        binding.widgetsPagerExampleViewpager.setCurrentItem(5, false)
     }
 
     private fun removeLast() = adapter.removeFragment(adapter.getAllFragments().last())

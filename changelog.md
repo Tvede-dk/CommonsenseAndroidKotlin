@@ -1,4 +1,12 @@
 # Changelog
+## 0.0.19
+- permissions handling is now possible with multiple values, and a way improved callback mechanism as well as many more extensions making life a lot easier
+- fixed bug with PictureRetriever where the permission for the Camera was not acquired.
+- kotlin 1.3.30
+- gradle 5.4-rc1
+- android gradle 3.3.2
+- minor version updates for testing.
+- removed thumbnail from PictureRetriever as it was not fully implemented. 
 
 ## 0.0.18
 - fixed minor bug with dialogFragments and baseFragmentPagerAdapter (a bug from the support libs)

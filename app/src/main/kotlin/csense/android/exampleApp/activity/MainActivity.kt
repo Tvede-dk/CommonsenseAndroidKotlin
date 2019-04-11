@@ -1,10 +1,13 @@
 package csense.android.exampleApp.activity
 
 
+import android.annotation.*
+import android.net.*
 import android.support.annotation.*
 import android.support.v7.widget.*
 import com.commonsense.android.kotlin.base.*
 import com.commonsense.android.kotlin.system.extensions.*
+import com.commonsense.android.kotlin.system.imaging.*
 import com.commonsense.android.kotlin.system.logging.*
 import com.commonsense.android.kotlin.views.*
 import com.commonsense.android.kotlin.views.databinding.activities.*
@@ -15,6 +18,7 @@ import csense.android.exampleApp.databinding.*
 import csense.android.exampleApp.views.dataAware.*
 import csense.android.exampleApp.views.tools.*
 import csense.android.exampleApp.views.widgets.*
+import kotlinx.coroutines.*
 
 
 class MainActivity : BaseDatabindingActivity<MainActivityBinding>() {
@@ -32,6 +36,7 @@ class MainActivity : BaseDatabindingActivity<MainActivityBinding>() {
         binding.mainActivityRecyclerView.setup(adapter, manager)
     }
 
+    @SuppressLint("MissingPermission")
     private fun setupAdapter() {
         adapter.add(CategoryRecyclerRender(R.string.mainactivity_category_tools) {
             startActivity(ToolsOverviewActivity::class)
@@ -52,6 +57,34 @@ class MainActivity : BaseDatabindingActivity<MainActivityBinding>() {
         }, 0)
         adapter.add(CategoryRecyclerRender(R.string.intro_text) {
             startActivity(DataAActivity::class)
+        }, 0)
+
+        adapter.add(CategoryRecyclerRender(R.string.retrive_picture) {
+            PictureRetriver(
+                    this,
+                    { path: Uri, fromCamera: Boolean ->
+                        launchInUi("safeToast") {
+                            delay(2500)
+                            logDebug("Got image Uri = $path, was it from camera ? = $fromCamera")
+                            it.safeToast("Got image Uri = $path, was it from camera ? = $fromCamera")
+                        }
+                    },
+                    null
+            ).getImage(true)
+        }, 0)
+
+        adapter.add(CategoryRecyclerRender(R.string.retrive_picture) {
+            PictureRetriver(
+                    this,
+                    { path: Uri, fromCamera: Boolean ->
+                        launchInUi("safeToast") {
+                            delay(2500)
+                            logDebug("Got image Uri = $path, was it from camera ? = $fromCamera")
+                            it.safeToast("Got image Uri = $path, was it from camera ? = $fromCamera")
+                        }
+                    },
+                    null
+            ).getImage(false)
         }, 0)
 
 

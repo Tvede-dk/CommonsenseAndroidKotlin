@@ -11,7 +11,7 @@ import org.robolectric.annotation.*
 import java.util.concurrent.*
 
 /**
- * Created by Kasper Tvede on 27-05-2017.
+ * 
  */
 
 @Config(sdk = [23])
@@ -23,7 +23,7 @@ class PermissionsHandlingTest : BaseRoboElectricTest() {
         val sem = Semaphore(0)
         val act = createActivity<AlwaysPermissionActivity>()
 
-        act.permissionHandler.performActionForPermission(Manifest.permission.CALL_PHONE, act, sem::release) {
+        act.permissionHandler.performActionForPermissions(listOf(Manifest.permission.CALL_PHONE), act, sem::release) { _, _ ->
             Assert.fail("should be granted in tests")
         }
         Assert.assertTrue(sem.tryAcquire())
@@ -33,17 +33,19 @@ class PermissionsHandlingTest : BaseRoboElectricTest() {
     fun testPermissionFlowDenyAccept() {
         val act = createActivity<DenyPermissionActivity>()
         testCallbackWithSemaphore { sem ->
-            act.permissionHandler.performActionForPermission(Manifest.permission.CALL_PHONE, act, {
+            act.permissionHandler.performActionForPermissions(listOf(Manifest.permission.CALL_PHONE), act, {
                 Assert.fail("should be granted in tests")
-            }, sem::release)
+            }, { _, _ ->
+                sem.release()
+            })
 
             callHandlerWith(act.permissionHandler, Manifest.permission.CALL_PHONE, false)
         }
         //simulate response from user
         testCallbackWithSemaphore { sem ->
-            act.permissionHandler.performActionForPermission(Manifest.permission.CALL_PHONE, act,
+            act.permissionHandler.performActionForPermissions(listOf(Manifest.permission.CALL_PHONE), act,
                     { sem.release() },
-                    { Assert.fail("should be granted in tests") })
+                    { _, _ -> Assert.fail("should be granted in tests") })
 
             callHandlerWith(act.permissionHandler, Manifest.permission.CALL_PHONE, true)
         }
@@ -54,9 +56,11 @@ class PermissionsHandlingTest : BaseRoboElectricTest() {
         val sem = Semaphore(0)
         val act = createActivity<DenyPermissionActivity>()
 
-        act.permissionHandler.performActionForPermission(Manifest.permission.CALL_PHONE, act, {
+        act.permissionHandler.performActionForPermissions(listOf(Manifest.permission.CALL_PHONE), act, {
             Assert.fail("should not be granted in tests")
-        }, sem::release)
+        }, { _, _ ->
+            sem.release()
+        })
 
         //simulate response from user
         callHandlerWith(act.permissionHandler, Manifest.permission.CALL_PHONE, false)
@@ -71,9 +75,11 @@ class PermissionsHandlingTest : BaseRoboElectricTest() {
 
         val listenerCount = 10
         for (i in 0 until listenerCount) {
-            act.permissionHandler.performActionForPermission(Manifest.permission.CALL_PHONE, act, {
+            act.permissionHandler.performActionForPermissions(listOf(Manifest.permission.CALL_PHONE), act, {
                 Assert.fail("should not be granted in tests")
-            }, sem::release)
+            }, { _, _ ->
+                sem.release()
+            })
         }
         callHandlerWith(act.permissionHandler, Manifest.permission.CALL_PHONE, false)
         Assert.assertTrue(sem.tryAcquire(listenerCount))
@@ -87,9 +93,11 @@ class PermissionsHandlingTest : BaseRoboElectricTest() {
 
         val listenerCount = 5
         for (i in 0 until listenerCount) {
-            act.permissionHandler.performActionForPermission(Manifest.permission.CALL_PHONE, act, {
+            act.permissionHandler.performActionForPermissions(listOf(Manifest.permission.CALL_PHONE), act, {
                 Assert.fail("should not be granted in tests")
-            }, sem::release)
+            }, { _, _ ->
+                sem.release()
+            })
         }
         callHandlerWith(act.permissionHandler, Manifest.permission.CALL_PHONE, false)
         Assert.assertTrue(sem.tryAcquire(listenerCount))
@@ -103,32 +111,7 @@ class PermissionsHandlingTest : BaseRoboElectricTest() {
         } else {
             PackageManager.PERMISSION_DENIED
         }
-        handler.onRequestPermissionResult(handler.handlerRequestCode, arrayOf(permission), intArrayOf(managerValue))
-    }
-
-    @Ignore
-    @Test
-    fun performActionForPermission() {
-    }
-
-    @Ignore
-    @Test
-    fun onRequestPermissionResult() {
-    }
-
-    @Ignore
-    @Test
-    fun requestPermissions() {
-    }
-
-    @Ignore
-    @Test
-    fun toPrettyString() {
-    }
-
-    @Ignore
-    @Test
-    fun getHandlerRequestCode() {
+        handler.onRequestPermissionResult(createActivity(), handler.handlerRequestCode, arrayOf(permission), intArrayOf(managerValue))
     }
 
 

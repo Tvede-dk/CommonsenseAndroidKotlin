@@ -34,7 +34,7 @@ open class BaseFragment : DialogFragment(), ActivityResultHelperContainer {
         get() {
             if (baseActivity == null) {
                 logError("The activity is either not a base activity or its not there;" +
-                        " the permission handling only works with BaseActivity")
+                        " the permissions handling only works with BaseActivity")
             }
             return baseActivity?.permissionHandler
         }

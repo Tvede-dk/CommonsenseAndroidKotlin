@@ -164,3 +164,10 @@ inline fun <I1, I2, I3, I4, I5, I6, O>
 inline fun <E> Iterable<E?>.forEachNotNull(crossinline action: FunctionUnit<E>) {
     forEach { it?.let(action) }
 }
+
+/**
+ * Tells if all booleans in the given collection are true.
+ * @receiver Collection<Boolean>
+ * @return Boolean true if all is true, false otherwise.
+ */
+inline fun Collection<Boolean>.isAllTrue() = all { it }

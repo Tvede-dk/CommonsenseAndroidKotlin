@@ -1,14 +1,10 @@
 package com.commonsense.android.kotlin.system.permissions
 
-import android.app.*
 import android.content.*
 import android.support.annotation.*
-import android.support.v4.content.*
 import com.commonsense.android.kotlin.base.*
-import com.commonsense.android.kotlin.base.extensions.*
 import com.commonsense.android.kotlin.base.extensions.collections.*
 import com.commonsense.android.kotlin.system.base.*
-import kotlinx.coroutines.*
 
 
 //region Permission enum extensions
@@ -21,83 +17,227 @@ fun PermissionEnum.useIfPermitted(context: Context,
             .ifFalse(useError)
 }
 
-@UiThread
-fun PermissionEnum.usePermission(handler: PermissionsHandling,
-                                 activity: Activity,
-                                 function: EmptyFunction,
-                                 errorFunction: EmptyFunction) {
-    handler.performActionForPermission(
-            permissionValue,
-            activity,
-            function,
-            errorFunction)
-}
 
 @UiThread
-fun PermissionEnum.useSuspend(handler: PermissionsHandling,
-                              activity: Activity,
-                              function: AsyncEmptyFunction,
-                              errorFunction: AsyncEmptyFunction) {
-    handler.performActionForPermission(permissionValue, activity, {
-        launchBlock(Dispatchers.Main, block = function)
-    }, {
-        launchBlock(Dispatchers.Main, block = errorFunction)
-    })
-}
-
-@UiThread
-fun PermissionEnum.useSuspend(handler: PermissionsHandling,
-                              activity: BaseActivity,
-                              function: AsyncFunctionUnit<Context>,
-                              errorFunction: AsyncFunctionUnit<Context>) {
-    handler.performActionForPermission(permissionValue, activity, {
-        activity.launchInUi("PermissionEnum.useSuspend", function)
-    }, {
-        activity.launchInUi("PermissionEnum.useSuspend", errorFunction)
-    })
-}
-
-
-@UiThread
-inline fun PermissionEnum.usePermission(context: Context, crossinline usePermission: EmptyFunction) {
+inline fun PermissionEnum.usePermission(context: Context, usePermission: EmptyFunction) {
     havePermission(context).ifTrue(usePermission)
 }
 
 @UiThread
-fun PermissionEnum.useSuspend(context: Context, usePermission: AsyncEmptyFunction): Job? {
-    return if (havePermission(context)) {
-        launchBlock(Dispatchers.Main, block = usePermission)
-    } else {
-        null
-    }
-}
-
-@UiThread
-fun PermissionEnum.useSuspend(context: BaseActivity, usePermission: AsyncFunctionUnit<Context>) {
-    if (havePermission(context)) {
-        context.launchInUi("PermissionEnum.useSuspend", usePermission)
-    }
-}
-
-
-@UiThread
-fun PermissionEnum.havePermission(context: Context): Boolean {
-    return ContextCompat.checkSelfPermission(context, permissionValue).isGranted()
-}
+fun PermissionEnum.havePermission(context: Context): Boolean =
+        context.havePermission(permissionValue)
 //endregion
 
 
 //region activity / fragment permissions extensions
+
+
+//region Base activity permission enum
 /**
  * Asks iff necessary, for the use of the given permission
  * if allowed, the usePermission callback will be called
  * if not allowed the onFailed callback will be called
- * NB if the activity IS NOT A BASEACTIVITY then onfailed will be called
  */
 @UiThread
-fun BaseFragment.usePermission(permission: PermissionEnum,
+fun BaseActivity.usePermissionEnum(permission: PermissionEnum,
+                                   usePermission: EmptyFunction,
+                                   onFailed: PermissionsFailedCallback? = null) {
+    permissionHandler.performActionForPermissionsEnum(
+            listOf(permission),
+            this,
+            usePermission,
+            onFailed)
+}
+
+@UiThread
+fun BaseActivity.usePermissionEnumFull(permission: PermissionEnum,
+                                       usePermission: PermissionsSuccessCallback,
+                                       onFailed: PermissionsFailedCallback? = null) {
+    permissionHandler.performActionForPermissionsEnumFull(
+            listOf(permission),
+            this,
+            usePermission,
+            onFailed)
+}
+
+@UiThread
+fun BaseActivity.usePermissionEnums(permissions: List<PermissionEnum>,
+                                    usePermission: EmptyFunction,
+                                    onFailed: PermissionsFailedCallback? = null) {
+    permissionHandler.performActionForPermissionsEnum(
+            permissions,
+            this,
+            usePermission,
+            onFailed)
+}
+
+@UiThread
+fun BaseActivity.usePermissionEnumsFull(permissions: List<PermissionEnum>,
+                                        usePermission: PermissionsSuccessCallback,
+                                        onFailed: PermissionsFailedCallback? = null) {
+    permissionHandler.performActionForPermissionsEnumFull(
+            permissions,
+            this,
+            usePermission,
+            onFailed)
+}
+//endregion
+
+//region Base activity permission string
+@UiThread
+fun BaseActivity.usePermission(permission: @DangerousPermissionString String,
                                usePermission: EmptyFunction,
-                               onFailed: EmptyFunction) {
+                               onFailed: PermissionsFailedCallback? = null) {
+    permissionHandler.performActionForPermissions(
+            listOf(permission),
+            this,
+            usePermission,
+            onFailed)
+}
+
+
+@UiThread
+fun BaseActivity.usePermissionFull(permission: @DangerousPermissionString String,
+                                   usePermission: PermissionsSuccessCallback,
+                                   onFailed: PermissionsFailedCallback? = null) {
+    permissionHandler.performActionForPermissionsFull(
+            listOf(permission),
+            this,
+            usePermission,
+            onFailed)
+}
+
+@UiThread
+fun BaseActivity.usePermissions(permissions: List<@DangerousPermissionString String>,
+                                usePermission: EmptyFunction,
+                                onFailed: PermissionsFailedCallback? = null) {
+    permissionHandler.performActionForPermissions(
+            permissions.toList(),
+            this,
+            usePermission,
+            onFailed)
+}
+
+
+@UiThread
+fun BaseActivity.usePermissionsFull(permissions: List<@DangerousPermissionString String>,
+                                    usePermission: PermissionsSuccessCallback,
+                                    onFailed: PermissionsFailedCallback? = null) {
+    permissionHandler.performActionForPermissionsFull(
+            permissions.toList(),
+            this,
+            usePermission,
+            onFailed)
+}
+//endregion
+
+//region Base fragment use permission enum
+/**
+ *
+ * NB if the activity IS NOT A BASEACTIVITY then onfailed will be called
+ * @receiver BaseFragment
+ * @param permission PermissionEnum
+ * @param usePermission EmptyFunction
+ * @param onFailed PermissionsFailedCallback?
+ */
+@UiThread
+fun BaseFragment.usePermissionEnum(permission: PermissionEnum,
+                                   usePermission: EmptyFunction,
+                                   onFailed: PermissionsFailedCallback?) {
+    val baseAct = baseActivity
+    if (baseAct != null) {
+        baseAct.usePermissionEnum(
+                permission,
+                usePermission,
+                onFailed)
+    } else {
+        onFailed?.invoke(emptyList(), listOf(permission.permissionValue))
+    }
+}
+
+/**
+ *
+ * NB if the activity IS NOT A BASEACTIVITY then onfailed will be called
+ * @receiver BaseFragment
+ * @param permission PermissionEnum
+ * @param usePermission PermissionsSuccessCallback
+ * @param onFailed PermissionsFailedCallback?
+ */
+@UiThread
+fun BaseFragment.usePermissionEnumFull(permission: PermissionEnum,
+                                       usePermission: PermissionsSuccessCallback,
+                                       onFailed: PermissionsFailedCallback?) {
+    val baseAct = baseActivity
+    if (baseAct != null) {
+        baseAct.usePermissionEnumFull(
+                permission,
+                usePermission,
+                onFailed)
+    } else {
+        onFailed?.invoke(emptyList(), listOf(permission.permissionValue))
+    }
+}
+
+/**
+ *
+ * NB if the activity IS NOT A BASEACTIVITY then onfailed will be called
+ * @receiver BaseFragment
+ * @param permissions List<PermissionEnum>
+ * @param usePermission EmptyFunction
+ * @param onFailed PermissionsFailedCallback?
+ */
+@UiThread
+fun BaseFragment.usePermissionEnums(permissions: List<PermissionEnum>,
+                                    usePermission: EmptyFunction,
+                                    onFailed: PermissionsFailedCallback?) {
+    val baseAct = baseActivity
+    if (baseAct != null) {
+        baseAct.usePermissionEnums(
+                permissions,
+                usePermission,
+                onFailed)
+    } else {
+        onFailed?.invoke(emptyList(), permissions.map { it.permissionValue })
+    }
+}
+
+/**
+ *
+ * NB if the activity IS NOT A BASEACTIVITY then onfailed will be called
+ * @receiver BaseFragment
+ * @param permissions List<PermissionEnum>
+ * @param usePermission PermissionsSuccessCallback
+ * @param onFailed PermissionsFailedCallback?
+ */
+@UiThread
+fun BaseFragment.usePermissionEnumsFull(permissions: List<PermissionEnum>,
+                                        usePermission: PermissionsSuccessCallback,
+                                        onFailed: PermissionsFailedCallback?) {
+    val baseAct = baseActivity
+    if (baseAct != null) {
+        baseAct.usePermissionEnumsFull(
+                permissions,
+                usePermission,
+                onFailed)
+    } else {
+        onFailed?.invoke(emptyList(), permissions.map { it.permissionValue })
+    }
+}
+//endregion
+
+//region base fragment use permission string
+/**
+ *
+ * NB if the activity IS NOT A BASEACTIVITY then onfailed will be called
+ * @receiver BaseFragment
+ * @param permission @DangerousPermissionString String
+ * @param usePermission EmptyFunction
+ * @param onFailed PermissionsFailedCallback?
+ */
+@UiThread
+fun BaseFragment.usePermission(permission: @DangerousPermissionString String,
+                               usePermission: EmptyFunction,
+                               onFailed: PermissionsFailedCallback?) {
     val baseAct = baseActivity
     if (baseAct != null) {
         baseAct.usePermission(
@@ -105,44 +245,79 @@ fun BaseFragment.usePermission(permission: PermissionEnum,
                 usePermission,
                 onFailed)
     } else {
-        onFailed()
+        onFailed?.invoke(emptyList(), listOf(permission))
     }
-
-}
-
-suspend fun BaseFragment.usePermissionSuspend(
-        permission: PermissionEnum,
-        usePermission: AsyncEmptyFunction,
-        onFailed: AsyncEmptyFunction) {
-    val act = baseActivity
-    if (act != null) {
-        act.usePermissionSuspend(permission, usePermission, onFailed)
-    } else {
-        onFailed()
-    }
-}
-
-fun BaseActivity.usePermissionSuspend(
-        permission: PermissionEnum,
-        usePermission: AsyncEmptyFunction,
-        onFailed: AsyncEmptyFunction) {
-    permission.useSuspend(permissionHandler, this, usePermission, onFailed)
 }
 
 /**
- * Asks iff necessary, for the use of the given permission
- * if allowed, the usePermission callback will be called
- * if not allowed the onFailed callback will be called
+ *
+ * NB if the activity IS NOT A BASEACTIVITY then onfailed will be called
+ * @receiver BaseFragment
+ * @param permission @DangerousPermissionString String
+ * @param usePermission PermissionsSuccessCallback
+ * @param onFailed PermissionsFailedCallback?
  */
 @UiThread
-fun BaseActivity.usePermission(permission: PermissionEnum,
-                               usePermission: EmptyFunction,
-                               onFailed: EmptyFunction? = null) {
-    permissionHandler.performActionForPermission(
-            permission.permissionValue,
-            this,
-            usePermission,
-            onFailed
-                    ?: {})
+fun BaseFragment.usePermissionFull(permission: @DangerousPermissionString String,
+                                   usePermission: PermissionsSuccessCallback,
+                                   onFailed: PermissionsFailedCallback?) {
+    val baseAct = baseActivity
+    if (baseAct != null) {
+        baseAct.usePermissionFull(
+                permission,
+                usePermission,
+                onFailed)
+    } else {
+        onFailed?.invoke(emptyList(), listOf(permission))
+    }
 }
+
+/**
+ *
+ * NB if the activity IS NOT A BASEACTIVITY then onfailed will be called
+ * @receiver BaseFragment
+ * @param permission List<@DangerousPermissionString String>
+ * @param usePermission EmptyFunction
+ * @param onFailed PermissionsFailedCallback?
+ */
+@UiThread
+fun BaseFragment.usePermissions(permission: List<@DangerousPermissionString String>,
+                                usePermission: EmptyFunction,
+                                onFailed: PermissionsFailedCallback?) {
+    val baseAct = baseActivity
+    if (baseAct != null) {
+        baseAct.usePermissions(
+                permission,
+                usePermission,
+                onFailed)
+    } else {
+        onFailed?.invoke(emptyList(), permission)
+    }
+}
+
+/**
+ *
+ * NB if the activity IS NOT A BASEACTIVITY then onfailed will be called
+ * @receiver BaseFragment
+ * @param permission List<@DangerousPermissionString String>
+ * @param usePermission PermissionsSuccessCallback
+ * @param onFailed PermissionsFailedCallback?
+ */
+@UiThread
+fun BaseFragment.usePermissionsFull(permission: List<@DangerousPermissionString String>,
+                                    usePermission: PermissionsSuccessCallback,
+                                    onFailed: PermissionsFailedCallback?) {
+    val baseAct = baseActivity
+    if (baseAct != null) {
+        baseAct.usePermissionsFull(
+                permission,
+                usePermission,
+                onFailed)
+    } else {
+        onFailed?.invoke(emptyList(), permission)
+    }
+}
+//endregion
+
+
 //endregion

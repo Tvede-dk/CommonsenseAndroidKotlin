@@ -78,7 +78,7 @@ open class BaseActivity : AppCompatActivity(), ActivityResultHelperContainer {
     }
 
     private val activityResultHelper by lazy {
-        ActivityResultHelper { logWarning(it) }
+        ActivityResultHelper { logWarning(it) }//todo allow user code to overwrite this ? hmm
     }
 
 
@@ -99,7 +99,7 @@ open class BaseActivity : AppCompatActivity(), ActivityResultHelperContainer {
      */
     fun launchInBackground(group: String, action: AsyncEmptyFunction): Job =
             localJobs.performAction(Dispatchers.Default, action, group)
-    
+
 
     //<editor-fold desc="Lifecycle events">
 
@@ -110,7 +110,7 @@ open class BaseActivity : AppCompatActivity(), ActivityResultHelperContainer {
 
     override fun onRequestPermissionsResult(requestCode: Int, permissions: Array<out String>, grantResults: IntArray) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults)
-        permissionHandler.onRequestPermissionResult(requestCode, permissions, grantResults)
+        permissionHandler.onRequestPermissionResult(this, requestCode, permissions, grantResults)
     }
 
     override fun onDestroy() {
@@ -155,6 +155,7 @@ open class BaseActivity : AppCompatActivity(), ActivityResultHelperContainer {
         super.onBackPressed()
     }
     //</editor-fold>
+
 
     //<editor-fold desc="Add activity result listener">
     override fun addActivityResultListenerOnlyOk(requestCode: Int, receiver: ActivityResultCallbackOk) {

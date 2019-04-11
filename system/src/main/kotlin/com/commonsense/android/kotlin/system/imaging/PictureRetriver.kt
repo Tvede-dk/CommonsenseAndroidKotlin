@@ -17,9 +17,11 @@ import com.commonsense.android.kotlin.system.permissions.*
 
 
 /**
- * Created by Kasper Tvede on 10-07-2017.
+ * A Simple wrapper class that handles the retrieval of images(pictures) from either the gallery or the camera.
+ *
+ *
  */
-//TODO better name:
+//TODO better name: or at least spell it right :)
 //-picture - taker, image retriver, image fetcher, cameraGalleryImageHandler ?
 // -- hmm somewhat along those
 class PictureRetriver(private val activity: BaseActivity,
@@ -27,36 +29,35 @@ class PictureRetriver(private val activity: BaseActivity,
                       private val optionalCancelCallback: EmptyFunction? = null,
                       private val requestCode: Int = 18877) {
 
-    var thumbnail: Bitmap? = null
 
     private var pictureUri: Uri? = null
-
-    fun useCamera() = activity.usePermission(PermissionEnum.WriteExternalStorage, usePermission = {
+    /**
+     * First queries for the required permission before retrieving the image and returning the result.
+     */
+    fun useCamera() = activity.usePermissionEnums(listOf(PermissionEnum.WriteExternalStorage, PermissionEnum.Camera), usePermission = {
         //we also need camera.
-        activity.usePermission(PermissionEnum.Camera, usePermission = {
-            //lets use the background since the contentresolver is using disk access, which
-            //violates the UI thread on file access principle; then only when we are ready,
-            // use the main thread.
-            activity.launchInBackground("useCamera") {
-                val takePictureIntent = Intent(MediaStore.ACTION_IMAGE_CAPTURE)
-                takePictureIntent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION or Intent.FLAG_GRANT_WRITE_URI_PERMISSION)
 
-                val values = ContentValues(1)
-                values.put(MediaStore.Images.Media.MIME_TYPE, "image/jpg")
-                pictureUri = activity.contentResolver
-                        .insert(MediaStore.Images.Media.EXTERNAL_CONTENT_URI, values)
-                takePictureIntent.putExtra(MediaStore.EXTRA_OUTPUT, pictureUri)
-                if (takePictureIntent.resolveActivity(activity.packageManager) != null) {
-                    activity.launchInUi("useCamera") {
-                        activity.startActivityForResult(takePictureIntent, null, requestCode, this::onActivityResult)
-                    }
+        //lets use the background since the contentResolver is using disk access, which
+        //violates the UI thread on file access principle; then only when we are ready,
+        // use the main thread.
+        activity.launchInBackground("useCamera") {
+            val takePictureIntent = Intent(MediaStore.ACTION_IMAGE_CAPTURE)
+            takePictureIntent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION or Intent.FLAG_GRANT_WRITE_URI_PERMISSION)
+
+            val values = ContentValues(1)
+            values.put(MediaStore.Images.Media.MIME_TYPE, "image/jpg")
+            pictureUri = activity.contentResolver.insert(MediaStore.Images.Media.EXTERNAL_CONTENT_URI, values)
+            takePictureIntent.putExtra(MediaStore.EXTRA_OUTPUT, pictureUri)
+            if (takePictureIntent.resolveActivity(activity.packageManager) != null) {
+                activity.launchInUi("useCamera") {
+                    activity.startActivityForResult(takePictureIntent, null, requestCode, this::onActivityResult)
                 }
             }
-        })
+        }
     })
 
     fun useGallery() {
-        val pickIntent = Intent(Intent.ACTION_PICK, android.provider.MediaStore.Images.Media.EXTERNAL_CONTENT_URI)
+        val pickIntent = Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI)
         pickIntent.type = "image/*"
         activity.startActivityForResult(pickIntent, null, requestCode, this::onActivityResult)
     }
@@ -73,11 +74,6 @@ class PictureRetriver(private val activity: BaseActivity,
             isCamera = false
         }
 
-        val imageBitmap = data?.extras?.get("data") as? Bitmap
-        imageBitmap?.let {
-            thumbnail = it
-        }
-        //TODO , might wanna create a thumbnail in background before this point.
         val safePictureUri = pictureUri
         if (safePictureUri != null) {
             callback(safePictureUri, isCamera)

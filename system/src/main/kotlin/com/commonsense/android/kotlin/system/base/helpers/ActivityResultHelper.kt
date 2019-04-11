@@ -157,6 +157,7 @@ interface ActivityResultHelperContainer {
      */
     fun removeActivityResultListener(@IntRange(from = 0) requestCode: Int)
 }
+
 //</editor-fold>
 
 
@@ -176,10 +177,10 @@ class AsyncActivityResultWrapper(val callback: AsyncActivityResultCallback,
                                  val removerFunction: (requestCode: Int) -> Unit)
     : ActivityResultCallbackInterface {
     override fun onActivityResult(resultCode: Int, data: Intent?) {
-        GlobalScope.launch(Dispatchers.Main, CoroutineStart.DEFAULT, {
+        GlobalScope.launch(Dispatchers.Main, CoroutineStart.DEFAULT) {
             callback(resultCode, data)
             removerFunction(requestCode)
-        })
+        }
     }
 }
 //</editor-fold>

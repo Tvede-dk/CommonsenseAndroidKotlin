@@ -10,7 +10,10 @@ import android.support.annotation.*
  */
 
 
-
+/**
+ * This is a list of all Dangerous permissions.
+ */
+@Target(AnnotationTarget.TYPE, AnnotationTarget.VALUE_PARAMETER, AnnotationTarget.PROPERTY)
 @SuppressLint("InlinedApi")
 @Retention(AnnotationRetention.SOURCE)
 @StringDef(Manifest.permission.ACCESS_CHECKIN_PROPERTIES, Manifest.permission.ACCESS_COARSE_LOCATION, Manifest.permission.ACCESS_FINE_LOCATION
@@ -30,7 +33,7 @@ annotation class DangerousPermissionString
 //TODO inline this when available.
 /*
 * This is a collection of "dangerous permissions" thus requiring user allowance.
-* https://developer.android.com/guide/topics/permissions/requesting.html#permission-groups
+* see https://developer.android.com/guide/topics/permissions/requesting.html#permission-groups
 */
 enum class PermissionEnum(@DangerousPermissionString val permissionValue: String) {
 

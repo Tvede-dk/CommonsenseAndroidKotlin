@@ -11,7 +11,7 @@ import org.robolectric.annotation.*
 import java.util.concurrent.*
 
 /**
- * 
+ *
  */
 
 @Config(sdk = [23])

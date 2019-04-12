@@ -15,9 +15,7 @@ import com.commonsense.android.kotlin.base.extensions.collections.*
 import com.commonsense.android.kotlin.system.extensions.*
 
 /**
- *
  * Handling of permissions. this class (and the supporting classes) basically handles the whole flow of permission requesting.
- *
  */
 
 
@@ -227,7 +225,7 @@ class PermissionsHandling(
          * Computes from a raw result of permissions and granted results what permission are really
          * @param permissions Array<out String>
          * @param grantedResults IntArray
-         * @return Pair<List<@DangerousPermissionString String>, List<@DangerousPermissionString String>>
+         *
          */
         fun computeSuccessAndFailed(
                 permissions: Array<out String>,
@@ -248,8 +246,6 @@ class PermissionsHandling(
 
 /**
  * Models the result of computeSuccessAndFailed with names.
- * @property successful List<[@com.commonsense.android.kotlin.system.permissions.DangerousPermissionString] String>
- * @property failed List<[@com.commonsense.android.kotlin.system.permissions.DangerousPermissionString] String>
  *
  * Allows to be destructed.
  */
@@ -276,8 +272,7 @@ internal fun Int.isGranted(): Boolean {
 }
 
 /**
- * Simlifies the intention of a "failed" request. simply calls the on failed with all permissions as failed.
- * @receiver PermissionRequest
+ * Simplifies the intention of a "failed" request. simply calls the on failed with all permissions as failed.
  */
 private fun PermissionRequest.failed() {
     onFailed?.invoke(emptyList(), permissions.toList())
@@ -285,7 +280,6 @@ private fun PermissionRequest.failed() {
 
 /**
  * Tells if we have the given permission (name) (
- * @receiver Context
  * @param permissionName String see PermissionEnum for values.
  * @return Boolean true if the permission is granted
  */

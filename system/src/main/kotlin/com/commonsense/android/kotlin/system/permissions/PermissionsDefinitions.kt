@@ -33,7 +33,7 @@ annotation class DangerousPermissionString
 //TODO inline this when available.
 /*
 * This is a collection of "dangerous permissions" thus requiring user allowance.
-* see https://developer.android.com/guide/topics/permissions/requesting.html#permission-groups
+* https://developer.android.com/guide/topics/permissions/requesting.html#permission-groups
 */
 enum class PermissionEnum(@DangerousPermissionString val permissionValue: String) {
 

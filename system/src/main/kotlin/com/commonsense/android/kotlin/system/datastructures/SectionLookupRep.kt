@@ -265,8 +265,10 @@ class SectionLookupRep<T : TypeHashCodeLookupRepresent<Rep>, out Rep : Any> {
         }
         size.forEach {
             val key = data.keyAt(it)
-            counter += data[key].visibleCount
-            newLookup[it] = counter
+            if (data[key].visibleCount > 0) {
+                counter += data[key].visibleCount
+                newLookup[it] = counter
+            }
         }
         preComputedLookup = newLookup
         isPrecomputedUpToDate = true

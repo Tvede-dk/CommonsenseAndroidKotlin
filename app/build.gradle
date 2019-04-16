@@ -35,6 +35,9 @@ android {
             resConfigs("en", "xhdpi")
         }
     }
+    packagingOptions {
+        exclude "META-INF/atomicfu.kotlin_module"
+    }
 }
 
 dependencies {

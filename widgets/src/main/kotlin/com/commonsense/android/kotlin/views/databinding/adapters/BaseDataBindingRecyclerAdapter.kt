@@ -229,7 +229,10 @@ abstract class DataBindingRecyclerAdapter<T>(context: Context) :
     override fun onCreateViewHolder(parent: ViewGroup, @IntRange(from = 0) viewType: Int): BaseViewHolderItem<*> {
         val rep = dataCollection.getTypeRepresentativeFromTypeValue(viewType)
         return rep?.invoke(inflater, parent, false)
-                ?: throw RuntimeException("could not find item, even though we expected it, for viewtype: $viewType")
+                ?: throw RuntimeException("could not find item, " +
+                        "even though we expected it, for viewType: $viewType;" +
+                        "rep is = $rep;" +
+                        "ViewGroup is = $parent")
     }
 
     /**
@@ -238,8 +241,11 @@ abstract class DataBindingRecyclerAdapter<T>(context: Context) :
      * @return Int
      */
     override fun getItemViewType(@IntRange(from = 0) position: Int): Int {
-        val index = dataCollection.indexToPath(position) ?: return 0
-        return dataCollection[index]?.getTypeValue() ?: 0
+        val index = dataCollection.indexToPath(position)
+                ?: throw RuntimeException("Could not get index, so the item is not there;" +
+                        " position = $position; count = ${dataCollection.size}")
+        val result = dataCollection[index] ?: throw RuntimeException("element was null at index")
+        return result.getTypeValue()
     }
 
     /**

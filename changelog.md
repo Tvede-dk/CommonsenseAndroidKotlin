@@ -1,4 +1,9 @@
 # Changelog
+
+## 0.0.19.1
+- coroutines 1.2.0 - improved schedualing performance on android (less work on main thread)
+- gradle 5.4
+
 ## 0.0.19
 - permissions handling is now possible with multiple values, and a way improved callback mechanism as well as many more extensions making life a lot easier
 - fixed bug with PictureRetriever where the permission for the Camera was not acquired.

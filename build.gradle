@@ -24,7 +24,7 @@ buildscript {
     ext.coroutinesVersion = '1.2.0'
     ext.leakCanaryVersion = "1.6.3"
     ext.junitVersion = "4.12"
-    ext.androidGradleVersion = "3.3.2"
+    ext.androidGradleVersion = "3.4.0"
     ext.roboElectricVersion = "4.2.1"
     ext.espressoVersion = "3.0.2"
     ext.testSupportRunnerVersion = "1.0.2"

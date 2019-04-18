@@ -4,8 +4,10 @@ package com.commonsense.android.kotlin.system.datastructures
 
 import android.support.annotation.IntRange
 import android.util.*
+import com.commonsense.android.kotlin.base.debug.prettyStringContent
 import com.commonsense.android.kotlin.base.extensions.*
 import com.commonsense.android.kotlin.base.extensions.collections.*
+import kotlin.Pair
 
 
 /**
@@ -21,8 +23,8 @@ data class TypeSection<T>(
         /**
          *  The content of this section
          */
-        val collection: MutableList<T> = mutableListOf()) {
-
+        val collection: MutableList<T> = mutableListOf()
+) {
     /**
      * retrieves the real size of the section  (ignores the isIgnored flag).
      */
@@ -34,6 +36,19 @@ data class TypeSection<T>(
      */
     val visibleCount: Int
         get() = isIgnored.map(0, size)
+
+    override fun toString(): String {
+        return toPrettyString()
+    }
+
+    fun toPrettyString(): String {
+        return "TypeSection state:" + listOf(
+                "\tsize = $size",
+                "\tvisibleCount = $visibleCount",
+                "\tisIgnored = $isIgnored"
+
+        ).prettyStringContent()
+    }
 }
 
 /**
@@ -61,6 +76,8 @@ class SectionLookupRep<T : TypeHashCodeLookupRepresent<Rep>, out Rep : Any> {
     private var cachedSize: Int = 0
     //</editor-fold>
 
+    private val cachedIndex = SectionIndexCache()
+
     //<editor-fold desc="Sizes">
     /**
      * The total number of items in this
@@ -70,26 +87,13 @@ class SectionLookupRep<T : TypeHashCodeLookupRepresent<Rep>, out Rep : Any> {
         get() = cachedSize
 
     /**
-     * The total number of sections in this
+     * The total number of sections in this (including invisible sections)
      */
     val sectionCount
         @IntRange(from = 0)
         get () = data.size()
 
     //</editor-fold>
-
-
-    /**
-     * Its a "mapping" / lookup list of absolute sizes
-     * should make queries from raw position to IndexPath's a simple O(log_2(sectionsCount)
-     * works by computing the start of a given section (in raw)
-     */
-    private var preComputedLookup: IntArray = intArrayOf()
-    /**
-     * Tells if the precomputed lookup is up to date.
-     */
-    private var isPrecomputedUpToDate = false
-
 
     //<editor-fold desc="Add functions">
     /**
@@ -233,46 +237,15 @@ class SectionLookupRep<T : TypeHashCodeLookupRepresent<Rep>, out Rep : Any> {
     fun clear() {
         data.clear()
         lookup.clear()
+        cachedIndex.invalidate()
         cachedSize = 0
     }
 
 
     fun indexToPath(@IntRange(from = 0) position: Int): IndexPath? {
-        computeLookup()
-
-        val index = preComputedLookup.binarySearch { item: Int, index: Int ->
-            val from = preComputedLookup.previousValueOr(index, 0)
-            position.compareToRange(from, item - 1)
-        }
-        return index?.let {
-            val from = preComputedLookup.previousValueOr(it, 0)
-            val key = data.keyAt(it)
-            IndexPath(position - from, key)
-        }
+        return cachedIndex.lookup(position, data)
     }
 
-    private fun computeLookup() {
-        if (isPrecomputedUpToDate) {
-            return
-        }
-        var counter = 0
-        val size = data.size()
-        //do not allocate more than necessarily. so if we have the right size, then use that.
-        val newLookup = if (preComputedLookup.size == size) {
-            preComputedLookup
-        } else {
-            IntArray(size)
-        }
-        size.forEach {
-            val key = data.keyAt(it)
-            if (data[key].visibleCount > 0) {
-                counter += data[key].visibleCount
-                newLookup[it] = counter
-            }
-        }
-        preComputedLookup = newLookup
-        isPrecomputedUpToDate = true
-    }
 
     private fun indexPathIsValid(@IntRange(from = 0) atRow: Int, @IntRange(from = 0) inSection: Int): Boolean =
             getItem(atRow, inSection) != null
@@ -290,7 +263,7 @@ class SectionLookupRep<T : TypeHashCodeLookupRepresent<Rep>, out Rep : Any> {
     private fun getItem(@IntRange(from = 0) atRow: Int, @IntRange(from = 0) inSection: Int): T? =
             data.get(inSection)?.collection?.getSafe(atRow)
 
-    //<editor-fold desc="Section igorance">
+    //<editor-fold desc="Section ignorance">
     fun ignoreSection(@IntRange(from = 0) sectionIndex: Int): SectionUpdate? {
         if (!sectionExists(sectionIndex) || data[sectionIndex].isIgnored) {
             return null
@@ -327,7 +300,7 @@ class SectionLookupRep<T : TypeHashCodeLookupRepresent<Rep>, out Rep : Any> {
     }
 //</editor-fold>
 
-//<editor-fold desc="Section opertations">
+    //<editor-fold desc="Section opertations">
 
     /**
      * returns what have changed. (the diff).
@@ -418,13 +391,13 @@ class SectionLookupRep<T : TypeHashCodeLookupRepresent<Rep>, out Rep : Any> {
     private fun sectionExists(sectionIndex: Int): Boolean = data[sectionIndex, null] != null
 //</editor-fold>
 
-//<editor-fold desc="Operators">
+    //<editor-fold desc="Operators">
 
-    /**  */
     operator fun get(@IntRange(from = 0) atRow: Int, @IntRange(from = 0) inSection: Int): T? = getItem(atRow, inSection)
 
-    /**  */
     operator fun get(index: IndexPath): T? = getItem(index.row, index.section)
+
+    operator fun get(index: Int): T? = indexToPath(index)?.let(::get)
 //</editor-fold>
 
     //<editor-fold desc="cache handling">
@@ -437,8 +410,9 @@ class SectionLookupRep<T : TypeHashCodeLookupRepresent<Rep>, out Rep : Any> {
             data.remove(sectionIndex)
         }
 
+        cachedIndex.invalidate()
         //todo move this around into something like "onChanged" and then set this variable there instead.
-        isPrecomputedUpToDate = false
+//        isPrecomputedUpToDate = false
 
         return actionResult
     }
@@ -455,7 +429,7 @@ class SectionLookupRep<T : TypeHashCodeLookupRepresent<Rep>, out Rep : Any> {
             }
 //</editor-fold>
 
-//<editor-fold desc="location calculations">
+    //<editor-fold desc="location calculations">
 
     private fun addSectionIfMissing(@IntRange(from = 0) inSection: Int): SectionUpdate {
         if (!sectionExists(inSection)) {
@@ -478,7 +452,46 @@ class SectionLookupRep<T : TypeHashCodeLookupRepresent<Rep>, out Rep : Any> {
 
 //</editor-fold>
 
+    override fun toString(): String {
+        return toPrettyString()
+    }
+
+    fun toPrettyString(): String {
+        return "Section lookup rep state:  " + listOf(
+                lookup.toPrettyString(),
+                "cached Size: $cachedSize",
+                "precomputed lookup = $cachedIndex",
+                data.toPrettyString()
+        ).prettyStringContent()
+    }
+
 }
+
+/**
+ * super simple and dirty way to compute the number of visible sections.
+ * @receiver SparseArray<TypeSection<T>>
+ * @return Int
+ */
+private fun <T> SparseArray<TypeSection<T>>.visibleSections(): Int {
+    var result = 0
+    forEach {
+        if (it.isNotEmptyOrInvisible) {
+            result += 1
+        }
+    }
+    return result
+}
+
+/**
+ * tells if this typesection is either empty or invisible
+ * @receiver TypeSection<T>
+ * @return Boolean
+ */
+private val <T> TypeSection<T>.isNotEmptyOrInvisible: Boolean
+    get() = visibleCount > 0
+
+private val <T> TypeSection<T>.isEmptyOrInvisible: Boolean
+    get() = !isNotEmptyOrInvisible
 
 /**
  * An index path (the location of an item) in a sectionized container
@@ -512,4 +525,93 @@ data class SectionUpdates(val changes: SectionUpdate?,
                           val optAdded: SectionUpdate?,
                           val optRemoved: SectionUpdate?)
 
+/**
+ * A cache between a "dataSet" and a "relative position"
+ * such as between a single index and a section with rows in it.
+ */
+class SectionIndexCache {
+    /**
+     * key = section
+     * value = "raw index start" for this container
+     */
+    private var sectionMapping = SparseIntArray()
+
+    /**
+     * Tries to recompute the mappings iff we are either invalid or the forceUpdate is true
+     * @param data TypeSection<T> the data to reflect the section mapping for
+     * @param forceUpdate Boolean if true will update even if we have not been marked invalid.
+     */
+    fun <T> recompute(data: SparseArray<TypeSection<T>>, forceUpdate: Boolean = false) {
+        if (isValid && !forceUpdate) {
+            return
+        }
+        rebuildMapping(data)
+        isValid = true
+    }
+
+    /**
+     * Rebuilds our mapping
+     * @param data TypeSection<T>
+     */
+    private fun <T> rebuildMapping(data: SparseArray<TypeSection<T>>) {
+        sectionMapping.clear()
+        var currentSize = 0
+        data.forEachIndexed { key, value, index ->
+            if (value.isNotEmptyOrInvisible) {
+                currentSize += value.visibleCount
+                sectionMapping.append(value.sectionIndexValue, currentSize)
+            }
+        }
+    }
+
+    /**
+     * converts a raw index to a IndexPath iff possible
+     * @param rawIndex Int the raw index to lookup
+     * @param data TypeSection<T> the data to rebuild the mapping of if we are invalid
+     * @return IndexPath? null if outside of the data set, else an IndexPath there to.
+     */
+    fun <T> lookup(rawIndex: Int, data: SparseArray<TypeSection<T>>): IndexPath? {
+        recompute(data, false)
+        val didFind = sectionMapping.findContainingSectionAndStartIndex(rawIndex)
+        val (key, value) = didFind ?: return null
+        return IndexPath(rawIndex - value, key)
+    }
+
+    /**
+     * Marks this as not up to date / invalid
+     */
+    fun invalidate() {
+        isValid = false
+        sectionMapping.clear()
+    }
+
+    /**
+     * if true we are up to date / valid
+     */
+    var isValid: Boolean = true
+        private set
+
+    /**
+     * if true, we are invalid / not up to date.
+     */
+    val isInvalid: Boolean
+        get () = !isValid
+
+    /**
+     *
+     * @receiver SparseIntArray
+     * @param rawIndex Int
+     * @return Pair<Int, Int>? the key is the size, the value is the section
+     */
+    private fun SparseIntArray.findContainingSectionAndStartIndex(rawIndex: Int): Pair<Int, Int>? {
+        val index = binarySearch { key: Int, value: Int, index: Int ->
+            val from = previousValueOr(index, 0)
+            rawIndex.compareToRange(from, value - 1) //make it exclusive
+        } ?: return null
+        val prevIndex = indexOfKey(index.first)
+        val from = previousValueOr(prevIndex, 0)
+        return Pair(index.first, from)//first is section, from is the start of the section.
+    }
+
+}
 

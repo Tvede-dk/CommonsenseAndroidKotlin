@@ -1,35 +1,35 @@
 <?xml version="1.0" encoding="utf-8"?>
-<layout>
+<layout xmlns:android="http://schemas.android.com/apk/res/android">
 
-    <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:orientation="vertical">
 
 
         <Button
-            android:id="@+id/widgets_recycler_example_add_1000"
+            android:id="@+id/widgets_recycler_example_add_1"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="add 1000 elements" />
+            android:text="add 1000 elements in 0 section" />
 
         <Button
-            android:id="@+id/widgets_recycler_example_add_10000"
+            android:id="@+id/widgets_recycler_example_add_2"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="add 10000 elements" />
+            android:text="add 100 elements 10 in each section" />
 
         <Button
-            android:id="@+id/widgets_recycler_example_remove_1000"
+            android:id="@+id/widgets_recycler_example_hide"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="remove 1000 elements" />
+            android:text="hide section 5,10,15" />
 
         <Button
-            android:id="@+id/widgets_recycler_example_remove_10000"
+            android:id="@+id/widgets_recycler_example_try_auto"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="remove 10000 elements" />
+            android:text="try out automatic" />
 
         <Button
             android:id="@+id/widgets_recycler_example_clear"

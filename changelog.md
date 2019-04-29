@@ -1,5 +1,16 @@
 # Changelog
 
+## 0.0.19.4
+- fixed issue with using null / nullable types in activity with data (fragments with data as well.)
+- kotlin 1.3.31
+- coroutines 1.2.1
+
+## 0.0.19.3
+- fixed bug with iterating over sparsarray in foreachIndexed. (used key rather than index to get value.)
+
+## 0.0.19.2
+- reupload as there are issues with the 0.0.19.1
+
 ## 0.0.19.1
 - coroutines 1.2.0 - improved scheduling performance on android (less work on main thread)
 - gradle 5.4

@@ -20,7 +20,7 @@ open class SimpleRecyclerDemo : BaseDatabindingFragment<DemoRecyclerSimpleViewBi
     override fun getInflater(): InflateBinding<DemoRecyclerSimpleViewBinding> = DemoRecyclerSimpleViewBinding::inflate
 
     private val adapter by lazy {
-        context?.let { BaseDataBindingRecyclerAdapter(it) }
+        context?.let { DefaultDataBindingRecyclerAdapter(it) }
     }
 
     override fun useBinding() {

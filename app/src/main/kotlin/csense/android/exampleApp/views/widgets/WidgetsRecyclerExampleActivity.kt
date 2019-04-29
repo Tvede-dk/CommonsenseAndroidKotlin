@@ -71,8 +71,9 @@ class WidgetsRecyclerExampleActivity : BaseDatabindingActivity<WidgetsRecyclerEx
 
     private fun add2() {
         for (i in 0 until 20) {
-            val mapped = listOf(ViewRender("section = $i")).repeateToSize(10)
-            adapter.addAll(mapped, i)
+            val section = i * 50
+            val mapped = listOf(ViewRender("section =  $section")).repeateToSize(10)
+            adapter.setSection(mapped, section)
         }
     }
 

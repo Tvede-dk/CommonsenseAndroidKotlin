@@ -68,6 +68,12 @@ dependencies {
     implementation project(path: ':tools')
     //below needed for as < 3.2
 //    kapt "com.android.databinding:compiler:$androidGradleVersion"
+    //implementation "com.commonsense.android.kotlin:all:0.0.19.2"
+//    implementation "com.commonsense.android.kotlin:prebuilt:0.0.19.2"
+//    implementation "com.commonsense.android.kotlin:system:0.0.19.2"
+//    implementation "com.commonsense.android.kotlin:base:0.0.19.2"
+//    implementation "com.commonsense.android.kotlin:widgets:0.0.19.2"
+//    implementation "com.commonsense.android.kotlin:tools:0.0.19.2"
 
 }
 

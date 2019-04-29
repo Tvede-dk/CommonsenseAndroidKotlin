@@ -115,7 +115,7 @@ inline fun <E> SparseArray<E>.forEachIndexed(action: (key: Int, value: E, index:
     val size = size()
     for (index in 0 until size) {
         val key = keyAt(index)
-        val value = valueAt(key)
+        val value = valueAt(index)
         action(key, value, index)
     }
 }

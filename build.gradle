@@ -3,7 +3,7 @@ buildscript {
     ext.androidBuildToolsVersion = "28.0.3"
 
     //Lib version and sdks
-    ext.commonsenseVersionName = "0.0.19.4"
+    ext.commonsenseVersionName = "0.0.19.5"
     ext.commonsenseVersionNumber = 1
     ext.minSdk = 16
     ext.targetSdk = 27

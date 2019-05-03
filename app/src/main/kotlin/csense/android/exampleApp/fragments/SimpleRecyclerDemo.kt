@@ -5,13 +5,13 @@ import android.support.v7.widget.*
 import android.view.*
 import com.commonsense.android.kotlin.system.logging.*
 import com.commonsense.android.kotlin.views.*
-import com.commonsense.android.kotlin.views.databinding.adapters.*
 import com.commonsense.android.kotlin.views.databinding.fragments.*
 import com.commonsense.android.kotlin.views.extensions.*
 import com.commonsense.android.kotlin.views.features.*
-import com.commonsense.android.kotlin.views.features.SectionRecyclerTransaction.*
 import csense.android.exampleApp.R
 import csense.android.exampleApp.databinding.*
+import csense.android.widgets.recycler.*
+import csense.android.widgets.recycler.ViewInflatingFunction
 
 /**
  * Created by Kasper Tvede on 31-05-2017.
@@ -30,7 +30,7 @@ open class SimpleRecyclerDemo : BaseDatabindingFragment<DemoRecyclerSimpleViewBi
         for (section in 0 until 10) {
             for (i in 0 until 10) {
                 adapter.add(SimpleListItemRender("First text is good text", section) {
-                    val transaction = Builder(adapter).apply {
+                    val transaction = SectionRecyclerTransaction.Builder(adapter).apply {
                         hideSection(section)
                         hideSection(section + 1)
                         hideSection(section + 2)

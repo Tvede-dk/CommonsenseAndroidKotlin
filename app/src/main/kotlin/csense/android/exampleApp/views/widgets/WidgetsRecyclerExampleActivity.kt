@@ -5,10 +5,12 @@ import com.commonsense.android.kotlin.base.extensions.*
 import com.commonsense.android.kotlin.base.extensions.collections.*
 import com.commonsense.android.kotlin.system.logging.logError
 import com.commonsense.android.kotlin.views.*
+import com.commonsense.android.kotlin.views.ViewInflatingFunction
 import com.commonsense.android.kotlin.views.databinding.activities.*
 import com.commonsense.android.kotlin.views.databinding.adapters.*
 import com.commonsense.android.kotlin.views.extensions.*
 import csense.android.exampleApp.databinding.*
+import csense.android.widgets.recycler.*
 
 class WidgetsRecyclerExampleActivity : BaseDatabindingActivity<WidgetsRecyclerExampleBinding>() {
 
@@ -18,7 +20,7 @@ class WidgetsRecyclerExampleActivity : BaseDatabindingActivity<WidgetsRecyclerEx
             WidgetsRecyclerExampleBinding::inflate
 
     override fun useBinding() {
-        binding.widgetsRecyclerExampleRecycler.setup(adapter, LinearLayoutManager(this)) {
+        binding.widgetsRecyclerExampleRecycler.setup(adapter, StickDataBindingVerticalLayout(true)) {
 
         }
         binding.widgetsRecyclerExampleAdd1.setOnclickAsync {
@@ -46,19 +48,28 @@ class WidgetsRecyclerExampleActivity : BaseDatabindingActivity<WidgetsRecyclerEx
     //lets try some fun things out
     private fun tryFun() {
 //        clear()
-        add2()
-        hide()
-        add1()
+//        add2()
 //        hide()
-        add2()
-//        hide()
-//        hide()
-        add2()
-        add2()
-        launchInUi("tryFun") {
-            adapter.smoothScrollToSection(19)
-        }
-        logError(adapter.toPrettyString())
+//        add1()
+////        hide()
+//        add2()
+////        hide()
+////        hide()
+//        add2()
+//        add2()
+//        launchInUi("tryFun") {
+//            adapter.smoothScrollToSection(19)
+//        }
+//        logError(adapter.toPrettyString())
+
+        val first = listOf(ViewRender("section = 1")).repeateToSize(10)
+        val second = listOf(ViewRender("section = 2")).repeateToSize(10)
+        val third = listOf(ViewRender("section = 3")).repeateToSize(10)
+        val forth = listOf(ViewRender("section = 4")).repeateToSize(10)
+        adapter.setSection(listOf(SectionRender("STICKY1")) + first, 1)
+        adapter.setSection(listOf(SectionRender("STICKY2")) + second, 2)
+        adapter.setSection(listOf(SectionRender("STICKY3")) + third, 3)
+        adapter.setSection(listOf(SectionRender("STICKY4")) + forth, 4)
     }
 
     private fun clear() {
@@ -94,4 +105,16 @@ class ViewRender(text: String) : BaseRenderModel<String, WidgetsRecyclerItemExam
     override fun getInflaterFunction(): ViewInflatingFunction<WidgetsRecyclerItemExampleBinding> =
             WidgetsRecyclerItemExampleBinding::inflate
 
+}
+
+class SectionRender(text: String) : BaseRenderModel<String, WidgetsRecyclerStickExampleBinding>(text, type()) {
+    override fun renderFunction(view: WidgetsRecyclerStickExampleBinding,
+                                model: String,
+                                viewHolder: BaseViewHolderItem<WidgetsRecyclerStickExampleBinding>) {
+
+        view.widgetsRecyclerExampleItemText.text = model
+    }
+
+    override fun getInflaterFunction(): ViewInflatingFunction<WidgetsRecyclerStickExampleBinding> =
+            WidgetsRecyclerStickExampleBinding::inflate
 }

@@ -10,6 +10,7 @@ import com.commonsense.android.kotlin.system.extensions.*
 import com.commonsense.android.kotlin.system.imaging.*
 import com.commonsense.android.kotlin.system.logging.*
 import com.commonsense.android.kotlin.views.*
+import com.commonsense.android.kotlin.views.ViewInflatingFunction
 import com.commonsense.android.kotlin.views.databinding.activities.*
 import com.commonsense.android.kotlin.views.databinding.adapters.*
 import com.commonsense.android.kotlin.views.extensions.*
@@ -18,6 +19,7 @@ import csense.android.exampleApp.databinding.*
 import csense.android.exampleApp.views.dataAware.*
 import csense.android.exampleApp.views.tools.*
 import csense.android.exampleApp.views.widgets.*
+import csense.android.widgets.recycler.*
 import kotlinx.coroutines.*
 
 

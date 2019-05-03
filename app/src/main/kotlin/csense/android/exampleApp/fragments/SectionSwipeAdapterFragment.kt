@@ -6,8 +6,9 @@ import android.view.*
 import com.commonsense.android.kotlin.views.*
 import com.commonsense.android.kotlin.views.databinding.adapters.*
 import com.commonsense.android.kotlin.views.databinding.fragments.*
-import com.commonsense.android.kotlin.views.features.*
 import csense.android.exampleApp.databinding.*
+import csense.android.widgets.recycler.*
+import csense.android.widgets.recycler.ViewInflatingFunction
 
 /**
  * Created by Kasper Tvede on 24-06-2017.

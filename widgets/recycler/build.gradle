@@ -1,0 +1,61 @@
+apply plugin: 'com.android.library'
+apply plugin: 'kotlin-android'
+apply plugin: "kotlin-kapt"
+
+android {
+    compileSdkVersion androidSdkBuildVersion
+
+    buildToolsVersion "$androidBuildToolsVersion"
+
+
+    defaultConfig {
+        minSdkVersion project.minSdk
+        targetSdkVersion project.targetSdk
+        versionCode project.commonsenseVersionNumber
+        versionName project.commonsenseVersionName
+
+        testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
+
+    }
+    buildTypes {
+        release {
+            minifyEnabled false
+            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+        }
+    }
+
+    dataBinding {
+        enabled true
+    }
+}
+
+
+dependencies {
+
+    //TESTS
+    androidTestImplementation("com.android.support.test.espresso:espresso-core:$espressoVersion", {
+        exclude group: 'com.android.support', module: 'support-annotations'
+    })
+//    testImplementation project(':test')
+
+    //coroutines libs
+    implementation "org.jetbrains.kotlinx:kotlinx-coroutines-core:$coroutinesVersion"
+    implementation "org.jetbrains.kotlinx:kotlinx-coroutines-android:$coroutinesVersion"
+
+//    implementation project(':system')
+    implementation project(':base')
+
+    //support libs
+    api "com.android.support:appcompat-v7:$supportVersion"
+    api "com.android.support:design:$supportVersion"
+    api "com.android.support:recyclerview-v7:$supportVersion"
+
+    implementation "org.jetbrains.kotlin:kotlin-stdlib:$kotlin_version"
+
+}
+apply from: "$rootDir/javadocSourceDokka.gradle"
+
+ext.artifactName = "widgets:recycler"
+ext.artifactDescription = ""
+ext.versionDescription = ""
+apply from: "$rootDir/publish.gradle"

@@ -61,7 +61,7 @@ allprojects {
 apply from: "libraySettings.gradle"
 apply from: "fixErrorCounts.gradle"
 subprojects {
-    apply from: "../jacoco-kotlin.gradle"
+    apply from: "$rootDir/jacoco-kotlin.gradle"
     buildscript {
         repositories {
             google()

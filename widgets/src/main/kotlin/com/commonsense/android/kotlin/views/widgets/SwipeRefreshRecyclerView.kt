@@ -68,13 +68,13 @@ class SwipeRefreshRecyclerView : CustomDataBindingView<SwipeRefreshRecylerViewBi
     }
 
     @UiThread
-    fun setup(newAdapter: RecyclerView.Adapter<*>, newLayoutManager: LinearLayoutManager, refreshCallback: () -> Unit) {
+    fun setup(newAdapter: RecyclerView.Adapter<*>, newLayoutManager: RecyclerView.LayoutManager, refreshCallback: () -> Unit) {
         recyclerView.setup(newAdapter, newLayoutManager)
         onRefreshListener = refreshCallback
     }
 
     @UiThread
-    fun setupAsync(newAdapter: RecyclerView.Adapter<*>, newLayoutManager: LinearLayoutManager, refreshCallback: () -> Job) {
+    fun setupAsync(newAdapter: RecyclerView.Adapter<*>, newLayoutManager: RecyclerView.LayoutManager, refreshCallback: () -> Job) {
         recyclerView.setup(newAdapter, newLayoutManager)
         onRefreshListener = {
             refreshCallback().launchOnCompleted(Dispatchers.Main) {

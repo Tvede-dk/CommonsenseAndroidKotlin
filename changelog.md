@@ -1,5 +1,8 @@
 # Changelog
 
+## 0.0.19.5
+- fixed weird issue where trying to fix weird bug in android keyboards, caused google keyboard sometimes to skip a char and delete the one previous of it. 
+
 ## 0.0.19.4
 - fixed issue with using null / nullable types in activity with data (fragments with data as well.)
 - kotlin 1.3.31
@@ -17,6 +20,7 @@
 - android gradle 3.4
 
 ## 0.0.19
+
 - permissions handling is now possible with multiple values, and a way improved callback mechanism as well as many more extensions making life a lot easier
 - fixed bug with PictureRetriever where the permission for the Camera was not acquired.
 - kotlin 1.3.30

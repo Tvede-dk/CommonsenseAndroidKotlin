@@ -1,9 +1,10 @@
 package csense.android.widgets.recycler
 
 import android.support.v7.widget.*
+import android.util.*
 import android.view.*
 import com.commonsense.android.kotlin.base.extensions.*
-import java.util.*
+import kotlin.system.*
 
 class StickDataBindingVerticalLayout(autoDrawingOrder: Boolean) : RecyclerView.LayoutManager() {
 
@@ -43,6 +44,9 @@ class StickDataBindingVerticalLayout(autoDrawingOrder: Boolean) : RecyclerView.L
     override fun onAttachedToWindow(view: RecyclerView) {
         super.onAttachedToWindow(view)
         mHelper.onAttachedToWindow(view)
+        if (view.adapter != null) {
+            onAdapterChanged(null, view.adapter)
+        }
     }
 
     override fun onDetachedFromWindow(view: RecyclerView?, recycler: RecyclerView.Recycler?) {
@@ -68,37 +72,40 @@ class StickDataBindingVerticalLayoutImpl(
         if (self.childCount < 1) {
             self.detachAndScrapAttachedViews(recycler)
 
-            val firstTop = self.paddingTop
-            val firstPosition = 0
+            val parentLeft: Int = calcParentLeft()
+            val parentRight: Int = calcParentRight()
+            val parentBottom: Int = calcParentBottom()
+            //start with padding top.
+            var nextTop = self.paddingTop
 
-            val parentLeft = calcParentLeft()
-            val parentRight = calcParentRight()
-            val parentBottom = calcParentBottom()
-            var nextTop = firstTop
-
-            var i = firstPosition
-            while (i < state.itemCount && nextTop < parentBottom) {
+            for (i in 0 until state.itemCount) {
+                //out of view ?
+                if (nextTop >= parentBottom) {
+                    break
+                }
                 val v = recycler.getViewForPosition(i)
-                self.addView(v, i)
-
-                self.measureChildWithMargins(v, 0, 0)
-
-                val bottom = nextTop + self.getDecoratedMeasuredHeight(v)
-
+                val bottom = self.addViewAndMeasureHeight(v, i, nextTop)
                 self.layoutDecoratedWithMargins(v, parentLeft, nextTop, parentRight, bottom)
-
                 nextTop = bottom
-                i++
             }
-        }
+        } else {
+            val items = mCurrentAdapter?.itemCount ?: 0
 
+            Log.e("omg", "here")
+        }
     }
 
-    private fun calcParentLeft(): Int {
+    private fun RecyclerView.LayoutManager.addViewAndMeasureHeight(viewToAdd: View, viewIndex: Int, currentTopLocation: Int): Int {
+        addView(viewToAdd, viewIndex)
+        measureChildWithMargins(viewToAdd, 0, 0)
+        return currentTopLocation + getDecoratedMeasuredHeight(viewToAdd)
+    }
+
+    internal fun calcParentLeft(): Int {
         return weakLayoutManager.get()?.paddingLeft ?: 0
     }
 
-    private fun calcParentRight(): Int {
+    internal fun calcParentRight(): Int {
         return (weakLayoutManager.get()?.height ?: 0) - (weakLayoutManager.get()?.paddingRight ?: 0)
     }
 
@@ -106,7 +113,7 @@ class StickDataBindingVerticalLayoutImpl(
         return calcParentHeight() - (weakLayoutManager.get()?.paddingBottom ?: 0)
     }
 
-    private fun calcParentHeight(): Int {
+    internal fun calcParentHeight(): Int {
         return weakLayoutManager.get()?.height ?: 0
     }
 
@@ -140,75 +147,59 @@ class StickDataBindingVerticalLayoutImpl(
     fun onAttachedToWindow(view: RecyclerView) {
         mCurrentRecyclerView = view
         if (autoDrawingOrder) {
-            view.setChildDrawingOrderCallback(object : RecyclerView.ChildDrawingOrderCallback {
-
-                override fun onGetChildDrawingOrder(childCount: Int, i: Int): Int {
-                    val previousStickyChildPosition: Int? = mPreviousStickySection?.let {
-                        getChildPositionByAdapterPosition(findStickyPositionByRawIndex(it))
-                    }
-                    val currentStickyChildPosition: Int? = mLastStickySection?.let {
-                        getChildPositionByAdapterPosition(findStickyPositionByRawIndex(it))
-                    }
-
-                    val ret: Int
-
-                    if (previousStickyChildPosition != null && i == childCount - 2) {
-                        ret = previousStickyChildPosition
-                    } else if (currentStickyChildPosition != null && i == childCount - 1) {
-                        ret = currentStickyChildPosition
-                    } else {
-                        val firstSticky = Math.min(
-                                previousStickyChildPosition ?: Integer.MAX_VALUE,
-                                currentStickyChildPosition ?: Integer.MAX_VALUE
-                        )
-                        val lastSticky: Int
-                        run {
-                            lastSticky = if (previousStickyChildPosition != null && currentStickyChildPosition != null) {
-                                Math.max(
-                                        previousStickyChildPosition,
-                                        currentStickyChildPosition
-                                )
-                            } else {
-                                if (previousStickyChildPosition != null && previousStickyChildPosition != firstSticky) {
-                                    previousStickyChildPosition
-                                } else if (currentStickyChildPosition != null && currentStickyChildPosition != firstSticky) {
-                                    currentStickyChildPosition
-                                } else {
-                                    Integer.MAX_VALUE
-                                }
-                            }
-                        }
-
-                        val increment: Int
-                        increment = when {
-                            i > lastSticky - 2 -> 2
-                            i > firstSticky - 1 -> 1
-                            else -> 0
-                        }
-                        ret = i + increment
-                    }
-
-                    return ret
+            view.setChildDrawingOrderCallback { childCount, index ->
+                val previousStickyChildPosition = mPreviousStickySection?.let {
+                    getChildPositionByAdapterPosition(findStickyPositionByRawIndex(it))
                 }
 
-            })
+                val currentStickyChildPosition = mLastStickySection?.let {
+                    getChildPositionByAdapterPosition(findStickyPositionByRawIndex(it))
+                }
+
+                return@setChildDrawingOrderCallback if (previousStickyChildPosition != null && index == childCount - 2) {
+                    previousStickyChildPosition
+                } else if (currentStickyChildPosition != null && index == childCount - 1) {
+                    currentStickyChildPosition
+                } else {
+                    val firstSticky = Math.min(
+                            previousStickyChildPosition ?: Integer.MAX_VALUE,
+                            currentStickyChildPosition ?: Integer.MAX_VALUE
+                    )
+                    val lastSticky: Int = if (previousStickyChildPosition != null && currentStickyChildPosition != null) {
+                        Math.max(
+                                previousStickyChildPosition,
+                                currentStickyChildPosition
+                        )
+                    } else {
+                        Integer.MAX_VALUE
+                    }
+
+                    val increment: Int
+                    increment = when {
+                        index > lastSticky - 2 -> 2
+                        index > firstSticky - 1 -> 1
+                        else -> 0
+                    }
+                    index + increment
+                }
+            }
         }
     }
 
     private fun getChildPositionByAdapterPosition(adapterPosition: Int): Int? {
         val self = weakLayoutManager.get() ?: return null
-        for (i in 0 until self.childCount) {
-            val v = self.getChildAt(i)
-            if (v != null && getAdapterPositionByView(v) == adapterPosition) {
+        var i = 0
+        self.forEachChild {
+            if (getAdapterPositionByView(it) == adapterPosition) {
                 return i
             }
+            i += 1
         }
         return null
     }
 
-    private fun isStickyViewItemType(v: View): Boolean {
+    internal fun isStickyViewItemType(v: View): Boolean {
         return v is StickLinearLayout
-//        return false
     }
 
     fun findStickyPositionByRawIndex(rawIndex: Int): Int {
@@ -219,7 +210,7 @@ class StickDataBindingVerticalLayoutImpl(
         return RecyclerView.NO_POSITION
     }
 
-    private fun getAdapterPositionByView(v: View): Int? {
+    internal fun getAdapterPositionByView(v: View): Int? {
         return mCurrentRecyclerView?.getChildAdapterPosition(v)
     }
 
@@ -229,292 +220,25 @@ class StickDataBindingVerticalLayoutImpl(
 
 
     fun scrollVerticallyBy(dy: Int, recycler: RecyclerView.Recycler, state: RecyclerView.State): Int {
-
         val self = weakLayoutManager.get() ?: return 0
         val adapter = mCurrentAdapter ?: return 0
-
-        val parentLeft: Int
-        val parentRight: Int
-        val parentHeight: Int
-        run {
-            parentLeft = calcParentLeft()
-            parentRight = calcParentRight()
-            parentHeight = calcParentHeight()
+        var result = 0
+        val timeInMs = measureTimeMillis {
+            result = VerticalScrollHandler.scrollVerticallyBy(dy, recycler, state, this, adapter, self)
         }
-
-        var scrolled = 0
-        if (dy >= 0) {
-            var counter = 0
-            while (scrolled < dy) {
-                val bottomNormal = getLastNormalChild()
-                val hangingBottom = Math.max(self.getDecoratedBottom(bottomNormal!!) - parentHeight, 0)
-                val scrollBy = -Math.min(dy - scrolled, hangingBottom)
-
-                scrolled -= scrollBy
-                if (scrollBy == 0) {
-                    counter += 1
-                } else {
-                    counter = 0
-                }
-                self.offsetChildrenVertical(scrollBy)
-                val nextPosition = getAdapterPositionByView(bottomNormal)!! + 1
-                if (counter < adapter.itemCount && nextPosition < state.itemCount && scrolled < dy) {
-                    val v = recycler.getViewForPosition(nextPosition)
-
-                    self.addView(v)
-
-                    self.measureChildWithMargins(v, 0, 0)
-
-                    val nextTop = self.getDecoratedBottom(bottomNormal)
-                    self.layoutDecorated(
-                            v,
-                            parentLeft,
-                            nextTop,
-                            parentRight,
-                            nextTop + self.getDecoratedMeasuredHeight(v)
-                    )
-                } else {
-                    break
-                }
-            }
-            run {
-                var currentSticky: View? = null
-                var nextSticky: View? = null
-                run {
-                    var maxBottom = Integer.MIN_VALUE
-                    var minTop = Integer.MAX_VALUE
-                    for (i in 0 until self.childCount) {
-                        val v = self.getChildAt(i)
-                        if (v != null && isStickyViewItemType(v)) {
-                            val bottom = self.getDecoratedBottom(v)
-                            val top = self.getDecoratedTop(v)
-                            if (maxBottom <= bottom && top <= 0) {
-                                maxBottom = bottom
-                                currentSticky = v
-                            }
-                            if (minTop > top && currentSticky !== v) {
-                                minTop = top
-                                nextSticky = v
-                            }
-                        }
-                    }
-                    currentSticky?.let {
-                        resetCurrentStickyPosition(it)
-                        setCurrentSticky(it)
-                    }
-                }
-                run {
-                    var diff = 0
-                    if (currentSticky != null && nextSticky != null) {
-                        val bottom = self.getDecoratedBottom(currentSticky!!)
-                        val nextTop = self.getDecoratedTop(nextSticky!!)
-                        diff = nextTop - bottom
-                    }
-
-                    if (currentSticky != null && diff < 0) {
-                        self.layoutDecorated(
-                                currentSticky!!,
-                                parentLeft,
-                                0 + diff,
-                                parentRight,
-                                0 + self.getDecoratedMeasuredHeight(currentSticky!!) + diff
-                        )
-                        setCurrentSticky(nextSticky)
-                    }
-
-                }
-            }
-        } else {
-            while (scrolled > dy) {
-                val topNormal = getFirstNormalChild()
-                val hangingTop = Math.max(-self.getDecoratedTop(topNormal!!), 0)
-                val scrollBy = Math.min(scrolled - dy, hangingTop)
-
-                scrolled -= scrollBy
-                self.offsetChildrenVertical(scrollBy)
-
-                val sticky = getCurrentSticky()
-                val nextPosition = getAdapterPositionByView(topNormal)!! - 1
-                val isScoped = nextPosition >= 0
-                if (isScoped && sticky != null && nextPosition == getAdapterPositionByView(sticky)) {
-                    val nextBottom = self.getDecoratedTop(topNormal!!)
-                    self.layoutDecorated(
-                            sticky!!,
-                            parentLeft,
-                            nextBottom - self.getDecoratedMeasuredHeight(sticky!!),
-                            parentRight,
-                            nextBottom
-                    )
-                    setCurrentSticky(null)
-                } else if (isScoped && scrolled > dy) {
-                    val v = recycler.getViewForPosition(nextPosition)
-
-                    self.addView(v, 0)
-
-                    self.measureChildWithMargins(v, 0, 0)
-
-                    val nextBottom = self.getDecoratedTop(topNormal!!)
-                    val nextTop = nextBottom - self.getDecoratedMeasuredHeight(v)
-                    self.layoutDecorated(
-                            v,
-                            parentLeft,
-                            nextTop,
-                            parentRight,
-                            nextBottom
-                    )
-                } else {
-                    break
-                }
-            }
-            run {
-                var firstNormal: View? = null
-                var firstSticky: View? = null
-                run {
-                    var minNormalTop = Integer.MAX_VALUE
-                    for (i in 0 until self.childCount) {
-                        val v = self.getChildAt(i)
-                        if (getCurrentSticky() == null || getCurrentSticky() !== v) {
-                            val top = self.getDecoratedTop(v!!)
-                            if (minNormalTop > top) {
-                                minNormalTop = top
-                                firstNormal = v
-                            }
-                        }
-                    }
-                    var minStickyTop = Integer.MAX_VALUE
-                    for (i in 0 until self.childCount) {
-                        val v = self.getChildAt(i)
-                        if (v != null && isStickyViewItemType(v)) {
-                            val top = self.getDecoratedTop(v)
-                            if (minStickyTop > top) {
-                                minStickyTop = top
-                                firstSticky = v
-                            }
-                        }
-                    }
-                }
-                run {
-                    val safeFirstNormal = firstNormal
-                    if (safeFirstNormal != null) {
-                        val firstPosition = getAdapterPositionByView(safeFirstNormal)
-                        if (firstPosition != null && isStickyViewItemType(safeFirstNormal)) {
-                            val requiredIdentifier = findStickyPositionByRawIndex(firstPosition)
-
-                            var resolved = false
-                            for (i in 0 until self.childCount) {
-                                val v = self.getChildAt(i)
-                                if (v != null &&
-                                        isStickyViewItemType(v) &&
-                                        findStickyPositionByRawIndex(getAdapterPositionByView(v)!!) == requiredIdentifier) {
-                                    resolved = true
-                                    break
-                                }
-                            }
-                            if (!resolved && self.getDecoratedTop(firstSticky!!) >= 0) {
-                                val i = findStickyPositionByRawIndex(requiredIdentifier)
-                                val v = recycler.getViewForPosition(i)
-                                self.addView(v, 0)
-                                self.measureChildWithMargins(v, 0, 0)
-                                val bottom = self.getDecoratedTop(firstNormal!!)
-                                self.layoutDecorated(
-                                        v,
-                                        parentLeft,
-                                        bottom - self.getDecoratedMeasuredHeight(v),
-                                        parentRight,
-                                        bottom
-                                )
-                            }
-                        }
-                    }
-                }
-            }
-            run {
-                var currentSticky: View? = null
-                var previousSticky: View? = null
-                run {
-                    for (pass in 1..2) {
-                        for (i in self.childCount - 1 downTo 0) {
-                            val v = self.getChildAt(i)
-                            if (v != null && isStickyViewItemType(v)) {
-                                val top = self.getDecoratedTop(v!!)
-                                val bottom = self.getDecoratedBottom(v!!)
-                                if (pass == 1) {
-                                    if (top >= 0 && (previousSticky == null || self.getDecoratedTop(previousSticky!!) > top)) {
-                                        previousSticky = v
-                                    }
-                                } else if (pass == 2) {
-                                    if (previousSticky == null && (currentSticky == null || self.getDecoratedBottom(currentSticky!!) < bottom) || previousSticky != null && self.getDecoratedTop(previousSticky!!) >= bottom && (currentSticky == null || self.getDecoratedBottom(currentSticky!!) < bottom)) {
-                                        currentSticky = v
-                                    }
-                                }
-                            }
-                        }
-                    }
-                    if (currentSticky == null && previousSticky != null) {
-                        currentSticky = previousSticky
-                        previousSticky = null
-                    }
-                }
-                run {
-                    currentSticky?.let {
-                        resetCurrentStickyPosition(it)
-                        setCurrentSticky(it)
-                    }
-                    var diff = 0
-                    if (currentSticky != null && previousSticky != null) {
-                        diff = self.getDecoratedTop(previousSticky!!) - self.getDecoratedBottom(currentSticky!!)
-                    }
-                    if (diff < 0) {
-                        val top = 0 + diff
-                        self.layoutDecorated(
-                                currentSticky!!,
-                                parentLeft,
-                                top,
-                                parentRight,
-                                top + self.getDecoratedMeasuredHeight(currentSticky!!)
-                        )
-                    }
-
-                }
-            }
-        }
-        run {
-            val toRecycleViews = LinkedList<View>()
-            for (i in 0 until self.childCount) {
-                val v = self.getChildAt(i)
-                val orgTop: Int
-                val orgBottom: Int
-                run {
-                    orgTop = self.getDecoratedTop(v!!)
-                    orgBottom = self.getDecoratedBottom(v!!)
-                }
-                val isHidedTop: Boolean
-                val isHidedBottom: Boolean
-                run {
-                    isHidedTop = orgBottom < 0
-                    isHidedBottom = orgTop > parentHeight
-                }
-                if ((isHidedTop || isHidedBottom) && v != null) {
-                    toRecycleViews.add(v)
-                }
-            }
-            for (v in toRecycleViews) {
-                self.removeAndRecycleView(v, recycler)
-            }
-        }
-
-        return scrolled
+        Log.e("scroll", "took $timeInMs ms for $result px")
+        return result
     }
 
-    private fun getFirstNormalChild(): View? {
+    internal fun getFirstNormalChild(): View? {
         val self = weakLayoutManager.get() ?: return null
-
         var resolved: View? = null
+        val currentSticky = getCurrentSticky()
+        val isCurrentStickyNull = currentSticky == null
         var lastMinTop = Integer.MAX_VALUE
-        for (i in 0 until self.childCount) {
-            val v = self.getChildAt(i)
-            if (getCurrentSticky() == null || v !== getCurrentSticky()) {
-                val top: Int = self.getDecoratedTop(v!!)
+        self.forEachChild { v ->
+            if (isCurrentStickyNull || v !== currentSticky) {
+                val top: Int = self.getDecoratedTop(v)
                 if (top < lastMinTop) {
                     lastMinTop = top
                     resolved = v
@@ -524,13 +248,17 @@ class StickDataBindingVerticalLayoutImpl(
         return resolved
     }
 
-    private fun getLastNormalChild(): View? {
+    internal fun getLastNormalChild(): View? {
         val self = weakLayoutManager.get() ?: return null
+        val currentSticky = getCurrentSticky()
+        val doesNotHaveSticky = currentSticky == null
+        val childPositionForSticky = currentSticky?.let { mCurrentRecyclerView?.getChildAdapterPosition(it) }
         var resolved: View? = null
         var lastMaxBottom = Integer.MIN_VALUE
-        for (i in self.childCount - 1 downTo 0) {
-            val v = self.getChildAt(i)
-            if ((v != null && !isStickyViewItemType(v)) || (v != null && getCurrentSticky() == null)) {
+        self.forEachChildBackwards { v ->
+            val vh = mCurrentRecyclerView?.findContainingViewHolder(v)
+            if (doesNotHaveSticky ||
+                    vh?.adapterPosition != childPositionForSticky) {
                 val bottom: Int = self.getDecoratedBottom(v)
                 if (bottom > lastMaxBottom) {
                     lastMaxBottom = bottom
@@ -549,26 +277,343 @@ class StickDataBindingVerticalLayoutImpl(
                 calcParentLeft(),
                 0,
                 calcParentRight(),
-                0 + self.getDecoratedMeasuredHeight(currentSticky)
+                self.getDecoratedMeasuredHeight(currentSticky)
         )
     }
 
-    private fun setCurrentSticky(newView: View?): Boolean {
-        if (newView == null || isStickyViewItemType(newView)) {
+    internal fun setCurrentSticky(newView: View?): Boolean {
+        if (newView == null || newView.isStickyView()) {
             mCurrentStickyView = newView
             return true
         }
         return false
     }
 
-    private fun getCurrentSticky(): View? {
-        return mCurrentStickyView?.let {
-            return if (isStickyViewItemType(it)) {
-                it
-            } else {
-                null
-            }
+    internal fun getCurrentSticky(): View? {
+        val toret = mCurrentStickyView
+        return if (toret?.isStickyView() == true) {
+            mCurrentStickyView
+        } else {
+            null
         }
     }
 
+    fun View.isStickyView(): Boolean {
+        return isStickyViewItemType(this)
+    }
+
+    fun updateIdentifiers(identifier: Int) {
+        if (mLastStickySection == identifier) {
+            return
+        }
+        mPreviousStickySection = mLastStickySection
+        mLastStickySection = identifier
+
+    }
+
+    fun updateCurrentSticky(currentSticky: View) {
+        resetCurrentStickyPosition(currentSticky)
+        setCurrentSticky(currentSticky)
+    }
+}
+
+private object VerticalScrollHandler {
+
+    fun scrollVerticallyBy(
+            dy: Int,
+            recycler: RecyclerView.Recycler,
+            state: RecyclerView.State,
+            layoutManager: StickDataBindingVerticalLayoutImpl,
+            adapter: BaseDataBindingRecyclerAdapter,
+            self: RecyclerView.LayoutManager
+    ): Int {
+        val height = layoutManager.calcParentHeight()
+        val left = layoutManager.calcParentLeft()
+        val right = layoutManager.calcParentRight()
+        val scrolled = if (dy >= 0) {
+            onScrollUp(dy, self, state, recycler, layoutManager, height, left, right, adapter)
+        } else {
+            onScrollDown(dy, self, state, recycler, layoutManager, height, left, right, adapter)
+        }
+        afterScroll(self, layoutManager.calcParentHeight(), recycler)
+        return scrolled
+    }
+
+
+    private fun onScrollUp(
+            dy: Int,
+            self: RecyclerView.LayoutManager,
+            state: RecyclerView.State,
+            recycler: RecyclerView.Recycler,
+            toDelegateTo: StickDataBindingVerticalLayoutImpl,
+            parentHeight: Int,
+            parentLeft: Int,
+            parentRight: Int,
+            mCurrentAdapter: BaseDataBindingRecyclerAdapter
+    ): Int {
+        var scrolled = 0
+        //add children until we have "scrolled down".
+        while (scrolled < dy) { //todo limit number of iterations to at max the child count.
+            val bottomNormal = toDelegateTo.getLastNormalChild() ?: break
+            val hangingBottom = Math.max(self.getDecoratedBottom(bottomNormal) - parentHeight, 0)
+            val scrollBy = -Math.min(dy - scrolled, hangingBottom)
+
+            scrolled -= scrollBy
+
+            self.offsetChildrenVertical(scrollBy)
+
+            val nextPosition = (toDelegateTo.getAdapterPositionByView(bottomNormal) ?: 0) + 1
+            if (nextPosition < state.itemCount && scrolled < dy) {
+                val v = recycler.getViewForPosition(nextPosition)
+
+                self.addView(v)
+
+                self.measureChildWithMargins(v, 0, 0)
+
+                val nextTop = self.getDecoratedBottom(bottomNormal)
+                self.layoutDecorated(
+                        v,
+                        parentLeft,
+                        nextTop,
+                        parentRight,
+                        nextTop + self.getDecoratedMeasuredHeight(v)
+                )
+            } else {
+                break
+            }
+        }
+        var currentSticky: View? = null
+        var nextSticky: View? = null
+        var maxBottom = Integer.MIN_VALUE
+        var minTop = Integer.MAX_VALUE
+        self.forEachChild { v ->
+            if (toDelegateTo.isStickyViewItemType(v)) {
+                val bottom = self.getDecoratedBottom(v)
+                val top = self.getDecoratedTop(v)
+                if (maxBottom <= bottom && top <= 0) {
+                    maxBottom = bottom
+                    currentSticky = v
+                }
+                if (minTop > top && currentSticky !== v) {
+                    minTop = top
+                    nextSticky = v
+                }
+            }
+        }
+        currentSticky?.let {
+            toDelegateTo.updateCurrentSticky(it)
+//update what is "currentSticky"
+            val safeNextSticky = nextSticky
+            if (safeNextSticky != null) {
+                var diff = 0
+                val bottom = self.getDecoratedBottom(it)
+                val nextTop = self.getDecoratedTop(safeNextSticky)
+                diff = nextTop - bottom
+                if (diff < 0) {
+                    self.layoutDecorated(
+                            it,
+                            parentLeft,
+                            diff,
+                            parentRight,
+                            self.getDecoratedMeasuredHeight(it) + diff
+                    )
+                    toDelegateTo.setCurrentSticky(nextSticky)
+                }
+            }
+            toDelegateTo.getAdapterPositionByView(it)?.let { pos ->
+                toDelegateTo.updateIdentifiers(
+                        pos
+//                        mCurrentAdapter.getIdentifierByPosition(pos)
+                )
+            }
+
+        }
+        return scrolled
+    }
+
+    private fun onScrollDown(
+            dy: Int,
+            self: RecyclerView.LayoutManager,
+            state: RecyclerView.State,
+            recycler: RecyclerView.Recycler,
+            toDelegateTo: StickDataBindingVerticalLayoutImpl,
+            parentHeight: Int,
+            parentLeft: Int,
+            parentRight: Int,
+            mCurrentAdapter: BaseDataBindingRecyclerAdapter
+    ): Int {
+        var scrolled = 0
+
+        while (scrolled > dy) {
+            val topNormal = toDelegateTo.getFirstNormalChild() ?: break
+            val hangingTop = Math.max(-self.getDecoratedTop(topNormal), 0)
+            val scrollBy = Math.min(scrolled - dy, hangingTop)
+
+            scrolled -= scrollBy
+            self.offsetChildrenVertical(scrollBy)
+
+            val sticky = toDelegateTo.getCurrentSticky()
+            val nextPosition = (toDelegateTo.getAdapterPositionByView(topNormal) ?: 0) - 1
+            val isScoped = nextPosition >= 0
+            if (isScoped && sticky != null && nextPosition == toDelegateTo.getAdapterPositionByView(sticky)) {
+                val nextBottom = self.getDecoratedTop(topNormal)
+                self.layoutDecorated(
+                        sticky,
+                        parentLeft,
+                        nextBottom - self.getDecoratedMeasuredHeight(sticky),
+                        parentRight,
+                        nextBottom
+                )
+                toDelegateTo.setCurrentSticky(null)
+            } else if (isScoped && scrolled > dy) {
+                val v = recycler.getViewForPosition(nextPosition)
+
+                self.addView(v, 0)
+
+                self.measureChildWithMargins(v, 0, 0)
+
+                val nextBottom = self.getDecoratedTop(topNormal)
+                val nextTop = nextBottom - self.getDecoratedMeasuredHeight(v)
+                self.layoutDecorated(
+                        v,
+                        parentLeft,
+                        nextTop,
+                        parentRight,
+                        nextBottom
+                )
+            } else {
+                break
+            }
+        }
+        var firstNormal: View? = null
+        var firstSticky: View? = null
+        var minNormalTop = Integer.MAX_VALUE
+        var minStickyTop = Integer.MAX_VALUE
+        val selfSticky = toDelegateTo.getCurrentSticky()
+        self.forEachChild { v ->
+            if (selfSticky !== v) {
+                val top = self.getDecoratedTop(v)
+                if (minNormalTop > top) {
+                    minNormalTop = top
+                    firstNormal = v
+                }
+            }
+            if (toDelegateTo.isStickyViewItemType(v)) {
+                val top = self.getDecoratedTop(v)
+                if (minStickyTop > top) {
+                    minStickyTop = top
+                    firstSticky = v
+                }
+            }
+        }
+        val safeFirstNormal = firstNormal ?: return scrolled
+        val firstPosition = toDelegateTo.getAdapterPositionByView(safeFirstNormal)
+                ?: return scrolled
+        if (toDelegateTo.isStickyViewItemType(safeFirstNormal)) {
+
+            var resolved = false
+            self.forEachChild { v ->
+                val pos = toDelegateTo.getAdapterPositionByView(v)
+                if (toDelegateTo.isStickyViewItemType(v) && pos != null && pos == firstPosition) {
+                    resolved = true
+                    return@forEachChild //break.
+                }
+            }
+            val safeSticky = firstSticky
+            if (!resolved && safeSticky != null && self.getDecoratedTop(safeSticky) >= 0) {
+                val i = firstPosition
+                val v = recycler.getViewForPosition(i)
+                self.addView(v, 0)
+                self.measureChildWithMargins(v, 0, 0)
+                val bottom = self.getDecoratedTop(safeFirstNormal)
+                self.layoutDecorated(
+                        v,
+                        parentLeft,
+                        bottom - self.getDecoratedMeasuredHeight(v),
+                        parentRight,
+                        bottom
+                )
+            }
+        }
+        var currentSticky: View? = null
+        var previousSticky: View? = null
+        self.forEachChildBackwards { v ->
+            if (toDelegateTo.isStickyViewItemType(v)) {
+                val top = self.getDecoratedTop(v)
+                val safePreviousSticky = previousSticky
+                if (top >= 0 && (safePreviousSticky == null || self.getDecoratedTop(safePreviousSticky) > top)) {
+                    previousSticky = v
+                }
+
+            }
+        }
+        self.forEachChildBackwards { v ->
+            if (toDelegateTo.isStickyViewItemType(v)) {
+                val safePreviousSticky = previousSticky
+                val bottom = self.getDecoratedBottom(v)
+                val safeCurrentSticky = currentSticky
+                if (previousSticky == null && (safeCurrentSticky == null || self.getDecoratedBottom(safeCurrentSticky) < bottom) || safePreviousSticky != null && self.getDecoratedTop(safePreviousSticky) >= bottom && (safeCurrentSticky == null || self.getDecoratedBottom(safeCurrentSticky) < bottom)) {
+                    currentSticky = v
+                }
+            }
+        }
+
+
+        if (currentSticky == null && previousSticky != null) {
+            currentSticky = previousSticky
+            previousSticky = null
+        }
+        currentSticky?.let {
+            toDelegateTo.updateCurrentSticky(it)
+
+            previousSticky?.let { previousSticky ->
+                val diff = self.getDecoratedTop(previousSticky) - self.getDecoratedBottom(it)
+                if (diff < 0) {
+                    self.layoutDecorated(
+                            it,
+                            parentLeft,
+                            diff,
+                            parentRight,
+                            diff + self.getDecoratedMeasuredHeight(it)
+                    )
+                }
+            }
+
+            val pos = toDelegateTo.getAdapterPositionByView(it) ?: return@let
+            toDelegateTo.updateIdentifiers(
+                    pos
+            )
+        }
+        return scrolled
+    }
+
+    private fun afterScroll(self: RecyclerView.LayoutManager, parentHeight: Int, recycler: RecyclerView.Recycler) {
+        val toRecycleViews = mutableListOf<View>()
+        for (i in 0 until self.childCount) {
+            val v = self.getChildAt(i) ?: continue
+            val orgTop: Int = self.getDecoratedTop(v)
+            val orgBottom: Int = self.getDecoratedBottom(v)
+            val isHidedTop: Boolean = orgBottom < 0
+            val isHidedBottom: Boolean = orgTop > parentHeight
+            if (isHidedTop || isHidedBottom) {
+                toRecycleViews.add(v)
+            }
+        }
+        toRecycleViews.forEach { self.removeAndRecycleView(it, recycler) }
+    }
+}
+
+
+inline fun RecyclerView.LayoutManager.forEachChild(onEachChild: (View) -> Unit) {
+    for (i in 0 until childCount) {
+        val child = getChildAt(i) ?: continue
+        onEachChild(child)
+    }
+}
+
+inline fun RecyclerView.LayoutManager.forEachChildBackwards(onEachChild: (View) -> Unit) {
+    for (i in childCount - 1 downTo 0) {
+        val child = getChildAt(i) ?: continue
+        onEachChild(child)
+    }
 }

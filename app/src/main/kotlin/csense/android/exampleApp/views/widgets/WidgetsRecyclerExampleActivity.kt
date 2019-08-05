@@ -62,14 +62,21 @@ class WidgetsRecyclerExampleActivity : BaseDatabindingActivity<WidgetsRecyclerEx
 //        }
 //        logError(adapter.toPrettyString())
 
-        val first = listOf(ViewRender("section = 1")).repeateToSize(10)
-        val second = listOf(ViewRender("section = 2")).repeateToSize(10)
-        val third = listOf(ViewRender("section = 3")).repeateToSize(10)
-        val forth = listOf(ViewRender("section = 4")).repeateToSize(10)
-        adapter.setSection(listOf(SectionRender("STICKY1")) + first, 1)
-        adapter.setSection(listOf(SectionRender("STICKY2")) + second, 2)
-        adapter.setSection(listOf(SectionRender("STICKY3")) + third, 3)
-        adapter.setSection(listOf(SectionRender("STICKY4")) + forth, 4)
+
+        for (i in 0 until 1000) {
+            val views = listOf(ViewRender("section = $i")).repeateToSize(7)
+            adapter.setSection(listOf(SectionRender("STICKY-$i")) + views, i)
+        }
+
+//
+//        val first = listOf(ViewRender("section = 1")).repeateToSize(10)
+//        val second = listOf(ViewRender("section = 2")).repeateToSize(10)
+//        val third = listOf(ViewRender("section = 3")).repeateToSize(10)
+//        val forth = listOf(ViewRender("section = 4")).repeateToSize(10)
+//        adapter.setSection(listOf(SectionRender("STICKY1")) + first, 1)
+//        adapter.setSection(listOf(SectionRender("STICKY2")) + second, 2)
+//        adapter.setSection(listOf(SectionRender("STICKY3")) + third, 3)
+//        adapter.setSection(listOf(SectionRender("STICKY4")) + forth, 4)
     }
 
     private fun clear() {

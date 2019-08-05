@@ -8,6 +8,7 @@ import com.commonsense.android.kotlin.system.base.*
 import com.commonsense.android.kotlin.system.dataFlow.*
 import com.commonsense.android.kotlin.system.extensions.*
 import com.commonsense.android.kotlin.system.logging.*
+import java.util.concurrent.atomic.*
 
 abstract class BaseDatabindingFragmentWithData<
         ViewType : ViewDataBinding,
@@ -53,15 +54,17 @@ abstract class BaseDatabindingFragmentWithData<
     companion object {
         internal const val dataIntentIndex = "baseFragment-data-index"
         internal val dataReferenceMap = ReferenceCountingMap()
+        // a counter, to avoid any size of the reference counting map for index.
+        internal val indexCounter = AtomicInteger(0)
     }
 
 }
 
 fun <T> BaseDatabindingFragmentWithData<*, T>.setData(data: T) {
-    val index = BaseDatabindingFragmentWithData.dataReferenceMap.count.toString()
+    val index = BaseDatabindingFragmentWithData.indexCounter.incrementAndGet().toString()
     arguments = Bundle().apply {
         BaseDatabindingFragmentWithData.dataReferenceMap.addItem(data, index)
-        putString(BaseDatabindingFragmentWithData.dataIntentIndex,index)
+        putString(BaseDatabindingFragmentWithData.dataIntentIndex, index)
     }
 
 }

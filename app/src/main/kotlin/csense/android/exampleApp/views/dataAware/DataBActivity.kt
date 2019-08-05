@@ -14,6 +14,7 @@ class DataBActivity : BaseDatabindingActivityWithData<DataBActivityBinding, Test
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         L.error("test", "omg")
+        L.error("pretty", "pretty = " + toPrettyString())
     }
 
     override fun useBinding() {

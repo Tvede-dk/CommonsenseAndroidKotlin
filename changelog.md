@@ -1,5 +1,11 @@
 # Changelog
 
+## 0.0.19.6
+- updated kotlin to 1.3.41 & coroutines to 1.2.2
+- gradle 5.5.1
+- fixed issue where startActivityWithData could end up reusing the same index / id.
+- more logging via prettyString for various baseDataBinding Activities (with data)
+
 ## 0.0.19.5
 - fixed weird issue where trying to fix weird bug in android keyboards, caused google keyboard sometimes to skip a char and delete the one previous of it. 
 

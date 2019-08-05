@@ -9,11 +9,11 @@ import com.commonsense.android.kotlin.base.extensions.collections.*
 import com.commonsense.android.kotlin.system.base.helpers.*
 import com.commonsense.android.kotlin.system.dataFlow.*
 import com.commonsense.android.kotlin.system.logging.*
+import java.util.concurrent.atomic.*
 import kotlin.reflect.*
 
 /**
- * Created by Kasper Tvede on 23-07-2017.
- * Incapsulate the fact that an activity that has a required input needs this , strongly typed and "safely";
+ * Insulate the fact that an activity that has a required input needs this , strongly typed and "safely";
  * safely means: since the parcelable "flow" is twistly broken (theres a buffer of approx 1 MB in android
  * which is used for all parcelable elements, if this buffer is filled, your app gets killed), we are to
  * use another strategy. so we resort to reference counting and a very limited ability to reference / deference
@@ -68,6 +68,8 @@ abstract class BaseActivityData<out InputType> : BaseActivity() {
     companion object {
         internal const val dataIntentIndex = "baseActivity-data-index"
         internal val dataReferenceMap = ReferenceCountingMap()
+        // a counter, to avoid any size of the reference counting map for index.
+        internal val indexCounter = AtomicInteger(0)
 
         /**
          *
@@ -97,7 +99,7 @@ abstract class BaseActivityData<out InputType> : BaseActivity() {
                                                                           flags: Int? = null,
                                                                           data: Input)
                 : IntentAndDataIndex {
-            val index = dataReferenceMap.count.toString()
+            val index = indexCounter.getAndIncrement().toString()
             val intent = Intent(context, activityToStart).apply {
                 dataReferenceMap.addItem(data, index)
                 putExtra(dataIntentIndex, index)
@@ -108,6 +110,18 @@ abstract class BaseActivityData<out InputType> : BaseActivity() {
             return IntentAndDataIndex(intent, index)
         }
     }
+
+    override fun toPrettyString(): String {
+        val start = super.toPrettyString()
+        val dataMap = dataReferenceMap.toPrettyString()
+        val currentIndex = indexCounter.get()
+        return start +
+                "\n" +
+                dataMap +
+                "\n" +
+                " index counter = $currentIndex"
+    }
+
 }
 
 /**

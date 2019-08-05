@@ -241,7 +241,7 @@ open class BaseActivity : AppCompatActivity(), ActivityResultHelperContainer {
      * Creates a pretty string representation of this internal state
      * @return String
      */
-    fun toPrettyString(): String {
+    open fun toPrettyString(): String {
         return "Base activity state: " + listOf(
                 permissionHandler.toPrettyString(),
                 onBackPressedListeners.map { "$it" }

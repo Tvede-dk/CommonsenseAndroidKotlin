@@ -9,7 +9,7 @@ import csense.android.exampleApp.databinding.*
 class DataAActivity : BaseDatabindingActivity<DataAActivityBinding>() {
     override fun useBinding() {
         binding.dataAActivityButton.setOnclickAsync {
-            startActivityWithData(DataBActivity::class, null, 849, Intent.FLAG_ACTIVITY_CLEAR_TASK, null)
+            startActivityWithData(DataBActivity::class, Test2.A, 849, Intent.FLAG_ACTIVITY_CLEAR_TASK, null)
         }
     }
 

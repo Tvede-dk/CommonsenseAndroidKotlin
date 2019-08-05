@@ -21,4 +21,5 @@ abstract class BaseDatabindingActivityWithData<out view : ViewDataBinding, out I
         binding.executePendingBindings()
         useBinding()
     }
+
 }

@@ -1,9 +1,9 @@
 buildscript {
     ext.androidSdkBuildVersion = 28
-    ext.androidBuildToolsVersion = "28.0.3"
+    ext.androidBuildToolsVersion = "29.0.0"
 
     //Lib version and sdks
-    ext.commonsenseVersionName = "0.0.19.5"
+    ext.commonsenseVersionName = "0.0.19.6"
     ext.commonsenseVersionNumber = 1
     ext.minSdk = 16
     ext.targetSdk = 27
@@ -19,12 +19,12 @@ buildscript {
     ext.commonsenseGit = "https://github.com/Tvede-dk/CommonsenseAndroidKotlin.git"
 
     //included versions.
-    ext.kotlin_version = '1.3.31'
+    ext.kotlin_version = '1.3.41'
     ext.supportVersion = '28.0.0'
-    ext.coroutinesVersion = '1.2.1'
+    ext.coroutinesVersion = '1.2.2'
     ext.leakCanaryVersion = "1.6.3"
     ext.junitVersion = "4.12"
-    ext.androidGradleVersion = "3.4.0"
+    ext.androidGradleVersion = "3.4.2"
     ext.roboElectricVersion = "4.2.1"
     ext.espressoVersion = "3.0.2"
     ext.testSupportRunnerVersion = "1.0.2"

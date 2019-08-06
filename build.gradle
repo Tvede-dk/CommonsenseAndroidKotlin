@@ -24,7 +24,7 @@ buildscript {
     ext.leakCanaryVersion = "1.6.3"
     ext.junitVersion = "4.12"
     ext.androidGradleVersion = "3.4.2"
-    ext.roboElectricVersion = "4.3"
+    ext.roboElectricVersion = "4.2.1"
 
 
     //Versions for X.

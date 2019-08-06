@@ -9,11 +9,12 @@ enum class Test2 {
     A, B
 }
 
-class DataBActivity : BaseDatabindingActivityWithData<DataBActivityBinding, Test2>() {
+class DataBActivity : BaseDatabindingActivityWithData<DataBActivityBinding, Test2?>() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         L.error("test", "omg")
+        L.error("pretty", "pretty = " + toPrettyString())
     }
 
     override fun useBinding() {

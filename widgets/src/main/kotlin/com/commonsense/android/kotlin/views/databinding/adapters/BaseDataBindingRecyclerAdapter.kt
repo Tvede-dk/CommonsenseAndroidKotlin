@@ -2,12 +2,14 @@
 
 package com.commonsense.android.kotlin.views.databinding.adapters
 
+import androidx.annotation.IntRange
 import android.content.*
 import android.view.*
 import androidx.annotation.*
 import androidx.databinding.*
 import androidx.recyclerview.widget.*
 import com.commonsense.android.kotlin.base.*
+import com.commonsense.android.kotlin.base.debug.prettyStringContent
 import com.commonsense.android.kotlin.base.extensions.*
 import com.commonsense.android.kotlin.base.extensions.collections.*
 import com.commonsense.android.kotlin.system.datastructures.*
@@ -190,6 +192,7 @@ abstract class DataBindingRecyclerAdapter<T>(context: Context) :
 
     /**
      * A simple implementation that discards / tells the underlying adapter that each item have no id.
+     * we are not stable so return NO_ID.
      * @param position Int
      * @return Long RecyclerView.NO_ID
      */
@@ -218,6 +221,10 @@ abstract class DataBindingRecyclerAdapter<T>(context: Context) :
     val sectionCount: Int
         get() = dataCollection.sectionCount
 
+    init {
+        super.setHasStableIds(false)
+    }
+
 
     /**
      * Delegates this responsibility to the data, since it knows it.
@@ -225,10 +232,13 @@ abstract class DataBindingRecyclerAdapter<T>(context: Context) :
      * @param viewType Int
      * @return BaseViewHolderItem<*>
      */
-    override fun onCreateViewHolder(parent: ViewGroup, @androidx.annotation.IntRange(from = 0) viewType: Int): BaseViewHolderItem<*> {
+    override fun onCreateViewHolder(parent: ViewGroup, @IntRange(from = 0) viewType: Int): BaseViewHolderItem<*> {
         val rep = dataCollection.getTypeRepresentativeFromTypeValue(viewType)
         return rep?.invoke(inflater, parent, false)
-                ?: throw RuntimeException("could not find item, even though we expected it, for viewtype: $viewType")
+                ?: throw RuntimeException("could not find item, " +
+                        "even though we expected it, for viewType: $viewType;" +
+                        "rep is = $rep;" +
+                        "ViewGroup is = $parent")
     }
 
     /**
@@ -236,9 +246,13 @@ abstract class DataBindingRecyclerAdapter<T>(context: Context) :
      * @param position Int
      * @return Int
      */
-    override fun getItemViewType(@androidx.annotation.IntRange(from = 0) position: Int): Int {
-        val index = dataCollection.indexToPath(position) ?: return 0
-        return dataCollection[index]?.getTypeValue() ?: 0
+    override fun getItemViewType(@IntRange(from = 0) position: Int): Int {
+        val item = dataCollection[position]
+                ?: throw RuntimeException("Could not get item, so the position is not there.;" +
+                        " position = $position;" +
+                        " count = ${dataCollection.size};" +
+                        "$dataCollection")
+        return item.getTypeValue()
     }
 
     /**
@@ -615,7 +629,7 @@ abstract class DataBindingRecyclerAdapter<T>(context: Context) :
 
     /**
      * Tries to find the given element in a section , and returns the path if found.
-     * @param item T the item to find (must be compareable to be compared, otherwise it will be per address)
+     * @param item T the item to find (must be comparable to be compared, otherwise it will be per address)
      * @param inSection Int the section index(sparse)
      * @return IndexPath? the index where the element is, if found, null otherwise (or null also if the section is not there)
      */
@@ -707,6 +721,25 @@ abstract class DataBindingRecyclerAdapter<T>(context: Context) :
         notifyItemRangeChanged(location.inRaw)
     }
 
+    override fun setHasStableIds(hasStableIds: Boolean) {
+        logClassError("Have no effect as we are effectively not stable according to the adapter implementation;" +
+                "We handle everything our self. Please do not call this method.")
+    }
+
+    //make sure we never allow transient state to be recycled.
+    override fun onFailedToRecycleView(holder: BaseViewHolderItem<*>): Boolean {
+        return false
+    }
+
+    override fun toString(): String {
+        return toPrettyString()
+    }
+
+    fun toPrettyString(): String {
+        return "Base dataBinding adapter state:" + listOf(
+                dataCollection.toPrettyString()
+        ).prettyStringContent()
+    }
 
 }
 
@@ -728,6 +761,7 @@ fun BaseDataBindingRecyclerAdapter.hideSections(vararg sections: Int) =
  */
 fun BaseDataBindingRecyclerAdapter.showSections(vararg sections: Int) =
         sections.forEach(this::showSection)
+
 
 open class BaseDataBindingRecyclerAdapter(context: Context) :
         DataBindingRecyclerAdapter<IRenderModelItem<*, *>>(context)

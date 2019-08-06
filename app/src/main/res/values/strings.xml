@@ -20,4 +20,5 @@
     <string name="tools.anr.enable.listener">Enable listener</string>
     <string name="mainactivity_category_activitydata">Activity with data</string>
     <string name="mainactivity_category_crypto">Crypto</string>
+    <string name="retrive_picture">Retrieve picture via camera</string>
 </resources>

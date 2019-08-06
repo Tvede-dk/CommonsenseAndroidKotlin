@@ -17,9 +17,11 @@ class IntentDataAble<InputType> {
         val safeIntent = intent ?: throw Exception("intent is null")
         val intentIndex = safeIntent.getString(BaseActivityData.dataIntentIndex)
                 ?: throw Exception("Intent content not presented; extra is: $safeIntent")
+        if (!BaseActivityData.dataReferenceMap.hasItem(intentIndex)) {
+            throw Exception("Data is not in map, so this activity/fragment " +
+                    "\"${this.javaClass.simpleName}\" is referring to the data after closing.")
+        }
         val item = BaseActivityData.dataReferenceMap.getItemOr(intentIndex)
-                ?: throw Exception("Data is not in map, so this activity/fragment " +
-                        "\"${this.javaClass.simpleName}\" is referring to the data after closing.")
         @Suppress("UNCHECKED_CAST") // Unfortunately we are unable to Type safe bypass the map though this. not in this generic manner
         return item as InputType
     }
@@ -35,7 +37,7 @@ class IntentDataAble<InputType> {
     }
 
     /**
-     * Retrives the data index from the intent or returns null
+     * Retrieves the data index from the intent or returns null
      */
     fun getDataIndex(intent: Bundle?): String? =
             intent?.getString(BaseActivityData.dataIntentIndex)

@@ -1,9 +1,47 @@
 # Changelog
 
+## 0.0.21
+- newer versions 
+- all updates from 0.0.19 to 0.0.19.6
+
 ## 0.0.20
-- fully andorid x (all migrated)
+- fully android x (all migrated)
 - with fix from 0.0.18
 
+## 0.0.19.6
+- updated kotlin to 1.3.41 & coroutines to 1.2.2
+- gradle 5.5.1
+- fixed issue where startActivityWithData could end up reusing the same index / id.
+- more logging via prettyString for various baseDataBinding Activities (with data)
+
+## 0.0.19.5
+- fixed weird issue where trying to fix weird bug in android keyboards, caused google keyboard sometimes to skip a char and delete the one previous of it. 
+
+## 0.0.19.4
+- fixed issue with using null / nullable types in activity with data (fragments with data as well.)
+- kotlin 1.3.31
+- coroutines 1.2.1
+
+## 0.0.19.3
+- fixed bug with iterating over sparsarray in foreachIndexed. (used key rather than index to get value.)
+
+## 0.0.19.2
+- reupload as there are issues with the 0.0.19.1
+
+## 0.0.19.1
+- coroutines 1.2.0 - improved scheduling performance on android (less work on main thread)
+- gradle 5.4
+- android gradle 3.4
+
+## 0.0.19
+
+- permissions handling is now possible with multiple values, and a way improved callback mechanism as well as many more extensions making life a lot easier
+- fixed bug with PictureRetriever where the permission for the Camera was not acquired.
+- kotlin 1.3.30
+- gradle 5.4-rc1
+- android gradle 3.3.2
+- minor version updates for testing.
+- removed thumbnail from PictureRetriever as it was not fully implemented. 
 
 ## 0.0.18
 - fixed minor bug with dialogFragments and baseFragmentPagerAdapter (a bug from the support libs)

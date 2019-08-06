@@ -94,16 +94,4 @@ private class KeyboardConnection(target: InputConnection,
         return super.sendKeyEvent(event)
 
     }
-
-    override fun deleteSurroundingText(beforeLength: Int, afterLength: Int): Boolean {
-        // magic: in latest Android, deleteSurroundingText(1, 0) will be called for backspace, when there are no text..
-        return if (beforeLength == 1 && afterLength == 0) {
-            // emulate backspace event..
-            sendKeyEvent(KeyEvent(KeyEvent.ACTION_DOWN, KeyEvent.KEYCODE_DEL))
-                    && sendKeyEvent(KeyEvent(KeyEvent.ACTION_UP, KeyEvent.KEYCODE_DEL))
-        } else {
-            super.deleteSurroundingText(beforeLength, afterLength)
-        }
-
-    }
 }

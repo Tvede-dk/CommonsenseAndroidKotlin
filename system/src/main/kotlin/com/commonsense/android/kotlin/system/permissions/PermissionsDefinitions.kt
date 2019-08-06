@@ -10,7 +10,10 @@ import androidx.annotation.*
  */
 
 
-
+/**
+ * This is a list of all Dangerous permissions.
+ */
+@Target(AnnotationTarget.TYPE, AnnotationTarget.VALUE_PARAMETER, AnnotationTarget.PROPERTY)
 @SuppressLint("InlinedApi")
 @Retention(AnnotationRetention.SOURCE)
 @StringDef(Manifest.permission.ACCESS_CHECKIN_PROPERTIES, Manifest.permission.ACCESS_COARSE_LOCATION, Manifest.permission.ACCESS_FINE_LOCATION

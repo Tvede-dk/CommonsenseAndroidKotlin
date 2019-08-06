@@ -51,3 +51,6 @@ captures/
 projectFilesBackup/
 reports/
 *.exec
+.idea/encodings.xml
+.idea/vcs.xml
+.idea/codeStyles/Project.xml

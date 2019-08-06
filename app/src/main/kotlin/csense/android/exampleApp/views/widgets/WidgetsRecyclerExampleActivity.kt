@@ -3,6 +3,7 @@ package csense.android.exampleApp.views.widgets
 import androidx.recyclerview.widget.*
 import com.commonsense.android.kotlin.base.extensions.*
 import com.commonsense.android.kotlin.base.extensions.collections.*
+import com.commonsense.android.kotlin.system.logging.logError
 import com.commonsense.android.kotlin.views.*
 import com.commonsense.android.kotlin.views.databinding.activities.*
 import com.commonsense.android.kotlin.views.databinding.adapters.*
@@ -20,29 +21,65 @@ class WidgetsRecyclerExampleActivity : BaseDatabindingActivity<WidgetsRecyclerEx
         binding.widgetsRecyclerExampleRecycler.setup(adapter, LinearLayoutManager(this)) {
 
         }
-        binding.widgetsRecyclerExampleAdd1000.setOnclickAsync {
-            val mapped = listOf(ViewRender("0")).repeateToSize(1000)
-            adapter.addAll(mapped, 0)
+        binding.widgetsRecyclerExampleAdd1.setOnclickAsync {
+            add1()
         }
 
-        binding.widgetsRecyclerExampleAdd10000.setOnclickAsync {
-            for (i in 0 until 1000) {
-                val section = i * 5
-                val mapped = listOf(ViewRender("$section")).repeateToSize(10)
-                adapter.addAll(mapped, section)
-            }
+        binding.widgetsRecyclerExampleAdd2.setOnclickAsync {
+            add2()
         }
 
         binding.widgetsRecyclerExampleClear.setOnclickAsync {
-            adapter.clear()
+            clear()
         }
 
-        binding.widgetsRecyclerExampleRemove1000.setOnclickAsync {
-//            adapter.smoothScrollToSection()
-            adapter.hideSections(5,10,15)
+        binding.widgetsRecyclerExampleHide.setOnclickAsync {
+            hide()
         }
 
+        binding.widgetsRecyclerExampleTryAuto.setOnclickAsync {
+            tryFun()
+        }
 
+    }
+
+    //lets try some fun things out
+    private fun tryFun() {
+//        clear()
+        add2()
+        hide()
+        add1()
+//        hide()
+        add2()
+//        hide()
+//        hide()
+        add2()
+        add2()
+        launchInUi("tryFun") {
+            adapter.smoothScrollToSection(19)
+        }
+        logError(adapter.toPrettyString())
+    }
+
+    private fun clear() {
+        adapter.clear()
+    }
+
+    private fun hide() {
+        adapter.hideSections(5, 10, 15)
+    }
+
+    private fun add2() {
+        for (i in 0 until 20) {
+            val section = i * 50
+            val mapped = listOf(ViewRender("section =  $section")).repeateToSize(10)
+            adapter.setSection(mapped, section)
+        }
+    }
+
+    private fun add1() {
+        val mapped = listOf(ViewRender("0")).repeateToSize(100)
+        adapter.addAll(mapped, 0)
     }
 }
 

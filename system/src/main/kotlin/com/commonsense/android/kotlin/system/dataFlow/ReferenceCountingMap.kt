@@ -6,10 +6,15 @@ import com.commonsense.android.kotlin.base.*
 import java.util.concurrent.atomic.*
 
 /**
- * Created by Kasper Tvede on 23-07-2017.
+ * An internal reference counter for some given data.
  */
 data class ReferenceItem<out T>(val item: T, var counter: AtomicInteger)
 
+/**
+ * A reference counting based map, so when the counter goes to 0 or below it will be removed.
+ * @property map HashMap<String, ReferenceItem<*>>
+ * @property count Int
+ */
 class ReferenceCountingMap {
     private val map: HashMap<String, ReferenceItem<*>> = hashMapOf()
 
@@ -65,6 +70,14 @@ class ReferenceCountingMap {
         }
     }
 
+    fun toPrettyString(): String {
+        return "ReferenceCountingMap state:\n\tcount = $count\n\t" +
+                "$map"
+    }
+
+    /**
+     * The size of this reference counting map.
+     */
     val count: Int
         get() = map.size
 

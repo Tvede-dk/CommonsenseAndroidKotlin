@@ -41,10 +41,10 @@ inline val Int.isOdd: Boolean
     get() = !isEven
 
 /**
- *
+ * tells if we are in a range, or above / below it (equal => in range).
  * @receiver Int
- * @param from Int
- * @param to Int
+ * @param from Int from this value (inclusive)
+ * @param to Int to this value (inclusive)
  * @return Comparing
  */
 inline fun Int.compareToRange(from: Int, to: Int): Comparing {

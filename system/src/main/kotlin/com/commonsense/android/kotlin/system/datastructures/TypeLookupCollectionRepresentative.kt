@@ -3,6 +3,8 @@
 package com.commonsense.android.kotlin.system.datastructures
 
 import android.util.*
+import com.commonsense.android.kotlin.base.debug.prettyStringContent
+import com.commonsense.android.kotlin.base.extensions.collections.toPrettyString
 
 /**
  * Created by Kasper Tvede on 03-06-2017.
@@ -94,6 +96,18 @@ class TypeRepresentative<in T : TypeHashCodeLookupRepresent<Rep>, out Rep : Any>
 
     fun removeAll(items: Collection<T>) {
         items.forEach(this::remove)
+    }
+
+    override fun toString(): String {
+        return toPrettyString()
+    }
+
+    fun toPrettyString(): String {
+        return "Type lookup collection representative state:  " + listOf(
+                lookupRep.toPrettyString(),
+                lookupCounter.toPrettyString()
+        ).prettyStringContent()
+
     }
 }
 

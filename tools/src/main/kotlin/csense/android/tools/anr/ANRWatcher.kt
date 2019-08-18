@@ -32,6 +32,7 @@ object ANRWatcher {
         }
 
     //<editor-fold desc="Enabled ability">
+
     var disableOnDebugger = false
         set(value) {
             field = value
@@ -40,20 +41,22 @@ object ANRWatcher {
 
     var enabled: Boolean = false
         set(value) {
-
             field = value && (disableOnDebugger && !Debug.isDebuggerConnected() || !disableOnDebugger)
             watcher.setState(field)
         }
+
     //</editor-fold>
 
     //<editor-fold desc="Listener">
+    private var weakListener: WeakReference<EmptyFunction>? = null
+
     var listener: EmptyFunction?
         set(value) {
             weakListener = value?.weakReference()
         }
         get() = weakListener?.get()
 
-    private var weakListener: WeakReference<EmptyFunction>? = null
+
     //</editor-fold>
 
     //<editor-fold desc="Logging internally">
@@ -180,14 +183,16 @@ private class ANRWatcherThread(val name: String, val callbackOnANR: EmptyFunctio
             field = value
         }
 
-    private var dividerOffset = currentTimeoutInMs.dividerOffset
+    private var dividerOffset: Int = currentTimeoutInMs.dividerOffset
 
     private var offset = currentTimeoutInMs.value / dividerOffset
 
     private var offset2 = (currentTimeoutInMs.value / dividerOffset) * 2
 
+
+
     private val TimeUnit.MilliSeconds.dividerOffset
-        get () = (value > 1000).map(50, 5)
+        get() = (value > 1000).map(50, 5)
 
 
 }

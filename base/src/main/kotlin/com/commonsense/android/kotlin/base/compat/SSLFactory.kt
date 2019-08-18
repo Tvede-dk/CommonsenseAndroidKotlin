@@ -2,7 +2,10 @@
 
 package com.commonsense.android.kotlin.base.compat
 
+import java.io.IOException
 import java.net.*
+import java.security.KeyManagementException
+import java.security.NoSuchAlgorithmException
 import javax.net.ssl.*
 
 /**
@@ -22,8 +25,13 @@ enum class SSLContextProtocols(val algorithmName: String) {
     TLSv11("TLSv1.1"),
     TLSv12("TLSv1.2");
 
-    fun createContext(): SSLContext? = SSLContext.getInstance(algorithmName)
+    fun createContext(): SSLContext? = try {
+        SSLContext.getInstance(algorithmName)
+    } catch (e: NoSuchAlgorithmException) {
+        null
+    }
 
+    @Throws(KeyManagementException::class)
     fun createSocketFactory(): SSLSocketFactory? = createContext()?.run {
         init(null, null, null)
         socketFactory
@@ -36,9 +44,11 @@ enum class SSLContextProtocols(val algorithmName: String) {
  */
 class SSLSocketFactoryCompat : SSLSocketFactory {
 
+    @Throws
     constructor() : super() {
         val optFactory = SSLContextProtocols.TLSv12.createSocketFactory()
-        factory = optFactory ?: throw RuntimeException("Cannot work with SSL / TLS when its not available.")
+        factory = optFactory
+                ?: throw RuntimeException("Cannot work with SSL / TLS when its not available.")
     }
 
     internal constructor(factory: SSLSocketFactory) : super() {
@@ -51,29 +61,35 @@ class SSLSocketFactoryCompat : SSLSocketFactory {
 
     override fun getDefaultCipherSuites(): Array<out String> = factory.defaultCipherSuites
 
+    @Throws(IOException::class)
     override fun createSocket(): Socket =
             factory.createSocket().setProtocolToTls12()
 
+    @Throws(IOException::class)
     override fun createSocket(socket: Socket?,
                               host: String?,
                               @androidx.annotation.IntRange(from = 0, to = 65535) port: Int,
                               autoClose: Boolean): Socket =
             factory.createSocket(socket, host, port, autoClose).setProtocolToTls12()
 
+    @Throws
     override fun createSocket(host: String?,
                               @androidx.annotation.IntRange(from = 0, to = 65535) port: Int): Socket =
             factory.createSocket(host, port).setProtocolToTls12()
 
+    @Throws
     override fun createSocket(host: String?,
                               @androidx.annotation.IntRange(from = 0, to = 65535) port: Int,
                               localHost: InetAddress?,
                               localPort: Int): Socket =
             factory.createSocket(host, port, localHost, localPort).setProtocolToTls12()
 
+    @Throws(IOException::class)
     override fun createSocket(host: InetAddress?,
                               @androidx.annotation.IntRange(from = 0, to = 65535) port: Int): Socket =
             factory.createSocket(host, port).setProtocolToTls12()
 
+    @Throws(IOException::class)
     override fun createSocket(address: InetAddress?,
                               @androidx.annotation.IntRange(from = 0, to = 65535) port: Int,
                               localAddress: InetAddress?, localPort: Int): Socket =

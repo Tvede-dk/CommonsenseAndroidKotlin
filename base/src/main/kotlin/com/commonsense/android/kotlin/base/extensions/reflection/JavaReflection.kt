@@ -8,6 +8,7 @@ import java.lang.reflect.*
 /**
  *
  */
+@Throws
 inline fun <reified T> Field.getAs(obj: Any): T? {
     return get(obj) as T?
 }

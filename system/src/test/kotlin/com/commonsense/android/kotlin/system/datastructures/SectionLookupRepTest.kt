@@ -381,16 +381,16 @@ class SectionLookupRepTest : BaseRoboElectricTest() {
         a.setSection((0 until 50).map { TestData(it.toString()) }, 5).assertNotNullApply {
             optAdded.assertNotNullApply {
                 inSection.length.assert(50, "should have added 50 elements")
-                inSection.start.assert(0, "should start at 0")
-                inSection.endInclusive.assert(49, "end should be expected 49 (inclusive), as the com.commonsense.android.kotlin.base.extensions.getLength")
+                inSection.first.assert(0, "should start at 0")
+                inSection.last.assert(49, "end should be expected 49 (inclusive), as the com.commonsense.android.kotlin.base.extensions.getLength")
             }
         }
         a.assertSizeAndSections(50, 1)
         a.setSection((0 until 100).map { TestData(it.toString()) }, 0).assertNotNullApply {
             optAdded.assertNotNullApply {
                 inSection.length.assert(100, "should have added 100 elements")
-                inSection.start.assert(0, "should start at 0")
-                inSection.endInclusive.assert(99, "end should be expected 99 (inclusive), as the com.commonsense.android.kotlin.base.extensions.getLength -1 ")
+                inSection.first.assert(0, "should start at 0")
+                inSection.last.assert(99, "end should be expected 99 (inclusive), as the com.commonsense.android.kotlin.base.extensions.getLength -1 ")
             }
         }
         a.assertSizeAndSections(150, 2)
@@ -398,8 +398,8 @@ class SectionLookupRepTest : BaseRoboElectricTest() {
         a.setSection((0 until 10).map { TestData(it.toString()) }, 10).assertNotNullApply {
             optAdded.assertNotNullApply {
                 inSection.length.assert(10, "should have added 10 elements")
-                inSection.start.assert(0, "should start at 0")
-                inSection.endInclusive.assert(9, "end should be expected 9 (inclusive), as the com.commonsense.android.kotlin.base.extensions.getLength -1 ")
+                inSection.first.assert(0, "should start at 0")
+                inSection.last.assert(9, "end should be expected 9 (inclusive), as the com.commonsense.android.kotlin.base.extensions.getLength -1 ")
             }
         }
         a.assertSizeAndSections(160, 3)

@@ -45,7 +45,7 @@ inline fun RecyclerView.addOnScrollWhenPastFirstItem(crossinline action: Functio
  */
 @Suppress("NOTHING_TO_INLINE")
 inline fun RecyclerView.Adapter<*>.notifyItemRangeChanged(range: IntRange) {
-    notifyItemRangeChanged(range.start, range.length)
+    notifyItemRangeChanged(range.first, range.length)
 }
 
 /**

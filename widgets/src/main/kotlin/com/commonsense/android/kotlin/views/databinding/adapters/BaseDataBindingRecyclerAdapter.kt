@@ -292,7 +292,7 @@ abstract class DataBindingRecyclerAdapter<T>(context: Context) :
      */
     open fun addAll(items: Collection<T>, inSection: Int): Unit = updateData {
         dataCollection.addAll(items, inSection)?.inRaw?.apply {
-            notifyItemRangeInserted(this.start, this.length)
+            notifyItemRangeInserted(this.first, this.length)
         }
 
     }
@@ -328,7 +328,7 @@ abstract class DataBindingRecyclerAdapter<T>(context: Context) :
      * @param inSection Int the section index (sparse) to insert into
      */
     open fun insertAll(items: Collection<T>, startPosition: Int, inSection: Int): Unit = updateData {
-        dataCollection.insertAll(items, inSection, startPosition)?.inRaw?.apply {
+        dataCollection.insertAll(items, startPosition, inSection)?.inRaw?.apply {
             notifyItemRangeInserted(start, length)
         }
     }
@@ -390,7 +390,7 @@ abstract class DataBindingRecyclerAdapter<T>(context: Context) :
     @UiThread
     open fun removeIn(range: kotlin.ranges.IntRange, inSection: Int): Unit = updateData {
         dataCollection.removeInRange(range, inSection)?.inRaw?.apply {
-            notifyItemRangeRemoved(start + range.start, range.length)
+            notifyItemRangeRemoved(start + range.first, range.length)
         }
     }
 
@@ -443,13 +443,13 @@ abstract class DataBindingRecyclerAdapter<T>(context: Context) :
         val (changes, added, removed) = dataCollection.setSection(items, inSection)
                 ?: return@updateData
         changes?.let {
-            notifyItemRangeChanged(it.inRaw.start, it.inRaw.length)
+            notifyItemRangeChanged(it.inRaw.first, it.inRaw.length)
         }
         added?.let {
-            notifyItemRangeInserted(it.inRaw.start, it.inRaw.length)
+            notifyItemRangeInserted(it.inRaw.first, it.inRaw.length)
         }
         removed?.let {
-            notifyItemRangeRemoved(it.inRaw.start, it.inRaw.length)
+            notifyItemRangeRemoved(it.inRaw.first, it.inRaw.length)
         }
     }
 
@@ -469,7 +469,7 @@ abstract class DataBindingRecyclerAdapter<T>(context: Context) :
     @UiThread
     fun clearSection(inSection: Int): Unit = updateData {
         dataCollection.clearSection(inSection)?.inRaw.apply {
-            this?.let { notifyItemRangeRemoved(it.start, it.length) }
+            this?.let { notifyItemRangeRemoved(it.first, it.length) }
         }
     }
 
@@ -581,7 +581,7 @@ abstract class DataBindingRecyclerAdapter<T>(context: Context) :
     @UiThread
     open fun hideSection(sectionIndex: Int) = updateData {
         val sectionLocation = dataCollection.ignoreSection(sectionIndex)?.inRaw ?: return@updateData
-        notifyItemRangeRemoved(sectionLocation.start, sectionLocation.length)
+        notifyItemRangeRemoved(sectionLocation.first, sectionLocation.length)
     }
 
     /**
@@ -592,7 +592,7 @@ abstract class DataBindingRecyclerAdapter<T>(context: Context) :
     @UiThread
     open fun showSection(sectionIndex: Int) = updateData {
         val sectionLocation = dataCollection.acceptSection(sectionIndex)?.inRaw ?: return@updateData
-        notifyItemRangeInserted(sectionLocation.start, sectionLocation.length)
+        notifyItemRangeInserted(sectionLocation.first, sectionLocation.length)
     }
 
     /**

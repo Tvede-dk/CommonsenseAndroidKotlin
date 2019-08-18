@@ -26,7 +26,7 @@ class ByteArrayExtensionsKtTest {
      * a regression test.
      */
     @Ignore
-    @Test()
+    @Test
     fun benchmarkToHexString() {
 
         val array = mutableListOf<Byte>()

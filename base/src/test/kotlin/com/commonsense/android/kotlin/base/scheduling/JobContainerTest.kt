@@ -82,6 +82,7 @@ class JobContainerTest {
         container.getRemainingGroupedJobs().assert(0, "job should have finished.")
     }
 
+    @Throws(InterruptedException::class)
     @Test
     fun testDuplicatedGroups() = runBlocking {
         val container = JobContainer(this)
@@ -122,6 +123,7 @@ class JobContainerTest {
         counter.get().assert(3, "all should have randed")
     }
 
+    @Throws(InterruptedException::class)
     @Test
     fun testQueueingBackground() = runBlocking {
         val container = JobContainer(this)
@@ -132,6 +134,7 @@ class JobContainerTest {
         Unit
     }
 
+    @Throws(InterruptedException::class)
     @Test
     fun performAction() = runBlocking {
         val container = JobContainer(this)
@@ -169,6 +172,7 @@ class JobContainerTest {
      * then you want to cancel the old and run the new.
      *
      */
+    @Throws(InterruptedException::class)
     @Test
     fun performActionGrouped(): Unit = runBlocking {
         val container = JobContainer(this)

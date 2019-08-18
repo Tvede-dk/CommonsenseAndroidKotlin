@@ -3,6 +3,7 @@
 package csense.android.tools.resources
 
 import androidx.annotation.*
+import com.commonsense.android.kotlin.system.logging.tryAndLog
 import kotlin.reflect.*
 
 
@@ -95,10 +96,12 @@ class DynamicResources(
         RAnim.mapFieldsToNameId(DynamicResourceType::AnimResource)
     }
 
-    inline fun <T : Any> KClass<*>.mapFieldsToNameId(ctor: Function2<String, Int, T?>): List<T> {
+    inline fun <T : Any> KClass<*>.mapFieldsToNameId(crossinline ctor: Function2<String, Int, T?>): List<T> {
         return this.java.fields.mapNotNull {
-            val extractedValue = it.get(this) as? Int ?: return@mapNotNull null
-            ctor(it.name, extractedValue)
+            tryAndLog("") {
+                val extractedValue = it.get(this) as? Int ?: return@tryAndLog null
+                ctor(it.name, extractedValue)
+            }
         }
     }
 }

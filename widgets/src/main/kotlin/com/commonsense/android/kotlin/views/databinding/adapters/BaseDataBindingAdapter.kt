@@ -39,7 +39,7 @@ open class BaseDataBindingAdapter(context: Context) : BaseAdapter<BaseAdapterIte
 
     @androidx.annotation.IntRange(from = 1)
 
-    override fun getViewTypeCount() = Math.max(viewTypes.size(), 1)
+    override fun getViewTypeCount() = maxOf(viewTypes.size(), 1)
 
     fun calculateViewTypes(): Int {
         val classes: List<Class<out BaseAdapterItemBinding<*>>> = getItems().asSequence().map { it::class.java }.distinct().toList()

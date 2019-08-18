@@ -25,6 +25,7 @@ internal class SSLSocketFactoryCompatTest {
         socketFactory.defaultCipherSuites.size.assertLargerThan(0)
     }
 
+    @Throws(UnknownHostException::class)
     @Test
     fun createSocket() {
         val fac = SSLSocketFactoryCompat(factory = MockedSSLFactory())

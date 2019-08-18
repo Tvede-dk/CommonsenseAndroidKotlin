@@ -307,6 +307,7 @@ class AbstractSearchableDataBindingRecyclerAdapterTest : BaseRoboElectricTest() 
 
     }
 
+    @Throws(InterruptedException::class)
     @Test
     fun testFilterAsync() {
         val recycler = RecyclerView(context)

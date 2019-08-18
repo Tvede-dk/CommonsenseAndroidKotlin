@@ -29,6 +29,7 @@ class ToolsFpsActivity : BaseDatabindingActivity<ToolsFpsBinding>() {
     override fun createBinding(): InflaterFunctionSimple<ToolsFpsBinding> =
             ToolsFpsBinding::inflate
 
+    @Throws(InterruptedException::class)
     override fun useBinding() {
         binding.toolsFpsStartButton.setOnclickAsync {
             startMonitoring()

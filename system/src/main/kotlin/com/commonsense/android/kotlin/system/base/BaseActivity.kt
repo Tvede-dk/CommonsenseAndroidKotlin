@@ -180,11 +180,13 @@ open class BaseActivity : AppCompatActivity(), ActivityResultHelperContainer {
 
 
     //<editor-fold desc="On paused ">
+    protected var mIsPaused: Boolean = false
+
     /**
      * If this activity is paused
      */
     val isPaused: Boolean
-        get () = mIsPaused
+        get() = mIsPaused
 
     /**
      * If this activity is visible, opposite of isPaused
@@ -192,7 +194,6 @@ open class BaseActivity : AppCompatActivity(), ActivityResultHelperContainer {
     val isVisible: Boolean
         get() = !isPaused
 
-    protected var mIsPaused: Boolean = false
     //</editor-fold>
 
 

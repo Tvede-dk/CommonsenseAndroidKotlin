@@ -12,7 +12,7 @@ package com.commonsense.android.kotlin.base.extensions
  * Gets this int negative, if it is already negative, returns that.
  */
 inline val Double.negative: Double
-    get() = Math.min(this, -this)
+    get() = minOf(this, -this)
 
 
 

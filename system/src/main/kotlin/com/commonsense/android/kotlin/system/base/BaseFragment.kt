@@ -23,6 +23,11 @@ import kotlinx.coroutines.*
  */
 open class BaseFragment : DialogFragment(), ActivityResultHelperContainer {
 
+    /**
+     * returns the activity as the base activity; if the activity is not a base activity then null is returned regardless.
+     */
+    val baseActivity: BaseActivity?
+        get() = activity as? BaseActivity
 
     /**
      * Gateway for permission handling.
@@ -37,11 +42,7 @@ open class BaseFragment : DialogFragment(), ActivityResultHelperContainer {
             }
             return baseActivity?.permissionHandler
         }
-    /**
-     * returns the activity as the base activity; if the activity is not a base activity then null is returned regardless.
-     */
-    val baseActivity: BaseActivity?
-        get() = activity as? BaseActivity
+
 
     /**
      * a safe way to retrieve the activity since its not annotated nullable.

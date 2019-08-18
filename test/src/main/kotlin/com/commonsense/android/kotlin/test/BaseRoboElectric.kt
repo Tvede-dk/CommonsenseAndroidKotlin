@@ -41,6 +41,7 @@ abstract class BaseRoboElectricTest {
                 }
             }
 
+    @Throws(InterruptedException::class)
     fun awaitAllTheading(condition: () -> Boolean,
                          @androidx.annotation.IntRange(from = 0) timeoutTime: Long,
                          TimeoutTimeUnit: TimeUnit,

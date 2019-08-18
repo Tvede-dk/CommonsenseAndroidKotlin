@@ -1,5 +1,6 @@
 package com.commonsense.android.kotlin.system.extensions
 
+import java.io.UnsupportedEncodingException
 import java.net.*
 
 /**
@@ -7,6 +8,7 @@ import java.net.*
  * Purpose:
  *
  */
+@Throws(UnsupportedEncodingException::class)
 fun String.urlEncoded(): String {
     return URLEncoder.encode(this, "UTF-8")
 }

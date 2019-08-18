@@ -41,6 +41,7 @@ class InputValidatorTest : BaseRoboElectricTest() {
 
     }
 
+    @Throws(InterruptedException::class)
     @Test
     fun testCallbacks() {
         val validator = InputValidator.Builder<String>()

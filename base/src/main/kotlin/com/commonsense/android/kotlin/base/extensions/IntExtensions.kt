@@ -14,7 +14,7 @@ import kotlin.math.*
  * Gets this int negative, if it is already negative, returns that.
  */
 inline val Int.negative: Int
-    get() = Math.min(this, -this)
+    get() = minOf(this, -this)
 
 
 /**

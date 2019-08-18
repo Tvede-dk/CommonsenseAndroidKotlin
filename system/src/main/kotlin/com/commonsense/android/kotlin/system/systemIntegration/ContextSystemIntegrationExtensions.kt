@@ -5,6 +5,7 @@ package com.commonsense.android.kotlin.system.systemIntegration
 import android.content.*
 import android.net.*
 import com.commonsense.android.kotlin.system.extensions.*
+import com.commonsense.android.kotlin.system.logging.tryAndLog
 
 class ChooserIntent(val title: CharSequence)
 
@@ -17,10 +18,12 @@ inline fun ChooserIntent?.getIntent(otherIntent: Intent): Intent {
 }
 
 inline fun Context.showOnMaps(address: String, useChooser: ChooserIntent? = null) {
-    val urlEncoded = address.urlEncoded()
-    val toLaunch = Uri.parse("geo:0,0?q=$urlEncoded")
-    val intent = Intent(Intent.ACTION_VIEW, toLaunch)
-    startActivitySafe(useChooser.getIntent(intent))
+    tryAndLog("Show on maps") {
+        val urlEncoded = address.urlEncoded()
+        val toLaunch = Uri.parse("geo:0,0?q=$urlEncoded")
+        val intent = Intent(Intent.ACTION_VIEW, toLaunch)
+        startActivitySafe(useChooser.getIntent(intent))
+    }
 }
 
 

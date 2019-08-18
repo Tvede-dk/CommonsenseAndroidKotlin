@@ -9,7 +9,7 @@ package com.commonsense.android.kotlin.base.extensions
  * Gets this float negative, if it is already negative, returns that.
  */
 inline val Float.negative: Float
-    get() = Math.min(this, -this)
+    get() = minOf(this, -this)
 
 /**
  * Compares two floats with a delta, since floats are not precise.

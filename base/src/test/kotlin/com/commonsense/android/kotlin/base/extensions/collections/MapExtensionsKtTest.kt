@@ -10,6 +10,7 @@ import kotlin.Pair
  * Created by Kasper Tvede on 08-10-2017.
  */
 class MapExtensionsKtTest : BaseRoboElectricTest() {
+    @Throws(InterruptedException::class)
     @Test
     fun forEachIndexed() {
         //test empty
@@ -47,6 +48,7 @@ class MapExtensionsKtTest : BaseRoboElectricTest() {
         sparseArray.map { it.length }.last().assert(4, "i:10 is 4 chars")
     }
 
+    @Throws(InterruptedException::class)
     @Test
     fun forEach() {
         val sparseArray = SparseArray<String>()

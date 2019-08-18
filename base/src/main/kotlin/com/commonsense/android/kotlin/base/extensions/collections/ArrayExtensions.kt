@@ -36,8 +36,7 @@ inline fun IntArray.binarySearch(crossinline comparere: Function2<Int, Int, Comp
     while (start < end) {
         val mid = start + (end - start) / 2
         val item = get(mid)
-        val compResult = comparere(item, mid)
-        when (compResult) {
+        when (comparere(item, mid)) {
             Comparing.LargerThan -> start = mid + 1
             Comparing.LessThan -> end = mid
             Comparing.Equal -> return mid

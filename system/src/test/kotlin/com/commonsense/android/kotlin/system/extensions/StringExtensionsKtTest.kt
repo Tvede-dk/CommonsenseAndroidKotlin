@@ -2,6 +2,7 @@ package com.commonsense.android.kotlin.system.extensions
 
 import com.commonsense.android.kotlin.test.*
 import org.junit.*
+import java.io.UnsupportedEncodingException
 
 /**
  * Created by Kasper Tvede on 30-05-2018.
@@ -9,6 +10,7 @@ import org.junit.*
  */
 class StringExtensionsKtTest {
 
+    @Throws(UnsupportedEncodingException::class)
     @Test
     fun urlEncoded() {
         "".urlEncoded().assert("")

@@ -60,17 +60,17 @@ inline fun <reified T : Exception> assertThrows(
         action()
         failTest("Expected an exception of type ${T::class.java.simpleName} but got no exceptions\r$message")
     } catch (exception: Exception) {
-        if (exception is T) {
-            //all is good / expected.
-        } else {
+        if (exception !is T) {
             failTest("Expected an exception of type \"${T::class.java.simpleName}\" " +
                     "but got exception of type \"${exception::class.java.simpleName}\" instead." +
                     "\r$messageWrongException")
         }
+        //all is good / expected.
     }
 }
 
 
+@Throws(InterruptedException::class)
 inline fun testCallbackWithSemaphore(@androidx.annotation.IntRange(from = 0) startPermits: Int = 0,
                                      @androidx.annotation.IntRange(from = 0) startAcquire: Int = startPermits + 1,
                                      @androidx.annotation.IntRange(from = 0) timeoutTime: Int = 50,

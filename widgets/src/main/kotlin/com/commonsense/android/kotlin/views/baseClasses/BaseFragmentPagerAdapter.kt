@@ -43,10 +43,12 @@ class BaseFragmentPagerAdapter(val fragmentManager: FragmentManager) : PagerAdap
     }
 
 
+    @Throws(IllegalStateException::class)
     override fun startUpdate(container: ViewGroup) {
-        if (container.id == -1) {
-            throw IllegalStateException("ViewPager with adapter $this requires a view id")
+        check(container.id != -1) {
+            "ViewPager with adapter $this requires a view id"
         }
+
     }
 
     override fun instantiateItem(container: ViewGroup, position: Int): Any {
@@ -152,7 +154,7 @@ class BaseFragmentPagerAdapter(val fragmentManager: FragmentManager) : PagerAdap
     override fun getItemPosition(`object`: Any): Int {
         //is not the right type ? skip it
         val fragment = `object` as? FragmentWithTitle
-                ?: return PagerAdapter.POSITION_NONE
+                ?: return POSITION_NONE
 
         //get what is possible from the index, if not safe then null is returned
         val atPosition = data.getSafe(fragment.lastPosition)
@@ -163,7 +165,7 @@ class BaseFragmentPagerAdapter(val fragmentManager: FragmentManager) : PagerAdap
             fragment.lastPosition = data.indexOf(fragment)
         }
         //unchanged => not changed / the old index is the same still; if not then return "none" meaning "changed".
-        return isRightPosition.map(PagerAdapter.POSITION_UNCHANGED, PagerAdapter.POSITION_NONE)
+        return isRightPosition.map(POSITION_UNCHANGED, POSITION_NONE)
     }
 
 

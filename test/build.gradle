@@ -2,6 +2,7 @@ apply plugin: 'com.android.library'
 apply plugin: 'kotlin-android'
 apply plugin: "de.mannodermaus.android-junit5"
 
+
 android {
     buildTypes {
         release {
@@ -13,12 +14,12 @@ android {
 
 dependencies {
     androidTestImplementation("androidx.test.espresso:espresso-core:$espressoVersion")
-    api "org.junit.jupiter:junit-jupiter-api:5.3.2"
-    api "org.junit.jupiter:junit-jupiter-engine:5.3.2"
-    api "org.junit.jupiter:junit-jupiter-engine:5.3.2"
+    api 'org.junit.jupiter:junit-jupiter-api:5.5.1'
+    api 'org.junit.jupiter:junit-jupiter-engine:5.5.1'
+    api 'org.junit.jupiter:junit-jupiter-engine:5.5.1'
 
     api "junit:junit:4.12"
-    api "org.junit.vintage:junit-vintage-engine:5.2.0"
+    api 'org.junit.vintage:junit-vintage-engine:5.5.1'
 
     api "org.robolectric:robolectric:$roboElectricVersion"
     api "androidx.test:runner:$testRunnerVersion"
@@ -26,6 +27,8 @@ dependencies {
 
     implementation "androidx.annotation:annotation:$annotationsVersion"
     implementation "org.jetbrains.kotlin:kotlin-stdlib:$kotlin_version"
+
+    annotationProcessor "com.google.auto.service:auto-service:$autoServiceTestVersion"
 }
 
 

@@ -23,6 +23,8 @@ dependencies {
     implementation "androidx.appcompat:appcompat:$appcompatVersion"
     implementation "androidx.fragment:fragment:$fragmentVersion"
     implementation "org.jetbrains.kotlin:kotlin-stdlib:$kotlin_version"
+
+    testAnnotationProcessor "com.google.auto.service:auto-service:$autoServiceTestVersion"
 }
 
 apply from: "../javadocSourceDokka.gradle"

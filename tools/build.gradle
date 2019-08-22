@@ -34,6 +34,7 @@ dependencies {
     implementation project(path: ':base')
     implementation project(path: ':system')
 
+    kaptTest "com.google.auto.service:auto-service:$autoServiceTestVersion"
 }
 apply from: "../resourcegroups.gradle"
 apply from: "../javadocSourceDokka.gradle"

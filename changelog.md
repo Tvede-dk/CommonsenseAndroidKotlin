@@ -1,5 +1,11 @@
 # Changelog
 
+## 0.0.22
+- updated versions
+- fixed bug with base recycler (argument names was switched in one of the insertAll functions) and more exception handling
+- prepared for future versions of android.x (annotations).
+
+
 ## 0.0.21
 - newer versions 
 - all updates from 0.0.19 to 0.0.19.6

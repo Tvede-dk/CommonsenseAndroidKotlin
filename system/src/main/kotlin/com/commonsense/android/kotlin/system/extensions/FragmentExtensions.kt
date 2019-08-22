@@ -28,11 +28,11 @@ fun Fragment.getActivityAsCompat(): AppCompatActivity? {
 
 fun DialogFragment.dialogFillParentView() {
     // Get existing layout params for the window
-    val params = dialog.window?.attributes
+    val params = dialog?.window?.attributes
     // Assign window properties to fill the parent
     params?.width = WindowManager.LayoutParams.MATCH_PARENT
     params?.height = WindowManager.LayoutParams.MATCH_PARENT
-    dialog.window?.attributes = params as android.view.WindowManager.LayoutParams
+    dialog?.window?.attributes = params as WindowManager.LayoutParams
     // Call super onResume after sizing
 }
 

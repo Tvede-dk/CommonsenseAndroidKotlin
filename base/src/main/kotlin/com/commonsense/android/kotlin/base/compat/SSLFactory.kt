@@ -44,7 +44,7 @@ enum class SSLContextProtocols(val algorithmName: String) {
  */
 class SSLSocketFactoryCompat : SSLSocketFactory {
 
-    @Throws
+    @Throws(Exception::class)
     constructor() : super() {
         val optFactory = SSLContextProtocols.TLSv12.createSocketFactory()
         factory = optFactory
@@ -72,12 +72,12 @@ class SSLSocketFactoryCompat : SSLSocketFactory {
                               autoClose: Boolean): Socket =
             factory.createSocket(socket, host, port, autoClose).setProtocolToTls12()
 
-    @Throws
+    @Throws(Exception::class)
     override fun createSocket(host: String?,
                               @androidx.annotation.IntRange(from = 0, to = 65535) port: Int): Socket =
             factory.createSocket(host, port).setProtocolToTls12()
 
-    @Throws
+    @Throws(Exception::class)
     override fun createSocket(host: String?,
                               @androidx.annotation.IntRange(from = 0, to = 65535) port: Int,
                               localHost: InetAddress?,

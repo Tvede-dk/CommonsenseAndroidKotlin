@@ -34,7 +34,7 @@ abstract class BaseDatabindingActivityToolbar<out T : ViewDataBinding> : BaseDat
         drawerToggle.syncState()
     }
 
-    override fun onConfigurationChanged(newConfig: Configuration?) {
+    override fun onConfigurationChanged(newConfig: Configuration) {
         super.onConfigurationChanged(newConfig)
         drawerToggle.onConfigurationChanged(newConfig)
     }

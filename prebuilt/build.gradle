@@ -38,7 +38,10 @@ dependencies {
     implementation "androidx.appcompat:appcompat:$appcompatVersion"
     implementation "org.jetbrains.kotlin:kotlin-stdlib:$kotlin_version"
 
+    kaptTest "com.google.auto.service:auto-service:$autoServiceTestVersion"
+
 }
+
 
 apply from: '../resourcegroups.gradle'
 

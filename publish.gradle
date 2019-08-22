@@ -13,7 +13,9 @@ artifacts {
 //
 publishing {
     publications {
-        mavenJava(MavenPublication) {
+        MyPublication(MavenPublication) {
+            artifact sourcesJar
+            artifact javadocJar
             pom {
                 packaging = 'aar'
                 groupId = project.commonsenseGroupId
@@ -38,8 +40,9 @@ publishing {
                         name = "Kasper Tvede"
                     }
                 }
+
                 withXml {
-                    def dependenciesNode = asNode().appendNode('dependencies')
+                    def dependenciesNode = asNode().getAt('dependencies')[0] ?: asNode().appendNode('dependencies');
 
                     // Iterate over the implementation dependencies (we don't want the test ones), adding a <dependency> node for each
                     configurations.implementation.allDependencies.each {
@@ -66,7 +69,7 @@ bintray {
     } catch (Exception ignored) {
         print "could not read local.properties"
     }
-    configurations = ['archives']
+    publications = ['MyPublication']
     override = true
     pkg {
         repo = project.commonsenseRepoName

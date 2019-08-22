@@ -105,5 +105,5 @@ task clean(type: Delete) {
 apply from: "fix-tests.gradle"
 
 //to publish to bintray / prod
-//clean assemble test sourcesJar javadocJar bintrayUpload
+//clean assemble test sourcesJar javadocJar generatePomFileForMavenJavaPublication bintrayUpload
 

@@ -13,8 +13,7 @@ class WidgetsFragmentExample : BaseDatabindingFragment<WidgetsPagerAdapterFragme
             WidgetsPagerAdapterFragmentBinding::inflate
 
     override fun useBinding() {
-        val random = Random().nextInt(4)
-        val color = when (random) {
+        val color = when (Random().nextInt(4)) {
             0 -> Color.RED
             1 -> Color.BLUE
             2 -> Color.GREEN

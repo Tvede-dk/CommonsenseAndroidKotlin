@@ -23,10 +23,10 @@ class LTest : BaseRoboElectricTest() {
             isWarningLoggingAllowed = true
         }
         assertLoggingAllowedStates(
-                true,
-                true,
-                true,
-                true)
+                assertProd = true,
+                assertError = true,
+                assertWarning = true,
+                assertDebug = true)
 
         //make sure all are turned on
 
@@ -34,26 +34,26 @@ class LTest : BaseRoboElectricTest() {
         L.isLoggingAllowed(false)
         //make sure all are turned off.
         assertLoggingAllowedStates(
-                false,
-                false,
-                false,
-                false)
+                assertProd = false,
+                assertError = false,
+                assertWarning = false,
+                assertDebug = false)
 
 
         L.isLoggingAllowed(true)
         assertLoggingAllowedStates(
-                true,
-                true,
-                true,
-                true)
+                assertProd = true,
+                assertError = true,
+                assertWarning = true,
+                assertDebug = true)
         //make sure all are turned on.
 
         L.isLoggingAllowed(false)
         assertLoggingAllowedStates(
-                false,
-                false,
-                false,
-                false)
+                assertProd = false,
+                assertError = false,
+                assertWarning = false,
+                assertDebug = false)
         L.isProductionLoggingAllowed = true
         assertLoggingAllowedStates(
                 true,
@@ -66,10 +66,10 @@ class LTest : BaseRoboElectricTest() {
         L.isProductionLoggingAllowed = false
 
         assertLoggingAllowedStates(
-                false,
-                false,
-                true,
-                false)
+                assertProd = false,
+                assertError = false,
+                assertWarning = true,
+                assertDebug = false)
         //make sure they are not dependent on each other.
 
 

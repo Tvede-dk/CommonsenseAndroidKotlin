@@ -15,6 +15,7 @@ import java.util.concurrent.*
  */
 class CoroutinesExtensionsKtTest {
 
+    @Throws(InterruptedException::class)
     @Test
     fun launchOnCompleted() = runBlocking {
 
@@ -37,6 +38,7 @@ class CoroutinesExtensionsKtTest {
 
     }
 
+    @Throws(InterruptedException::class)
     @Test
     fun launchOnCompletedAsync() = runBlocking {
         val sem = Semaphore(0, false)
@@ -107,6 +109,7 @@ class CoroutinesExtensionsKtTest {
 
 
 
+    @Throws(InterruptedException::class)
     @Test
     fun forEachSync() = runBlocking {
         var combinedResult = 0
@@ -128,6 +131,7 @@ class CoroutinesExtensionsKtTest {
         combinedResult.assert(4 + 3 + 2 + 1)
     }
 
+    @Throws(InterruptedException::class)
     @Test
     fun forEachAsync() = runBlocking {
         var combinedResult = 0

@@ -47,7 +47,7 @@ class ReferenceCountingMapTest {
             map.addItem(testValue, index)
         }
 
-        (0 until 20).forEach {
+        (0 until 20).forEach { 
             map.incrementCounter(index)
         }
         map.hasItem(index).assert(true, "incrementing an item a lot should not affect its status(counter should be 21 now)")

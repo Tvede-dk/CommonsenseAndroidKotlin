@@ -35,6 +35,8 @@ abstract class BaseCustomViewGroup : ViewGroup, LateAttributes {
 
     override var partialTypedArray: TypedArray? = null
 
+    var storedBackground: Drawable? = null
+
     /**
      * if true, we will perform our own background drawing;
      * if false, use the default
@@ -60,7 +62,6 @@ abstract class BaseCustomViewGroup : ViewGroup, LateAttributes {
             }
         }
 
-    var storedBackground: Drawable? = null
 
     fun getContentSize(): Rect {
         contentSize(contentRect)

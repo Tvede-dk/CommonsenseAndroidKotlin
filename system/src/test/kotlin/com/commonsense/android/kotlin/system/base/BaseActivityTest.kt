@@ -14,6 +14,7 @@ import java.util.concurrent.*
  */
 @Config(sdk = [21])
 class BaseActivityTest : BaseRoboElectricTest() {
+    @Throws(InterruptedException::class)
     @Test
     fun launchInUiLifecycleEventsPaused() = testCallbackWithSemaphore(
             shouldAcquire = false,
@@ -22,11 +23,12 @@ class BaseActivityTest : BaseRoboElectricTest() {
             setup()
             pause()
         }
-        act.get().launchInUi("test", {
+        act.get().launchInUi("test") {
             failTest("Should not get called when the pause or destroy have been called")
-        })
+        }
     }
 
+    @Throws(InterruptedException::class)
     @Test
     fun launchInUiLifecycleEventsPausedResume() {
         val sem = Semaphore(0)
@@ -35,13 +37,13 @@ class BaseActivityTest : BaseRoboElectricTest() {
             pause()
         }
         var counter = 0
-        act.get().launchInUi("test", {
+        act.get().launchInUi("test") {
             if (counter == 0) {
                 failTest("Should not get called when the pause or destroy have been called")
             } else {
                 sem.release()
             }
-        })
+        }
         counter += 1
         act.visible()
         act.resume()
@@ -52,6 +54,7 @@ class BaseActivityTest : BaseRoboElectricTest() {
                 "callback should be called after onresume after a pause")
     }
 
+    @Throws(InterruptedException::class)
     @Test
     fun launchInUiLifecycleEventsPausedDestory() = testCallbackWithSemaphore(
             shouldAcquire = false,
@@ -60,9 +63,9 @@ class BaseActivityTest : BaseRoboElectricTest() {
             setup()
             pause()
         }
-        act.get().launchInUi("test", {
+        act.get().launchInUi("test") {
             failTest("Should not get called when the pause or destroy have been called")
-        })
+        }
         runBlocking {
             Robolectric.flushBackgroundThreadScheduler()
             Robolectric.flushForegroundThreadScheduler()
@@ -78,6 +81,7 @@ class BaseActivityTest : BaseRoboElectricTest() {
     }
 
 
+    @Throws(InterruptedException::class)
     @Test
     fun launchInBackgroundLifecycleEventsPaused() = testCallbackWithSemaphore(
             shouldAcquire = true,
@@ -86,11 +90,12 @@ class BaseActivityTest : BaseRoboElectricTest() {
             setup()
             pause()
         }
-        act.get().launchInBackground("test", {
+        act.get().launchInBackground("test") {
             sem.release()
-        })
+        }
     }
 
+    @Throws(InterruptedException::class)
     @Test
     fun launchInUiLifecycleEventsVisible() = testCallbackWithSemaphore(
             shouldAcquire = true,
@@ -99,12 +104,13 @@ class BaseActivityTest : BaseRoboElectricTest() {
             setup()
             visible()
         }
-        act.get().launchInUi("test", {
+        act.get().launchInUi("test") {
             sem.release()
-        })
+        }
     }
 
 
+    @Throws(InterruptedException::class)
     @Test
     fun launchInBackgroundLifecycleEventsVisible() = testCallbackWithSemaphore(
             shouldAcquire = true,
@@ -113,12 +119,13 @@ class BaseActivityTest : BaseRoboElectricTest() {
             setup()
             visible()
         }
-        act.get().launchInBackground("test", {
+        act.get().launchInBackground("test") {
             sem.release()
-        })
+        }
 
     }
 
+    @Throws(InterruptedException::class)
     @Test
     fun addOnBackPressedListeners() = testCallbackWithSemaphore(
             shouldAcquire = true,
@@ -137,6 +144,7 @@ class BaseActivityTest : BaseRoboElectricTest() {
         act.get().onBackPressed()
     }
 
+    @Throws(InterruptedException::class)
     @Test
     fun removeOnBackPressedListeners() = testCallbackWithSemaphore(
             shouldAcquire = false,

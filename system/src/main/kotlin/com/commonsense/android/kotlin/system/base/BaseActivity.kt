@@ -4,8 +4,7 @@ package com.commonsense.android.kotlin.system.base
 
 import android.content.*
 import android.os.*
-import android.support.annotation.IntRange
-import android.support.v7.app.*
+import android.support.v7.app.AppCompatActivity
 import android.view.*
 import com.commonsense.android.kotlin.base.*
 import com.commonsense.android.kotlin.base.debug.*
@@ -174,18 +173,20 @@ open class BaseActivity : AppCompatActivity(), ActivityResultHelperContainer {
         activityResultHelper.addForAllResultsAsync(requestCode, receiver)
     }
 
-    override fun removeActivityResultListener(@IntRange(from = 0) requestCode: Int) {
+    override fun removeActivityResultListener(@android.support.annotation.IntRange(from = 0) requestCode: Int) {
         activityResultHelper.remove(requestCode)
     }
     //</editor-fold>
 
 
     //<editor-fold desc="On paused ">
+    protected var mIsPaused: Boolean = false
+
     /**
      * If this activity is paused
      */
     val isPaused: Boolean
-        get () = mIsPaused
+        get() = mIsPaused
 
     /**
      * If this activity is visible, opposite of isPaused
@@ -193,7 +194,6 @@ open class BaseActivity : AppCompatActivity(), ActivityResultHelperContainer {
     val isVisible: Boolean
         get() = !isPaused
 
-    protected var mIsPaused: Boolean = false
     //</editor-fold>
 
 

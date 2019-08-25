@@ -3,8 +3,7 @@
 package com.commonsense.android.kotlin.views.databinding.adapters
 
 import android.content.*
-import android.databinding.*
-import android.support.annotation.IntRange
+import android.databinding.ViewDataBinding
 import android.util.*
 import android.view.*
 import com.commonsense.android.kotlin.base.extensions.collections.*
@@ -38,9 +37,9 @@ open class BaseDataBindingAdapter(context: Context) : BaseAdapter<BaseAdapterIte
         return viewTypes.get(item, IGNORE_ITEM_VIEW_TYPE)
     }
 
-    @IntRange(from = 1)
+    @android.support.annotation.IntRange(from = 1)
 
-    override fun getViewTypeCount() = Math.max(viewTypes.size(), 1)
+    override fun getViewTypeCount() = maxOf(viewTypes.size(), 1)
 
     fun calculateViewTypes(): Int {
         val classes: List<Class<out BaseAdapterItemBinding<*>>> = getItems().asSequence().map { it::class.java }.distinct().toList()

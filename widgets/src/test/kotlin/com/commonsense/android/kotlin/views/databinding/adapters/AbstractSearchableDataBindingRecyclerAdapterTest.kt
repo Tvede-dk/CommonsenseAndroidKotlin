@@ -1,7 +1,7 @@
 package com.commonsense.android.kotlin.views.databinding.adapters
 
-import android.databinding.*
-import android.support.v7.widget.*
+import android.databinding.ViewDataBinding
+import android.support.v7.widget.RecyclerView
 import com.commonsense.android.kotlin.system.logging.*
 import com.commonsense.android.kotlin.test.*
 import org.junit.*
@@ -307,6 +307,7 @@ class AbstractSearchableDataBindingRecyclerAdapterTest : BaseRoboElectricTest() 
 
     }
 
+    @Throws(InterruptedException::class)
     @Test
     fun testFilterAsync() {
         val recycler = RecyclerView(context)

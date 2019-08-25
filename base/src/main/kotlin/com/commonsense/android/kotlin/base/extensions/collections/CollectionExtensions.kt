@@ -2,7 +2,7 @@
 
 package com.commonsense.android.kotlin.base.extensions.collections
 
-import android.support.annotation.*
+import android.support.annotation.Size
 import com.commonsense.android.kotlin.base.*
 
 /**
@@ -71,10 +71,10 @@ inline fun <reified T> List<T>.repeateToSize(
 
 
 inline fun Collection<*>.isRangeValid(intRange: IntRange): Boolean =
-        (intRange.start >= 0 && intRange.endInclusive < size)
+        (intRange.first >= 0 && intRange.last < size)
 
 inline fun <T> List<T>.subList(intRange: IntRange): List<T> =
-        subList(intRange.start, intRange.endInclusive)
+        subList(intRange.first, intRange.last)
 
 /**
  * Returns a limited view of this list, by limiting the size of it (if the list is shorter than the limit,

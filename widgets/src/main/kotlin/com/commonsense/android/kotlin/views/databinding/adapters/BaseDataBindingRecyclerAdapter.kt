@@ -2,11 +2,12 @@
 
 package com.commonsense.android.kotlin.views.databinding.adapters
 
-import android.content.*
-import android.databinding.*
-import android.support.annotation.*
 import android.support.annotation.IntRange
-import android.support.v7.widget.*
+import android.content.*
+import android.databinding.ViewDataBinding
+import android.support.annotation.AnyThread
+import android.support.annotation.UiThread
+import android.support.v7.widget.RecyclerView
 import android.view.*
 import com.commonsense.android.kotlin.base.*
 import com.commonsense.android.kotlin.base.debug.prettyStringContent
@@ -232,7 +233,7 @@ abstract class DataBindingRecyclerAdapter<T>(context: Context) :
      * @param viewType Int
      * @return BaseViewHolderItem<*>
      */
-    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): BaseViewHolderItem<*> {
+    override fun onCreateViewHolder(parent: ViewGroup, @IntRange(from = 0) viewType: Int): BaseViewHolderItem<*> {
         val rep = dataCollection.getTypeRepresentativeFromTypeValue(viewType)
         return rep?.invoke(inflater, parent, false)
                 ?: throw RuntimeException("could not find item, " +
@@ -261,7 +262,7 @@ abstract class DataBindingRecyclerAdapter<T>(context: Context) :
      * @param holder BaseViewHolderItem<*>
      * @param position Int
      */
-    override fun onBindViewHolder(holder: BaseViewHolderItem<*>, @IntRange(from = 0) position: Int) {
+    override fun onBindViewHolder(holder: BaseViewHolderItem<*>, @android.support.annotation.IntRange(from = 0) position: Int) {
         //lookup type to converter, then apply model on view using converter
         val index = dataCollection.indexToPath(position) ?: return
         val render = dataCollection[index]
@@ -292,7 +293,7 @@ abstract class DataBindingRecyclerAdapter<T>(context: Context) :
      */
     open fun addAll(items: Collection<T>, inSection: Int): Unit = updateData {
         dataCollection.addAll(items, inSection)?.inRaw?.apply {
-            notifyItemRangeInserted(this.start, this.length)
+            notifyItemRangeInserted(this.first, this.length)
         }
 
     }
@@ -328,7 +329,7 @@ abstract class DataBindingRecyclerAdapter<T>(context: Context) :
      * @param inSection Int the section index (sparse) to insert into
      */
     open fun insertAll(items: Collection<T>, startPosition: Int, inSection: Int): Unit = updateData {
-        dataCollection.insertAll(items, inSection, startPosition)?.inRaw?.apply {
+        dataCollection.insertAll(items, startPosition, inSection)?.inRaw?.apply {
             notifyItemRangeInserted(start, length)
         }
     }
@@ -390,7 +391,7 @@ abstract class DataBindingRecyclerAdapter<T>(context: Context) :
     @UiThread
     open fun removeIn(range: kotlin.ranges.IntRange, inSection: Int): Unit = updateData {
         dataCollection.removeInRange(range, inSection)?.inRaw?.apply {
-            notifyItemRangeRemoved(start + range.start, range.length)
+            notifyItemRangeRemoved(start + range.first, range.length)
         }
     }
 
@@ -443,13 +444,13 @@ abstract class DataBindingRecyclerAdapter<T>(context: Context) :
         val (changes, added, removed) = dataCollection.setSection(items, inSection)
                 ?: return@updateData
         changes?.let {
-            notifyItemRangeChanged(it.inRaw.start, it.inRaw.length)
+            notifyItemRangeChanged(it.inRaw.first, it.inRaw.length)
         }
         added?.let {
-            notifyItemRangeInserted(it.inRaw.start, it.inRaw.length)
+            notifyItemRangeInserted(it.inRaw.first, it.inRaw.length)
         }
         removed?.let {
-            notifyItemRangeRemoved(it.inRaw.start, it.inRaw.length)
+            notifyItemRangeRemoved(it.inRaw.first, it.inRaw.length)
         }
     }
 
@@ -469,7 +470,7 @@ abstract class DataBindingRecyclerAdapter<T>(context: Context) :
     @UiThread
     fun clearSection(inSection: Int): Unit = updateData {
         dataCollection.clearSection(inSection)?.inRaw.apply {
-            this?.let { notifyItemRangeRemoved(it.start, it.length) }
+            this?.let { notifyItemRangeRemoved(it.first, it.length) }
         }
     }
 
@@ -581,7 +582,7 @@ abstract class DataBindingRecyclerAdapter<T>(context: Context) :
     @UiThread
     open fun hideSection(sectionIndex: Int) = updateData {
         val sectionLocation = dataCollection.ignoreSection(sectionIndex)?.inRaw ?: return@updateData
-        notifyItemRangeRemoved(sectionLocation.start, sectionLocation.length)
+        notifyItemRangeRemoved(sectionLocation.first, sectionLocation.length)
     }
 
     /**
@@ -592,7 +593,7 @@ abstract class DataBindingRecyclerAdapter<T>(context: Context) :
     @UiThread
     open fun showSection(sectionIndex: Int) = updateData {
         val sectionLocation = dataCollection.acceptSection(sectionIndex)?.inRaw ?: return@updateData
-        notifyItemRangeInserted(sectionLocation.start, sectionLocation.length)
+        notifyItemRangeInserted(sectionLocation.first, sectionLocation.length)
     }
 
     /**
@@ -634,7 +635,7 @@ abstract class DataBindingRecyclerAdapter<T>(context: Context) :
      * @return IndexPath? the index where the element is, if found, null otherwise (or null also if the section is not there)
      */
     @UiThread
-    fun getIndexFor(item: T, @IntRange(from = 0) inSection: Int): IndexPath? {
+    fun getIndexFor(item: T, @android.support.annotation.IntRange(from = 0) inSection: Int): IndexPath? {
         val innerIndex = dataCollection.sectionAt(inSection)?.collection?.indexOf(item)
                 ?: return null
         return IndexPath(innerIndex, inSection)
@@ -678,7 +679,7 @@ abstract class DataBindingRecyclerAdapter<T>(context: Context) :
      * @param sectionIndex Int the section index (sparse) to remove.
      */
     @UiThread
-    open fun removeSection(@IntRange(from = 0) sectionIndex: Int) = clearSection(sectionIndex)
+    open fun removeSection(@android.support.annotation.IntRange(from = 0) sectionIndex: Int) = clearSection(sectionIndex)
 
     /**
      * Removes a given list of sections
@@ -686,7 +687,7 @@ abstract class DataBindingRecyclerAdapter<T>(context: Context) :
      * @param sectionIndexes IntArray the sections (sparse) to remove
      */
     @UiThread
-    fun removeSections(@IntRange(from = 0) vararg sectionIndexes: Int) {
+    fun removeSections(@android.support.annotation.IntRange(from = 0) vararg sectionIndexes: Int) {
         sectionIndexes.forEach(this::removeSection)
     }
 
@@ -696,7 +697,7 @@ abstract class DataBindingRecyclerAdapter<T>(context: Context) :
      * @param sectionIndex Int the section index (sparse)
      */
     @UiThread
-    fun smoothScrollToSection(@IntRange(from = 0) sectionIndex: Int) {
+    fun smoothScrollToSection(@android.support.annotation.IntRange(from = 0) sectionIndex: Int) {
         val positionInList = dataCollection.getSectionLocation(sectionIndex)?.inRaw?.first ?: return
         listeningRecyclers.forEach {
             it.use { this.smoothScrollToPosition(positionInList) }

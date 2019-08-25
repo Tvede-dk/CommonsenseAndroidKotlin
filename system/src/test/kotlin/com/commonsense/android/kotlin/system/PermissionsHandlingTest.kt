@@ -29,6 +29,7 @@ class PermissionsHandlingTest : BaseRoboElectricTest() {
         Assert.assertTrue(sem.tryAcquire())
     }
 
+    @Throws(InterruptedException::class)
     @Test
     fun testPermissionFlowDenyAccept() {
         val act = createActivity<DenyPermissionActivity>()

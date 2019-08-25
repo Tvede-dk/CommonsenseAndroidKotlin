@@ -10,6 +10,7 @@ import java.util.concurrent.*
  */
 class PrimitiveExtensionsKtTest {
 
+    @Throws(InterruptedException::class)
     @Test
     fun testOntrue() {
         val sem = Semaphore(0)
@@ -24,6 +25,7 @@ class PrimitiveExtensionsKtTest {
         Assert.assertFalse(sem.tryAcquire(10))  //should not get the 10
     }
 
+    @Throws(InterruptedException::class)
     @Test
     fun testOnFalse() {
         val sem = Semaphore(0)

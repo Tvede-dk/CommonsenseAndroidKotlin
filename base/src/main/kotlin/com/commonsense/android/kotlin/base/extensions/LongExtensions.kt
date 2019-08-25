@@ -12,7 +12,7 @@ package com.commonsense.android.kotlin.base.extensions
  * Gets this long negative, if it is already negative, returns that.
  */
 inline val Long.negative: Long
-    get() = Math.min(this, -this)
+    get() = minOf(this, -this)
 
 
 /**

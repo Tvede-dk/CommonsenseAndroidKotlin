@@ -2,14 +2,19 @@
 
 package com.commonsense.android.kotlin.views.baseClasses
 
-import android.annotation.*
-import android.os.*
-import android.support.annotation.*
-import android.support.annotation.IntRange
-import android.support.v4.app.*
-import android.support.v4.view.*
-import android.view.*
-import com.commonsense.android.kotlin.base.extensions.collections.*
+import android.annotation.SuppressLint
+import android.os.Parcelable
+import android.support.annotation.IntDef
+import android.support.v4.app.DialogFragment
+import android.support.v4.app.Fragment
+import android.support.v4.app.FragmentManager
+import android.support.v4.app.FragmentTransaction
+import android.support.v4.view.PagerAdapter
+import android.view.View
+import android.view.ViewGroup
+import com.commonsense.android.kotlin.base.extensions.collections.getSafe
+import com.commonsense.android.kotlin.base.extensions.collections.ifTrue
+import com.commonsense.android.kotlin.base.extensions.collections.map
 
 /**
  *
@@ -44,10 +49,12 @@ class BaseFragmentPagerAdapter(val fragmentManager: FragmentManager) : PagerAdap
     }
 
 
+    @Throws(IllegalStateException::class)
     override fun startUpdate(container: ViewGroup) {
-        if (container.id == -1) {
-            throw IllegalStateException("ViewPager with adapter $this requires a view id")
+        check(container.id != -1) {
+            "ViewPager with adapter $this requires a view id"
         }
+
     }
 
     override fun instantiateItem(container: ViewGroup, position: Int): Any {
@@ -125,7 +132,7 @@ class BaseFragmentPagerAdapter(val fragmentManager: FragmentManager) : PagerAdap
     }
 
 
-    fun getItem(@IntRange(from = 0) position: Int): Fragment = data[position].fragment
+    fun getItem(@android.support.annotation.IntRange(from = 0) position: Int): Fragment = data[position].fragment
 
     override fun getCount(): Int = data.size
 
@@ -141,7 +148,7 @@ class BaseFragmentPagerAdapter(val fragmentManager: FragmentManager) : PagerAdap
     }
 
 
-    fun getItemId(@IntRange(from = 0) position: Int): Long {
+    fun getItemId(@android.support.annotation.IntRange(from = 0) position: Int): Long {
         //since the hashcode will default to the memory address of the object,
         // We will never have to come up with a uniq id for the object as the memory add is unique :)
         return getItem(position).hashCode().toLong()
@@ -153,7 +160,7 @@ class BaseFragmentPagerAdapter(val fragmentManager: FragmentManager) : PagerAdap
     override fun getItemPosition(`object`: Any): Int {
         //is not the right type ? skip it
         val fragment = `object` as? FragmentWithTitle
-                ?: return PagerAdapter.POSITION_NONE
+                ?: return POSITION_NONE
 
         //get what is possible from the index, if not safe then null is returned
         val atPosition = data.getSafe(fragment.lastPosition)
@@ -164,7 +171,7 @@ class BaseFragmentPagerAdapter(val fragmentManager: FragmentManager) : PagerAdap
             fragment.lastPosition = data.indexOf(fragment)
         }
         //unchanged => not changed / the old index is the same still; if not then return "none" meaning "changed".
-        return isRightPosition.map(PagerAdapter.POSITION_UNCHANGED, PagerAdapter.POSITION_NONE)
+        return isRightPosition.map(POSITION_UNCHANGED, POSITION_NONE)
     }
 
 

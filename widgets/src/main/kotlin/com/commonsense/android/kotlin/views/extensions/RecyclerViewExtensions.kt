@@ -1,7 +1,7 @@
 @file:Suppress("unused")
 package com.commonsense.android.kotlin.views.extensions
 
-import android.support.v7.widget.*
+import android.support.v7.widget.RecyclerView
 import com.commonsense.android.kotlin.base.*
 import com.commonsense.android.kotlin.base.extensions.collections.*
 
@@ -45,7 +45,7 @@ inline fun RecyclerView.addOnScrollWhenPastFirstItem(crossinline action: Functio
  */
 @Suppress("NOTHING_TO_INLINE")
 inline fun RecyclerView.Adapter<*>.notifyItemRangeChanged(range: IntRange) {
-    notifyItemRangeChanged(range.start, range.length)
+    notifyItemRangeChanged(range.first, range.length)
 }
 
 /**

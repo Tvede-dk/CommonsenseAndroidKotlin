@@ -4,7 +4,6 @@ import com.commonsense.android.kotlin.base.extensions.*
 import com.commonsense.android.kotlin.test.*
 import com.commonsense.android.kotlin.test.benchmark.*
 import org.junit.*
-import org.junit.jupiter.api.*
 import org.junit.jupiter.api.Test
 
 /**
@@ -27,7 +26,7 @@ class ByteArrayExtensionsKtTest {
      * a regression test.
      */
     @Ignore
-    @Test()
+    @Test
     fun benchmarkToHexString() {
 
         val array = mutableListOf<Byte>()

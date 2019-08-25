@@ -5,9 +5,6 @@ import android.os.*
 /**
  * Handles the data aware part of an BaseActivityData or BaseFragmentData
  * @param InputType
- * @property data InputType
- * @property intent Intent?
- * @property dataIndex String?
  */
 class IntentDataAble<InputType> {
     /**

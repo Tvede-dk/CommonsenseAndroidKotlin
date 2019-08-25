@@ -2,7 +2,10 @@
 
 
 ## 0.0.19.7
-
+- fixed bug with base recycler (argument names was switched in one of the insertAll functions) and more exception handling
+- updated 3-party versions (kotlin, gradle, tools ect. )
+- exceptions more exposed / handled
+- minor styling ect. 
 
 ## 0.0.19.6
 - updated kotlin to 1.3.41 & coroutines to 1.2.2

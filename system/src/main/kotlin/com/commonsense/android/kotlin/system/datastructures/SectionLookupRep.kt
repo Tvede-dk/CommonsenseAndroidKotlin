@@ -91,7 +91,7 @@ class SectionLookupRep<T : TypeHashCodeLookupRepresent<Rep>, out Rep : Any> {
      */
     val sectionCount
         @IntRange(from = 0)
-        get () = data.size()
+        get() = data.size()
 
     //</editor-fold>
 
@@ -111,7 +111,7 @@ class SectionLookupRep<T : TypeHashCodeLookupRepresent<Rep>, out Rep : Any> {
         if (isSectionIgnored(inSection)) {
             return null
         }
-        return SectionLocation(sectionUpdate.inRaw.endInclusive + 1, sectionUpdate.inSection.endInclusive + 1)
+        return SectionLocation(sectionUpdate.inRaw.last + 1, sectionUpdate.inSection.last + 1)
     }
 
     private fun isSectionIgnored(inSection: Int): Boolean =
@@ -130,7 +130,7 @@ class SectionLookupRep<T : TypeHashCodeLookupRepresent<Rep>, out Rep : Any> {
         if (isSectionIgnored(inSection)) {
             return null
         }
-        return SectionLocation(sectionUpdate.inRaw.start + atRow, atRow)
+        return SectionLocation(sectionUpdate.inRaw.first + atRow, atRow)
     }
 
 
@@ -175,7 +175,7 @@ class SectionLookupRep<T : TypeHashCodeLookupRepresent<Rep>, out Rep : Any> {
                 data[inSection].collection.removeAt(indexOf)
                 lookup.remove(item)
                 isSectionIgnored(inSection).map(null,
-                        SectionLocation(section.inRaw.start + indexOf, indexOf))
+                        SectionLocation(section.inRaw.first + indexOf, indexOf))
             }
         }
     }
@@ -189,7 +189,7 @@ class SectionLookupRep<T : TypeHashCodeLookupRepresent<Rep>, out Rep : Any> {
             val item = data[inSection].collection.removeAt(row)
             lookup.remove(item)
             isSectionIgnored(inSection).map(null,
-                    SectionLocation(sectionLocation.inRaw.start + row, row))
+                    SectionLocation(sectionLocation.inRaw.first + row, row))
         }
     }
 
@@ -213,8 +213,8 @@ class SectionLookupRep<T : TypeHashCodeLookupRepresent<Rep>, out Rep : Any> {
         if (isSectionIgnored(inSection)) {
             return null
         }
-        return SectionUpdate((section.inRaw.start + range.start) until
-                (section.inRaw.start + range.largest + 1), range)
+        return SectionUpdate((section.inRaw.first + range.first) until
+                (section.inRaw.first + range.largest + 1), range)
     }
     //</editor-fold>
 
@@ -227,7 +227,7 @@ class SectionLookupRep<T : TypeHashCodeLookupRepresent<Rep>, out Rep : Any> {
         if (isSectionIgnored(inSection)) {
             return null
         }
-        return SectionLocation(sectionLocation.inRaw.start + atRow, atRow)
+        return SectionLocation(sectionLocation.inRaw.first + atRow, atRow)
     }
 
     fun getTypeRepresentativeFromTypeValue(type: Int): Rep? =
@@ -240,7 +240,6 @@ class SectionLookupRep<T : TypeHashCodeLookupRepresent<Rep>, out Rep : Any> {
         cachedIndex.invalidate()
         cachedSize = 0
     }
-
 
     fun indexToPath(@IntRange(from = 0) position: Int): IndexPath? {
         return cachedIndex.lookup(position, data)
@@ -256,7 +255,7 @@ class SectionLookupRep<T : TypeHashCodeLookupRepresent<Rep>, out Rep : Any> {
         if (indexInSection == -1) {
             return null
         }
-        return SectionLocation(locationOfSection.inRaw.start + indexInSection, indexInSection)
+        return SectionLocation(locationOfSection.inRaw.first + indexInSection, indexInSection)
     }
 
 
@@ -318,7 +317,7 @@ class SectionLookupRep<T : TypeHashCodeLookupRepresent<Rep>, out Rep : Any> {
 
         val inSectionChangedEnd = minOf(removed.inSection.length, addedSafe.inSection.length)
 
-        val startOffsetRaw = addedSafe.inRaw.start
+        val startOffsetRaw = addedSafe.inRaw.first
         val changedEndOffSetRaw = startOffsetRaw + inSectionChangedEnd
         //if the list is empty, then no change can occur => null.
         val changedRange = items.isEmpty().map(null,
@@ -556,7 +555,7 @@ class SectionIndexCache {
     private fun <T> rebuildMapping(data: SparseArray<TypeSection<T>>) {
         sectionMapping.clear()
         var currentSize = 0
-        data.forEachIndexed { key, value, index ->
+        data.forEachIndexed { _, value, _ ->
             if (value.isNotEmptyOrInvisible) {
                 currentSize += value.visibleCount
                 sectionMapping.append(value.sectionIndexValue, currentSize)
@@ -595,7 +594,7 @@ class SectionIndexCache {
      * if true, we are invalid / not up to date.
      */
     val isInvalid: Boolean
-        get () = !isValid
+        get() = !isValid
 
     /**
      *
@@ -604,7 +603,7 @@ class SectionIndexCache {
      * @return Pair<Int, Int>? the key is the size, the value is the section
      */
     private fun SparseIntArray.findContainingSectionAndStartIndex(rawIndex: Int): Pair<Int, Int>? {
-        val index = binarySearch { key: Int, value: Int, index: Int ->
+        val index = binarySearch { _: Int, value: Int, index: Int ->
             val from = previousValueOr(index, 0)
             rawIndex.compareToRange(from, value - 1) //make it exclusive
         } ?: return null

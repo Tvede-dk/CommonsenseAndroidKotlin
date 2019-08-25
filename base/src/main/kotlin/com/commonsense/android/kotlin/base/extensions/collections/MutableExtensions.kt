@@ -2,7 +2,6 @@
 
 package com.commonsense.android.kotlin.base.extensions.collections
 
-import android.support.annotation.IntRange
 import com.commonsense.android.kotlin.base.*
 
 /**
@@ -22,7 +21,7 @@ inline fun <T> MutableList<T>.findAndRemoveAll(crossinline findAction: FunctionB
 }
 
 
-fun <T> MutableList<T>.replace(item: T, @IntRange(from = 0) position: Int) {
+fun <T> MutableList<T>.replace(item: T, @android.support.annotation.IntRange(from = 0) position: Int) {
     if (isIndexValid(position)) {
         this.add(position, item)
         this.removeAt(position + 1) //the +1 : we just moved all content before the original position.
@@ -49,10 +48,10 @@ fun <E> MutableCollection<E>.set(item: E) {
  * returns true iff all could be removed
  */
 fun <T> MutableList<T>.removeAll(intRange: kotlin.ranges.IntRange): Boolean {
-    if (intRange.start >= size || intRange.endInclusive >= size) {
+    if (intRange.first >= size || intRange.last >= size) {
         return false
     }
-    intRange.forEach { _ -> this.removeAt(intRange.start) }
+    intRange.forEach { _ -> this.removeAt(intRange.first) }
     return true
 }
 

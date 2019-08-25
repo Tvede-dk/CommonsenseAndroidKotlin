@@ -17,9 +17,9 @@ fun Job.launchOnCompleted(context: CoroutineContext,
                           action: EmptyFunction) {
     invokeOnCompletion {
 
-        GlobalScope.launch(context, CoroutineStart.DEFAULT, {
+        GlobalScope.launch(context, CoroutineStart.DEFAULT) {
             action()
-        })
+        }
     }
 }
 
@@ -30,9 +30,9 @@ fun Job.launchOnCompleted(context: CoroutineContext,
 fun Job.launchOnCompletedAsync(context: CoroutineContext,
                                action: AsyncEmptyFunction) {
     invokeOnCompletion {
-        GlobalScope.launch(context, CoroutineStart.DEFAULT, {
+        GlobalScope.launch(context, CoroutineStart.DEFAULT) {
             action()
-        })
+        }
     }
 }
 
@@ -42,9 +42,9 @@ fun Job.launchOnCompletedAsync(context: CoroutineContext,
 fun launchBlock(context: CoroutineContext,
                 start: CoroutineStart = CoroutineStart.DEFAULT,
                 block: AsyncEmptyFunction): Job {
-    return GlobalScope.launch(context, start, {
+    return GlobalScope.launch(context, start) {
         block()
-    })
+    }
 }
 
 /**
@@ -54,8 +54,8 @@ fun <T> asyncSimple(context: CoroutineContext = Dispatchers.Default,
                     start: CoroutineStart = CoroutineStart.DEFAULT,
                     block: suspend () -> T): Deferred<T> {
     return GlobalScope.async(context,
-            start,
-            { block() })
+            start
+    ) { block() }
 }
 
 /**
@@ -75,13 +75,7 @@ fun <T> asyncSimple(
 suspend fun <T> List<Deferred<T>>.await(): List<T> {
     return this.map { it.await() }
 }
-//
-///**
-// * Waits for all the given jobs to finish.
-// */
-//suspend fun List<Job>.awaitAll() {
-//    this.forEach { it.join() }
-//}
+
 
 suspend fun <E> Channel<E>.forEach(function: FunctionUnit<E>) {
     for (item in this) {

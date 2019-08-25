@@ -221,16 +221,17 @@ private class MockedToggleableViewWithCallback(myStr: String) : ToggleableView<S
     }
 
     private var _checked: Boolean = false
+
+    override val value = myStr
+
+    private var selectionCallback: SelectionToggleCallback<String>? = null
+
     override var checked: Boolean
         get() = _checked
         set(value) {
             _checked = value
             selectionCallback?.invoke(this, value)
         }
-
-    override val value = myStr
-
-    private var selectionCallback: SelectionToggleCallback<String>? = null
 
     override fun setOnSelectionChanged(callback: SelectionToggleCallback<String>) {
         this.selectionCallback = callback

@@ -200,12 +200,12 @@ class TypeLookupCollectionRepresentative<T : TypeHashCodeLookupRepresent<Rep>, o
     }
 
     fun isRangeValid(range: IntRange): Boolean {
-        return range.start >= 0 && range.endInclusive < size
+        return range.first >= 0 && range.last < size
     }
 
     fun removeIn(range: IntRange) {
         range.forEach { _ ->
-            removeAt(range.start)
+            removeAt(range.first)
         }
     }
 

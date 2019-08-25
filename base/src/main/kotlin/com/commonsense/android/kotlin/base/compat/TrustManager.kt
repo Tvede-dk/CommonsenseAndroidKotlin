@@ -2,6 +2,7 @@
 
 package com.commonsense.android.kotlin.base.compat
 
+import java.lang.Exception
 import java.security.*
 import javax.net.ssl.*
 import javax.net.ssl.TrustManagerFactory
@@ -11,10 +12,13 @@ import javax.net.ssl.TrustManagerFactory
  *
  */
 object TrustManagerFactory {
-    fun getDefaultX509Trust(): X509TrustManager? =
-            with(TrustManagerFactory.getInstance(TrustManagerFactory.getDefaultAlgorithm())) {
-                init(null as KeyStore?)
-                return trustManagers?.firstOrNull() as? X509TrustManager
-            }
+    fun getDefaultX509Trust(): X509TrustManager? = try {
+        with(TrustManagerFactory.getInstance(TrustManagerFactory.getDefaultAlgorithm())) {
+            init(null as KeyStore?)
+            return trustManagers?.firstOrNull() as? X509TrustManager
+        }
+    } catch (e: Exception) {
+        null
+    }
 }
 

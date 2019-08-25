@@ -2,7 +2,20 @@
 
 package csense.android.tools.resources
 
-import android.support.annotation.*
+import android.support.annotation.ColorRes
+import android.support.annotation.DimenRes
+import android.support.annotation.DrawableRes
+import android.support.annotation.FontRes
+import android.support.annotation.LayoutRes
+import android.support.annotation.MenuRes
+import android.support.annotation.PluralsRes
+import android.support.annotation.RawRes
+import android.support.annotation.StringRes
+import android.support.annotation.StyleRes
+import android.support.annotation.StyleableRes
+import android.support.annotation.TransitionRes
+import android.support.annotation.XmlRes
+import com.commonsense.android.kotlin.system.logging.tryAndLog
 import kotlin.reflect.*
 
 
@@ -95,10 +108,12 @@ class DynamicResources(
         RAnim.mapFieldsToNameId(DynamicResourceType::AnimResource)
     }
 
-    inline fun <T : Any> KClass<*>.mapFieldsToNameId(ctor: Function2<String, Int, T?>): List<T> {
+    inline fun <T : Any> KClass<*>.mapFieldsToNameId(crossinline ctor: Function2<String, Int, T?>): List<T> {
         return this.java.fields.mapNotNull {
-            val extractedValue = it.get(this) as? Int ?: return@mapNotNull null
-            ctor(it.name, extractedValue)
+            tryAndLog("") {
+                val extractedValue = it.get(this) as? Int ?: return@tryAndLog null
+                ctor(it.name, extractedValue)
+            }
         }
     }
 }

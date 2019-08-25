@@ -1,9 +1,9 @@
 package com.commonsense.android.kotlin.views.databinding.activities
 
 import android.content.res.*
-import android.databinding.*
+import android.databinding.ViewDataBinding
 import android.os.*
-import android.support.v7.app.*
+import android.support.v7.app.ActionBarDrawerToggle
 import android.view.*
 
 /**
@@ -34,7 +34,7 @@ abstract class BaseDatabindingActivityToolbar<out T : ViewDataBinding> : BaseDat
         drawerToggle.syncState()
     }
 
-    override fun onConfigurationChanged(newConfig: Configuration?) {
+    override fun onConfigurationChanged(newConfig: Configuration) {
         super.onConfigurationChanged(newConfig)
         drawerToggle.onConfigurationChanged(newConfig)
     }

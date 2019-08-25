@@ -3,7 +3,6 @@ package com.commonsense.android.kotlin.system.base
 import android.app.*
 import android.content.*
 import android.os.*
-import android.support.annotation.IntRange
 import android.support.v4.app.DialogFragment
 import android.view.*
 import com.commonsense.android.kotlin.base.*
@@ -24,6 +23,11 @@ import kotlinx.coroutines.*
  */
 open class BaseFragment : DialogFragment(), ActivityResultHelperContainer {
 
+    /**
+     * returns the activity as the base activity; if the activity is not a base activity then null is returned regardless.
+     */
+    val baseActivity: BaseActivity?
+        get() = activity as? BaseActivity
 
     /**
      * Gateway for permission handling.
@@ -38,11 +42,7 @@ open class BaseFragment : DialogFragment(), ActivityResultHelperContainer {
             }
             return baseActivity?.permissionHandler
         }
-    /**
-     * returns the activity as the base activity; if the activity is not a base activity then null is returned regardless.
-     */
-    val baseActivity: BaseActivity?
-        get() = activity as? BaseActivity
+
 
     /**
      * a safe way to retrieve the activity since its not annotated nullable.
@@ -128,8 +128,8 @@ open class BaseFragment : DialogFragment(), ActivityResultHelperContainer {
     }
 
 
-    override fun onOptionsItemSelected(item: MenuItem?): Boolean {
-        return if (item?.itemId == android.R.id.home) {
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        return if (item.itemId == android.R.id.home) {
             onBackPressed()
             true
         } else {
@@ -137,33 +137,33 @@ open class BaseFragment : DialogFragment(), ActivityResultHelperContainer {
         }
     }
 
-    override fun onActivityResult(@IntRange(from = 0) requestCode: Int, resultCode: Int, data: Intent?) {
+    override fun onActivityResult(@android.support.annotation.IntRange(from = 0) requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
         activityResultHelper.handle(requestCode, resultCode, data)
     }
 
     //<editor-fold desc="Add activity result listener">
     override fun addActivityResultListenerOnlyOk(
-            @IntRange(from = 0) requestCode: Int,
+            @android.support.annotation.IntRange(from = 0) requestCode: Int,
             receiver: ActivityResultCallbackOk) =
             activityResultHelper.addForOnlyOk(requestCode, receiver)
 
     override fun addActivityResultListener(
-            @IntRange(from = 0) requestCode: Int,
+            @android.support.annotation.IntRange(from = 0) requestCode: Int,
             receiver: ActivityResultCallback) =
             activityResultHelper.addForAllResults(requestCode, receiver)
 
     override fun removeActivityResultListener(
-            @IntRange(from = 0) requestCode: Int) =
+            @android.support.annotation.IntRange(from = 0) requestCode: Int) =
             activityResultHelper.remove(requestCode)
 
     override fun addActivityResultListenerOnlyOkAsync(
-            @IntRange(from = 0) requestCode: Int,
+            @android.support.annotation.IntRange(from = 0) requestCode: Int,
             receiver: AsyncActivityResultCallbackOk) =
             activityResultHelper.addForOnlyOkAsync(requestCode, receiver)
 
     override fun addActivityResultListenerAsync(
-            @IntRange(from = 0) requestCode: Int,
+            @android.support.annotation.IntRange(from = 0) requestCode: Int,
             receiver: AsyncActivityResultCallback) =
             activityResultHelper.addForAllResultsAsync(requestCode, receiver)
     //</editor-fold>

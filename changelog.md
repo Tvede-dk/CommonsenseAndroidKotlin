@@ -1,5 +1,9 @@
 # Changelog
 
+
+## 0.0.19.7
+
+
 ## 0.0.19.6
 - updated kotlin to 1.3.41 & coroutines to 1.2.2
 - gradle 5.5.1

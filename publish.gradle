@@ -79,6 +79,7 @@ bintray {
         licenses = project.commonsenseLicense
         publish = false
         publicDownloadNumbers = true
+        vcsUrl = project.commonsenseGit
         version {
             name = project.commonsenseVersionName
             desc = versionDescription

@@ -32,7 +32,7 @@ class MultiDirRes implements Plugin<Project> {
                 List<File> srcDirs = resDirs.collect {
                     getSubDirs(it, rootResDir)
                 }.flatten()
-                it.res.srcDirs = srcDirs + rootResDir
+                it.res.srcDirs = [rootResDir] + srcDirs
             }
         }
 

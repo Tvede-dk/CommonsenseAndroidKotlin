@@ -12,7 +12,6 @@ import com.commonsense.android.kotlin.base.extensions.*
 import com.commonsense.android.kotlin.base.extensions.collections.*
 import com.commonsense.android.kotlin.system.extensions.*
 import com.commonsense.android.kotlin.system.logging.*
-import com.squareup.leakcanary.*
 import java.util.concurrent.atomic.*
 
 /**
@@ -46,26 +45,10 @@ abstract class BaseApplication : Application() {
 
     override fun onCreate() {
         super.onCreate()
-        if (shouldBailOnCreate() != false) {
-            return
-        }
         registerActivityLifecycleCallbacks(activityCounter)
         isDebugMode().ifTrue { setupDebugTools() }
         setupVectorDrawableOldAndroid()
         afterOnCreate()
-    }
-
-    /**
-     * Function handling the checking if we are a special process (required for eg leak canary).
-     */
-    fun shouldBailOnCreate(): Boolean? = tryAndLog(BaseApplication::class) {
-        if (LeakCanary.isInAnalyzerProcess(this)) {
-            logDebug("Spawning analyzer procees. skipping setup")
-            // This process is dedicated to LeakCanary for heap analysis.
-            // You should not init your app in this process.
-            return@tryAndLog true
-        }
-        return@tryAndLog false
     }
 
     /**
@@ -90,14 +73,7 @@ abstract class BaseApplication : Application() {
     //<editor-fold desc="Debug tools">
     private fun setupDebugTools() = tryAndLog(BaseApplication::class) {
         logDebug("Setting up debugging tools")
-        enableLeakCanary()
         enableStrictMode()
-    }
-
-    private fun enableLeakCanary() = tryAndLog(BaseApplication::class) {
-
-        logDebug("Setting up leak canary")
-        LeakCanary.install(this)
     }
 
     private fun enableStrictMode() = tryAndLog(BaseApplication::class) {

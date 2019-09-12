@@ -47,8 +47,7 @@ class SSLSocketFactoryCompat : SSLSocketFactory {
     @Throws(Exception::class)
     constructor() : super() {
         val optFactory = SSLContextProtocols.TLSv12.createSocketFactory()
-        factory = optFactory
-                ?: throw RuntimeException("Cannot work with SSL / TLS when its not available.")
+        factory = optFactory ?: throw RuntimeException("Cannot work with SSL / TLS when its not available.")
     }
 
     internal constructor(factory: SSLSocketFactory) : super() {

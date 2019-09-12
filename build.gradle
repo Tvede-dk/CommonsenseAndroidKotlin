@@ -21,7 +21,6 @@ buildscript {
     //included versions.
     ext.kotlin_version = '1.3.50'
     ext.coroutinesVersion = '1.2.2'
-    ext.leakCanaryVersion = "1.6.3"
     ext.junitVersion = "4.12"
     ext.androidGradleVersion = "3.5.0"
     ext.roboElectricVersion = '4.3'

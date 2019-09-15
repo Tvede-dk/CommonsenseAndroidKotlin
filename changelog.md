@@ -1,5 +1,8 @@
 # Changelog
 
+## 0.0.19.8
+- removed leak canary from prebuilt
+- fixed some weird issues in AS when using resourcegroups.gradle
 
 ## 0.0.19.7
 - fixed bug with base recycler (argument names was switched in one of the insertAll functions) and more exception handling

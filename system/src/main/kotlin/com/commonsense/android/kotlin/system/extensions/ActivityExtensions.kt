@@ -116,18 +116,18 @@ fun Activity.safeFinish() = runOnUiThread(this::finish)
  * @param intent Intent
  */
 @AnyThread
-fun Activity.startAndFinish(intent: Intent) = actionAndFinish {
+fun Activity.startAndFinish(intent: Intent) = runOnUiAndFinish {
     startActivity(intent)
 }
 
 @AnyThread
-fun Activity.startAndFinish(kClass: KClass<Activity>, flags: Int? = null) = actionAndFinish {
+fun Activity.startAndFinish(kClass: KClass<Activity>, flags: Int? = null) = runOnUiAndFinish {
     startActivity(kClass, flags)
 }
 
 
 @AnyThread
-fun Activity.startAndFinish(jClass: Class<Activity>, flags: Int? = null) = actionAndFinish {
+fun Activity.startAndFinish(jClass: Class<Activity>, flags: Int? = null) = runOnUiAndFinish {
     startActivity(jClass, flags)
 }
 
@@ -138,7 +138,7 @@ fun Activity.startAndFinish(jClass: Class<Activity>, flags: Int? = null) = actio
  */
 @Suppress("NOTHING_TO_INLINE")
 @AnyThread
-private inline fun Activity.actionAndFinish(crossinline action: EmptyFunction) = runOnUiThread {
+private inline fun Activity.runOnUiAndFinish(@UiThread crossinline action: EmptyFunction) = runOnUiThread {
     action()
     finish()
 }

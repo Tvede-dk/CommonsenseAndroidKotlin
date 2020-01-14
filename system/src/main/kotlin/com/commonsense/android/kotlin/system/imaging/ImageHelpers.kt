@@ -37,8 +37,10 @@ fun Uri.loadBitmapWithSampleSize(contentResolver: ContentResolver,
              inTargetDensity = dstWidt * inSampleSize*/
     }
 
-    contentResolver.openInputStream(this@loadBitmapWithSampleSize).use { inputToDecode ->
-        return@async BitmapFactory.decodeStream(inputToDecode, null, bitmapOptions)
+    tryAndLog("loadBitmapWithSampleSize") {
+        contentResolver.openInputStream(this@loadBitmapWithSampleSize).use { inputToDecode ->
+            return@tryAndLog BitmapFactory.decodeStream(inputToDecode, null, bitmapOptions)
+        }
     }
 }
 
@@ -54,14 +56,16 @@ fun Uri.loadBitmapSize(contentResolver: ContentResolver, bitmapConfig: Bitmap.Co
         inJustDecodeBounds = true
         inPreferredConfig = bitmapConfig//optional
     }
-    contentResolver.openInputStream(this@loadBitmapSize).use { input ->
-        BitmapFactory.decodeStream(input, null, onlyBoundsOptions)
-    }
+    tryAndLog("loadBitmapSize") {
+        contentResolver.openInputStream(this@loadBitmapSize).use { input ->
+            BitmapFactory.decodeStream(input, null, onlyBoundsOptions)
+        }
 
-    return@async if (onlyBoundsOptions.outWidth == -1 || onlyBoundsOptions.outHeight == -1) {
-        null
-    } else {
-        onlyBoundsOptions
+        return@tryAndLog if (onlyBoundsOptions.outWidth == -1 || onlyBoundsOptions.outHeight == -1) {
+            null
+        } else {
+            onlyBoundsOptions
+        }
     }
 }
 
@@ -199,8 +203,10 @@ suspend fun Uri.loadBitmapRotatedCorrectly(contentResolver: ContentResolver, wid
  * @return Deferred<ExifInterface?>
  */
 fun Uri.getExifForImage(contentResolver: ContentResolver) = GlobalScope.async(Dispatchers.Default, CoroutineStart.DEFAULT) {
-    contentResolver.openInputStream(this@getExifForImage)?.use { input ->
-        return@async ExifInterface(input)
+    tryAndLog("getExifForImage") {
+        contentResolver.openInputStream(this@getExifForImage)?.use { input ->
+            return@tryAndLog ExifInterface(input)
+        }
     }
 }
 
@@ -226,8 +232,10 @@ fun Bitmap.outputTo(outputStream: OutputStream, @IntRange(from = 0, to = 100) qu
  */
 fun Bitmap.saveTo(path: Uri, contentResolver: ContentResolver, @IntRange(from = 0, to = 100) quality: Int,
                   format: Bitmap.CompressFormat) = GlobalScope.async(Dispatchers.Default, CoroutineStart.DEFAULT) {
-    contentResolver.openOutputStream(path)?.use {
-        this@saveTo.outputTo(it, quality, format)
+    tryAndLog("saveTo") {
+        contentResolver.openOutputStream(path)?.use {
+            this@saveTo.outputTo(it, quality, format)
+        }
     }
 }
 

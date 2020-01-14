@@ -16,9 +16,9 @@ import java.io.*
  * @return Deferred<Unit?>
  */
 fun Uri.copyTo(other: Uri, resolver: ContentResolver) = GlobalScope.async {
-    val openIS = resolver.openInputStream(this@copyTo)
-    val outIS = resolver.openOutputStream(other)
     tryAndLog("Uri.copyTo") {
+        val openIS = resolver.openInputStream(this@copyTo)
+        val outIS = resolver.openOutputStream(other)
         val bufferedIn = BufferedInputStream(openIS)
         val bufferedOut = BufferedOutputStream(outIS)
         val buff = ByteArray(32 * 1024) //32 kb buffer.

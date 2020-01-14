@@ -63,7 +63,6 @@ class BaseAsyncLayoutInflater(val context: Context,
         }
     }
 
-    @Throws(Throwable::class)
     private suspend fun inflateViewInUIThread(id: Int, parent: ViewGroup?): View {
         val view = withContext(Dispatchers.Main) {
             inflateViewViaInflaters(id, parent)
@@ -120,7 +119,11 @@ internal class BaseLayoutInflater(context: Context) : LayoutInflater(
     }
 
     override fun onCreateView(name: String?, attrs: AttributeSet?): View {
-        return cache.createView(name ?: "", attrs, this) ?: super.onCreateView(name, attrs)
+        try {
+            return cache.createView(name ?: "", attrs, this) ?: super.onCreateView(name, attrs)
+        } catch (e: ClassNotFoundException) {
+            throw e
+        }
     }
 
 }
@@ -150,23 +153,23 @@ internal class LayoutInflaterCache {
             "TextureView" to viewPackage,
             "WebView" to webkitPackage)
 
-    fun createView(name: String, attrs: AttributeSet?, inflater: LayoutInflater): View? {
+    fun createView(name: String, attrs: AttributeSet?, inflater: LayoutInflater): View? = tryAndLog("createView") {
         val optValue = foundMap[name]
         if (optValue != null) {
-            return inflater.createView(name, optValue, attrs)
+            return@tryAndLog inflater.createView(name, optValue, attrs)
         }
         predefinedPrefixes.forEach { prefix ->
             try {
                 val view = inflater.createView(name, prefix, attrs)
                 if (view != null) {
                     foundMap[name] = prefix
-                    return view
+                    return@tryAndLog  view
                 }
             } catch (e: ClassNotFoundException) {
                 //"wrong" guess.. try again or return null.
             }
         }
-        return null
+        return@tryAndLog  null
     }
 
     /**

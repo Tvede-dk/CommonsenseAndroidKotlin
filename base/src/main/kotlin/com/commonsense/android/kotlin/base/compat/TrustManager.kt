@@ -15,7 +15,7 @@ object TrustManagerFactory {
     fun getDefaultX509Trust(): X509TrustManager? = try {
         with(TrustManagerFactory.getInstance(TrustManagerFactory.getDefaultAlgorithm())) {
             init(null as KeyStore?)
-            return trustManagers?.firstOrNull() as? X509TrustManager
+            return@with trustManagers?.firstOrNull() as? X509TrustManager
         }
     } catch (e: Exception) {
         null

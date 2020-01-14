@@ -20,7 +20,7 @@ import com.commonsense.android.kotlin.base.extensions.collections.map
  *
  * @property fragment Fragment
  * @property title CharSequence
- * @property position Int the positing "last set" via the pager adapter. this is mostly for internal stuff.
+ * @property lastPosition Int the positing "last set" via the pager adapter. this is mostly for internal stuff.
  * @constructor
  */
 private data class FragmentWithTitle(val fragment: Fragment, val title: CharSequence, var lastPosition: Int)
@@ -118,8 +118,25 @@ class BaseFragmentPagerAdapter(val fragmentManager: FragmentManager) : PagerAdap
     override fun finishUpdate(container: ViewGroup) {
         mCurTransaction?.commitAllowingStateLoss()
         mCurTransaction = null
-//        fragmentManager.executePendingTransactions()
-        container.post { fragmentManager.executePendingTransactions() } // long story short,
+        container.post {
+            try {
+                if (fragmentManager.isDestroyed) {
+                    return@post
+                }
+                fragmentManager.executePendingTransactions()
+            } catch (ex: IllegalStateException) {
+                //we can get this as we get interleaved with the UI thread operations.
+                //the flow is kinda as follows (from the UI Thread / handler perspective)
+                // do update
+                // finish
+                //but since the update (here) ends with a post we get
+                //update
+                //finish
+                // executePendingTransactions
+                //this + a bunch of report bugs on the matter leads to the simplest solution, that is to swallow the exception
+            }
+
+        } // long story short,
         //by delaying this, we allow the viewpager to update its internal strucutures (populate -> all the code AFTER finishUpdate)
         //which in terms should cause some correct calculations to sortChildDrawingOrder
         //which in turn should avoid any issues with the viewpager drifting in state from the viewgroup , as

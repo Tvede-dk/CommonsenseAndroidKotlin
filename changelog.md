@@ -1,5 +1,8 @@
 # Changelog
 
+## 0.0.19.9
+- fixed weird crash from BaseFragmentPagerAdapter
+
 ## 0.0.19.8
 - removed leak canary from prebuilt
 - fixed some weird issues in AS when using resourcegroups.gradle

@@ -1,4 +1,6 @@
 # Changelog
+## 0.0.19.10
+-spelling mistake in BaseFragmentPagerAdapter (from "setPrimiaryItem" to "setPrimaryItem") 
 
 ## 0.0.19.9
 - fixed weird crash from BaseFragmentPagerAdapter

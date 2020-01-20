@@ -91,8 +91,7 @@ class BaseFragmentPagerAdapter(val fragmentManager: FragmentManager) : PagerAdap
 
     override fun setPrimaryItem(container: ViewGroup, position: Int, `object`: Any) {
         val fragment = `object` as? Fragment ?: return
-        setPrimiaryItem(fragment)
-
+        setPrimaryItem(fragment)
     }
 
     @SuppressLint("CommitTransaction")//since the update finish update must be called by the viewpager
@@ -102,7 +101,7 @@ class BaseFragmentPagerAdapter(val fragmentManager: FragmentManager) : PagerAdap
         return transaction
     }
 
-    fun setPrimiaryItem(fragment: Fragment) {
+    fun setPrimaryItem(fragment: Fragment) {
         if (fragment === this.mCurrentPrimaryItem) {
             return
         }

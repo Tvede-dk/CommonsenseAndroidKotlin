@@ -47,7 +47,7 @@ fun <E> MutableCollection<E>.set(item: E) {
 /**
  * returns true iff all could be removed
  */
-fun <T> MutableList<T>.removeAll(intRange: kotlin.ranges.IntRange): Boolean {
+fun <T> MutableList<T>.removeAll(intRange: IntRange): Boolean {
     if (intRange.first >= size || intRange.last >= size) {
         return false
     }

@@ -16,7 +16,7 @@ import java.io.*
 fun Throwable.stackTraceToString(): String =
         StringWriter().use {
             printStackTrace(PrintWriter(it))
-            return it.toString()
+            it.toString()
         }
 
 

@@ -1,5 +1,10 @@
 # Changelog
 
+## 0.0.23
+- spelling mistake in BaseFragmentPagerAdapter (from "setPrimiaryItem" to "setPrimaryItem") 
+- fixed weird crash from BaseFragmentPagerAdapter
+
+
 ## 0.0.22
 - updated versions
 - fixed bug with base recycler (argument names was switched in one of the insertAll functions) and more exception handling

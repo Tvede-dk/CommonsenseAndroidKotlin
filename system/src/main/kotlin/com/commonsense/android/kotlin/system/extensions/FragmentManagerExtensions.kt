@@ -67,5 +67,5 @@ fun FragmentManager.replaceFragment(@IdRes container: Int, fragment: Fragment) =
  */
 @UiThread
 fun FragmentManager.pushNewFragmentsTo(@IdRes container: Int, fragments: List<Fragment>) {
-    fragments.forEach { it -> pushNewFragmentTo(container, it) }
+    fragments.forEach { pushNewFragmentTo(container, it) }
 }

@@ -29,12 +29,10 @@ class MultiDirRes implements Plugin<Project> {
             println "Multi res dir enabled for $project.name"
             project.android.sourceSets.each {
                 def rootResDir = it.res.srcDirs[0]
-
                 List<File> srcDirs = resDirs.collect {
                     getSubDirs(it, rootResDir)
                 }.flatten()
-                it.res.srcDirs += srcDirs
-                it.res.srcDirs += rootResDir
+                it.res.srcDirs = [rootResDir] + srcDirs
             }
         }
 

@@ -23,7 +23,7 @@ inline fun <T> Byte.toChars(crossinline action: (upperChar: Char, lowerChar: Cha
 
 inline fun Byte.toHexString(): String =
         this.toChars { upperChar, lowerChar ->
-            String(kotlin.charArrayOf(upperChar, lowerChar))
+            String(charArrayOf(upperChar, lowerChar))
         }
 
 

@@ -85,22 +85,22 @@ inline fun AppCompatActivity.setSupportActionBarAndApply(toolbar: Toolbar,
  */
 @UiThread
 fun FragmentActivity.popToFirstFragment() = runOnUiThread {
-    supportFragmentManager?.popToFirstFragment()
+    supportFragmentManager.popToFirstFragment()
 }
 
 @UiThread
 fun FragmentActivity.replaceFragment(@IdRes container: Int, fragment: Fragment) {
-    supportFragmentManager?.replaceFragment(container, fragment)
+    supportFragmentManager.replaceFragment(container, fragment)
 }
 
 @UiThread
 fun FragmentActivity.pushNewFragmentTo(@IdRes container: Int, fragment: Fragment) {
-    supportFragmentManager?.pushNewFragmentTo(container, fragment)
+    supportFragmentManager.pushNewFragmentTo(container, fragment)
 }
 
 @UiThread
 fun FragmentActivity.pushNewFragmentsTo(@IdRes container: Int, fragments: List<Fragment>) {
-    supportFragmentManager?.pushNewFragmentsTo(container, fragments)
+    supportFragmentManager.pushNewFragmentsTo(container, fragments)
 }
 
 /**
@@ -137,7 +137,7 @@ fun Activity.startAndFinish(jClass: Class<Activity>, flags: Int? = null) = actio
  */
 @Suppress("NOTHING_TO_INLINE")
 @AnyThread
-private inline fun Activity.actionAndFinish(crossinline action: EmptyFunction) = runOnUiThread {
+private inline fun Activity.actionAndFinish(@UiThread crossinline action: EmptyFunction) = runOnUiThread {
     action()
     finish()
 }

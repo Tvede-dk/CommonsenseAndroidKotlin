@@ -36,7 +36,7 @@ class BaseAsyncLayoutInflater(val context: Context,
 
 
     @Throws(Throwable::class)
-    @UiThread
+    @AnyThread
     suspend fun inflate(@LayoutRes id: Int,
                         parent: ViewGroup? = null)
             : Deferred<View> = GlobalScope.async(inflaterQueue, block = {
@@ -44,7 +44,7 @@ class BaseAsyncLayoutInflater(val context: Context,
                 ?: inflateViewInUIThread(id, parent)
     })
 
-    @UiThread
+    @AnyThread
     suspend fun inflateNoFallback(@LayoutRes id: Int,
                                   parent: ViewGroup? = null)
             : Deferred<View?> = GlobalScope.async(inflaterQueue, block = {
@@ -62,6 +62,7 @@ class BaseAsyncLayoutInflater(val context: Context,
         }
     }
 
+    @AnyThread
     @Throws(Throwable::class)
     private suspend fun inflateViewInUIThread(id: Int, parent: ViewGroup?): View {
         val view = withContext(Dispatchers.Main) {
@@ -156,10 +157,13 @@ internal class LayoutInflaterCache {
         }
         predefinedPrefixes.forEach { prefix ->
             try {
-                val view = inflater.createView(name, prefix, attrs)
-                if (view != null) {
-                    foundMap[name] = prefix
-                    return view
+                try {
+                    val view = inflater.createView(name, prefix, attrs)
+                    if (view != null) {
+                        foundMap[name] = prefix
+                        return view
+                    }
+                } catch (e: Exception) {
                 }
             } catch (e: ClassNotFoundException) {
                 //"wrong" guess.. try again or return null.

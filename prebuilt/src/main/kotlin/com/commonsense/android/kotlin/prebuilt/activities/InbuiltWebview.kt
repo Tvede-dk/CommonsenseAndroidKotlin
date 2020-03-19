@@ -20,7 +20,7 @@ open class InbuiltWebView : BaseActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        val uri = intent?.getParcelableExtra<Uri>(InbuiltWebView.uriIntentIndex)
+        val uri = intent?.getParcelableExtra<Uri>(uriIntentIndex)
         if (uri == null) {
             finish()
             return

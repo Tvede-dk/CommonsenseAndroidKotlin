@@ -40,7 +40,7 @@ inline fun Uri.fileExtension(): String? {
 inline fun String.fileExtension(): String? {
     return lastIndexOf('.').let {
         if (it > 0 && it + 1 < length) {
-            return substring(it + 1)
+            substring(it + 1)
         } else {
             null
         }

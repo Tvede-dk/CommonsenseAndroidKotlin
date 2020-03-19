@@ -5,10 +5,10 @@ apply plugin: 'maven-publish'
 version = project.commonsenseVersionName
 group = project.commonsenseGroupId
 
-
 artifacts {
     archives javadocJar
     archives sourcesJar
+
 }
 //
 publishing {
@@ -16,6 +16,10 @@ publishing {
         MyPublication(MavenPublication) {
             artifact sourcesJar
             artifact javadocJar
+            //TODO this seems hackis but it gets the job done.
+            final def outputFolder = buildDir.path + "/outputs/aar/";
+            final def outputFile = new File(outputFolder + artifactName + "-release.aar")
+            artifact(outputFile)
             pom {
                 packaging = 'aar'
                 groupId = project.commonsenseGroupId

@@ -70,7 +70,7 @@ private class InnerSwipeHelper(val recyclerAdapter: DataBindingRecyclerAdapter<*
         val startMovement = (startView != null).map(ifTrue = ItemTouchHelper.START, ifFalse = 0)
         val endMovement = (endView != null).map(ifTrue = ItemTouchHelper.END, ifFalse = 0)
 
-        return ItemTouchHelper.Callback.makeMovementFlags(0, startMovement or endMovement)
+        return makeMovementFlags(0, startMovement or endMovement)
     }
 
     private fun getOptInterface(viewHolder: RecyclerView.ViewHolder?)

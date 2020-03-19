@@ -30,6 +30,6 @@ fun Byte.assert(value: Byte, message: String = "") {
     Assert.assertEquals(message, value, this)
 }
 
-fun kotlin.ranges.IntRange.assert(otherRange: kotlin.ranges.IntRange, message: String = "") {
+fun IntRange.assert(otherRange: IntRange, message: String = "") {
     Assert.assertEquals(message, otherRange, this)
 }

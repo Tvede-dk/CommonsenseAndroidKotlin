@@ -42,7 +42,7 @@ fun String.assertContainsInOrder(values: List<String>,
             failTest("$message\n\nReason:could not find \n\t\"$it\" after index $currentIndex in string \n" +
                     "\"$this\"\n" +
                     "\tafter index is :\"${this.substring(currentIndex)}\"")
-            return
+            return@forEach
         }
         currentIndex = next + it.length
     }

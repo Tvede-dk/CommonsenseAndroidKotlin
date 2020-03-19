@@ -4,9 +4,9 @@
 - versions updated
 - base recycler adapter does not require a context for construction, allowing to be used in say fragments much cleaner.
 
-
 ## 0.0.23
-- TODO 
+- spelling mistake in BaseFragmentPagerAdapter (from "setPrimiaryItem" to "setPrimaryItem") 
+- fixed weird crash from BaseFragmentPagerAdapter
 
 ## 0.0.22
 - updated versions

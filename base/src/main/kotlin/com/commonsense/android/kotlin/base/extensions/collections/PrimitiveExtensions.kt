@@ -110,11 +110,11 @@ inline fun Boolean.onFalse(crossinline action: EmptyFunction): Boolean {
 inline fun Boolean.ifFalse(crossinline action: EmptyFunction): Boolean =
         onFalse(action)
 
-inline fun <reified T : kotlin.Enum<T>> enumFromOrNull(name: String?): T? {
+inline fun <reified T : Enum<T>> enumFromOrNull(name: String?): T? {
     return enumValues<T>().find { it.name == name }
 }
 
-inline fun <reified T : kotlin.Enum<T>> enumFromOr(name: String?, orElse: T): T {
+inline fun <reified T : Enum<T>> enumFromOr(name: String?, orElse: T): T {
     return enumFromOrNull<T>(name) ?: orElse
 }
 

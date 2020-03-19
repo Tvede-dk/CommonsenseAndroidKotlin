@@ -1,5 +1,13 @@
 # Changelog
 
+## 0.0.24
+- versions updated
+- base recycler adapter does not require a context for construction, allowing to be used in say fragments much cleaner.
+
+
+## 0.0.23
+- TODO 
+
 ## 0.0.22
 - updated versions
 - fixed bug with base recycler (argument names was switched in one of the insertAll functions) and more exception handling

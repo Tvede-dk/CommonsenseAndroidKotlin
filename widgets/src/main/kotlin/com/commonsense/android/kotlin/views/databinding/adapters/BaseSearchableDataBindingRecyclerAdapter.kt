@@ -45,8 +45,8 @@ typealias IGenericSearchRender<F> = IRenderModelSearchItem<*, *, F>
  */
 open class AbstractSearchableDataBindingRecyclerAdapter<
         T : IGenericSearchRender<F>,
-        F>(context: Context)
-    : DataBindingRecyclerAdapter<T>(context.applicationContext) {
+        F>()
+    : DataBindingRecyclerAdapter<T>() {
 
     //<editor-fold desc="Field variables">
     private val allDataCollection: SectionLookupRep<T, InflatingFunction<*>> = SectionLookupRep()
@@ -289,13 +289,13 @@ private class ConflatedActorHelper<F> {
 }
 
 
-open class BaseSearchableDataBindingRecyclerAdapter<Filter>(context: Context)
+open class BaseSearchableDataBindingRecyclerAdapter<Filter>()
     : AbstractSearchableDataBindingRecyclerAdapter<
         IRenderModelSearchItem<*, *, Filter>,
-        Filter>(context)
+        Filter>()
 
 
 open class DefaultSearchableDatabindingRecyclerAdapter<
         T : IGenericSearchRender<F>,
-        F>(context: Context)
-    : AbstractSearchableDataBindingRecyclerAdapter<T, F>(context)
+        F>()
+    : AbstractSearchableDataBindingRecyclerAdapter<T, F>()

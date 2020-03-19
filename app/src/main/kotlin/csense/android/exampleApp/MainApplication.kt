@@ -26,7 +26,7 @@ class MainApplication : BaseApplication() {
             R.style::class,
             R.styleable::class,
             R.attr::class,
-            R.animator::class,
+//            R.animator::class,
             R.anim::class
     )
 

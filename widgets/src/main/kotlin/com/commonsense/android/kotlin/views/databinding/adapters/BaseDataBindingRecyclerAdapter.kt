@@ -13,6 +13,7 @@ import com.commonsense.android.kotlin.base.debug.prettyStringContent
 import com.commonsense.android.kotlin.base.extensions.*
 import com.commonsense.android.kotlin.base.extensions.collections.*
 import com.commonsense.android.kotlin.system.datastructures.*
+import com.commonsense.android.kotlin.system.extensions.layoutInflater
 import com.commonsense.android.kotlin.system.logging.*
 import com.commonsense.android.kotlin.views.*
 import com.commonsense.android.kotlin.views.extensions.*
@@ -187,7 +188,7 @@ open class RenderModel<
  *  Base class for data binding recycler adapters.
  * @param T the type of render models
  */
-abstract class DataBindingRecyclerAdapter<T>(context: Context) :
+abstract class DataBindingRecyclerAdapter<T>() :
         RecyclerView.Adapter<BaseViewHolderItem<*>>() where T : IRenderModelItem<*, *> {
 
     /**
@@ -208,12 +209,14 @@ abstract class DataBindingRecyclerAdapter<T>(context: Context) :
      */
     private val listeningRecyclers = mutableSetOf<WeakReference<RecyclerView>>()
 
-    /**
-     * Our own layoutinflater
-     */
-    private val inflater: LayoutInflater by lazy {
-        LayoutInflater.from(context)
-    }
+//    /**
+//     * Our own layoutinflater
+//     */
+//    private val inflater: LayoutInflater by lazy {
+//        LayoutInflater.from(context)
+//    }
+
+    private var cachedInflater: LayoutInflater? = null
 
     /**
      * The number of sections in this adapter
@@ -234,11 +237,23 @@ abstract class DataBindingRecyclerAdapter<T>(context: Context) :
      */
     override fun onCreateViewHolder(parent: ViewGroup, @IntRange(from = 0) viewType: Int): BaseViewHolderItem<*> {
         val rep = dataCollection.getTypeRepresentativeFromTypeValue(viewType)
+        val inflater = getInflaterFrom(parent)
         return rep?.invoke(inflater, parent, false)
                 ?: throw RuntimeException("could not find item, " +
                         "even though we expected it, for viewType: $viewType;" +
                         "rep is = $rep;" +
                         "ViewGroup is = $parent")
+    }
+
+    /**
+     *
+     * @param parent ViewGroup
+     * @return LayoutInflater
+     */
+    private fun getInflaterFrom(parent: ViewGroup): LayoutInflater {
+        return cachedInflater ?: parent.context.layoutInflater?.also {
+            cachedInflater = it
+        } ?: throw RuntimeException("cannot get inflater for current context")
     }
 
     /**
@@ -763,8 +778,8 @@ fun BaseDataBindingRecyclerAdapter.showSections(vararg sections: Int) =
         sections.forEach(this::showSection)
 
 
-open class BaseDataBindingRecyclerAdapter(context: Context) :
-        DataBindingRecyclerAdapter<IRenderModelItem<*, *>>(context)
+open class BaseDataBindingRecyclerAdapter :
+        DataBindingRecyclerAdapter<IRenderModelItem<*, *>>()
 
 
-class DefaultDataBindingRecyclerAdapter(context: Context) : BaseDataBindingRecyclerAdapter(context)
+class DefaultDataBindingRecyclerAdapter : BaseDataBindingRecyclerAdapter()

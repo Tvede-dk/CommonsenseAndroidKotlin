@@ -18,9 +18,12 @@ android {
 
     buildTypes {
         release {
+            shrinkResources false
+            minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
         }
     }
+
     flavorDimensions "sdkRequirements"
 
     productFlavors {
@@ -35,9 +38,9 @@ android {
             resConfigs("en", "xhdpi")
         }
     }
-    packagingOptions {
-        exclude "META-INF/atomicfu.kotlin_module"
-    }
+//    packagingOptions {
+//        exclude "META-INF/atomicfu.kotlin_module"
+//    }
 }
 
 dependencies {
@@ -50,7 +53,6 @@ dependencies {
     implementation "androidx.appcompat:appcompat:$appcompatVersion"
     implementation "androidx.exifinterface:exifinterface:$exifVersion"
     implementation "androidx.recyclerview:recyclerview:$recyclerviewVersion"
-    implementation "com.google.android.material:material:$materialVersion"
     implementation "androidx.cardview:cardview:$cardViewVersion"
 
     //tests libs
@@ -66,7 +68,7 @@ dependencies {
     implementation project(path: ':tools')
 
 
-    debugImplementation 'com.squareup.leakcanary:leakcanary-android:2.0-beta-3'
+    debugImplementation 'com.squareup.leakcanary:leakcanary-android:2.1'
 
 }
 

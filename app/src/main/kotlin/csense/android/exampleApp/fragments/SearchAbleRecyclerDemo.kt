@@ -20,9 +20,7 @@ class SearchAbleSimpleListItemRender(item: String) : SimpleListItemRender(item, 
 class SearchAbleRecyclerDemo : BaseDatabindingFragment<DemoRecyclerSearchableBinding>() {
     override fun getInflater(): InflateBinding<DemoRecyclerSearchableBinding> = DemoRecyclerSearchableBinding::inflate
 
-    private val adapter by lazy {
-        context?.let { BaseSearchableDataBindingRecyclerAdapter<String>(it) }
-    }
+    private val adapter = BaseSearchableDataBindingRecyclerAdapter<String>()
 
     override fun useBinding() {
         val adapter = adapter ?: return

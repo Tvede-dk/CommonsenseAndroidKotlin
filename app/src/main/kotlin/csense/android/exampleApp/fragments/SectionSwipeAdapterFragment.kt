@@ -16,9 +16,7 @@ class SectionSwipeAdapterFragment : BaseDatabindingFragment<DemoRecyclerSectionS
     override fun getInflater(): InflateBinding<DemoRecyclerSectionSwipeBinding>
             = DemoRecyclerSectionSwipeBinding::inflate
 
-    val adapter by lazy {
-        context?.let { BaseSearchableDataBindingRecyclerAdapter<String>(it) }
-    }
+    val adapter = BaseSearchableDataBindingRecyclerAdapter<String>()
 
 
     override fun useBinding() {

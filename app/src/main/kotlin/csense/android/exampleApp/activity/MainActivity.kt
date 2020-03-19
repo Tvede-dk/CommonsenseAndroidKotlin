@@ -25,9 +25,7 @@ class MainActivity : BaseDatabindingActivity<MainActivityBinding>() {
     override fun createBinding(): InflaterFunctionSimple<MainActivityBinding> =
             MainActivityBinding::inflate
 
-    val adapter by lazy {
-        BaseDataBindingRecyclerAdapter(this)
-    }
+    val adapter = BaseDataBindingRecyclerAdapter()
 
 
     override fun useBinding() {

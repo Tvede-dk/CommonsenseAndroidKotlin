@@ -19,9 +19,8 @@ import csense.android.exampleApp.databinding.*
 open class SimpleRecyclerDemo : BaseDatabindingFragment<DemoRecyclerSimpleViewBinding>() {
     override fun getInflater(): InflateBinding<DemoRecyclerSimpleViewBinding> = DemoRecyclerSimpleViewBinding::inflate
 
-    private val adapter by lazy {
-        context?.let { DefaultDataBindingRecyclerAdapter(it) }
-    }
+    private val adapter = DefaultDataBindingRecyclerAdapter()
+
 
     override fun useBinding() {
         val adapter = adapter ?: return

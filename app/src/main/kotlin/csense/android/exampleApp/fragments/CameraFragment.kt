@@ -21,16 +21,14 @@ import kotlin.system.*
  * Created by Kasper Tvede on 10-07-2017.
  */
 class CameraFragment : BaseDatabindingFragment<CameraFragmentDemoBinding>() {
-    override fun getInflater(): InflateBinding<CameraFragmentDemoBinding>
-            = CameraFragmentDemoBinding::inflate
+    override fun getInflater(): InflateBinding<CameraFragmentDemoBinding> = CameraFragmentDemoBinding::inflate
 
     private val imageHelper by lazy {
         PictureRetriver(activity as BaseActivity, { path, _ -> onImageSelected(path) })
     }
 
-    private val imageAdapter by lazy {
-        context?.let { BaseDataBindingRecyclerAdapter(it) }
-    }
+    private val imageAdapter = BaseDataBindingRecyclerAdapter()
+
 
     @SuppressLint("MissingPermission")
     override fun useBinding() {
@@ -80,8 +78,7 @@ class CameraFragment : BaseDatabindingFragment<CameraFragmentDemoBinding>() {
 class ImageViewItemRender(bitmap: Bitmap) : BaseRenderModel<Bitmap, SimpleImageListItemBinding>(bitmap,
         SimpleImageListItemBinding::class.java) {
 
-    override fun getInflaterFunction(): ViewInflatingFunction<SimpleImageListItemBinding>
-            = SimpleImageListItemBinding::inflate
+    override fun getInflaterFunction(): ViewInflatingFunction<SimpleImageListItemBinding> = SimpleImageListItemBinding::inflate
 
     override fun renderFunction(view: SimpleImageListItemBinding,
                                 model: Bitmap,

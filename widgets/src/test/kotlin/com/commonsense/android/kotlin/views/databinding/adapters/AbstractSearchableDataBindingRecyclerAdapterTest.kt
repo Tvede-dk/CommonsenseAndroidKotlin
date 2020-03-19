@@ -430,7 +430,7 @@ class AbstractSearchableDataBindingRecyclerAdapterTest : BaseRoboElectricTest() 
             (0 until itemsSize).map { renderWith(it.toString()) }
 
 
-    private fun createAdapter() = BaseSearchableDataBindingRecyclerAdapter<String>(context)
+    private fun createAdapter() = BaseSearchableDataBindingRecyclerAdapter<String>()
 
     private fun renderWith(value: String): RenderSearchableModelItem<String, ViewDataBinding, String> = TestRender(value).toSearchable(String::equals)
     @Ignore

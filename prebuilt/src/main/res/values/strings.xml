@@ -1,5 +1,4 @@
 <resources>
-    <string name="app_name">com.commonsense.android.kotlin-views</string>
     <string name="missing_browser">There are no application that could show the given url</string>
     <string name="please_wait">Please wait</string>
 </resources>

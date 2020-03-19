@@ -12,7 +12,7 @@ import csense.android.exampleApp.databinding.*
 
 class WidgetsRecyclerExampleActivity : BaseDatabindingActivity<WidgetsRecyclerExampleBinding>() {
 
-    private val adapter = BaseDataBindingRecyclerAdapter(this)
+    private val adapter = BaseDataBindingRecyclerAdapter()
 
     override fun createBinding(): InflaterFunctionSimple<WidgetsRecyclerExampleBinding> =
             WidgetsRecyclerExampleBinding::inflate

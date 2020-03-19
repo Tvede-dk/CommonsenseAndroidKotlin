@@ -27,7 +27,7 @@ class DynamicResources(
         private val RStyleable: KClass<*>,
 //        private val RPlural: Any,
         private val RAttr: KClass<*>,
-        private val RAnimator: KClass<*>,
+//        private val RAnimator: KClass<*>,
         private val RAnim: KClass<*>
 
 ) {
@@ -72,9 +72,9 @@ class DynamicResources(
 //        RMenu.mapFieldsToNameId(DynamicResourceType::MenuResource)
 //    }
 
-    val allAnimators by lazy {
-        RAnimator.mapFieldsToNameId(DynamicResourceType::AnimatorResource)
-    }
+//    val allAnimators by lazy {
+//        RAnimator.mapFieldsToNameId(DynamicResourceType::AnimatorResource)
+//    }
 
 //    val allTransistions by lazy {
 //        RTransitions.mapFieldsToNameId(DynamicResourceType::TransitionResource)

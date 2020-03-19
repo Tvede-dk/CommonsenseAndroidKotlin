@@ -17,7 +17,7 @@ class BaseDataBindingRecyclerViewTest : BaseRoboElectricTest() {
 
     @Test
     fun testLookup() {
-        val recycler = BaseDataBindingRecyclerAdapter(context)
+        val recycler = BaseDataBindingRecyclerAdapter()
         recycler.add(createVm1RenderModel(), 0)
         Assert.assertNotEquals(recycler.getItemViewType(0), 0)
         recycler.add(createVm1RenderModel(), 0)

@@ -24,99 +24,81 @@ class MultiDirRes implements Plugin<Project> {
             "values",
     ]
 
-    void applyMultiSourceDir(Project project) {
+    void applyMultiSourceDir(final Project project) {
         project.afterEvaluate {
+
+            final String androidVersion = findAndroidBuildVersionString(project)
+            final boolean useNewArrayStrategy = shouldUseNewArrayConversion(androidVersion)
+
             println "Multi res dir enabled for $project.name"
+            if (!useNewArrayStrategy) {
+                println("  * using old android res dir strategy, if resources gets placed in the wrong directory by AS, then update to a newer android studio version, and update android gradle plugin")
+            }
             project.android.sourceSets.each {
-                def rootResDir = it.res.srcDirs[0]
+                final def rootResDir = it.res.srcDirs[0]
                 List<File> srcDirs = resDirs.collect {
                     getSubDirs(it, rootResDir)
                 }.flatten()
-                it.res.srcDirs = [rootResDir] + srcDirs
+                if (useNewArrayStrategy) {
+                    it.res.srcDirs = srcDirs + [rootResDir]
+                } else {
+                    it.res.srcDirs = [rootResDir] + srcDirs
+                }
+
             }
         }
-
-        /**
-         * Since idea is kinda broken with this: we remove the "source roots" from the iml file, thus idea will not clog up the layout folder
-         */
-        final def fixTask = project.task("fixImlIssue") {
-            println "is in " + project.projectDir.path
-            final def projectFiles = project.projectDir.listFiles(new FilenameFilter() {
-                @Override
-                boolean accept(File dir, String name) {
-                    return name.endsWith(".iml")
-                }
-            })
-            if (projectFiles == null || projectFiles.length != 1) {
-                return
-            }
-            final def projectFile = projectFiles[0]
-
-            final def projectFileName = projectFile.name
-            final def toRemove = computeAllResDirNamePaths(project)
-
-            final def correctedIml = new File(project.projectDir.path + '/correctedIml.iml')
-
-            correctedIml.withWriter { w ->
-                projectFile.eachLine { line ->
-                    if (!haveBadLine(line, toRemove)) {
-                        w << line + System.getProperty("line.separator")
-                    }
-                }
-            }
-            //uncomment if you want the old iml preserved
-//            projectFile.renameTo(project.projectDir.path + "/${projectFileName}.iml.old")
-            projectFile.delete()
-            correctedIml.renameTo(project.projectDir.path + "/" + projectFileName)
-
-        }
-
-        project.tasks.findByName("preBuild").dependsOn(fixTask)
-
-
     }
 
-    static final boolean haveBadLine(String line, Set<String> ignoreList) {
-
-
-        final searchPart = "<sourceFolder url=\"file://\$MODULE_DIR\$"
-        final def pathPart = line.indexOf(searchPart)
-        if (pathPart < 0 || !line.contains("type=\"java-resource\"")) {
-            //make sure its really a java resouce line
-            return false
+    static boolean shouldUseNewArrayConversion(String androidVersion) {
+        if (androidVersion == null) {
+            androidVersion = "10.0.0" //assume a newer version that we know nothing about...
         }
-        final def pathEnd = line.indexOf("\"", pathPart + searchPart.length())
-        if (pathEnd < 0) {
-            return false//broken xml ?...
+        final def (majorString, minorString) = androidVersion.tokenize(".")
+        final int major = majorString as Integer
+        final int minor = minorString as Integer
+        boolean useNewArrayStrategy = major >= 3
+        //if old version then no, and all newer versions are a yes
+        if (major == 3 && minor < 6) { //3.5 ect was "old"
+            useNewArrayStrategy = false
         }
-        final def resPath = line.substring(
-                pathPart + searchPart.length(),
-                pathEnd).replace("\\", "/")
-        return ignoreList.contains(resPath)
+        return useNewArrayStrategy
     }
 
-    /**
-     * Computes sub dir path names from the src component so
-     * "src/main/res/layout/x"
-     * @param project
-     * @return
-     */
-    Set<String> computeAllResDirNamePaths(project) {
-        return new HashSet(project.android.sourceSets.collect {
-            def rootResDir = it.res.srcDirs[0]
-            List<File> srcDirs = resDirs.collect {
-                getSubDirs(it, rootResDir).collect {
-                    it.path.substring(it.path.indexOf("src") - 1).replace("\\", "/")
+    static String findAndroidBuildVersionString(final Project project) {
+        final Project root = project.rootProject
+        final String androidVersion = getAndroidBuildFrom(root)
+        //fast- path: generally it would be in the root project.
+        if (androidVersion != null) {
+            return androidVersion
+        }
+        //slow path, search recursive from project and up(until root)
+        Project currentProject = project
+        while (currentProject != root && currentProject != null) {
+            final String version = getAndroidBuildFrom(currentProject)
+            if (version != null) {
+                return version
+            }
+            currentProject = currentProject.parent
+        }
+        return null
+    }
+
+    private static String getAndroidBuildFrom(Project project) {
+        for (config in project.buildscript.configurations) {
+            for (dep in config.dependencies) {
+                if (dep.group == "com.android.tools.build") {
+                    return dep.version
                 }
-            }.flatten()
-            return srcDirs
-        }.flatten())
+            }
+        }
+        return null
     }
 
     final def getSubDirs = { final dirName, final rootResDir ->
         final def resDir = new File(rootResDir, dirName)
         def subLayoutDirs = []
         if (resDir.exists()) {
+
             resDir.eachDir {
                 subLayoutDirs.add it
                 println "\t - adding dir $it to category $dirName"

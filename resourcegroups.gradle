@@ -24,22 +24,79 @@ class MultiDirRes implements Plugin<Project> {
             "values",
     ]
 
-    void applyMultiSourceDir(Project project) {
+    void applyMultiSourceDir(final Project project) {
         project.afterEvaluate {
+
+            final String androidVersion = findAndroidBuildVersionString(project)
+            final boolean useNewArrayStrategy = shouldUseNewArrayConversion(androidVersion)
+
             println "Multi res dir enabled for $project.name"
+            if (!useNewArrayStrategy) {
+                println("- using old android res dir strategy")
+            }
             project.android.sourceSets.each {
-                def rootResDir = it.res.srcDirs[0]
+                final def rootResDir = it.res.srcDirs[0]
                 List<File> srcDirs = resDirs.collect {
                     getSubDirs(it, rootResDir)
                 }.flatten()
-                it.res.srcDirs = [rootResDir] + srcDirs
+                if (useNewArrayStrategy) {
+                    it.res.srcDirs = srcDirs + [rootResDir]
+                } else {
+                    it.res.srcDirs = [rootResDir] + srcDirs
+                }
+
             }
         }
-
     }
+
+    static boolean shouldUseNewArrayConversion(String androidVersion) {
+        if (androidVersion == null) {
+            androidVersion = "10.0.0" //assume a newer version that we know nothing about...
+        }
+        final def (majorString, minorString) = androidVersion.tokenize(".")
+        final int major = majorString as Integer
+        final int minor = minorString as Integer
+        boolean useNewArrayStrategy = major >= 3
+        //if old version then no, and all newer versions are a yes
+        if (major == 3 && minor < 6) { //3.5 ect was "old"
+            useNewArrayStrategy = false
+        }
+        return useNewArrayStrategy
+    }
+
+    static String findAndroidBuildVersionString(final Project project) {
+        final Project root = project.rootProject
+        final String androidVersion = getAndroidBuildFrom(root)
+        //fast- path: generally it would be in the root project.
+        if (androidVersion != null) {
+            return androidVersion
+        }
+        //slow path, search recursive from project and up(until root)
+        Project currentProject = project
+        while (currentProject != root && currentProject != null) {
+            final String version = getAndroidBuildFrom(currentProject)
+            if (version != null) {
+                return version
+            }
+            currentProject = currentProject.parent
+        }
+        return null
+    }
+
+    private static String getAndroidBuildFrom(Project project) {
+        for (config in project.buildscript.configurations) {
+            for (dep in config.dependencies) {
+                if (dep.group == "com.android.tools.build") {
+                    return dep.version
+                }
+            }
+        }
+        return null
+    }
+
     final def getSubDirs = { final dirName, final rootResDir ->
         final def resDir = new File(rootResDir, dirName)
-         def subLayoutDirs = []
+        def subLayoutDirs = []
         if (resDir.exists()) {
 
             resDir.eachDir {

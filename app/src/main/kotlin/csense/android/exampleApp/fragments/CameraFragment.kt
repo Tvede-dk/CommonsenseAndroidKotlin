@@ -32,7 +32,6 @@ class CameraFragment : BaseDatabindingFragment<CameraFragmentDemoBinding>() {
 
     @SuppressLint("MissingPermission")
     override fun useBinding() {
-        val imageAdapter = imageAdapter ?: return
         binding.cameraFragmentImagesTake.setOnclickAsync {
             imageHelper.getImage(fromCamera = true)
         }
@@ -53,11 +52,11 @@ class CameraFragment : BaseDatabindingFragment<CameraFragmentDemoBinding>() {
     fun onImageSelected(imageUri: Uri) = launchInUi("bitmap") {
         val context = context ?: return@launchInUi
         val activity = activity ?: return@launchInUi
-        val imageAdapter = imageAdapter ?: return@launchInUi
+        val imageAdapter = imageAdapter
 
         tryAndLogSuspend("bitmap") {
             //            val bitmap = imageUri.loadBitmapScaled(context.contentResolver, 200).await() ?: return@tryAndLogSuspend
-            var images: List<Bitmap>? = null
+            var images: List<Bitmap>?
             val scales = (100 downTo 50) step 1
             val time = measureTimeMillis {
 

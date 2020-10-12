@@ -155,35 +155,35 @@ class ActivityCounter : Application.ActivityLifecycleCallbacks {
 
     private val runningActivites = AtomicInteger(0)
 
-    override fun onActivityPaused(p0: Activity?) {
+    override fun onActivityPaused(activity: Activity) {
     }
 
-    override fun onActivityResumed(p0: Activity?) {
+    override fun onActivityResumed(activity: Activity) {
 
     }
 
-    override fun onActivityDestroyed(p0: Activity?) {
+    override fun onActivityDestroyed(activity: Activity) {
     }
 
-    override fun onActivitySaveInstanceState(p0: Activity?, p1: Bundle?) {
+    override fun onActivitySaveInstanceState(activity: Activity, outState: Bundle) {
     }
 
     /**
      * Count "just started" activities.
      */
-    override fun onActivityStarted(p0: Activity?) {
+    override fun onActivityStarted(activity: Activity) {
         (runningActivites.incrementAndGet() == 1).ifTrue { onNonZeroCallback?.invoke() }
     }
 
     /**
      * Count "not dead" but close to activities
      */
-    override fun onActivityStopped(p0: Activity?) {
+    override fun onActivityStopped(activity: Activity) {
         runningActivites.decrementAndGet().isZero.ifTrue { onZeroCallback?.invoke() }
 
     }
 
-    override fun onActivityCreated(p0: Activity?, p1: Bundle?) {
+    override fun onActivityCreated(activity: Activity, p1: Bundle?) {
     }
 
 }

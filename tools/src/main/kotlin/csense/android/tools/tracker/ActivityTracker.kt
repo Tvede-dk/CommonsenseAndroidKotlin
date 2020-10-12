@@ -15,31 +15,25 @@ class ActivityTracker(val application: Application) : BaseActivityLifecycleCallb
 
     private val eventList: MutableList<ActivityTrackerEvents> = mutableListOf()
 
-    override fun onActivityResumed(activity: Activity?) {
-        val lastEvent = eventList.lastOrNull()
-        if (activity == null || lastEvent == null) {
-            return
-        }
+    override fun onActivityResumed(activity: Activity) {
+        val lastEvent = eventList.lastOrNull() ?: return
         if (lastEvent.data.activityName == activity::class.java.simpleName
                 && lastEvent is Stops) {
             eventList.add(ReturnsTo(activity.getTrackingData()))
         }
     }
 
-    override fun onActivityDestroyed(activity: Activity?) {
-        val act = activity ?: return
-        eventList.add(Closes(act.getTrackingData()))
+    override fun onActivityDestroyed(activity: Activity) {
+        eventList.add(Closes(activity.getTrackingData()))
     }
 
-    override fun onActivityStopped(activity: Activity?) {
-        val act = activity ?: return
-        eventList.add(Stops(act.getTrackingData()))
+    override fun onActivityStopped(activity: Activity) {
+        eventList.add(Stops(activity.getTrackingData()))
 
     }
 
-    override fun onActivityCreated(activity: Activity?, savedInstanceState: Bundle?) {
-        val act = activity ?: return
-        eventList.add(GoesTo(act.getTrackingData()))
+    override fun onActivityCreated(activity: Activity, savedInstanceState: Bundle?) {
+        eventList.add(GoesTo(activity.getTrackingData()))
     }
 
     fun register() = application.registerActivityLifecycleCallbacks(this)

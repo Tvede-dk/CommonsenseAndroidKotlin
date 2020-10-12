@@ -23,7 +23,6 @@ open class SimpleRecyclerDemo : BaseDatabindingFragment<DemoRecyclerSimpleViewBi
 
 
     override fun useBinding() {
-        val adapter = adapter ?: return
         val context = context ?: return
         adapter.clear()
         for (section in 0 until 10) {

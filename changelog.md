@@ -1,5 +1,9 @@
 # Changelog
 
+## 0.0.25
+- updated versions
+- bumped target sdk to 30
+
 ## 0.0.24
 - versions updated
 - base recycler adapter does not require a context for construction, allowing to be used in say fragments much cleaner.

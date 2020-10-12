@@ -120,8 +120,8 @@ open class BaseActivity : AppCompatActivity(), ActivityResultHelperContainer {
         super.onDestroy()
     }
 
-    override fun onOptionsItemSelected(item: MenuItem?): Boolean =
-            item.backPressIfHome(this) || super.onOptionsItemSelected(item)
+    override fun onOptionsItemSelected(item: MenuItem): Boolean =
+            item.backPressIfHome(this)
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)

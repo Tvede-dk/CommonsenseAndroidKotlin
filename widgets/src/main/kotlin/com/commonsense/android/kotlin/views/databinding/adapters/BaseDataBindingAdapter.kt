@@ -48,9 +48,9 @@ open class BaseDataBindingAdapter(context: Context) : BaseAdapter<BaseAdapterIte
         return viewTypeCount
     }
 
-    override fun add(obj: BaseAdapterItemBinding<*>) {
+    override fun add(obj: BaseAdapterItemBinding<*>?) {
         super.add(obj)
-        obj.let(this::addHashCodeIfNeeded)
+        obj?.let(this::addHashCodeIfNeeded)
     }
 
     fun addHashCodeIfNeeded(obj: BaseAdapterItemBinding<*>) {
@@ -75,14 +75,16 @@ open class BaseDataBindingAdapter(context: Context) : BaseAdapter<BaseAdapterIte
         viewTypes.clear()
     }
 
-    override fun remove(obj: BaseAdapterItemBinding<*>) {
+    override fun remove(obj: BaseAdapterItemBinding<*>?) {
         super.remove(obj)
         calculateViewTypes()
     }
 
-    override fun insert(obj: BaseAdapterItemBinding<*>, index: Int) {
+    override fun insert(obj: BaseAdapterItemBinding<*>?, index: Int) {
         super.insert(obj, index)
-        addHashCodeIfNeeded(obj)
+        if (obj != null) {
+            addHashCodeIfNeeded(obj)
+        }
     }
 
 }

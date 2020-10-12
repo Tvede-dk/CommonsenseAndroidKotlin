@@ -555,7 +555,7 @@ class SectionIndexCache {
     private fun <T> rebuildMapping(data: SparseArray<TypeSection<T>>) {
         sectionMapping.clear()
         var currentSize = 0
-        data.forEachIndexed { key, value, index ->
+        data.forEachIndexed { _, value, _ ->
             if (value.isNotEmptyOrInvisible) {
                 currentSize += value.visibleCount
                 sectionMapping.append(value.sectionIndexValue, currentSize)

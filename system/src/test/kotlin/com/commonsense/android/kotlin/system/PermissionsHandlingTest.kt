@@ -3,11 +3,14 @@ package com.commonsense.android.kotlin.system
 import android.*
 import android.content.pm.*
 import android.os.*
+import android.os.Looper.*
 import com.commonsense.android.kotlin.system.base.*
 import com.commonsense.android.kotlin.system.permissions.*
 import com.commonsense.android.kotlin.test.*
 import org.junit.*
+import org.robolectric.Shadows.*
 import org.robolectric.annotation.*
+import org.robolectric.shadows.*
 import java.util.concurrent.*
 
 /**
@@ -29,25 +32,29 @@ class PermissionsHandlingTest : BaseRoboElectricTest() {
         Assert.assertTrue(sem.tryAcquire())
     }
 
-    @Throws(InterruptedException::class)
     @Test
     fun testPermissionFlowDenyAccept() {
         val act = createActivity<DenyPermissionActivity>()
         testCallbackWithSemaphore { sem ->
-            act.permissionHandler.performActionForPermissions(listOf(Manifest.permission.CALL_PHONE), act, {
-                Assert.fail("should be granted in tests")
-            }, { _, _ ->
+            act.permissionHandler.performActionForPermissions(listOf(Manifest.permission.CALL_PHONE), act,
+                    onGranted = {
+                        Assert.fail("should NOT be granted")
+                    }, onFailed = { _, _ ->
                 sem.release()
             })
 
             callHandlerWith(act.permissionHandler, Manifest.permission.CALL_PHONE, false)
         }
         //simulate response from user
+
         testCallbackWithSemaphore { sem ->
             act.permissionHandler.performActionForPermissions(listOf(Manifest.permission.CALL_PHONE), act,
-                    { sem.release() },
-                    { _, _ -> Assert.fail("should be granted in tests") })
-
+                    onGranted = {
+                        sem.release()
+                    },
+                    onFailed = { _, _ ->
+                        Assert.fail("should be granted")
+                    })
             callHandlerWith(act.permissionHandler, Manifest.permission.CALL_PHONE, true)
         }
     }
@@ -121,7 +128,7 @@ class PermissionsHandlingTest : BaseRoboElectricTest() {
 class AlwaysPermissionActivity : BaseActivity() {
 
 
-    override fun checkPermission(permission: String?, pid: Int, uid: Int): Int =
+    override fun checkPermission(permission: String, pid: Int, uid: Int): Int =
             PackageManager.PERMISSION_GRANTED
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -130,7 +137,7 @@ class AlwaysPermissionActivity : BaseActivity() {
 }
 
 class DenyPermissionActivity : BaseActivity() {
-    override fun checkPermission(permission: String?, pid: Int, uid: Int): Int =
+    override fun checkPermission(permission: String, pid: Int, uid: Int): Int =
             PackageManager.PERMISSION_DENIED
 
     override fun onCreate(savedInstanceState: Bundle?) {

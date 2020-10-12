@@ -15,12 +15,12 @@ class LifeCycleMonitor(application: Application) : ActivityLifecycleCallbacks {
 
     private val activityMap: MutableMap<String, LifeCycleTracking> = mutableMapOf()
 
-    override fun onActivityPaused(activity: Activity?) = modifyTracking(activity) {
+    override fun onActivityPaused(activity: Activity) = modifyTracking(activity) {
         state = LifeCycleState.OnPaused
         onPause = currentTime
     }
 
-    override fun onActivityResumed(activity: Activity?) = modifyTracking(activity) {
+    override fun onActivityResumed(activity: Activity) = modifyTracking(activity) {
         state = LifeCycleState.OnResumed
         onResume = currentTime
         val onCreateTimeInMs = timeForCreate.toString()
@@ -29,31 +29,28 @@ class LifeCycleMonitor(application: Application) : ActivityLifecycleCallbacks {
         L.error(this::class, "$name: Full creation time: $fullCreationTime")
     }
 
-    override fun onActivityStarted(activity: Activity?) = modifyTracking(activity) {
+    override fun onActivityStarted(activity: Activity) = modifyTracking(activity) {
         state = LifeCycleState.OnStarted
         onStarted = currentTime
     }
 
-    override fun onActivityDestroyed(activity: Activity?) {
+    override fun onActivityDestroyed(activity: Activity) {
         // summarize tracking ? hmm
-        if (activity == null) {
-            return
-        }
         activityMap.remove(activity.name)
 
     }
 
-    override fun onActivitySaveInstanceState(activity: Activity?, p1: Bundle?) = modifyTracking(activity) {
+    override fun onActivitySaveInstanceState(activity: Activity, outState: Bundle) = modifyTracking(activity) {
         state = LifeCycleState.OnSaving
         onSavedInstanceState = currentTime
     }
 
-    override fun onActivityStopped(activity: Activity?) = modifyTracking(activity) {
+    override fun onActivityStopped(activity: Activity) = modifyTracking(activity) {
         state = LifeCycleState.OnStopped
         onStopped = currentTime
     }
 
-    override fun onActivityCreated(activity: Activity?, p1: Bundle?) = modifyTracking(activity) {
+    override fun onActivityCreated(activity: Activity, p1: Bundle?) = modifyTracking(activity) {
         state = LifeCycleState.OnCreating
         onCreate = currentTime
     }

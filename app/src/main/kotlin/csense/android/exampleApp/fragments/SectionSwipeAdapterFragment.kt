@@ -20,7 +20,6 @@ class SectionSwipeAdapterFragment : BaseDatabindingFragment<DemoRecyclerSectionS
 
 
     override fun useBinding() {
-        val adapter = adapter ?: return
         launchInBackground("useBinding") {
             val items = (0 until 100).map { SimpleSwipeItem("") { adapter.removeAt(it, 0) } }
             launchInUi("useBindingInside") {

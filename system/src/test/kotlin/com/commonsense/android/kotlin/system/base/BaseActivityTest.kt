@@ -1,11 +1,13 @@
 package com.commonsense.android.kotlin.system.base
 
+import android.os.Looper.*
 import com.commonsense.android.kotlin.system.R
 import com.commonsense.android.kotlin.system.logging.*
 import com.commonsense.android.kotlin.test.*
 import kotlinx.coroutines.*
 import org.junit.*
 import org.robolectric.*
+import org.robolectric.Shadows.*
 import org.robolectric.annotation.*
 import java.util.concurrent.*
 
@@ -55,6 +57,7 @@ class BaseActivityTest : BaseRoboElectricTest() {
     }
 
     @Throws(InterruptedException::class)
+    @LooperMode(LooperMode.Mode.PAUSED)
     @Test
     fun launchInUiLifecycleEventsPausedDestory() = testCallbackWithSemaphore(
             shouldAcquire = false,
@@ -67,8 +70,7 @@ class BaseActivityTest : BaseRoboElectricTest() {
             failTest("Should not get called when the pause or destroy have been called")
         }
         runBlocking {
-            Robolectric.flushBackgroundThreadScheduler()
-            Robolectric.flushForegroundThreadScheduler()
+            shadowOf(getMainLooper()).idle()
             delay(50)
         }
         act.destroy()
@@ -107,6 +109,8 @@ class BaseActivityTest : BaseRoboElectricTest() {
         act.get().launchInUi("test") {
             sem.release()
         }
+        shadowOf(getMainLooper()).idle()
+
     }
 
 

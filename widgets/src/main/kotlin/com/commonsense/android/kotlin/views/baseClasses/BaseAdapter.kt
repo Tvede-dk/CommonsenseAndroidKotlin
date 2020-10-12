@@ -13,7 +13,7 @@ import java.util.*
  */
 open class BaseAdapter<T>(context: Context) : ArrayAdapter<T>(context, 0) {
 
-    override fun add(obj: T) {
+    override fun add(obj: T?) {
         if (obj != null) {
             super.add(obj)
         }
@@ -52,14 +52,14 @@ open class BaseAdapter<T>(context: Context) : ArrayAdapter<T>(context, 0) {
         return list
     }
 
-    override fun remove(obj: T) {
+    override fun remove(obj: T?) {
         if (obj != null) {
             super.remove(obj)
         }
     }
 
     @Suppress("RedundantOverride")
-    override fun getPosition(item: T): Int = super.getPosition(item)
+    override fun getPosition(item: T?): Int = super.getPosition(item)
 
     @Suppress("RedundantOverride")
     @androidx.annotation.IntRange(from = 0)
@@ -73,7 +73,7 @@ open class BaseAdapter<T>(context: Context) : ArrayAdapter<T>(context, 0) {
     /**
      *  insert the given item, if it is not null
      */
-    override fun insert(obj: T, @androidx.annotation.IntRange(from = 0) index: Int) {
+    override fun insert(obj: T?, @androidx.annotation.IntRange(from = 0) index: Int) {
         if (obj != null) {
             super.insert(obj, index)
         }

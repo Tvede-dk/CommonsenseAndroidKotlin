@@ -39,11 +39,10 @@ abstract class BaseDatabindingActivityToolbar<out T : ViewDataBinding> : BaseDat
         drawerToggle.onConfigurationChanged(newConfig)
     }
 
-    override fun onOptionsItemSelected(item: MenuItem?): Boolean {
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
         if (drawerToggle.onOptionsItemSelected(item)) {
             return true
         }
-
         return super.onOptionsItemSelected(item)
     }
 

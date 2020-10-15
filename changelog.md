@@ -1,5 +1,8 @@
 # Changelog
 
+## 0.0.26
+- fix android 11 package visibility & query for media/ images
+
 ## 0.0.25
 - updated versions
 - bumped target sdk to 30

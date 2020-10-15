@@ -13,6 +13,7 @@ import androidx.annotation.*
 import com.commonsense.android.kotlin.base.*
 import com.commonsense.android.kotlin.system.base.*
 import com.commonsense.android.kotlin.system.base.helpers.*
+import com.commonsense.android.kotlin.system.logging.*
 import com.commonsense.android.kotlin.system.permissions.*
 
 
@@ -31,6 +32,7 @@ class PictureRetriver(private val activity: BaseActivity,
 
 
     private var pictureUri: Uri? = null
+
     /**
      * First queries for the required permission before retrieving the image and returning the result.
      */
@@ -45,11 +47,11 @@ class PictureRetriver(private val activity: BaseActivity,
             takePictureIntent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION or Intent.FLAG_GRANT_WRITE_URI_PERMISSION)
 
             val values = ContentValues(1)
-            values.put(MediaStore.Images.Media.MIME_TYPE, "image/jpg")
+            values.put(MediaStore.Images.Media.MIME_TYPE, "image/jpeg")
             pictureUri = activity.contentResolver.insert(MediaStore.Images.Media.EXTERNAL_CONTENT_URI, values)
             takePictureIntent.putExtra(MediaStore.EXTRA_OUTPUT, pictureUri)
-            if (takePictureIntent.resolveActivity(activity.packageManager) != null) {
-                activity.launchInUi("useCamera") {
+            activity.launchInUi("useCamera") {
+                tryAndLog("pictureRetriever - no image capture app found") {
                     activity.startActivityForResult(takePictureIntent, null, requestCode, this::onActivityResult)
                 }
             }

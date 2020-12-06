@@ -3,7 +3,7 @@ buildscript {
     ext.androidBuildToolsVersion = "30.0.2"
 
     //Lib version and sdks
-    ext.commonsenseVersionName = "0.0.26"
+    ext.commonsenseVersionName = "0.0.27"
     ext.commonsenseVersionNumber = 2
     ext.minSdk = 16
     ext.targetSdk = 30
@@ -22,7 +22,7 @@ buildscript {
     ext.kotlin_version = '1.4.10'
     ext.coroutinesVersion = '1.3.9'
     ext.junitVersion = "4.13"
-    ext.androidGradleVersion = '4.0.2'
+    ext.androidGradleVersion = '4.1.1'
     ext.roboElectricVersion = '4.3'
 
 

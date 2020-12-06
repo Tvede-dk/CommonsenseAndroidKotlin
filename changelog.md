@@ -1,5 +1,8 @@
 # Changelog
 
+## 0.0.27
+- renamed async "startActivityWithResult" that was not named async (causes overload resolution ambiguity)
+
 ## 0.0.26
 - fix android 11 package visibility & query for media/ images
 

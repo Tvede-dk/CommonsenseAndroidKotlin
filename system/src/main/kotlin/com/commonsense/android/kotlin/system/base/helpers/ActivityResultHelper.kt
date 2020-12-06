@@ -273,7 +273,7 @@ fun BaseFragment?.startActivityForResultAsync(intent: Intent,
     startActivityForResult(intent, requestCode, options)
 }
 
-fun BaseFragment?.startActivityForResult(intent: Intent,
+fun BaseFragment?.startActivityForResultAsync(intent: Intent,
                                          options: Bundle?,
                                          requestCode: Int,
                                          activityResultCallback: AsyncActivityResultCallback) {

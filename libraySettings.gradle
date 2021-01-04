@@ -3,6 +3,7 @@ ext.setupProject = { Project it ->
     it.extensions.findByName("kapt")?.with {
         println " - Enabling kapt cache"
         it.useBuildCache = true
+        it.includeCompileClasspath = false
     }
     it.extensions.findByName("android")?.with {
 

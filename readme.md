@@ -401,9 +401,9 @@ L.debugLoggers.add{ tag: String, message:String, throwable : Throwable? ->
 The project is accessible though jcenter, so there should be a jcenter() in the repositories.
 
 It is recommended to store the version 1 place only, such as;
-```gralde
+```gradle
 buildscript {
-  ext.commonsenseVersion = "0.0.19.7"
+  ext.commonsenseVersion = "0.0.19.11"
 }
 ````
 Then you can start importing each of the sub modules. a full list is:

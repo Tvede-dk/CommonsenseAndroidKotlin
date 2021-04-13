@@ -22,18 +22,7 @@ class PermissionsHandlingTest : BaseRoboElectricTest() {
 
 
     @Test
-    fun testPermissionFlowAccept() {
-        val sem = Semaphore(0)
-        val act = createActivity<AlwaysPermissionActivity>()
-
-        act.permissionHandler.performActionForPermissions(listOf(Manifest.permission.CALL_PHONE), act, sem::release) { _, _ ->
-            Assert.fail("should be granted in tests")
-        }
-        Assert.assertTrue(sem.tryAcquire())
-    }
-
-    @Test
-    fun testPermissionFlowDenyAccept() {
+    fun testPermissionFlowDeny() {
         val act = createActivity<DenyPermissionActivity>()
         testCallbackWithSemaphore { sem ->
             act.permissionHandler.performActionForPermissions(listOf(Manifest.permission.CALL_PHONE), act,
@@ -45,8 +34,13 @@ class PermissionsHandlingTest : BaseRoboElectricTest() {
 
             callHandlerWith(act.permissionHandler, Manifest.permission.CALL_PHONE, false)
         }
-        //simulate response from user
 
+    }
+
+    @Test
+    fun testPermissionFlowAccept() {
+        //simulate response from user
+        val act = createActivity<DenyPermissionActivity>()
         testCallbackWithSemaphore { sem ->
             act.permissionHandler.performActionForPermissions(listOf(Manifest.permission.CALL_PHONE), act,
                     onGranted = {
@@ -57,6 +51,7 @@ class PermissionsHandlingTest : BaseRoboElectricTest() {
                     })
             callHandlerWith(act.permissionHandler, Manifest.permission.CALL_PHONE, true)
         }
+
     }
 
     @Test

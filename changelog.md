@@ -1,5 +1,9 @@
 # Changelog
 
+## 0.0.28
+- fixed issue where setContentView was called before onCreate
+- bumped 3party deps
+
 ## 0.0.27
 - renamed async "startActivityWithResult" that was not named async (causes overload resolution ambiguity)
 

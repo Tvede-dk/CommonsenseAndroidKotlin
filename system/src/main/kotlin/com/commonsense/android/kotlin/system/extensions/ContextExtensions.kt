@@ -62,7 +62,7 @@ inline fun Context.getVirtualScreenSize(): Point? {
     return display?.let {
         val size = Point()
         display.getSize(size)
-        return size
+        size
     }
 }
 

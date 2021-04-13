@@ -16,6 +16,7 @@ import com.commonsense.android.kotlin.views.extensions.*
 import csense.android.exampleApp.R
 import csense.android.exampleApp.databinding.*
 import csense.android.exampleApp.views.dataAware.*
+import csense.android.exampleApp.views.searchable.SearchableRecyclerDemoActivity
 import csense.android.exampleApp.views.tools.*
 import csense.android.exampleApp.views.widgets.*
 import kotlinx.coroutines.*
@@ -57,6 +58,9 @@ class MainActivity : BaseDatabindingActivity<MainActivityBinding>() {
         }, 0)
         adapter.add(CategoryRecyclerRender(R.string.intro_text) {
             startActivity(DataAActivity::class)
+        }, 0)
+        adapter.add(CategoryRecyclerRender(R.string.mainactivity_category_searchable_recycler) {
+            startActivity(SearchableRecyclerDemoActivity::class)
         }, 0)
 
         adapter.add(CategoryRecyclerRender(R.string.retrive_picture) {

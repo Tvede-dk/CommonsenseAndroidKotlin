@@ -33,8 +33,8 @@ abstract class BaseDatabindingActivity<out T : ViewDataBinding> : BaseActivity()
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
-        setContentView(binding.root)
         super.onCreate(savedInstanceState)
+        setContentView(binding.root)
         binding.executePendingBindings()
         useBinding()
     }

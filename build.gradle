@@ -1,12 +1,12 @@
 buildscript {
     ext.androidSdkBuildVersion = 28
-    ext.androidBuildToolsVersion = "29.0.2"
+    ext.androidBuildToolsVersion = "29.0.3"
 
     //Lib version and sdks
-    ext.commonsenseVersionName = "0.0.19.10"
+    ext.commonsenseVersionName = "0.0.19.11"
     ext.commonsenseVersionNumber = 1
     ext.minSdk = 16
-    ext.targetSdk = 28
+    ext.targetSdk = 30
 
     //for bintray
     ext.commonsenseUserOrg = "tvede-oss"
@@ -19,11 +19,11 @@ buildscript {
     ext.commonsenseGit = "https://github.com/Tvede-dk/CommonsenseAndroidKotlin.git"
 
     //included versions.
-    ext.kotlin_version = '1.3.61'
+    ext.kotlin_version = '1.4.32'
     ext.supportVersion = '28.0.0'
-    ext.coroutinesVersion = '1.3.3'
+    ext.coroutinesVersion = '1.4.3'
     ext.junitVersion = "4.13"
-    ext.androidGradleVersion = '3.5.3'
+    ext.androidGradleVersion = '4.1.3'
     ext.roboElectricVersion = "4.2.1"
     ext.espressoVersion = "3.0.2"
     ext.testSupportRunnerVersion = "1.0.2"
@@ -43,9 +43,9 @@ buildscript {
         classpath "com.android.tools.build:gradle:${androidGradleVersion}"
         classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlin_version"
         //https://github.com/bintray/gradle-bintray-plugin
-        classpath 'com.jfrog.bintray.gradle:gradle-bintray-plugin:1.8.4'
+        classpath 'com.jfrog.bintray.gradle:gradle-bintray-plugin:1.8.5'
         //https://github.com/mannodermaus/android-junit5
-        classpath "de.mannodermaus.gradle.plugins:android-junit5:1.5.2.0"
+        classpath "de.mannodermaus.gradle.plugins:android-junit5:1.7.1.1"
     }
 }
 

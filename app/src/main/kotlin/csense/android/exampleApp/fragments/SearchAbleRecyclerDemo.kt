@@ -1,13 +1,17 @@
 package csense.android.exampleApp.fragments
 
-import android.graphics.*
-import android.support.v7.widget.*
-import android.text.*
-import com.commonsense.android.kotlin.base.extensions.collections.*
-import com.commonsense.android.kotlin.views.databinding.adapters.*
-import com.commonsense.android.kotlin.views.databinding.fragments.*
-import com.commonsense.android.kotlin.views.extensions.*
-import csense.android.exampleApp.databinding.*
+import android.support.v7.widget.LinearLayoutManager
+import android.text.Editable
+import android.text.TextWatcher
+import com.commonsense.android.kotlin.base.extensions.collections.repeateToSize
+import com.commonsense.android.kotlin.views.databinding.adapters.BaseSearchableDataBindingRecyclerAdapter
+import com.commonsense.android.kotlin.views.databinding.adapters.IRenderModelSearchItem
+import com.commonsense.android.kotlin.views.databinding.fragments.BaseDatabindingFragment
+import com.commonsense.android.kotlin.views.databinding.fragments.InflateBinding
+import com.commonsense.android.kotlin.views.extensions.setOnclickAsync
+import com.commonsense.android.kotlin.views.extensions.setup
+import csense.android.exampleApp.databinding.DemoRecyclerSearchableBinding
+import csense.android.exampleApp.databinding.SimpleListItemBinding
 
 /**
  * Created by kasper on 01/06/2017.
@@ -28,15 +32,20 @@ class SearchAbleRecyclerDemo : BaseDatabindingFragment<DemoRecyclerSearchableBin
         val adapter = adapter ?: return
         val items = mutableListOf<IRenderModelSearchItem<*, *, String>>(
                 SearchAbleSimpleListItemRender("First []"),
-                SimpleListImageItemRender(Color.BLUE, 0).toSearchable { _, _ -> false },
+//                SimpleListImageItemRender(Color.BLUE, 0).toSearchable { _, _ -> false },
                 SearchAbleSimpleListItemRender("Whats up "),
-                SimpleListImageItemRender(Color.RED, 0).toSearchable { _, _ -> false }
-        ).repeateToSize(50000)
+//                SimpleListImageItemRender(Color.RED, 0).toSearchable { _, _ -> false }
+        ).repeateToSize(2)
 
-        adapter.setSection(items, 0)
+//        adapter.setSection(items, 0)
         binding.demoRecyclerSearchableRecyclerview.recyclerView.setup(adapter, LinearLayoutManager(context))
-        binding.demoRecyclerSearchableRecyclerview2.recyclerView.setup(adapter, LinearLayoutManager(context))
-
+//        binding.demoRecyclerSearchableRecyclerview2.recyclerView.setup(adapter, LinearLayoutManager(context))
+        binding.resetButton.setOnclickAsync {
+            adapter.setSection(listOf(), 0)
+            adapter.filterBy("First")
+            adapter.setSection(items, 0)
+            adapter.filterBy("")
+        }
         binding.demoRecyclerSearchableEdit.addTextChangedListener(SafeTextWatcher(this::performFilter))
     }
 
@@ -46,7 +55,7 @@ class SearchAbleRecyclerDemo : BaseDatabindingFragment<DemoRecyclerSearchableBin
         if (temp.isEmpty()) {
             adapter.removeFilter()
         } else {
-            temp.let(adapter::filterBy)
+            adapter.filterBy(temp)
         }
 
     }

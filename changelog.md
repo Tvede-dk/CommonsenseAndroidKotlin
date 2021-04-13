@@ -1,4 +1,10 @@
 # Changelog
+
+## 0.0.19.11
+- fixed issue with setContentView called before super.onCreate
+- bumped some 3 party deps
+- fixed issue with SectionLookupRep causing AbstractSearchableDataBindingRecyclerAdapter to crash in certain instances
+
 ## 0.0.19.10
 -spelling mistake in BaseFragmentPagerAdapter (from "setPrimiaryItem" to "setPrimaryItem") 
 

@@ -365,6 +365,7 @@ class SectionLookupRep<T : TypeHashCodeLookupRepresent<Rep>, out Rep : Any> {
 
 
     fun setAllSections(sections: List<TypeSection<T>>) {
+        cachedIndex.invalidate()
         cachedSize = sections.sumBy { it.visibleCount }
         data.clear()
         sections.forEach { data.put(it.sectionIndexValue, it) }

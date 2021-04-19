@@ -1,0 +1,44 @@
+apply plugin: "maven-publish"
+
+
+publishing {
+    publications {
+        maven(MavenPublication) {
+            groupId = csenseGroupId
+            artifactId = csenseArtifactId
+            version = csenseVersionName
+            from components.java
+            pom {
+                name = csenseArtifactId
+                description = csenseArtifactDescription
+                url = csenseWebsite
+
+                licenses {
+                    license {
+                        name = csenseLicense
+                        url = csenseLicenseUrl
+                    }
+                }
+                developers {
+                    developer {
+                        id = csenseDeveloperAlias
+                        name = csenseDeveloperName
+                        email = csenseDeveloperEmail
+                    }
+                }
+                organization {
+                    name = csenseUserOrg
+                }
+            }
+        }
+    }
+    repositories {
+        maven {
+            url 'https://pkgs.dev.azure.com/csense-oss/csense-oss/_packaging/csense-oss/maven/v1'
+            name 'csense-oss'
+            authentication {
+                basic(BasicAuthentication)
+            }
+        }
+    }
+}

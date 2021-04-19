@@ -1,4 +1,6 @@
 # Changelog
+## 0.0.29
+- fixed issue with SectionLookupRep causing AbstractSearchableDataBindingRecyclerAdapter to crash in certain instances
 
 ## 0.0.28
 - fixed issue where setContentView was called before onCreate

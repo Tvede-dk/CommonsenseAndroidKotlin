@@ -28,7 +28,7 @@ dependencies {
 }
 
 
-apply from: "../javadocSourceDokka.gradle"
+apply from: "../javadocSource.gradle"
 
 
 ext.artifactName = "system"

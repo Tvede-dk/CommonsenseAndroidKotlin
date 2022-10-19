@@ -32,7 +32,7 @@ dependencies {
 }
 
 
-apply from: "../javadocSourceDokka.gradle"
+apply from: "../javadocSource.gradle"
 ext.artifactName = "test"
 ext.artifactDescription = ""
 ext.versionDescription = ""

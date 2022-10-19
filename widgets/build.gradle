@@ -25,10 +25,9 @@ android {
     }
 
     buildFeatures {
-        dataBinding  = true
+        dataBinding = true
     }
 }
-
 
 
 dependencies {
@@ -62,4 +61,4 @@ apply from: "../javadocSourceDokka.gradle"
 ext.artifactName = "widgets"
 ext.artifactDescription = ""
 ext.versionDescription = ""
-apply from: "../publish.gradle"
+apply from: "$rootDir/gradle/publish.gradle"

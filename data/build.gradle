@@ -47,4 +47,4 @@ ext.artifactName = "data"
 ext.artifactDescription = ""
 ext.versionDescription = ""
 
-apply from: "../publish.gradle"
+apply from: "$rootDir/gradle/publish.gradle"

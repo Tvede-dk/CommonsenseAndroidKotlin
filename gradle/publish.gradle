@@ -1,37 +1,42 @@
 apply plugin: "maven-publish"
 
+afterEvaluate {
+    publishing {
+        publications {
+            release(MavenPublication) {
+                from components.release
+                groupId = csenseGroupId
+                artifactId = artifactName
+                version = csenseVersionName
+                artifact project.androidSourcesJar
+                pom {
+                    name = csenseArtifactId
+                    description = csenseArtifactDescription
+                    url = csenseWebsite
 
-publishing {
-    publications {
-        maven(MavenPublication) {
-            groupId = csenseGroupId
-            artifactId = csenseArtifactId
-            version = csenseVersionName
-            from components.java
-            pom {
-                name = csenseArtifactId
-                description = csenseArtifactDescription
-                url = csenseWebsite
-
-                licenses {
-                    license {
-                        name = csenseLicense
-                        url = csenseLicenseUrl
+                    licenses {
+                        license {
+                            name = csenseLicense
+                            url = csenseLicenseUrl
+                        }
                     }
-                }
-                developers {
-                    developer {
-                        id = csenseDeveloperAlias
-                        name = csenseDeveloperName
-                        email = csenseDeveloperEmail
+                    developers {
+                        developer {
+                            id = csenseDeveloperAlias
+                            name = csenseDeveloperName
+                            email = csenseDeveloperEmail
+                        }
                     }
-                }
-                organization {
-                    name = csenseUserOrg
+                    organization {
+                        name = csenseUserOrg
+                    }
                 }
             }
         }
     }
+
+}
+publishing {
     repositories {
         maven {
             url 'https://pkgs.dev.azure.com/csense-oss/csense-oss/_packaging/csense-oss/maven/v1'

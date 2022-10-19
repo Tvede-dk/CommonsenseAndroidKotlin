@@ -82,7 +82,7 @@ class ExtendedEditTextView : AppCompatEditText {
 
 typealias onKeyboardEvent = (KeyEvent) -> Boolean
 
-private class KeyboardConnection(target: InputConnection,
+private class KeyboardConnection(target: InputConnection?,
                                  mutable: Boolean,
                                  val callback: onKeyboardEvent)
     : InputConnectionWrapper(target, mutable) {

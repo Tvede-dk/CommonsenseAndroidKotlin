@@ -39,11 +39,26 @@ afterEvaluate {
 publishing {
     repositories {
         maven {
+            final def properties = tryReadLocalProperties()
             url 'https://pkgs.dev.azure.com/csense-oss/csense-oss/_packaging/csense-oss/maven/v1'
             name 'csense-oss'
+            credentials {
+                username = properties.getProperty("username", "")
+                password = properties.getProperty("password", "")
+            }
             authentication {
                 basic(BasicAuthentication)
             }
         }
     }
+}
+
+private final Properties tryReadLocalProperties() {
+    final Properties properties = new Properties()
+    try {
+        properties.load(project.rootProject.file("local.properties").newDataInputStream())
+    } catch (ignored) {
+
+    }
+    return properties
 }

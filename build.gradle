@@ -1,12 +1,12 @@
 buildscript {
-    ext.androidSdkBuildVersion = 30
+    ext.androidSdkBuildVersion = 33
     ext.androidBuildToolsVersion = "33.0.0"
 
     //Lib version and sdks
     ext.commonsenseVersionName = "0.0.29"
     ext.commonsenseVersionNumber = 3
     ext.minSdk = 16
-    ext.targetSdk = 30
+    ext.targetSdk = 33
 
     //for bintray
     ext.commonsenseUserOrg = "tvede-oss"
@@ -23,7 +23,7 @@ buildscript {
     ext.coroutinesVersion = '1.6.4'
     ext.junitVersion = "4.13.2"
     ext.androidGradleVersion = '7.3.1'
-    ext.roboElectricVersion = '4.7'
+    ext.roboElectricVersion = '4.9'
 
 
     //Versions for X.
@@ -77,7 +77,8 @@ buildscript {
 allprojects {
     repositories {
         google()
-        jcenter()
+        mavenCentral()
+//        jcenter()
     }
 }
 
@@ -88,10 +89,11 @@ subprojects {
     buildscript {
         repositories {
             google()
-            jcenter()
+            mavenCentral()
+//            jcenter()
         }
         dependencies {
-            classpath "org.jetbrains.dokka:dokka-android-gradle-plugin:${dokkaVersion}"
+//            classpath "org.jetbrains.dokka:dokka-android-gradle-plugin:${dokkaVersion}"
         }
     }
 

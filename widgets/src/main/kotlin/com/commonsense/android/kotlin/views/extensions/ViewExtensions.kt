@@ -57,7 +57,7 @@ fun View.setOnclickAsyncSuspend(action: AsyncFunctionUnit<Context>) {
             }
         }
     }
-    setOnClick { eventActor.offer(Unit) }
+    setOnClick { eventActor.trySend(Unit) }
 }
 
 @UiThread
@@ -76,7 +76,7 @@ fun View.setOnclickAsync(action: FunctionUnit<Context>) {
             }
         }
     }
-    setOnClick { eventActor.offer(Unit) }
+    setOnClick { eventActor.trySend(Unit) }
 }
 
 @UiThread

@@ -265,7 +265,7 @@ private class ConflatedActorHelper<F> {
     fun offer(filter: F?) {
         val actor = eventActor
         if (actor != null) {
-            actor.offer(filter)
+            actor.trySend(filter)
         } else {
             L.error(ConflatedActorHelper::class.java.simpleName, "the actor is null ," +
                     "thus the recycler adapter does not have a view attached to it." +

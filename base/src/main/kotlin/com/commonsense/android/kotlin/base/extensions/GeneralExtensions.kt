@@ -215,6 +215,6 @@ inline fun <reified T> type(): Class<T> = T::class.java
  * @param function Function1<Int, U> the mapper function
  * @return List<U> the resulting list
  */
-fun <U> @receiver:IntRange(from = 1) Int.mapEach(function: Function1<Int, U>): List<U> {
+fun <U> @receiver:androidx.annotation.IntRange(from = 1) Int.mapEach(function: Function1<Int, U>): List<U> {
     return List(this, function)
 }

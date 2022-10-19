@@ -16,11 +16,18 @@ class ExtendedEditTextView : AppCompatEditText {
         afterInit()
     }
 
-    constructor(context: android.content.Context, attrs: android.util.AttributeSet) : super(context, attrs) {
+    constructor(context: android.content.Context, attrs: android.util.AttributeSet) : super(
+        context,
+        attrs
+    ) {
         afterInit()
     }
 
-    constructor(context: android.content.Context, attrs: android.util.AttributeSet, defStyleAttr: Int) : super(context, attrs, defStyleAttr) {
+    constructor(
+        context: android.content.Context,
+        attrs: android.util.AttributeSet,
+        defStyleAttr: Int
+    ) : super(context, attrs, defStyleAttr) {
         afterInit()
     }
 
@@ -31,7 +38,8 @@ class ExtendedEditTextView : AppCompatEditText {
 
     private val internalListOfListeners = mutableListOf<TextWatcher>()
 
-    private var backspaceDetectedCallback: ((view: ExtendedEditTextView, isEmpty: Boolean) -> Unit)? = null
+    private var backspaceDetectedCallback: ((view: ExtendedEditTextView, isEmpty: Boolean) -> Unit)? =
+        null
 
     fun setTextChangeListener(listener: TextWatcher) {
         clearTextChangeListeners()
@@ -50,13 +58,9 @@ class ExtendedEditTextView : AppCompatEditText {
     }
 
 
-    override fun onCreateInputConnection(outAttrs: EditorInfo?): InputConnection {
-        if (outAttrs == null) {
-            throw RuntimeException("Bad editor info supplied;" +
-                    "\n You have properly added the focusAble attribute to this view in the xml), just remove it. " +
-                    "\n (reason for throwing: super call will fail with unhelpful exception in android code.)")
-        }
-        return KeyboardConnection(super.onCreateInputConnection(outAttrs), true, this::onKeyboardEvent)
+    override fun onCreateInputConnection(outAttrs: EditorInfo): InputConnection? {
+        val superConnection = super.onCreateInputConnection(outAttrs) ?: return null
+        return KeyboardConnection(superConnection, true, this::onKeyboardEvent)
     }
 
     //TODO listen for custom sequences ? (hmm ) would avoid opening this func.
@@ -82,10 +86,11 @@ class ExtendedEditTextView : AppCompatEditText {
 
 typealias onKeyboardEvent = (KeyEvent) -> Boolean
 
-private class KeyboardConnection(target: InputConnection,
-                                 mutable: Boolean,
-                                 val callback: onKeyboardEvent)
-    : InputConnectionWrapper(target, mutable) {
+private class KeyboardConnection(
+    target: InputConnection,
+    mutable: Boolean,
+    val callback: onKeyboardEvent
+) : InputConnectionWrapper(target, mutable) {
 
     override fun sendKeyEvent(event: KeyEvent?): Boolean {
         if (event != null && callback(event)) {

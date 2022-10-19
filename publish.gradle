@@ -5,7 +5,7 @@ version = project.commonsenseVersionName
 group = project.commonsenseGroupId
 
 artifacts {
-    archives javadocJar
+//    archives javadocJar
     archives sourcesJar
 
 }
@@ -14,7 +14,7 @@ publishing {
     publications {
         MyPublication(MavenPublication) {
             artifact sourcesJar
-            artifact javadocJar
+//            artifact javadocJar
             //TODO this seems hackis but it gets the job done.
             final def outputFolder = buildDir.path + "/outputs/aar/";
             final def outputFile = new File(outputFolder + artifactName + "-release.aar")

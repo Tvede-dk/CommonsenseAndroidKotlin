@@ -1,45 +1,47 @@
 apply plugin: "maven-publish"
 
-afterEvaluate {
-    publishing {
-        publications {
-            release(MavenPublication) {
-                from components.release
-                groupId = csenseGroupId
-                artifactId = artifactName
-                version = csenseVersionName
-                artifact project.sourcesJar
-                pom {
-                    name = csenseArtifactId
-                    description = csenseArtifactDescription
-                    url = csenseWebsite
 
-                    licenses {
-                        license {
-                            name = csenseLicense
-                            url = csenseLicenseUrl
-                        }
+publishing {
+    publications {
+        release(MavenPublication) {
+            afterEvaluate {
+                from components.release
+            }
+            groupId = csenseGroupId
+            artifactId = artifactName
+            version = csenseVersionName
+            pom {
+                name = csenseArtifactId
+                description = csenseArtifactDescription
+                url = csenseWebsite
+
+                licenses {
+                    license {
+                        name = csenseLicense
+                        url = csenseLicenseUrl
                     }
-                    developers {
-                        developer {
-                            id = csenseDeveloperAlias
-                            name = csenseDeveloperName
-                            email = csenseDeveloperEmail
-                        }
+                }
+                developers {
+                    developer {
+                        id = csenseDeveloperAlias
+                        name = csenseDeveloperName
+                        email = csenseDeveloperEmail
                     }
-                    organization {
-                        name = csenseUserOrg
-                    }
+                }
+                organization {
+                    name = csenseUserOrg
                 }
             }
         }
     }
-
-}
-publishing {
     repositories {
         maven {
-            final def properties = tryReadLocalProperties()
+            final Properties properties = new Properties()
+            try {
+                properties.load(project.rootProject.file("local.properties").newDataInputStream())
+            } catch (Exception) {
+
+            }
             url 'https://pkgs.dev.azure.com/csense-oss/csense-oss/_packaging/csense-oss/maven/v1'
             name 'csense-oss'
             credentials {
@@ -51,14 +53,4 @@ publishing {
             }
         }
     }
-}
-
-private final Properties tryReadLocalProperties() {
-    final Properties properties = new Properties()
-    try {
-        properties.load(project.rootProject.file("local.properties").newDataInputStream())
-    } catch (ignored) {
-
-    }
-    return properties
 }

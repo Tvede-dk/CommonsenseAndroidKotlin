@@ -8,6 +8,11 @@ android {
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }
     }
+    publishing {
+        singleVariant("release") {
+            withSourcesJar()
+        }
+    }
 }
 
 dependencies {
@@ -25,10 +30,8 @@ dependencies {
     implementation "org.jetbrains.kotlin:kotlin-stdlib:$kotlin_version"
 
     testAnnotationProcessor "com.google.auto.service:auto-service:$autoServiceTestVersion"
+
 }
-
-
-apply from: "../javadocSource.gradle"
 
 
 ext.artifactName = "system"

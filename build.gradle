@@ -78,7 +78,7 @@ buildscript {
     }
 }
 plugins {
-    id "net.linguica.maven-settings" version "0.5"
+    id "maven-publish"
 }
 
 allprojects {
@@ -91,7 +91,6 @@ allprojects {
 apply from: "libraySettings.gradle"
 apply from: "fixErrorCounts.gradle"
 subprojects {
-    apply plugin: 'net.linguica.maven-settings'
     apply from: "../jacoco-kotlin.gradle"
     buildscript {
         repositories {
@@ -118,7 +117,4 @@ task clean(type: Delete) {
 //for CI / jenkins integration
 
 apply from: "fix-tests.gradle"
-
-//to publish to bintray / prod
-//clean assemble test sourcesJar javadocJar  bintrayUpload
 

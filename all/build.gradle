@@ -4,13 +4,18 @@ android {
     compileSdkVersion androidSdkBuildVersion
     buildToolsVersion androidBuildToolsVersion
 
-
     defaultConfig {
         minSdkVersion project.minSdk
         targetSdkVersion project.targetSdk
         versionCode project.commonsenseVersionNumber
         versionName project.commonsenseVersionName
 
+    }
+
+    publishing {
+        singleVariant("release") {
+            withSourcesJar()
+        }
     }
 }
 
@@ -22,7 +27,7 @@ dependencies {
     api project(":tools")
     api project(':widgets')
 }
-apply from: "../javadocSource.gradle"
+
 ext.artifactName = "all"
 ext.artifactDescription = ""
 ext.versionDescription = ""

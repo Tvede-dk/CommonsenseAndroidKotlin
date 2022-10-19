@@ -30,7 +30,7 @@ apply from: "../javadocSourceDokka.gradle"
 ext.artifactName = "base"
 ext.artifactDescription = ""
 ext.versionDescription = ""
-apply from: "../publish.gradle"
+apply from: "$rootDir/gradle/publish.gradle"
 //only uncomment when prepared to spend the enoumus amount of time required fixing the stupid android vs kotlin coverage bug;
 //this will make builds slow as hell.
 // apply from: "../fixKotlinCoverage.gradle"

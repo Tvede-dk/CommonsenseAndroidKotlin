@@ -161,7 +161,7 @@ internal class LayoutInflaterCache {
                     val view = inflater.createView(name, prefix, attrs)
                     if (view != null) {
                         foundMap[name] = prefix
-                        return view
+                        return@createView view
                     }
                 } catch (e: Exception) {
                 }

@@ -61,7 +61,7 @@ open class ColorValueViewVariable(@ColorInt defaultValue: Int,
                                   @StyleableRes styleIndex: Int,
                                   toAttachTo: ViewAttributeList,
                                   onUpdate: EmptyFunction)
-    : AbstractViewVariable<@ColorInt Int>(defaultValue, TypedArray::getColorSafe, styleIndex, toAttachTo, onUpdate)
+    : AbstractViewVariable<Int>(defaultValue, TypedArray::getColorSafe, styleIndex, toAttachTo, onUpdate)
 
 open class BooleanViewVariable(defaultValue: Boolean,
                                @StyleableRes styleIndex: Int,
@@ -94,7 +94,7 @@ open class DimensionViewVariable(@Dimension defaultValue: Float,
                                  @StyleableRes styleIndex: Int,
                                  toAttachTo: ViewAttributeList,
                                  onUpdate: EmptyFunction)
-    : AbstractViewVariable<@Dimension Float>(defaultValue, TypedArray::getDimension, styleIndex, toAttachTo, onUpdate)
+    : AbstractViewVariable<Float>(defaultValue, TypedArray::getDimension, styleIndex, toAttachTo, onUpdate)
 
 
 abstract class AbstractViewVariable<T>(defaultValue: T,

@@ -1,4 +1,10 @@
 # Changelog
+
+## 0.0.31
+- added new dangerous permissions
+- bumped deps
+- fixed some issues with gradle scrips
+
 ## 0.0.29
 - fixed issue with SectionLookupRep causing AbstractSearchableDataBindingRecyclerAdapter to crash in certain instances
 

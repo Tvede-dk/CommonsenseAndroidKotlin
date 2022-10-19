@@ -8,7 +8,7 @@ afterEvaluate {
                 groupId = csenseGroupId
                 artifactId = artifactName
                 version = csenseVersionName
-                artifact project.androidSourcesJar
+                artifact project.sourcesJar
                 pom {
                     name = csenseArtifactId
                     description = csenseArtifactDescription

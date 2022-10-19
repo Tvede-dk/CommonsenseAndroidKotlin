@@ -22,7 +22,7 @@ dependencies {
     api project(":tools")
     api project(':widgets')
 }
-apply from: "../javadocSourceDokka.gradle"
+apply from: "../javadocSource.gradle"
 ext.artifactName = "all"
 ext.artifactDescription = ""
 ext.versionDescription = ""

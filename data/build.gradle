@@ -41,7 +41,7 @@ dependencies {
     testAnnotationProcessor "com.google.auto.service:auto-service:$autoServiceTestVersion"
 }
 
-apply from: "../javadocSourceDokka.gradle"
+apply from: "../javadocSource.gradle"
 
 ext.artifactName = "data"
 ext.artifactDescription = ""

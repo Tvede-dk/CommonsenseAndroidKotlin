@@ -37,7 +37,7 @@ dependencies {
     kaptTest "com.google.auto.service:auto-service:$autoServiceTestVersion"
 }
 apply from: "../resourcegroups.gradle"
-apply from: "../javadocSourceDokka.gradle"
+apply from: "../javadocSource.gradle"
 
 ext.artifactName = "tools"
 ext.artifactDescription = ""

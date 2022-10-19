@@ -2,106 +2,55 @@ class MultiDirRes implements Plugin<Project> {
 
     @Override
     void apply(final Project project) {
-        //is it an android project ? if so then apply the plugin.
-        if (project.pluginManager.hasPlugin("com.android.application")
-                || project.pluginManager.hasPlugin("com.android.library")) {
-            applyMultiSourceDir(project)
-        } else {
+        if (!isAndroidProject(project)) {
             println("Not android based project, thus disabling plugin.")
+            return
         }
+        applyMultiSourceDir(project)
     }
 
-    final def resDirs = [
-            "anim",
-            "color",
-            "drawable",
-            "mipmap",
-            "drawable-hdpi",
-            "drawable-mdpi",
-            "drawable-xhdpi",
-            "drawable-xxhdpi",
-            "layout",
-            "values",
-    ]
+    public static boolean isAndroidProject(final Project self) {
+        return self.pluginManager.hasPlugin("com.android.application") || self.pluginManager.hasPlugin("com.android.library")
+    }
+
+    final def resDirs = ["anim",
+                         "color",
+                         "drawable",
+                         "mipmap",
+                         "drawable-hdpi",
+                         "drawable-mdpi",
+                         "drawable-xhdpi",
+                         "drawable-xxhdpi",
+                         "layout",
+                         "values",]
 
     void applyMultiSourceDir(final Project project) {
-        project.afterEvaluate {
+        println("Multi res dir enabled for $project.name")
 
-            final String androidVersion = findAndroidBuildVersionString(project)
-            final boolean useNewArrayStrategy = shouldUseNewArrayConversion(androidVersion)
 
-            println "Multi res dir enabled for $project.name"
-            if (!useNewArrayStrategy) {
-                println("- using old android res dir strategy")
-            }
-            project.android.sourceSets.each {
-                final def rootResDir = it.res.srcDirs[0]
-                List<File> srcDirs = resDirs.collect {
-                    getSubDirs(it, rootResDir)
-                }.flatten()
-                if (useNewArrayStrategy) {
-                    it.res.srcDirs = srcDirs + [rootResDir]
-                } else {
-                    it.res.srcDirs = [rootResDir] + srcDirs
-                }
-
-            }
+        project.android.sourceSets.each { it ->
+            it.res.srcDirs = walkthoughRootResourceDirectory(it)
         }
     }
 
-    static boolean shouldUseNewArrayConversion(String androidVersion) {
-        if (androidVersion == null) {
-            androidVersion = "10.0.0" //assume a newer version that we know nothing about...
-        }
-        final def (majorString, minorString) = androidVersion.tokenize(".")
-        final int major = majorString as Integer
-        final int minor = minorString as Integer
-        boolean useNewArrayStrategy = major >= 3
-        //if old version then no, and all newer versions are a yes
-        if (major == 3 && minor < 6) { //3.5 ect was "old"
-            useNewArrayStrategy = false
-        }
-        return useNewArrayStrategy
+    private List<File> walkthoughRootResourceDirectory(final sourceSet) {
+        final File rootResDir = sourceSet.res.srcDirs[0]
+        final List<File> srcDirs = resDirs.collect { final String resourceDirectoryName ->
+            walkSubDirectories(resourceDirectoryName, rootResDir)
+        }.flatten()
+        return srcDirs + [rootResDir]
     }
 
-    static String findAndroidBuildVersionString(final Project project) {
-        final Project root = project.rootProject
-        final String androidVersion = getAndroidBuildFrom(root)
-        //fast- path: generally it would be in the root project.
-        if (androidVersion != null) {
-            return androidVersion
+    private static final List<File> walkSubDirectories(final String dirName, final File rootResDir) {
+        if (dirName == null || rootResDir == null) {
+            return []
         }
-        //slow path, search recursive from project and up(until root)
-        Project currentProject = project
-        while (currentProject != root && currentProject != null) {
-            final String version = getAndroidBuildFrom(currentProject)
-            if (version != null) {
-                return version
-            }
-            currentProject = currentProject.parent
-        }
-        return null
-    }
-
-    private static String getAndroidBuildFrom(Project project) {
-        for (config in project.buildscript.configurations) {
-            for (dep in config.dependencies) {
-                if (dep.group == "com.android.tools.build") {
-                    return dep.version
-                }
-            }
-        }
-        return null
-    }
-
-    final def getSubDirs = { final dirName, final rootResDir ->
-        final def resDir = new File(rootResDir, dirName)
-        def subLayoutDirs = []
+        final File resDir = new File(rootResDir, dirName)
+        final List<File> subLayoutDirs = []
         if (resDir.exists()) {
-
             resDir.eachDir {
-                subLayoutDirs.add it
-                println "\t - adding dir $it to category $dirName"
+                subLayoutDirs.add(it)
+                println("\t - adding dir $it to category $dirName")
             }
         }
         return subLayoutDirs
@@ -109,4 +58,3 @@ class MultiDirRes implements Plugin<Project> {
 }
 
 apply plugin: MultiDirRes
-

@@ -12,8 +12,9 @@ android {
         multiDexEnabled true
     }
 
+
     buildFeatures {
-        dataBinding  = true
+        dataBinding true
     }
 
     buildTypes {
@@ -67,8 +68,7 @@ dependencies {
     testImplementation project(':test')
     implementation project(path: ':tools')
 
-
-    debugImplementation 'com.squareup.leakcanary:leakcanary-android:2.1'
+    debugImplementation 'com.squareup.leakcanary:leakcanary-android:2.7'
 
 }
 

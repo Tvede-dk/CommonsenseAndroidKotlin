@@ -1,4 +1,10 @@
 # Changelog
+
+## 0.0.29.1
+- bump deps
+- added bluetooth to permissions
+- 
+
 ## 0.0.29
 - fixed issue with SectionLookupRep causing AbstractSearchableDataBindingRecyclerAdapter to crash in certain instances
 

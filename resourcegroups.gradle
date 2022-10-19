@@ -36,15 +36,16 @@ class MultiDirRes implements Plugin<Project> {
             }
             project.android.sourceSets.each {
                 final def rootResDir = it.res.srcDirs[0]
-                List<File> srcDirs = resDirs.collect {
-                    getSubDirs(it, rootResDir)
-                }.flatten()
-                if (useNewArrayStrategy) {
-                    it.res.srcDirs = srcDirs + [rootResDir]
-                } else {
-                    it.res.srcDirs = [rootResDir] + srcDirs
+                if (rootResDir != null) {
+                    List<File> srcDirs = resDirs.collect {
+                        getSubDirs(it, rootResDir)
+                    }.flatten()
+                    if (useNewArrayStrategy) {
+                        it.res.srcDirs = srcDirs + [rootResDir]
+                    } else {
+                        it.res.srcDirs = [rootResDir] + srcDirs
+                    }
                 }
-
             }
         }
     }
@@ -94,7 +95,7 @@ class MultiDirRes implements Plugin<Project> {
         return null
     }
 
-    final def getSubDirs = { final dirName, final rootResDir ->
+    final def getSubDirs = { final String dirName, final File rootResDir ->
         final def resDir = new File(rootResDir, dirName)
         def subLayoutDirs = []
         if (resDir.exists()) {

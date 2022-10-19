@@ -59,6 +59,7 @@ buildscript {
 
     repositories {
         google()
+        mavenCentral()
         jcenter()
     }
 
@@ -78,7 +79,6 @@ allprojects {
     repositories {
         google()
         mavenCentral()
-//        jcenter()
     }
 }
 
@@ -90,7 +90,6 @@ subprojects {
         repositories {
             google()
             mavenCentral()
-//            jcenter()
         }
         dependencies {
 //            classpath "org.jetbrains.dokka:dokka-android-gradle-plugin:${dokkaVersion}"

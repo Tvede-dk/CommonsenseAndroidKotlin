@@ -47,4 +47,4 @@ ext.artifactName = "prebuilt"
 ext.artifactDescription = ""
 ext.versionDescription = ""
 
-apply from: "../publish.gradle"
+apply from: "$rootDir/gradle/publish.gradle"

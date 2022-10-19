@@ -198,8 +198,8 @@ class BaseFragmentPagerAdapter(val fragmentManager: FragmentManager) : PagerAdap
 
     override fun restoreState(state: Parcelable?, loader: ClassLoader?) = Unit
 
-    private fun makeFragmentName(viewId: Int, id: Long): String {
-        return "android:switcher:$viewId:$id"
+    private fun makeFragmentName(containerId: Int, viewId: Long): String {
+        return "android:switcher:$containerId:$viewId"
     }
 }
 

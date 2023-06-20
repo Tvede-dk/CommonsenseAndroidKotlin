@@ -6,10 +6,6 @@ import com.commonsense.android.kotlin.test.*
 import kotlinx.coroutines.*
 import org.junit.jupiter.api.*
 
-/**
- * Created by Kasper Tvede on 20-05-2018.
- * Purpose:
- */
 class LimitedCoroutineCounterTest {
 
 

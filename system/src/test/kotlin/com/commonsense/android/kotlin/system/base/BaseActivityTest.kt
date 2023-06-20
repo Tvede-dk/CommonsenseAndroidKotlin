@@ -11,9 +11,6 @@ import org.robolectric.Shadows.*
 import org.robolectric.annotation.*
 import java.util.concurrent.*
 
-/**
- * Created by Kasper Tvede on 07-10-2017.
- */
 @Config(sdk = [21])
 class BaseActivityTest : BaseRoboElectricTest() {
 

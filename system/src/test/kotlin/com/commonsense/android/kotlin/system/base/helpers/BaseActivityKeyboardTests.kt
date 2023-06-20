@@ -10,11 +10,6 @@ import org.junit.*
 import org.robolectric.*
 import org.robolectric.annotation.*
 
-/**
- * Created by kasper on 18/12/2017.
- */
-
-
 @Config(manifest = Config.NONE)
 class BaseActivityKeyboardTests : BaseRoboElectricTest() {
 

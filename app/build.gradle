@@ -3,6 +3,12 @@ apply plugin: 'kotlin-android'
 apply plugin: 'kotlin-kapt'
 
 android {
+    compileOptions {
+        sourceCompatibility = "11"
+        targetCompatibility = "11"
+    }
+
+    namespace "csense.android.exampleApp"
     defaultConfig {
         compileSdkVersion androidSdkBuildVersion
         buildToolsVersion androidBuildToolsVersion
@@ -11,6 +17,7 @@ android {
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
         multiDexEnabled true
     }
+
 
 
     buildFeatures {
@@ -68,8 +75,16 @@ dependencies {
     testImplementation project(':test')
     implementation project(path: ':tools')
 
-    debugImplementation 'com.squareup.leakcanary:leakcanary-android:2.7'
+    debugImplementation 'com.squareup.leakcanary:leakcanary-android:2.11'
 
 }
 
 apply from: "../resourcegroups.gradle"
+
+java.toolchain {
+    languageVersion.set(JavaLanguageVersion.of(11))
+}
+
+kotlin.jvmToolchain {
+    languageVersion.set(JavaLanguageVersion.of(11))
+}

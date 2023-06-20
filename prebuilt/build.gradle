@@ -3,6 +3,13 @@ apply plugin: 'kotlin-android'
 apply plugin: 'kotlin-kapt'
 
 android {
+    namespace "com.commonsense.android.kotlin.prebuilt"
+
+    compileOptions {
+        sourceCompatibility = "11"
+        targetCompatibility = "11"
+    }
+
     buildTypes {
         release {
             minifyEnabled false
@@ -51,3 +58,11 @@ ext.artifactDescription = ""
 ext.versionDescription = ""
 
 apply from: "$rootDir/gradle/publish.gradle"
+
+java.toolchain {
+    languageVersion.set(JavaLanguageVersion.of(11))
+}
+
+kotlin.jvmToolchain {
+    languageVersion.set(JavaLanguageVersion.of(11))
+}

@@ -123,6 +123,7 @@ open class BaseActivity : AppCompatActivity(), ActivityResultHelperContainer {
     override fun onOptionsItemSelected(item: MenuItem): Boolean =
             item.backPressIfHome(this)
 
+    @Deprecated("Deprecated in Java")
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
         activityResultHelper.handle(requestCode, resultCode, data)
@@ -145,6 +146,7 @@ open class BaseActivity : AppCompatActivity(), ActivityResultHelperContainer {
     }
 
 
+    @Deprecated("Deprecated in Java")
     override fun onBackPressed() {
         //if any wants to handle the on back press of the listeners,
         // then we should "ignore it"

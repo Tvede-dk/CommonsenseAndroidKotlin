@@ -4,11 +4,10 @@ android {
     compileSdkVersion androidSdkBuildVersion
     buildToolsVersion androidBuildToolsVersion
 
+    namespace "com.commonsense.android.kotlin.all"
     defaultConfig {
         minSdkVersion project.minSdk
         targetSdkVersion project.targetSdk
-        versionCode project.commonsenseVersionNumber
-        versionName project.commonsenseVersionName
 
     }
 
@@ -32,3 +31,7 @@ ext.artifactName = "all"
 ext.artifactDescription = ""
 ext.versionDescription = ""
 apply from: "$rootDir/gradle/publish.gradle"
+
+java.toolchain {
+    languageVersion.set(JavaLanguageVersion.of(11))
+}

@@ -211,8 +211,7 @@ open class RenderModel<T : Any, Vm : ViewDataBinding>(
  */
 abstract class DataBindingRecyclerAdapter<T>(
     private val lifecycleOwner: LifecycleOwner? = null
-) :
-    RecyclerView.Adapter<BaseViewHolderItem<*>>() where T : IRenderModelItem<*, *> {
+) : RecyclerView.Adapter<BaseViewHolderItem<*>>() where T : IRenderModelItem<*, *> {
 
     /**
      * A simple implementation that discards / tells the underlying adapter that each item have no id.

@@ -128,6 +128,7 @@ open class BaseFragment : DialogFragment(), ActivityResultHelperContainer {
     }
 
 
+    @Deprecated("Deprecated in Java")
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         return if (item.itemId == android.R.id.home) {
             onBackPressed()
@@ -137,6 +138,7 @@ open class BaseFragment : DialogFragment(), ActivityResultHelperContainer {
         }
     }
 
+    @Deprecated("Deprecated in Java")
     override fun onActivityResult(@androidx.annotation.IntRange(from = 0) requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
         activityResultHelper.handle(requestCode, resultCode, data)

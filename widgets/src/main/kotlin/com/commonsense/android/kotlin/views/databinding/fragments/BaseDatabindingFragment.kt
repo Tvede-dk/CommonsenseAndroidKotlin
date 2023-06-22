@@ -55,6 +55,7 @@ abstract class BaseDatabindingFragment<out T : ViewDataBinding> : BaseFragment()
         return binding.root
     }
 
+    @Deprecated("Deprecated in Java")
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
         binding.executePendingBindings()

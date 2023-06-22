@@ -10,11 +10,6 @@ import org.junit.*
 import org.robolectric.*
 import org.robolectric.annotation.*
 
-/**
- * Created by kasper on 18/12/2017.
- */
-
-
 @Config(manifest = Config.NONE)
 class BaseActivityKeyboardTests : BaseRoboElectricTest() {
 
@@ -22,7 +17,7 @@ class BaseActivityKeyboardTests : BaseRoboElectricTest() {
     @Test
     // @Ignore
     fun testHideKeyboard() {
-        val helper = createActivityController<BaseActivity>(R.style.Theme_AppCompat).create()
+        val helper = createActivityController<BaseActivity>(androidx.appcompat.R.style.Theme_AppCompat).create()
         val act = helper.get()
         //the expectation
         act.keyboardHandler.isEnabled.assert(true)

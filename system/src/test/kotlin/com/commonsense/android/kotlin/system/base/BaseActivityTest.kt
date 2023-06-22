@@ -11,17 +11,15 @@ import org.robolectric.Shadows.*
 import org.robolectric.annotation.*
 import java.util.concurrent.*
 
-/**
- * Created by Kasper Tvede on 07-10-2017.
- */
 @Config(sdk = [21])
 class BaseActivityTest : BaseRoboElectricTest() {
+
     @Throws(InterruptedException::class)
     @Test
     fun launchInUiLifecycleEventsPaused() = testCallbackWithSemaphore(
             shouldAcquire = false,
             errorMessage = "callback should not be called") { _ ->
-        val act = createActivityController<BaseActivity>(R.style.Theme_AppCompat).apply {
+        val act = createActivityController<BaseActivity>(androidx.appcompat.R.style.Theme_AppCompat).apply {
             setup()
             pause()
         }
@@ -34,7 +32,7 @@ class BaseActivityTest : BaseRoboElectricTest() {
     @Test
     fun launchInUiLifecycleEventsPausedResume() {
         val sem = Semaphore(0)
-        val act = createActivityController<BaseActivity>(R.style.Theme_AppCompat).apply {
+        val act = createActivityController<BaseActivity>(androidx.appcompat.R.style.Theme_AppCompat).apply {
             setup()
             pause()
         }
@@ -62,7 +60,7 @@ class BaseActivityTest : BaseRoboElectricTest() {
     fun launchInUiLifecycleEventsPausedDestory() = testCallbackWithSemaphore(
             shouldAcquire = false,
             errorMessage = "callback should be called after onresume after a pause") {
-        val act = createActivityController<BaseActivity>(R.style.Theme_AppCompat).apply {
+        val act = createActivityController<BaseActivity>(androidx.appcompat.R.style.Theme_AppCompat).apply {
             setup()
             pause()
         }
@@ -88,7 +86,7 @@ class BaseActivityTest : BaseRoboElectricTest() {
     fun launchInBackgroundLifecycleEventsPaused() = testCallbackWithSemaphore(
             shouldAcquire = true,
             errorMessage = "callback should be called even when activity is paused.") { sem ->
-        val act = createActivityController<BaseActivity>(R.style.Theme_AppCompat).apply {
+        val act = createActivityController<BaseActivity>(androidx.appcompat.R.style.Theme_AppCompat).apply {
             setup()
             pause()
         }
@@ -102,7 +100,7 @@ class BaseActivityTest : BaseRoboElectricTest() {
     fun launchInUiLifecycleEventsVisible() = testCallbackWithSemaphore(
             shouldAcquire = true,
             errorMessage = "callback should be called") { sem ->
-        val act = createActivityController<BaseActivity>(R.style.Theme_AppCompat).apply {
+        val act = createActivityController<BaseActivity>(androidx.appcompat.R.style.Theme_AppCompat).apply {
             setup()
             visible()
         }
@@ -119,7 +117,7 @@ class BaseActivityTest : BaseRoboElectricTest() {
     fun launchInBackgroundLifecycleEventsVisible() = testCallbackWithSemaphore(
             shouldAcquire = true,
             errorMessage = "callback should be called") { sem ->
-        val act = createActivityController<BaseActivity>(R.style.Theme_AppCompat).apply {
+        val act = createActivityController<BaseActivity>(androidx.appcompat.R.style.Theme_AppCompat).apply {
             setup()
             visible()
         }
@@ -134,7 +132,7 @@ class BaseActivityTest : BaseRoboElectricTest() {
     fun addOnBackPressedListeners() = testCallbackWithSemaphore(
             shouldAcquire = true,
             errorMessage = "callback should be called") { sem ->
-        val act = createActivityController<BaseActivity>(R.style.Theme_AppCompat).apply {
+        val act = createActivityController<BaseActivity>(androidx.appcompat.R.style.Theme_AppCompat).apply {
             setup()
             visible()
         }
@@ -153,7 +151,7 @@ class BaseActivityTest : BaseRoboElectricTest() {
     fun removeOnBackPressedListeners() = testCallbackWithSemaphore(
             shouldAcquire = false,
             errorMessage = "callback should NOT be called") {
-        val act = createActivityController<BaseActivity>(R.style.Theme_AppCompat).apply {
+        val act = createActivityController<BaseActivity>(androidx.appcompat.R.style.Theme_AppCompat).apply {
             setup()
             visible()
         }

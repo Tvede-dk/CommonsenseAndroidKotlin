@@ -6,40 +6,35 @@ import com.commonsense.android.kotlin.system.logging.*
 import csense.android.tools.resources.*
 import csense.android.tools.ui.*
 
-
-/**
- * Created by Kasper Tvede on 31-05-2017.
- */
-
 class MainApplication : BaseApplication() {
     override fun isDebugMode(): Boolean = BuildConfig.DEBUG
 
     private val performanceTracker: LifeCycleMonitor = LifeCycleMonitor(this)
 
-    private val dynamicResources: DynamicResources = DynamicResources(
-            R.string::class,
-            R.drawable::class,
-            R.layout::class,
-            R.color::class,
-            R.raw::class,
-            R.dimen::class,
-            R.style::class,
-            R.styleable::class,
-            R.attr::class,
-//            R.animator::class,
-            R.anim::class
-    )
+//    private val dynamicResources: DynamicResources = DynamicResources(
+//            R.string::class,
+//            R.drawable::class,
+//            R.layout::class,
+//            R.color::class,
+//            R.raw::class,
+//            R.dimen::class,
+//            R.style::class,
+//            R.styleable::class,
+//            R.attr::class,
+////            R.animator::class,
+//            R.anim::class
+//    )
 
     override fun afterOnCreate() {
         L.warning("test", "here")
-        dynamicResources.allLayouts.filterNot {
-            it.name.contains("leak_canary") ||
-                    it.name.contains("abc_") ||
-                    it.name.contains("design_") ||
-                    it.name.contains("notification_template")
-        }.forEach {
-            L.warning(MainApplication::class, "layout: ${it.name}:${it.id}")
-        }
+//        dynamicResources.allLayouts.filterNot {
+//            it.name.contains("leak_canary") ||
+//                    it.name.contains("abc_") ||
+//                    it.name.contains("design_") ||
+//                    it.name.contains("notification_template")
+//        }.forEach {
+//            L.warning(MainApplication::class, "layout: ${it.name}:${it.id}")
+//        }
         L.warning("test", "here end")
     }
 

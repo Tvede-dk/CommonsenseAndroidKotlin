@@ -2,15 +2,18 @@ apply plugin: 'com.android.library'
 apply plugin: 'kotlin-android'
 
 android {
+    namespace "com.commonsense.android.kotlin.data"
     compileSdkVersion androidSdkBuildVersion
     buildToolsVersion androidBuildToolsVersion
 
+    compileOptions {
+        sourceCompatibility = "11"
+        targetCompatibility = "11"
+    }
 
     defaultConfig {
         minSdkVersion project.minSdk
         targetSdkVersion project.targetSdk
-        versionCode project.commonsenseVersionNumber
-        versionName project.commonsenseVersionName
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
 
     }
@@ -52,3 +55,11 @@ ext.artifactDescription = ""
 ext.versionDescription = ""
 
 apply from: "$rootDir/gradle/publish.gradle"
+
+java.toolchain {
+    languageVersion.set(JavaLanguageVersion.of(11))
+}
+
+kotlin.jvmToolchain {
+    languageVersion.set(JavaLanguageVersion.of(11))
+}

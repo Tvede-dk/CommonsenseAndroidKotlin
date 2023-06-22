@@ -4,6 +4,12 @@ apply plugin: "de.mannodermaus.android-junit5"
 
 
 android {
+    namespace "com.commonsense.android.kotlin.test"
+    compileOptions {
+        sourceCompatibility = "11"
+        targetCompatibility = "11"
+    }
+
     buildTypes {
         release {
             minifyEnabled false
@@ -19,12 +25,12 @@ android {
 
 dependencies {
     androidTestImplementation("androidx.test.espresso:espresso-core:$espressoVersion")
-    api 'org.junit.jupiter:junit-jupiter-api:5.9.1'
-    api 'org.junit.jupiter:junit-jupiter-engine:5.9.1'
-    api 'org.junit.jupiter:junit-jupiter-engine:5.9.1'
+    api 'org.junit.jupiter:junit-jupiter-api:5.9.2'
+    api 'org.junit.jupiter:junit-jupiter-engine:5.9.2'
+    api 'org.junit.jupiter:junit-jupiter-engine:5.9.2'
 
     api "junit:junit:4.13.2"
-    api 'org.junit.vintage:junit-vintage-engine:5.9.1'
+    api 'org.junit.vintage:junit-vintage-engine:5.9.2'
 
     api "org.robolectric:robolectric:$roboElectricVersion"
     api "androidx.test:runner:$testRunnerVersion"
@@ -43,3 +49,11 @@ ext.artifactName = "test"
 ext.artifactDescription = ""
 ext.versionDescription = ""
 apply from: "$rootDir/gradle/publish.gradle"
+
+java.toolchain {
+    languageVersion.set(JavaLanguageVersion.of(11))
+}
+
+kotlin.jvmToolchain {
+    languageVersion.set(JavaLanguageVersion.of(11))
+}

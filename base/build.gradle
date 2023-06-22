@@ -4,6 +4,13 @@ apply plugin: "de.mannodermaus.android-junit5"
 apply plugin: "maven-publish"
 
 android {
+    namespace "com.commonsense.android.kotlin.base"
+
+    compileOptions {
+        sourceCompatibility = "11"
+        targetCompatibility = "11"
+    }
+
     buildTypes {
         release {
             minifyEnabled false
@@ -37,3 +44,11 @@ ext.versionDescription = ""
 
 
 apply from: "$rootDir/gradle/publish.gradle"
+
+java.toolchain {
+    languageVersion.set(JavaLanguageVersion.of(11))
+}
+
+kotlin.jvmToolchain {
+    languageVersion.set(JavaLanguageVersion.of(11))
+}

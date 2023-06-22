@@ -7,6 +7,7 @@ import android.content.*
 import android.view.*
 import androidx.annotation.*
 import androidx.databinding.*
+import androidx.lifecycle.LifecycleOwner
 import androidx.recyclerview.widget.*
 import com.commonsense.android.kotlin.base.*
 import com.commonsense.android.kotlin.base.debug.prettyStringContent
@@ -37,11 +38,15 @@ typealias InflatingFunction<Vm> = (inflater: LayoutInflater, parent: ViewGroup?,
  * @property item T the data for the view
  * @property viewBindingTypeValue Int the view type (a unique number for the view)
  */
-open class BaseViewHolderItem<out T : ViewDataBinding>(val item: T) : RecyclerView.ViewHolder(item.root) {
+open class BaseViewHolderItem<out T : ViewDataBinding>(
+    val item: T
+) : RecyclerView.ViewHolder(item.root) {
     /**
      * The view's "type", which is the type of the class (which is unique, by jvm specification).
      */
     val viewBindingTypeValue = item.javaClass.hashCode()
+    val lifecycleOwner: LifecycleOwner?
+        get() = item.lifecycleOwner
 }
 
 /**
@@ -50,7 +55,7 @@ open class BaseViewHolderItem<out T : ViewDataBinding>(val item: T) : RecyclerVi
  * @param Vm : ViewDataBinding
  */
 interface IRenderModelItem<T : Any, Vm : ViewDataBinding> :
-        TypeHashCodeLookupRepresent<InflatingFunction<Vm>> {
+    TypeHashCodeLookupRepresent<InflatingFunction<Vm>> {
 
     /**
      * Gets the data associated with this binding
@@ -67,7 +72,7 @@ interface IRenderModelItem<T : Any, Vm : ViewDataBinding> :
     fun renderFunction(view: Vm, model: T, viewHolder: BaseViewHolderItem<Vm>)
 
     /**
-     * Binds this to the given view holder.
+     * Binds this to the given view holder
      * @param holder BaseViewHolderItem<*>
      */
     fun bindToViewHolder(holder: BaseViewHolderItem<*>)
@@ -93,17 +98,20 @@ interface IRenderModelItem<T : Any, Vm : ViewDataBinding> :
  * @param T : Any the data associated with this render
  * @param Vm : ViewDataBinding the view associated with this render
  */
-abstract class BaseRenderModel<
-        T : Any,
-        Vm : ViewDataBinding>(val item: T, classType: Class<Vm>)
-    : IRenderModelItem<T, Vm> {
+abstract class BaseRenderModel<T : Any, Vm : ViewDataBinding>(
+    val item: T,
+    classType: Class<Vm>
+) : IRenderModelItem<T, Vm> {
 
     /**
      * Convenience constructor, same as original but using kotlin's classes instead.
      * @param item T the data to use
      * @param classType KClass<Vm> the view class type
      */
-    constructor(item: T, classType: KClass<Vm>) : this(item, classType.java)
+    constructor(
+        item: T,
+        classType: KClass<Vm>
+    ) : this(item, classType.java)
 
     override fun getValue(): T = item
 
@@ -115,20 +123,30 @@ abstract class BaseRenderModel<
     override fun bindToViewHolder(holder: BaseViewHolderItem<*>) {
         val casted = holder.cast<BaseViewHolderItem<Vm>>()
         if (casted != null) {
-            renderFunction(casted.item, item, casted)
+            renderFunction(
+                view = casted.item,
+                model = item,
+                viewHolder = casted
+            )
             //we are now "sure" that the binding class is the same as ours, thus casting "should" be "ok". (we basically introduced our own type system)
         } else {
-            L.debug("RenderModelItem",
-                    "unable to bind to view even though it should be correct type$vmTypeValue expected, got : ${holder.viewBindingTypeValue}")
+            L.debug(
+                "RenderModelItem",
+                "unable to bind to view even though it should be correct type$vmTypeValue expected, got : ${holder.viewBindingTypeValue}"
+            )
         }
     }
 
-    override fun createViewHolder(inflatedView: Vm): BaseViewHolderItem<Vm> =
-            BaseViewHolderItem(inflatedView)
+    override fun createViewHolder(
+        inflatedView: Vm
+    ): BaseViewHolderItem<Vm> =
+        BaseViewHolderItem(item = inflatedView)
 
     override fun getCreatorFunction(): InflatingFunction<Vm> {
         return { inflater: LayoutInflater, parent: ViewGroup?, attach: Boolean ->
-            createViewHolder(getInflaterFunction().invoke(inflater, parent, attach))
+            createViewHolder(
+                inflatedView = getInflaterFunction().invoke(inflater, parent, attach)
+            )
         }
     }
 }
@@ -139,18 +157,17 @@ abstract class BaseRenderModel<
  * @param Vm : ViewDataBinding the view associated with this render
  * @constructor
  */
-open class RenderModel<
-        T : Any,
-        Vm : ViewDataBinding>(private val item: T,
-                              private val vmInflater: ViewInflatingFunction<Vm>,
-                              private val classType: Class<Vm>,
-                              private val vmRender: (view: Vm, model: T, viewHolder: BaseViewHolderItem<Vm>) -> Unit)
-    : IRenderModelItem<T, Vm> {
+open class RenderModel<T : Any, Vm : ViewDataBinding>(
+    private val item: T,
+    private val vmInflater: ViewInflatingFunction<Vm>,
+    private val classType: Class<Vm>,
+    private val vmRender: (view: Vm, model: T, viewHolder: BaseViewHolderItem<Vm>) -> Unit
+) : IRenderModelItem<T, Vm> {
     override fun getInflaterFunction() = vmInflater
 
 
     override fun createViewHolder(inflatedView: Vm): BaseViewHolderItem<Vm> =
-            BaseViewHolderItem(inflatedView)
+        BaseViewHolderItem(inflatedView)
 
     override fun getCreatorFunction(): InflatingFunction<Vm> {
         return { inflater: LayoutInflater, parent: ViewGroup?, attach: Boolean ->
@@ -162,7 +179,8 @@ open class RenderModel<
 
     override fun getTypeValue(): Int = vmTypeValue
 
-    override fun renderFunction(view: Vm, model: T, viewHolder: BaseViewHolderItem<Vm>) = vmRender(view, model, viewHolder)
+    override fun renderFunction(view: Vm, model: T, viewHolder: BaseViewHolderItem<Vm>) =
+        vmRender(view, model, viewHolder)
 
     override fun bindToViewHolder(holder: BaseViewHolderItem<*>) {
         val casted = holder.cast<BaseViewHolderItem<Vm>>()
@@ -171,7 +189,10 @@ open class RenderModel<
             renderFunction(casted.item, item, casted)
             //we are now "sure" that the binding class is the same as ours, thus casting "should" be "ok". (we basically introduced our own type system)
         } else {
-            L.debug("RenderModelItem", "unable to bind to view even though it should be correct type$vmTypeValue expected, got : ${holder.viewBindingTypeValue}")
+            L.debug(
+                "RenderModelItem",
+                "unable to bind to view even though it should be correct type$vmTypeValue expected, got : ${holder.viewBindingTypeValue}"
+            )
         }
     }
 
@@ -188,8 +209,9 @@ open class RenderModel<
  *  Base class for data binding recycler adapters.
  * @param T the type of render models
  */
-abstract class DataBindingRecyclerAdapter<T>() :
-        RecyclerView.Adapter<BaseViewHolderItem<*>>() where T : IRenderModelItem<*, *> {
+abstract class DataBindingRecyclerAdapter<T>(
+    private val lifecycleOwner: LifecycleOwner? = null
+) : RecyclerView.Adapter<BaseViewHolderItem<*>>() where T : IRenderModelItem<*, *> {
 
     /**
      * A simple implementation that discards / tells the underlying adapter that each item have no id.
@@ -208,13 +230,6 @@ abstract class DataBindingRecyclerAdapter<T>() :
      *  A list of all attached recycler views
      */
     private val listeningRecyclers = mutableSetOf<WeakReference<RecyclerView>>()
-
-//    /**
-//     * Our own layoutinflater
-//     */
-//    private val inflater: LayoutInflater by lazy {
-//        LayoutInflater.from(context)
-//    }
 
     private var cachedInflater: LayoutInflater? = null
 
@@ -235,14 +250,22 @@ abstract class DataBindingRecyclerAdapter<T>() :
      * @param viewType Int
      * @return BaseViewHolderItem<*>
      */
-    override fun onCreateViewHolder(parent: ViewGroup, @IntRange(from = 0) viewType: Int): BaseViewHolderItem<*> {
+    override fun onCreateViewHolder(
+        parent: ViewGroup,
+        @IntRange(from = 0) viewType: Int
+    ): BaseViewHolderItem<*> {
         val rep = dataCollection.getTypeRepresentativeFromTypeValue(viewType)
         val inflater = getInflaterFrom(parent)
-        return rep?.invoke(inflater, parent, false)
-                ?: throw RuntimeException("could not find item, " +
-                        "even though we expected it, for viewType: $viewType;" +
-                        "rep is = $rep;" +
-                        "ViewGroup is = $parent")
+        return rep?.invoke(
+            inflater,
+            parent,
+            false
+        ) ?: throw RuntimeException(
+            "could not find item, " +
+                    "even though we expected it, for viewType: $viewType;" +
+                    "rep is = $rep;" +
+                    "ViewGroup is = $parent"
+        )
     }
 
     /**
@@ -262,11 +285,12 @@ abstract class DataBindingRecyclerAdapter<T>() :
      * @return Int
      */
     override fun getItemViewType(@IntRange(from = 0) position: Int): Int {
-        val item = dataCollection[position]
-                ?: throw RuntimeException("Could not get item, so the position is not there.;" +
-                        " position = $position;" +
-                        " count = ${dataCollection.size};" +
-                        "$dataCollection")
+        val item = dataCollection[position] ?: throw RuntimeException(
+            "Could not get item, so the position is not there.;" +
+                    " position = $position;" +
+                    " count = ${dataCollection.size};" +
+                    "$dataCollection"
+        )
         return item.getTypeValue()
     }
 
@@ -276,11 +300,14 @@ abstract class DataBindingRecyclerAdapter<T>() :
      * @param holder BaseViewHolderItem<*>
      * @param position Int
      */
-    override fun onBindViewHolder(holder: BaseViewHolderItem<*>, @androidx.annotation.IntRange(from = 0) position: Int) {
-        //lookup type to converter, then apply model on view using converter
+    override fun onBindViewHolder(
+        holder: BaseViewHolderItem<*>,
+        @IntRange(from = 0) position: Int
+    ) {
         val index = dataCollection.indexToPath(position) ?: return
         val render = dataCollection[index]
-        render?.bindToViewHolder(holder)
+        holder.item.lifecycleOwner = lifecycleOwner
+        render?.bindToViewHolder(holder = holder)
     }
 
     /**
@@ -342,11 +369,12 @@ abstract class DataBindingRecyclerAdapter<T>() :
      * @param startPosition Int the place to perform the insert
      * @param inSection Int the section index (sparse) to insert into
      */
-    open fun insertAll(items: Collection<T>, startPosition: Int, inSection: Int): Unit = updateData {
-        dataCollection.insertAll(items, startPosition, inSection)?.inRaw?.apply {
-            notifyItemRangeInserted(start, length)
+    open fun insertAll(items: Collection<T>, startPosition: Int, inSection: Int): Unit =
+        updateData {
+            dataCollection.insertAll(items, startPosition, inSection)?.inRaw?.apply {
+                notifyItemRangeInserted(start, length)
+            }
         }
-    }
 
     /**
      * Inserts all the given elements at the given start position into the given section, or creates the section if not there.
@@ -456,7 +484,7 @@ abstract class DataBindingRecyclerAdapter<T>() :
     @UiThread
     open fun setSection(items: List<T>, inSection: Int) = updateData {
         val (changes, added, removed) = dataCollection.setSection(items, inSection)
-                ?: return@updateData
+            ?: return@updateData
         changes?.let {
             notifyItemRangeChanged(it.inRaw.first, it.inRaw.length)
         }
@@ -509,10 +537,11 @@ abstract class DataBindingRecyclerAdapter<T>() :
      * @return Boolean if it is ignored or not. (true if ignored)
      */
     @UiThread
-    protected fun clearAndSetItemsNoNotify(items: List<T>, inSection: Int, isIgnored: Boolean) = updateData {
-        dataCollection.setSection(items, inSection)
-        isIgnored.ifTrue { dataCollection.ignoreSection(inSection) }
-    }
+    protected fun clearAndSetItemsNoNotify(items: List<T>, inSection: Int, isIgnored: Boolean) =
+        updateData {
+            dataCollection.setSection(items, inSection)
+            isIgnored.ifTrue { dataCollection.ignoreSection(inSection) }
+        }
 
     /**
      * Sets all sections
@@ -575,7 +604,7 @@ abstract class DataBindingRecyclerAdapter<T>() :
      */
     @UiThread
     open fun getRepresentUsingType(viewHolderItem: BaseViewHolderItem<*>): InflatingFunction<*>? =
-            dataCollection.getTypeRepresentativeFromTypeValue(viewHolderItem.viewBindingTypeValue)
+        dataCollection.getTypeRepresentativeFromTypeValue(viewHolderItem.viewBindingTypeValue)
 
     /**
      * Tries to lookup an item from a given raw index (0 until the item count)
@@ -649,9 +678,9 @@ abstract class DataBindingRecyclerAdapter<T>() :
      * @return IndexPath? the index where the element is, if found, null otherwise (or null also if the section is not there)
      */
     @UiThread
-    fun getIndexFor(item: T, @androidx.annotation.IntRange(from = 0) inSection: Int): IndexPath? {
+    fun getIndexFor(item: T, @IntRange(from = 0) inSection: Int): IndexPath? {
         val innerIndex = dataCollection.sectionAt(inSection)?.collection?.indexOf(item)
-                ?: return null
+            ?: return null
         return IndexPath(innerIndex, inSection)
     }
 
@@ -670,7 +699,7 @@ abstract class DataBindingRecyclerAdapter<T>() :
      */
     @UiThread
     fun isSectionVisible(inSection: Int): Boolean =
-            dataCollection.sectionAt(inSection)?.isIgnored?.not() ?: false
+        dataCollection.sectionAt(inSection)?.isIgnored?.not() ?: false
 
 
     /**
@@ -693,7 +722,8 @@ abstract class DataBindingRecyclerAdapter<T>() :
      * @param sectionIndex Int the section index (sparse) to remove.
      */
     @UiThread
-    open fun removeSection(@androidx.annotation.IntRange(from = 0) sectionIndex: Int) = clearSection(sectionIndex)
+    open fun removeSection(@IntRange(from = 0) sectionIndex: Int) =
+        clearSection(sectionIndex)
 
     /**
      * Removes a given list of sections
@@ -701,7 +731,7 @@ abstract class DataBindingRecyclerAdapter<T>() :
      * @param sectionIndexes IntArray the sections (sparse) to remove
      */
     @UiThread
-    fun removeSections(@androidx.annotation.IntRange(from = 0) vararg sectionIndexes: Int) {
+    fun removeSections(@IntRange(from = 0) vararg sectionIndexes: Int) {
         sectionIndexes.forEach(this::removeSection)
     }
 
@@ -711,7 +741,7 @@ abstract class DataBindingRecyclerAdapter<T>() :
      * @param sectionIndex Int the section index (sparse)
      */
     @UiThread
-    fun smoothScrollToSection(@androidx.annotation.IntRange(from = 0) sectionIndex: Int) {
+    fun smoothScrollToSection(@IntRange(from = 0) sectionIndex: Int) {
         val positionInList = dataCollection.getSectionLocation(sectionIndex)?.inRaw?.first ?: return
         listeningRecyclers.forEach {
             it.use { this.smoothScrollToPosition(positionInList) }
@@ -737,8 +767,10 @@ abstract class DataBindingRecyclerAdapter<T>() :
     }
 
     override fun setHasStableIds(hasStableIds: Boolean) {
-        logClassError("Have no effect as we are effectively not stable according to the adapter implementation;" +
-                "We handle everything our self. Please do not call this method.")
+        logClassError(
+            "Have no effect as we are effectively not stable according to the adapter implementation;" +
+                    "We handle everything our self. Please do not call this method."
+        )
     }
 
     //make sure we never allow transient state to be recycled.
@@ -752,7 +784,7 @@ abstract class DataBindingRecyclerAdapter<T>() :
 
     fun toPrettyString(): String {
         return "Base dataBinding adapter state:" + listOf(
-                dataCollection.toPrettyString()
+            dataCollection.toPrettyString()
         ).prettyStringContent()
     }
 
@@ -766,7 +798,7 @@ abstract class DataBindingRecyclerAdapter<T>() :
  */
 @UiThread
 fun BaseDataBindingRecyclerAdapter.hideSections(vararg sections: Int) =
-        sections.forEach(this::hideSection)
+    sections.forEach(this::hideSection)
 
 /**
  * Shows all the given sections (by sparse index)
@@ -775,11 +807,11 @@ fun BaseDataBindingRecyclerAdapter.hideSections(vararg sections: Int) =
  * @param sections IntArray the sections to show
  */
 fun BaseDataBindingRecyclerAdapter.showSections(vararg sections: Int) =
-        sections.forEach(this::showSection)
+    sections.forEach(this::showSection)
 
 
 open class BaseDataBindingRecyclerAdapter :
-        DataBindingRecyclerAdapter<IRenderModelItem<*, *>>()
+    DataBindingRecyclerAdapter<IRenderModelItem<*, *>>()
 
 
 class DefaultDataBindingRecyclerAdapter : BaseDataBindingRecyclerAdapter()

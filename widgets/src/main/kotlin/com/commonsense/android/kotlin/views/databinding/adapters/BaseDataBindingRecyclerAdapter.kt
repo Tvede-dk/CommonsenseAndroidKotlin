@@ -72,7 +72,7 @@ interface IRenderModelItem<T : Any, Vm : ViewDataBinding> :
     fun renderFunction(view: Vm, model: T, viewHolder: BaseViewHolderItem<Vm>)
 
     /**
-     * Binds this to the given view holder with the given lifecycleOwner
+     * Binds this to the given view holder
      * @param holder BaseViewHolderItem<*>
      */
     fun bindToViewHolder(holder: BaseViewHolderItem<*>)

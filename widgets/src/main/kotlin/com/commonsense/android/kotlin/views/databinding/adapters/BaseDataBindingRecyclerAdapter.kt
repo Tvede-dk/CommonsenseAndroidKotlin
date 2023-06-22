@@ -304,7 +304,6 @@ abstract class DataBindingRecyclerAdapter<T>(
         holder: BaseViewHolderItem<*>,
         @IntRange(from = 0) position: Int
     ) {
-        //lookup type to converter, then apply model on view using converter
         val index = dataCollection.indexToPath(position) ?: return
         val render = dataCollection[index]
         holder.item.lifecycleOwner = lifecycleOwner
